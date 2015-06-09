@@ -32,6 +32,7 @@
 	native IsPlayerInZone(playerid, zoneid);
 	native ReturnPlayerZone(playerid);
 	native GetPlayerZoneID(playerid);
+	native ReturnZoneName(zoneid);
 */
 
 #include <a_samp>

@@ -76,6 +76,14 @@ Compile options:
 	-
 -*----------------------------------------------------------------------------*/
 
+#if defined _YSI_bit_included
+  #endinput
+#endif
+
+#define _YSI_bit_included
+
+#include <a_samp>
+
 /*----------------------------------------------------------------------------*-
 Function:
 	ceildiv
@@ -238,10 +246,169 @@ Notes:
 	-
 -*----------------------------------------------------------------------------*/
 
-stock Bit_GetCount(Bit:array[], size = sizeof (array))
+stock Bit_GetCount(const Bit:array[], size = sizeof (array))
 {
 	new
 		count;
 	for (new i = 0; i < size; i++) for (new j = 1; j; j <<= 1) if (array[i] & Bit:j) count++;
 	return count;
+}
+
+/*----------------------------------------------------------------------------*-
+Function:
+	Bit_GetStringFromArray
+Params:
+	Bit:array[] - Array to get a string of set bits.
+	string - The string to store the set bits in.
+	seperator - The string to place between numbers.
+	range - The string to place between ranges.
+	size - Size of array.
+	maxlength - Size of string.
+Return:
+	If the array had bits set.
+Notes:
+	-
+-*----------------------------------------------------------------------------*/
+
+stock Bit_GetStringFromArray(const Bit:array[], string[], const seperator[]=",", const range[]="-", size=sizeof(array), maxlength=sizeof(string))
+{
+	new start = cellmin,
+		lastid = cellmin,
+		empty = true;
+	for(new i, arrayi; arrayi < size; arrayi++) {
+		for(new arrayj = 1; arrayj; arrayj <<= 1, i++) {
+			if(array[arrayi] & Bit:arrayj) {
+				if(start == cellmin) {
+					start = i;
+				} else if(lastid != i - 1) {
+					if(start == lastid) {
+						if(empty) {
+							format(string, maxlength, "%i", start);
+						} else {
+							format(string, maxlength, "%s%s%i", string, seperator, start);
+						}
+						empty = false;
+					} else if(start == lastid - 1) {
+						if(empty) {
+							format(string, maxlength, "%i%s%i", start, seperator, lastid);
+						} else {
+							format(string, maxlength, "%s%s%i%s%i", string, seperator, start, seperator, lastid);
+						}
+						empty = false;
+					} else {
+						if(empty) {
+							format(string, maxlength, "%i%s%i", start, range, lastid);
+						} else {
+							format(string, maxlength, "%s%s%i%s%i", string, seperator, start, range, lastid);
+						}
+						empty = false;
+					}
+					start = i;
+				}
+				lastid = i;
+			}
+		}
+	}
+	if(lastid != cellmin) {
+		if(start != cellmin) {
+			if(start == lastid) {
+				if(empty) {
+					format(string, maxlength, "%i", lastid);
+				} else {
+					format(string, maxlength, "%s%s%i", string, seperator, lastid);
+				}
+				empty = false;
+			} else if(start == lastid - 1) {
+				if(empty) {
+					format(string, maxlength, "%i%s%i", start, seperator, lastid);
+				} else {
+					format(string, maxlength, "%s%s%i%s%i", string, seperator, start, seperator, lastid);
+				}
+				empty = false;
+			} else {
+				if(empty) {
+					format(string, maxlength, "%i%s%i", start, range, lastid);
+				} else {
+					format(string, maxlength, "%s%s%i%s%i", string, seperator, start, range, lastid);
+				}
+				empty = false;
+			}
+		}
+	}
+	return !empty;
+}
+
+/*----------------------------------------------------------------------------*-
+Function:
+	Bit_GetArrayFromString
+Params:
+	Bit:array[] - Array to set.
+	string - The string to get bits from.
+	seperator - The string to placed between numbers.
+	range - The string to placed between ranges.
+	size - Size of array.
+Return:
+	If the string was a valid list.
+Notes:
+	-
+-*----------------------------------------------------------------------------*/
+
+stock Bit_GetArrayFromString(Bit:array[], const string[], const seperator[]=",", const range[]="-", size=sizeof(array))
+{
+	if(!('0' <= string[0] <= '9')) return false;
+	size *= cellbits;
+	new start = -1, end = 0x80000000;
+	for(new pos, slen = strlen(seperator), rlen=strlen(range); string[pos] != '\0';) {
+		if('\0' < string[pos] <= ' ') {
+			pos++;
+		} else if('0' <= string[pos] <= '9') {
+			end = (end * 10) + (string[pos] - '0');
+			pos++;
+		} else if(strcmp(string[pos], seperator, true, slen) == 0) {
+			pos += slen;
+			while('\0' < string[pos] <= ' ') pos++;
+			if(!('0' <= string[pos] <= '9') || !(0 <= end < size)) return false;
+			if(start == -1) {
+				Bit_Let(array, end);
+				end = 0x80000000;
+			} else {
+				if(end == start) return false;
+				if(end > start) {
+					for(new i = start; i <= end; i++) {
+						Bit_Let(array, i);
+					}
+				} else {
+					for(new i = start; i >= end; i--) {
+						Bit_Let(array, i);
+					}
+				}
+				start = -1;
+				end = 0x80000000;
+			}
+		} else if(strcmp(string[pos], range, true, rlen) == 0) {
+			pos += rlen;
+			while('\0' < string[pos] <= ' ') pos++;
+			if( !('0' <= string[pos] <= '9') || start != -1 || !(0 <= end < size)) return false;
+			start = end;
+			end = 0x80000000;
+		} else {
+			return false;
+		}
+	}
+	if(end == 0x80000000 || !(0 <= end < size)) return false;
+	if(start == -1) {
+		Bit_Let(array, end);
+	} else {
+		if(end == start) return false;
+		if(end > start) {
+			for(new i = start; i <= end; i++) {
+				Bit_Let(array, i);
+			}
+		} else {
+			for(new i = start; i >= end; i--) {
+				Bit_Let(array, i);
+			}
+		}
+	}
+	return true;
 }

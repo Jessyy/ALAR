@@ -20,41 +20,33 @@
  */
 
 
-#define ALAR_VERSION 		1.3.1
+#define ALAR_VERSION 		1.4
 
+// Database
+#define ALAR_DATABASE		"Alar.sqlite"
 
-// Folders
-#define ALIASFOLDER			"alar/Aliases/"
-#define PLAYERFOLDER		"alar/Players/"
-#define IP_DEFINITIONS		"alar/IP2c/"
-
-// File Names
-#define BANFILE				"alar/Bans.ini"
-#define LOGFILE				"alar/AdminLog.txt"
-#define MODESFILE			"alar/Gamemodes.ini"
-#define SETTINGSFILE		"alar/Settings.ini"
-#define STATUSFILE			"alar/Status.ini"
-#define SUSPENDFILE			"alar/Suspensions.ini"
-#define USERFILE			"alar/Users.ini"
-#define WHITELISTFILE		"alar/Whitelist.ini"
+// Admin Log
+#define ALAR_LOG			"Alar.log"
 
 // Default Values
-#define BANMSG				"If you feel you have been WRONGFULLY banned, please appeal on the website $(WEBSITE)|Name: $(NAME)|IP: $(IP)|Admin: $(ADMIN)|Date: $(DATE) $(TIME)"
+#define BANMSG				"If you feel you have been WRONGFULLY banned, please appeal on the website $(WEBSITE)|Name: $(NAME)|IP: $(IP)|Admin: $(ADMIN)|Date: $(DATETIME)"
 #define CHATHISTORY			"Admins"	// Show pervious chat messages to joining players ("Admins"/"All"/"None")
-#define CHATPREFIX			"@|//"		// The prefix for admin chat
+#define CHATPREFIX			"@|//"		// The prefix(s) for admin chat
 #define DEFAULTNUMPLATE		"alar!"		// The default number plate for admin created vehicles (! - vehicleid, # - random number from 0 to 9, $ - random letter from A to Z)
 #define DEFAULTPW			"changeme"	// The default admin password
-#define RANGEBANMSG			""			// The message to show people who are range banned (defaults to the normal message if left empty
-#define RANGESUSPENDMSG		""			// The message to show people who are range suspended (defaults to the normal message if left empty
-#define SUSPENDMSG			"If you feel you have been WRONGFULLY suspended, please appeal on the website $(WEBSITE)|Name: $(NAME)|IP: $(IP)|Admin: $(ADMIN)|Date: $(DATE) $(TIME)"
+#define RANGEBANMSG			""			// The message to show people who are range banned (defaults to the normal message if left empty)
+#define RANGESUSPENDMSG		""			// The message to show people who are range suspended (defaults to the normal message if left empty)
+#define SUSPENDMSG			"If you feel you have been WRONGFULLY suspended, please appeal on the website $(WEBSITE)|Name: $(NAME)|IP: $(IP)|Admin: $(ADMIN)|Date: $(DATETIME)"
 
 #define AUTOMUTETIME		60			// The time to mute spammers for (0 or less for a permanent mute)
 #define DROPHEIGHT			15			// The height to drop players with /adrop
 #define GIVEWEAPONAMMO		200			// The default ammo to give with weapons
 #define MAXPING				450			// The maximium average ping a player may have
-#define MINPWLENGTH			3			// The minimium length for admin passwords
+#define MINPWLENGTH			5			// The minimium length for admin passwords
 #define PUNCHDECREMENT		20			// The amount of health/armour to take off with /apunch
 #define RAGETIME			15			// The time after being killed to count as a rage quit (0 or less to disable rage quits)
+#define RCONLEVEL			9			// The effective alar level of players logged into RCON
+#define RCONLOGINLEVEL		9			// The level of the accounts for admins who use RCON to create their account (0 or less to disable account creation)
 #define SIGNINTIME			45			// The time admins have to login before being kicked (0 or less to not kick)
 #define SLAPDECREMENT		20			// The default amount of health to take off with /aslap
 
@@ -72,12 +64,11 @@
 #define JOINMSGS			true		// Show join/disconnect messages
 #define KICKALLIPS			true		// Kick all players who have the same IP as a player who is banned/suspended
 #define LOGACTIONS			false		// Log admin activity to a seperate file
-#define LOGLOGINS			true		// Show admin logins/logouts in the admin log
-#define PINGIMMUNITY		true		// Allow players to be immune from the ping kicker
+#define LOGLOGINS			false		// Show admin logins/logouts in the admin log
+#define PINGIMMUNITY		true		// Allow admins to be immune from the ping kicker
 #define RESPAWNVEHICLES		false		// Respawn admin create vehicles when they are destroyed
-#define SHOWPMS				false		// Allow admins to see PMs between players
 #define SPECHUD				true		// Allow spectating admins to see the HUD
-#define USECALLBACKS		true		// Enable callbacks (OnAdminLogin(), OnAdminLogout() etc)
+#define STOREALIASES		true		// Store the alternate names and IPs of players
 
 
 #define ALIASLEVEL			1
@@ -111,7 +102,7 @@
 #define GRAVITYLEVEL		9
 #define HEALALLLEVEL		7
 #define HEALLEVEL			6
-#define IMITATELEVEL		-9		// I can't really see any legitimate uses for this...
+#define IMITATELEVEL		-9
 #define IMMUNELEVEL			9
 #define INFOLEVEL			1
 #define INTERIORLEVEL		3
@@ -124,9 +115,9 @@
 #define MUTELEVEL			3
 #define PUNCHLEVEL			4
 #define RANGEBANLEVEL		9
+#define RANGEKICKLEVEL		10
 #define RANGESUSPENDLEVEL	9
 #define RAPELEVEL			7
-#define RCONLEVEL			9
 #define RELOADDATALEVEL		10
 #define REMALLCASHLEVEL		6
 #define REMALLWEAPONSLEVEL	6
@@ -156,17 +147,33 @@
 #define UNMUTELEVEL			3
 #define UNRAPELEVEL			7
 #define UNSUSPENDLEVEL		8
+#define UNWARNLEVEL			4
 #define UNWHITELISTLEVEL	9
+#define WARNLEVEL			4
 #define WEATHERLEVEL		9
 #define WILDBANLEVEL		9
+#define WILDKICKLEVEL		9
+#define WILDSUSPENDLEVEL	9
 #define WHITELISTLEVEL		9
 #define WORLDLEVEL			3
 
+// Warnings
+#define WARNLIMIT			5		// The number of warnings a player can have before being kicked/suspended (0 or less for infinite)
+#define WARNPROTECTION		5		// The minimium time in seconds between warnings to prevent multiple admins warning the same player
+#define WARNSUSPENDTIME		24		// The time in hours to suspend for when the number of allowed warnings is exceeded (0 or less to kick)
+#define WARNTIMEOUT			168		// The time in hours for warnings to be active (0 or less for permanent warnings)
+
 // Join Flood Kicker
-#define JOINCOUNT			4		// The maximum amount of joins in the specified time
+#define JOINCOUNT			4		// The maximum amount of joins in the specified time (1 or less to disable join flood protection)
 #define JOINTIME			10		// The time, in seconds, for the player to join x times
 #define JOINBANTIME			120		// The number of seconds to ban for (set to 0 or less for a permanent ban)
 #define JOINPREV			20		// The number of previous joins to check against
+
+// RCON Password Kicker
+#define RCONCOUNT			3		// The maximum amount of RCON attempts in the specified time (1 or less to disable RCON password protection)
+#define RCONTIME			120		// The time, in seconds, for the player to attempt to login x times
+#define RCONBANTIME			300		// The number of seconds to ban for (set to 0 or less for a permanent ban)
+#define RCONPREV			40		// The number of previous RCON attempts to check against
 
 // Ping Kicker
 #define PINGCOUNT			5		// The number of values to average
@@ -182,7 +189,6 @@
 
 #define MUTECMDS			true	// Check commands for spam and disable if a player is muted
 #define MUTECHAT			true	// Check chat for spam and disable if a player is muted
-#define MUTEPMS				true	// Check PMs for spam and disable if a player is muted (currently impossible from filterscripts)
 
 // Colours
 #define COLOUR_ADMIN		0xEE66EEAA
@@ -192,6 +198,7 @@
 #define COLOUR_MSG			0x00FFDCAA
 #define COLOUR_PLAYER		0x3333DDAA
 #define COLOUR_SPECMODE		0xEE66EEFF
+#define COLOUR_VEHICLE		0xEE66EEFF
 #define COLOUR_WARNING		0xCC0000AA
 
 #define COLOUR_CONNECT		0x22BB22AA
@@ -212,11 +219,11 @@
 #define JOINMSG_UPDATE		200		// The time in ms to update the fading (lower = more cpu/bandwidth, higher = more jumpyness)
 
 // Chat History
-#define CHATHISTORY_SIZE	30		// The number of previous chat messages to store
+#define CHATHISTORY_SIZE	50		// The number of previous chat messages to store (0 or less to disable the chat history)
 
 // Chat Prefix
-#define CHATPREFIX_NUMBER	5		// The number of chat prefixes
-#define CHATPREFIX_LENGTH	10		// The number maximum length of a chat prefix
+#define CHATPREFIX_NUMBER	5		// The maximum number of chat prefixes
+#define CHATPREFIX_LENGTH	10		// The maximum length of a chat prefix
 
 // Log Settings
 #define LOG_LINES			15		// Number of lines for the in-game admin log
@@ -229,11 +236,28 @@
 #define KEY_LOG_UP			KEY_ANALOG_RIGHT
 #define NAME_LOG_UP			"right analog"
 
+// Vehicle tags
+#define VEHICLE_TAGS_NUMBER		50		// The maximium number of 3D texts showing alar vehicleids
+#define VEHICLE_TAGS_TIME		10		// The time in seconds to show the tags
+#define VEHICLE_TAGS_DISTANCE	30.0	// The distance where you are able to see the 3D Text Label
+
 // Mute/Jail/Freeze
 #define MIN_ACTION_TIME		10		// The minimium time (in seconds) to mute/jail/freeze for
 
+// Default reason for bans/mutes etc
+#define DEFAULT_REASON		"No reason"
+
+// Default name for bans/suspension messages
+#define DEFAULT_NAME		"Console"
+
 // Spec Mode
 #define SPEC_TXT_TIME		10		// The time to show the spec mode (in seconds)
+
+// Default spawning method
+#define DEFAULT_SPAWNTYPE	SPAWN_ALAR_TIMER
+
+// Sound volume
+#define SOUND_VOLUME		20		// The number of times to play sounds to increase their volume
 
 // Key Definitions
 #define KEY_SPEC_LEFT		KEY_HANDBRAKE
@@ -262,6 +286,8 @@
 stock const gMutedCommands[][] = {
 	"/apm",
 	"/me",
+	"/pm",
+	"/tpm",
 	"/slap",
 	"/site",
 	"/gang invite",
@@ -282,49 +308,14 @@ stock const gRageWords[][] = {
 	"noob",
 	"nub",
 	"shit",
+	"ffff",
 	"whore"
 };
 
 
 
 //-------------------------------------------------------------------------------------------------------------------
-#include <a_samp>
-#include <alar/String>
-#include <alar/Dini>
-#include <alar/Bans>
-#include <alar/IP2c>
-#include <alar/Functions>
-#include <alar/Zones>
-#include <alar/MD5.inc>
-#include <alar/Vehicles>
 
-#define dcmd(%1,%2,%3)			if((strcmp((%3)[1], #%1, true, (%2)) == 0) && ((((%3)[(%2) + 1] == '\0') && (dcmd_%1(playerid, "")))||(((%3)[(%2) + 1] == ' ') && (dcmd_%1(playerid, (%3)[(%2) + 2]))))) return 1
-#define cmd(%1,%2)				if(strcmp((%2)[1], #%1, true) == 0) return cmd_%1(playerid)
-#define rdcmd(%1,%2,%3)			if((strcmp((%3), #%1, true, (%2)) == 0) && ((((%3)[%2] == '\0') && (dcmd_%1(INVALID_PLAYER_ID, "")))||(((%3)[%2] == ' ') && (dcmd_%1(INVALID_PLAYER_ID, (%3)[(%2) + 1]))))) return 1
-#define rcmd(%1,%2)				if(strcmp((%2), #%1, true) == 0) return cmd_%1(INVALID_PLAYER_ID)
-#define cmdchk(%1,%2)			(gPlayerData[%1][E_ADMINLEVEL] >= gServerData[%2] && gServerData[%2] > 0)
-#define setchk(%1,%2)			if(!dini_Isset(SETTINGSFILE,%1)) dini_IntSet(SETTINGSFILE, %1, %2)
-#define SendMessage(%1,%2,%3)	if(%1==INVALID_PLAYER_ID) print(%3); else SendClientMessage(%1, %2, %3)
-#define IsKeyJustDown(%1,%2,%3)	(((%2)&(%1))&&!((%3)&(%1)))
-#define IsKeyJustUp(%1,%2,%3)	(((%3)&(%1))&&!((%2)&(%1)))
-#define LoopPlayers(%1)			for(new %1; %1 < gMaxPlayers; %1++) if(IsPlayerConnected(%1))
-#define AddJoinString(%1,%2,%3)	alar_AddJoinLine(%1,%2,%3)
-
-#if LOG_LINES > 0 && LOG_PAGES > 0
-	#define AddLogString(%1)	alar_AddAdminLogLine(COLOUR_LOG, %1)
-#else
-	#define AddLogString(%1);
-#endif
-
-#if !USECALLBACKS
-	#define CallRemoteFunction(%1);
-#endif
-
-#assert (JOINMSG_ALPHA) >= 0x00 && (JOINMSG_ALPHA) <= 0xFF		// JOINMSG_ALPHA must be between 0 and 255
-#assert (PINGCOUNT) >= 1										// PINGCOUNT must be more then 0
-#assert (MSGCOUNT) >= 2											// MSGCOUNT must be more then 1
-
-#define MAX_REASON			50
 #define FREE_SPECTATE_ID	-1
 #define ALAR_PROPERTY_ID	41412
 
@@ -348,7 +339,8 @@ enum E_INFOTYPE (<<=1) {
 	INFOTYPE_WEAPONS,
 	INFOTYPE_CASH,
 	INFOTYPE_HEALTH,
-	INFOTYPE_ARMOUR
+	INFOTYPE_ARMOUR,
+	INFOTYPE_VEHICLE
 };
 
 enum E_SPAWNTYPE {
@@ -360,6 +352,89 @@ enum E_SPAWNTYPE {
 	SPAWN_GAMEMODE_STATE,
 	SPAWN_GAMEMODE_SPAWN
 };
+
+//-------------------------------------------------------------------------------------------------------------------
+
+#include <a_samp>
+
+#tryinclude "alar/Bugfix"
+#if !defined _alar_bugfix_included
+	#include <alar/Bugfix>
+#endif
+
+#tryinclude "alar/Acmd"
+#if !defined _alar_acmd_included
+	#include <alar/Acmd>
+#endif
+
+#tryinclude "alar/String"
+#if !defined _alar_string_included
+	#include <alar/String>
+#endif
+
+#tryinclude "alar/Bans"
+#if !defined _alar_bans_included
+	#include <alar/Bans>
+#endif
+
+#tryinclude "alar/IP2c"
+#if !defined _alar_ip2c_included
+	#include <alar/IP2c>
+#endif
+
+#tryinclude "alar/Functions"
+#if !defined _alar_functions_included
+	#include <alar/Functions>
+#endif
+
+#tryinclude "alar/Zones"
+#if !defined _alar_zones_included
+	#include <alar/Zones>
+#endif
+
+#tryinclude "alar/Vehicles"
+#if !defined _alar_vehicles_included
+	#include <alar/Vehicles>
+#endif
+
+#tryinclude "alar/YSI_foreach"
+#if !defined _foreach_included
+	#tryinclude <alar/YSI_foreach>
+#endif
+
+#tryinclude "alar/Data"
+#if !defined _alar_data_included
+	#include <alar/Data>
+#endif
+
+//-------------------------------------------------------------------------------------------------------------------
+
+#define rdcmd(%1,%2,%3)			if((strcmp((%3), #%1, true, (%2)) == 0) && ((((%3)[%2] == '\0') && (acmd_%1(INVALID_PLAYER_ID, "", false)))||(((%3)[%2] == ' ') && (acmd_%1(INVALID_PLAYER_ID, (%3)[(%2) + 1], false))))) return 1
+#define rcmd(%1,%2)				if(strcmp((%2), #%1, true) == 0) return acmd_%1(INVALID_PLAYER_ID, "", false)
+#define cmdchk(%1,%2)			(gServerData[%2] > 0 && (gPlayerData[%1][E_ADMINLEVEL] >= gServerData[%2] || gPlayerData[%1][E_RCONLEVEL] >= gServerData[%2]))
+#define SendMessage(%1,%2,%3)	if((%1)==INVALID_PLAYER_ID) print(%3); else SendClientMessage(%1, %2, %3)
+#define IsKeyJustDown(%1,%2,%3)	(((%2)&(%1))&&!((%3)&(%1)))
+#define IsKeyJustUp(%1,%2,%3)	(((%3)&(%1))&&!((%2)&(%1)))
+#define AddJoinString(%1,%2,%3)	alar_AddJoinLine(%1,%2,%3)
+
+#if LOG_LINES > 0 && LOG_PAGES > 0
+	#define AddLogString(%1)	alar_AddAdminLogLine(COLOUR_LOG, %1)
+#else
+	#define AddLogString(%1);
+#endif
+
+#if defined _foreach_included
+	#define LoopPlayers(%1)		foreach(Player,%1)
+#else
+	#define LoopPlayers(%1)		for(new %1; %1 < gMaxPlayers; %1++) if(IsPlayerConnected(%1))
+#endif
+
+#assert (JOINMSG_ALPHA) >= 0x00 && (JOINMSG_ALPHA) <= 0xFF		// JOINMSG_ALPHA must be between 0 and 255
+#assert (PINGCOUNT) >= 1										// PINGCOUNT must be more then 0
+#assert (MSGCOUNT) >= 2											// MSGCOUNT must be more then 1
+
+#define MAX_REASON			50
+
 
 enum E_PLAYERDATA {
 	// Timers
@@ -380,7 +455,14 @@ enum E_PLAYERDATA {
 	E_NAME[MAX_PLAYER_NAME],
 
 	// The last time they were active
+	E_LAST_UPDATE,
 	E_LAST_ACTIVE,
+
+	// The time they joined
+	E_JOIN_TIME,
+
+	// Their last warning
+	E_LAST_WARNING,
 
 	// Muted/frozen/jailed
 	E_STATE,
@@ -419,14 +501,24 @@ enum E_PLAYERDATA {
 	E_CASH,
 	Float:E_HEALTH,
 	Float:E_ARMOUR,
+	E_ARMED,
 	E_WEAPON[13],
 	E_AMMO[13],
+	E_VEHICLEID,
+	E_SEATID,
 
 	// Country code
 	E_COUNTRY[3],
+	Unsigned:E_IPCODE,
 
 	// Admin stuff
+	#if VEHICLE_TAGS_TIME > 0 && VEHICLE_TAGS_NUMBER > 0
+		PlayerText3D:E_VEHICLETAGS[VEHICLE_TAGS_NUMBER],
+		E_TIMER_VEHICLETAGS,
+	#endif
+
 	E_ADMINLEVEL,
+	E_RCONLEVEL,
 
 	#if LOG_LINES > 0
 		bool:E_LOGKEYS,
@@ -469,6 +561,7 @@ enum E_SERVERDATA {
 	E_BAN_MSG[MAX_STRING],
 	E_DEFAULT_NUM_PLATE[9],
 	E_DEFAULT_PW[20],
+	E_LOGGEDIN_FUNC[MAX_COMM_FUNC_NAME],
 	E_RANGEBAN_MSG[MAX_STRING],
 	E_RANGESUSPEND_MSG[MAX_STRING],
 	E_SUSPEND_MSG[MAX_STRING],
@@ -485,12 +578,19 @@ enum E_SERVERDATA {
 	E_MIN_PW_LENGTH,
 	E_PUNCH_DECREMENT,
 	E_RAGE_TIME,
+	E_RCON_LOGIN_LEVEL,
+	E_RCON_BAN_TIME,
 	E_SIGNIN_TIME,
 	E_SLAP_DECREMENT,
+	E_WARN_LIMIT,
+	E_WARN_PROTECTION,
+	E_WARN_SUSPEND_TIME,
+	E_WARN_TIMEOUT,
 
 	bool:E_ADMIN_PMS,
 	bool:E_ALIAS_ADMINS,
 	bool:E_AUTO_LOGIN,
+	bool:E_CHECK_MODS,
 	bool:E_CONSOLE_MSGS,
 	bool:E_EXTRA_SPEC_VIEWS,
 	bool:E_FIX_RUNNING,
@@ -503,8 +603,8 @@ enum E_SERVERDATA {
 	bool:E_LOG_LOGINS,
 	bool:E_PING_IMMUNITY,
 	bool:E_RESPAWN_VEHICLES,
-	bool:E_SHOW_PMS,
 	bool:E_SPEC_HUD,
+	bool:E_STORE_ALIASES,
 
 	E_ALIAS_LEVEL,
 	E_ALIAS2_LEVEL,
@@ -552,6 +652,7 @@ enum E_SERVERDATA {
 	E_MUTE_LEVEL,
 	E_PUNCH_LEVEL,
 	E_RANGEBAN_LEVEL,
+	E_RANGEKICK_LEVEL,
 	E_RANGESUSPEND_LEVEL,
 	E_RAPE_LEVEL,
 	E_RCON_LEVEL,
@@ -583,16 +684,20 @@ enum E_SERVERDATA {
 	E_UNMUTE_LEVEL,
 	E_UNRAPE_LEVEL,
 	E_UNSUSPEND_LEVEL,
+	E_UNWARN_LEVEL,
 	E_UNWHITELIST_LEVEL,
+	E_WARN_LEVEL,
 	E_WEATHER_LEVEL,
 	E_WILDBAN_LEVEL,
+	E_WILDKICK_LEVEL,
+	E_WILDSUSPEND_LEVEL,
 	E_WHITELIST_LEVEL,
 	E_WORLD_LEVEL
 }; stock SIZE_E_SERVERDATA[E_SERVERDATA];
 
 enum E_FLOOD {
 	Unsigned:E_LASTIP,
-	E_LASTJOIN
+	E_LASTTIME
 }; stock SIZE_E_FLOOD[E_FLOOD];
 
 enum E_TEXTBOX {
@@ -610,21 +715,10 @@ enum E_HISTORY {
 	E_HISTORY_MESSAGE[MAX_INPUT]
 }; stock SIZE_E_HISTORY[E_HISTORY];
 
-enum E_LOGINDATA {
-	E_LOGIN_LEVEL,
-	E_LOGIN_IP[MAX_IP],
-	E_LOGIN_PW[33],
-	bool:E_LOGIN_HIDDEN,
-	#if LOG_LINES > 0 && LOG_PAGES > 0
-		E_LOGIN_PAGE,
-	#endif
-	bool:E_LOGIN_MANUAL,
-	bool:E_LOGIN_HUD
-}; stock SIZE_E_LOGINDATA[E_LOGINDATA];
-
 stock
-	gJoinTimer,
 	Text:g_txtSpecMode[4] = {INVALID_TEXT_DRAW, ...},
+	gJoinList[JOINPREV][E_FLOOD],
+	gRconList[RCONPREV][E_FLOOD],
 	#if LOG_LINES > 0 && LOG_PAGES > 0
 		gAdminLog[LOG_LINES * LOG_PAGES][E_TEXTBOX],
 		#if LOG_PAGES > 1
@@ -634,16 +728,19 @@ stock
 	#if CHATHISTORY_SIZE > 0
 		gChatHistory[CHATHISTORY_SIZE][E_HISTORY],
 	#endif
-	gJoinMessage[JOINMSG_LINES][E_TEXTBOX];
+	#if JOINMSG_LINES > 0
+		gJoinMessage[JOINMSG_LINES][E_TEXTBOX],
+	#endif
+	gJoinTimer;
 
 new Bit:g_bitAdmins[Bit_Bits(MAX_PLAYERS)],
 	Bit:gCreatedVehicles[Bit_Bits(MAX_VEHICLES)],
+	DB:gAlarDB,
 	gDefaultPlayerData[E_PLAYERDATA],
-	gJoinList[JOINPREV][E_FLOOD],
 	gChatPrefix[CHATPREFIX_NUMBER][E_CHATPREFIX],
 	gMaxPlayers,
 	gSpecTimer,
-	E_SPAWNTYPE:gSpawnMethod,	// 0-OnPlayerSpawn, 1-Timer, 2-OnPlayerSpawn, 3-SetPlayerSpawnInfo; <=0 = alar handles spawn info, >0 = gamemode handles spawn info
+	E_SPAWNTYPE:gSpawnMethod = DEFAULT_SPAWNTYPE,	// 0-OnPlayerSpawn, 1-Timer, 2-OnPlayerSpawn, 3-SetPlayerSpawnInfo; <=0 = alar handles spawn info, >0 = gamemode handles spawn info
 	E_INFOTYPE:gSpawnSaves = E_INFOTYPE:0xFFFFFFFF,
 	gPlayerData[MAX_PLAYERS][E_PLAYERDATA],
 	gServerData[E_SERVERDATA];
@@ -651,11 +748,13 @@ new Bit:g_bitAdmins[Bit_Bits(MAX_PLAYERS)],
 forward alar_autokick(playerid);
 forward alar_fixkick(playerid);
 forward alar_floodunban(Unsigned:IPcode);
+forward alar_hidevehicletags(playerid);
 forward alar_hidespectxt(playerid);
 forward alar_jailplayer(playerid);
 forward alar_joinfade();
 forward alar_pausecheck();
 forward alar_pingkick();
+forward alar_rconupdate(Unsigned:IPCode);
 forward alar_setspawndata(playerid);
 forward alar_setspawnposition(playerid);
 forward alar_setspawnpositiondata(playerid);
@@ -669,12 +768,16 @@ forward alar_AddAdminLogLine(colour, const string[]);
 forward alar_AddMessageToHistory(const playername[], colour, const message[], flags);
 forward alar_AddLineToHistory(colour, const message[], flags);
 forward alar_ClearHistory();
+forward alar_DestroyVehicle(vehicleid);
+forward alar_GetPlayerCountryCode(playerid);
+forward alar_GetCountryCode(const IP[]);
 forward alar_GetAdminLevel(playerid);
 forward alar_GetAdminState(playerid);
 forward alar_GetAdminSpectating(playerid);
 forward alar_SetAdminSpectating(playerid, targetid, bool:saveplayer);
 forward alar_DisableAdminSpectating(playerid);
 forward alar_ClearAdminSpawnData(playerid);
+forward alar_LoginFunc(const func[]);
 forward alar_SetSpawnType(E_SPAWNTYPE:spawntype, E_INFOTYPE:spawnsaves);
 forward alar_OnPlayerSpectatePlayer(playerid, specid);
 forward alar_OnPlayerSpectateVehicle(playerid, vehicleid);
@@ -682,22 +785,33 @@ forward alar_OnPlayerVehicleChange(playerid, newvehicleid, oldvehicleid);
 forward alar_OnPlayerWorldChange(playerid, newworldid);
 forward alar_SetAdminState(playerid, newstate, seconds);
 forward alar_ClearAdminState(playerid, newstate);
-forward alar_Ban(const playername[], const playerip[], const reason[], const adminname[]);
-forward alar_BanPlayer(playerid, const reason[], const adminname[]);
-forward alar_Suspend(const playername[], const playerip[], Float:hours, const reason[], const adminname[]);
-forward alar_SuspendPlayer(playerid, Float:hours, const reason[], const adminname[]);
+forward alar_Ban(const playername[], const playerip[], const reason[], const adminname[], const adminip[], bool:hidename);
+forward alar_BanPlayer(playerid, const reason[], const adminname[], const adminip[], bool:hidename);
+forward alar_Suspend(const playername[], const playerip[], Float:hours, const reason[], const adminname[], const adminip[], bool:hidename);
+forward alar_SuspendPlayer(playerid, Float:hours, const reason[], const adminname[], const adminip[], bool:hidename);
+forward alar_WarnPlayer(playerid, const reason[], const adminname[], const adminip[], bool:hidename);
+forward alar_Warn(const playername[], const reason[], const adminname[], const adminip[], bool:hidename);
 
 public OnFilterScriptInit()
 {
+	gAlarDB = db_open(ALAR_DATABASE);
 	gMaxPlayers = GetMaxPlayers();
 
 	gDefaultPlayerData[E_SPECID] = INVALID_PLAYER_ID;
 	gDefaultPlayerData[E_LAST_SPECID] = INVALID_PLAYER_ID;
 	gDefaultPlayerData[E_SPECHUD] = INVALID_TEXT_DRAW;
+	gDefaultPlayerData[E_VEHICLEID] = INVALID_VEHICLE_ID;
+	gDefaultPlayerData[E_SEATID] = INVALID_SEAT_ID;
+	gDefaultPlayerData[E_LOGKEYS] = true;
+	#if VEHICLE_TAGS_TIME > 0 && VEHICLE_TAGS_NUMBER > 0
+		for(new i; i < sizeof(gDefaultPlayerData[E_VEHICLETAGS]); i++) {
+			gDefaultPlayerData[E_VEHICLETAGS][i] = INVALID_PLAYER3DTEXT_ID;
+		}
+	#endif
 	#if SPEC_TXT_TIME > 0
 		gDefaultPlayerData[E_SPECTXT] = INVALID_TEXT_DRAW;
 	#endif
-	gDefaultPlayerData[E_LAST_ACTIVE] = GetTickCount();
+	gDefaultPlayerData[E_LAST_UPDATE] = gDefaultPlayerData[E_LAST_ACTIVE] = GetTickCount();
 	#if JOINMSG_LINES > 0
 		gDefaultPlayerData[E_JOINTEXT] = true;
 	#endif
@@ -763,7 +877,7 @@ public OnFilterScriptInit()
 		g_txtSpecMode[2] = TextDrawCreate(10.0, 390.0, "Side Spectate");
 		g_txtSpecMode[3] = TextDrawCreate(10.0, 390.0, "Free Spectate");
 
-		for(new i; i < 4; i++) {
+		for(new i; i < sizeof(g_txtSpecMode); i++) {
 			TextDrawUseBox(g_txtSpecMode[i], 0);
 			TextDrawSetOutline(g_txtSpecMode[i], 0);
 			TextDrawColor(g_txtSpecMode[i], COLOUR_SPECMODE);
@@ -774,97 +888,164 @@ public OnFilterScriptInit()
 		}
 	#endif
 
+	db_free_result(db_query(gAlarDB, "BEGIN TRANSACTION"));
+
+	TempBan_UnbanAll(gAlarDB);
 	LoadData();
 
 	SendClientMessageToAll(COLOUR_HELP, "Any Last Administrative Requests loaded");
 	LogAction("Any Last Administrative Requests loaded (Version " #ALAR_VERSION ")");
 	AddLogString("Any Last Administrative Requests loaded (Version " #ALAR_VERSION ")");
 
-	new pname[MAX_PLAYER_NAME],
+	new jointime = gettime(),
+		pname[MAX_PLAYER_NAME],
 		pIP[MAX_IP],
-		msg[MAX_INPUT];
+		msg[MAX_INPUT * 2];
 
 	LoopPlayers(i) {
-		gPlayerData[i][E_HIDEEXIT] = 1;		// Default is 0 but since they didnt join increment it manually
+		gPlayerData[i][E_JOIN_TIME] = jointime;
+
+		gPlayerData[i][E_HIDEEXIT] = 1;		// Default is 0 but since they didn't join increment it manually
 
 		GetPlayerName(i, pname, sizeof(pname));
 		GetPlayerIp(i, pIP, sizeof(pIP));
 
-		gPlayerData[i][E_WHITELISTED] = IsNameWhitelisted(pname);
+		if(!IsPlayerNPC(i)) {
+			gPlayerData[i][E_WHITELISTED] = Whitelist_IsNameWhitelisted(gAlarDB, pname, true);
 
-		new BanData[E_ALAR_BAN];
-		if(GetBanInfo(pname, pIP, BanData, gPlayerData[i][E_WHITELISTED])) {
-			format(msg, sizeof(msg), "You are banned from this server (%s)", BanData[E_BAN_REASON]);
-			SendClientMessage(i, COLOUR_WARNING, msg);
-			if(gServerData[E_RANGEBAN_MSG][0] != '\0' && strfind(BanData[E_BAN_IP], "*") != -1) {
-				SendBanMsg(i, gServerData[E_RANGEBAN_MSG], BanData[E_BAN_DATE], BanData[E_BAN_TIME], BanData[E_BAN_ADMIN]);
-			} else if(gServerData[E_BAN_MSG][0] != '\0') {
-				SendBanMsg(i, gServerData[E_BAN_MSG], BanData[E_BAN_DATE], BanData[E_BAN_TIME], BanData[E_BAN_ADMIN]);
-			}
-			format(msg, sizeof(msg), "%s(%i) is banned from this server (%s)", pname, i, BanData[E_BAN_REASON]);
-			AddJoinString(i, COLOUR_BAN, msg);
-
-			format(msg, sizeof(msg), "%s(%i) [%s:%s] is banned from this server (%s)", pname, i, BanData[E_BAN_NAME], BanData[E_BAN_IP], BanData[E_BAN_REASON]);
-			AddLogString(msg);
-			LogAction(msg);
-			Kick(i);
-			continue;
-		}
-
-		new SuspendData[E_ALAR_SUSPENSION],
-			bool:unsuspended = false;
-		while(GetSuspendInfo(pname, pIP, SuspendData, gPlayerData[i][E_WHITELISTED])) {
-			new curyear,
-				curmonth,
-				curday,
-				curhour,
-				curmin,
-				cursec;
-			getdate(curyear, curmonth, curday);
-			gettime(curhour, curmin, cursec);
-			if(SuspendData[E_SUSPEND_YEAR] < curyear || (SuspendData[E_SUSPEND_YEAR] == curyear && (SuspendData[E_SUSPEND_MONTH] < curmonth || (SuspendData[E_SUSPEND_MONTH] == curmonth && (SuspendData[E_SUSPEND_DAY] < curday || (SuspendData[E_SUSPEND_DAY] == curday && SuspendData[E_SUSPEND_HOUR] < (curhour + floatdiv(curmin, 60) + floatdiv(cursec, 3600)))))))) {
-				UnsuspendPlayer(pname, pIP, SuspendData);
-				format(msg, sizeof(msg), "%s(%i) [%s:%s] has been unsuspended", ReturnPlayerName(i), i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP]);
-				LogAction(msg);
-				AddLogString(msg);
-				unsuspended = true;
-			} else {
-				new minute = floatround((SuspendData[E_SUSPEND_HOUR] - floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor)) * 60);
-				format(msg, sizeof(msg), "You are suspended from this server until %02i/%02i/%i %02i:%02i (%s)", SuspendData[E_SUSPEND_DAY], SuspendData[E_SUSPEND_MONTH], SuspendData[E_SUSPEND_YEAR], floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor), minute, SuspendData[E_SUSPEND_REASON]);
-				SendClientMessage(i, COLOUR_WARNING, msg);
-				if(gServerData[E_RANGESUSPEND_MSG][0] != '\0' && strfind(SuspendData[E_SUSPEND_IP], "*") != -1) {
-					SendBanMsg(i, gServerData[E_RANGESUSPEND_MSG], SuspendData[E_SUSPEND_DATE], SuspendData[E_SUSPEND_TIME], SuspendData[E_SUSPEND_ADMIN]);
-				} else if(gServerData[E_SUSPEND_MSG][0] != '\0') {
-					SendBanMsg(i, gServerData[E_SUSPEND_MSG], SuspendData[E_SUSPEND_DATE], SuspendData[E_SUSPEND_TIME], SuspendData[E_SUSPEND_ADMIN]);
-				}
-				format(msg, sizeof(msg), "%s(%i) is suspended from this server until %02i/%02i/%i %02i:%02i (%s)", pname, i, SuspendData[E_SUSPEND_DAY], SuspendData[E_SUSPEND_MONTH], SuspendData[E_SUSPEND_YEAR], floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor), minute, SuspendData[E_SUSPEND_REASON]);
-				if(gServerData[E_HIDE_BANS]) {
-					gPlayerData[i][E_HIDEEXIT] = 3;
+			new BanData[E_ALAR_BAN];
+			if(Bans_GetBanInfo(gAlarDB, pname, pIP, BanData, gPlayerData[i][E_WHITELISTED], false, true)) {
+				if(BanData[E_BAN_REASON][0]) {
+					format(msg, sizeof(msg), "You are banned from this server (%s)", BanData[E_BAN_REASON]);
 				} else {
-					gPlayerData[i][E_HIDEEXIT] = 1;
-					AddJoinString(i, COLOUR_SUSPEND, msg);
+					msg = "You are banned from this server";
 				}
+				SendWrappedMessageToPlayer(i, COLOUR_WARNING, msg);
+				if(gServerData[E_RANGEBAN_MSG][0] != '\0' && strfind(BanData[E_BAN_IP], "*") != -1) {
+					SendBanMsg(i, gServerData[E_RANGEBAN_MSG], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN]);
+				} else if(gServerData[E_BAN_MSG][0] != '\0') {
+					SendBanMsg(i, gServerData[E_BAN_MSG], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN]);
+				}
+				if(BanData[E_BAN_REASON][0]) {
+					strtruncate(BanData[E_BAN_REASON], BanData[E_BAN_REASON], MAX_REASON, .maxlength=sizeof(SIZE_E_ALAR_BAN[E_BAN_REASON]));
+					format(msg, sizeof(msg), "%s(%i) is banned from this server (%s)", pname, i, BanData[E_BAN_REASON]);
+				} else {
+					format(msg, sizeof(msg), "%s(%i) is banned from this server", pname, i);
+				}
+				AddJoinString(i, COLOUR_BAN, msg);
 
-				format(msg, sizeof(msg), "%s(%i) [%s:%s] is suspended from this server (%s)", pname, i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
+				if(BanData[E_BAN_REASON][0]) {
+					if(BanData[E_BAN_NAME][0]) {
+						if(BanData[E_BAN_IP][0]) {
+							format(msg, sizeof(msg), "%s(%i) [%s:%s] is banned from this server (%s)", pname, i, BanData[E_BAN_NAME], BanData[E_BAN_IP], BanData[E_BAN_REASON]);
+						} else {
+							format(msg, sizeof(msg), "%s(%i) [%s] is banned from this server (%s)", pname, i, BanData[E_BAN_NAME], BanData[E_BAN_REASON]);
+						}
+					} else {
+						format(msg, sizeof(msg), "%s(%i) [%s] is banned from this server (%s)", pname, i, BanData[E_BAN_IP], BanData[E_BAN_REASON]);
+					}
+				} else {
+					if(BanData[E_BAN_NAME][0]) {
+						if(BanData[E_BAN_IP][0]) {
+							format(msg, sizeof(msg), "%s(%i) [%s:%s] is banned from this server", pname, i, BanData[E_BAN_NAME], BanData[E_BAN_IP]);
+						} else {
+							format(msg, sizeof(msg), "%s(%i) [%s] is banned from this server", pname, i, BanData[E_BAN_NAME]);
+						}
+					} else {
+						format(msg, sizeof(msg), "%s(%i) [%s] is banned from this server", pname, i, BanData[E_BAN_IP]);
+					}
+				}
 				AddLogString(msg);
 				LogAction(msg);
 				Kick(i);
-				return 1;
+				continue;
 			}
-		}
-		if(unsuspended) {
-			SendClientMessage(i, COLOUR_PLAYER, "You have been unsuspended");
-			format(msg, sizeof(msg), "%s(%i) has been unsuspended", ReturnPlayerName(i), i);
 
-			LoopPlayers(j) {
-				if(gPlayerData[j][E_ADMINLEVEL] > 0) {
-					SendClientMessage(j, COLOUR_ADMIN, msg);
+			new SuspendData[E_ALAR_SUSPENSION],
+				bool:unsuspended = false;
+			while(Suspensions_GetSuspendInfo(gAlarDB, pname, pIP, SuspendData, gPlayerData[i][E_WHITELISTED], false, true)) {
+				if(SuspendData[E_SUSPEND_EXPIRED]) {
+					Suspensions_UnsuspendPlayer(gAlarDB, pname, pIP, SuspendData);
+					format(msg, sizeof(msg), "%s(%i) [%s:%s] has been unsuspended", ReturnPlayerName(i), i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP]);
+					LogAction(msg);
+					AddLogString(msg);
+					unsuspended = true;
+				} else {
+					if(SuspendData[E_SUSPEND_REASON][0]) {
+						format(msg, sizeof(msg), "You are suspended from this server until %s (%s)", SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_REASON]);
+					} else {
+						format(msg, sizeof(msg), "You are suspended from this server until %s", SuspendData[E_SUSPEND_EXPIRES]);
+					}
+					SendWrappedMessageToPlayer(i, COLOUR_WARNING, msg);
+					if(gServerData[E_RANGESUSPEND_MSG][0] != '\0' && strfind(SuspendData[E_SUSPEND_IP], "*") != -1) {
+						SendBanMsg(i, gServerData[E_RANGESUSPEND_MSG], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN]);
+					} else if(gServerData[E_SUSPEND_MSG][0] != '\0') {
+						SendBanMsg(i, gServerData[E_SUSPEND_MSG], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN]);
+					}
+					if(SuspendData[E_SUSPEND_REASON][0]) {
+						strtruncate(SuspendData[E_SUSPEND_REASON], SuspendData[E_SUSPEND_REASON], MAX_REASON, .maxlength=sizeof(SIZE_E_ALAR_SUSPENSION[E_SUSPEND_REASON]));
+						format(msg, sizeof(msg), "%s(%i) is suspended from this server until %s (%s)", pname, i, SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_REASON]);
+					} else {
+						format(msg, sizeof(msg), "%s(%i) is suspended from this server until %s", pname, i, SuspendData[E_SUSPEND_EXPIRES]);
+					}
+					if(gServerData[E_HIDE_BANS]) {
+						gPlayerData[i][E_HIDEEXIT] = 3;
+					} else {
+						gPlayerData[i][E_HIDEEXIT] = 1;
+						AddJoinString(i, COLOUR_SUSPEND, msg);
+					}
+
+					if(SuspendData[E_SUSPEND_REASON][0]) {
+						if(SuspendData[E_SUSPEND_NAME][0]) {
+							if(SuspendData[E_SUSPEND_IP][0]) {
+								format(msg, sizeof(msg), "%s(%i) [%s:%s] is suspended from this server (%s)", pname, i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
+							} else {
+								format(msg, sizeof(msg), "%s(%i) [%s] is suspended from this server (%s)", pname, i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_REASON]);
+							}
+						} else {
+							format(msg, sizeof(msg), "%s(%i) [%s] is suspended from this server (%s)", pname, i, SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
+						}
+					} else {
+						if(SuspendData[E_SUSPEND_NAME][0]) {
+							if(SuspendData[E_SUSPEND_IP][0]) {
+								format(msg, sizeof(msg), "%s(%i) [%s:%s] is suspended from this server", pname, i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP]);
+							} else {
+								format(msg, sizeof(msg), "%s(%i) [%s] is suspended from this server", pname, i, SuspendData[E_SUSPEND_NAME]);
+							}
+						} else {
+							format(msg, sizeof(msg), "%s(%i) [%s] is suspended from this server", pname, i, SuspendData[E_SUSPEND_IP]);
+						}
+					}
+					AddLogString(msg);
+					LogAction(msg);
+					Kick(i);
+					continue;
 				}
+			}
+			if(unsuspended) {
+				SendClientMessage(i, COLOUR_PLAYER, "You have been unsuspended");
+				format(msg, sizeof(msg), "%s(%i) has been unsuspended", ReturnPlayerName(i), i);
+
+				LoopPlayers(j) {
+					if(gPlayerData[j][E_ADMINLEVEL] > 0 || gPlayerData[j][E_RCONLEVEL] > 0) {
+						SendClientMessage(j, COLOUR_ADMIN, msg);
+					}
+				}
+			}
+
+			if(gServerData[E_STORE_ALIASES]) Alias_Add(gAlarDB, pname, pIP);
+		}
+
+		if(IsPlayerAdmin(i)) {
+			gPlayerData[i][E_RCONLEVEL] = gServerData[E_RCON_LEVEL];
+			if(gServerData[E_RCON_LEVEL] > 0) {
+				Bit_Set(g_bitAdmins, i, 1);
+				AllowPlayerTeleport(i, cmdchk(i, E_TELE_LEVEL));
 			}
 		}
 
 		new logininfo[E_LOGINDATA];
-		if(GetPlayerData(pname, logininfo)) {
+		if(Admin_GetData(gAlarDB, pname, logininfo)) {
 			strcpy(gPlayerData[i][E_NAME], pname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
 			if(!logininfo[E_LOGIN_MANUAL] && gServerData[E_AUTO_LOGIN] && IPcompare(logininfo[E_LOGIN_IP], pIP)) {
 				Bit_Set(g_bitAdmins, i, 1);
@@ -905,7 +1086,7 @@ public OnFilterScriptInit()
 					AddLogString(msg);
 				} else {
 					LoopPlayers(j) {
-						if(gPlayerData[j][E_ADMINLEVEL] > 0 && j != i) {
+						if(j != i && (gPlayerData[j][E_ADMINLEVEL] > 0 || gPlayerData[j][E_RCONLEVEL] > 0)) {
 							SendClientMessage(j, COLOUR_ADMIN, msg);
 						}
 					}
@@ -920,7 +1101,7 @@ public OnFilterScriptInit()
 			}
 		}
 
-		LoadPlayerData(i);
+		if(!IsPlayerNPC(i)) LoadPlayerData(i);
 		if(gPlayerData[i][E_STATE] != 0) {
 			if(gPlayerData[i][E_STATE] != ADMIN_STATE_HIDDEN) {
 				new statstring[50];
@@ -944,21 +1125,23 @@ public OnFilterScriptInit()
 				}
 
 				new string[MAX_INPUT];
-				format(string, sizeof(string), "%s(%i) is permanently %s", ReturnPlayerName(i), i, statstring);
+				format(string, sizeof(string), "%s(%i) is %s", ReturnPlayerName(i), i, statstring);
 				LogAction(string);
 				AddLogString(string);
-				format(string, sizeof(string), "You are permanently %s", statstring);
+				format(string, sizeof(string), "You are %s", statstring);
 				SendClientMessage(i, COLOUR_WARNING, string);
 			}
 			CallRemoteFunction("OnAdminStateChange", "iii", i, gPlayerData[i][E_STATE], 0);
 		}
 
-		if(gServerData[E_ALIAS_LEVEL] > 0) WriteAlias(i);
-		strcpy(gPlayerData[i][E_COUNTRY], ReturnCuntCode(pIP), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
+		strcpy(gPlayerData[i][E_COUNTRY], ReturnCuntCode(gAlarDB, pIP), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
+		gPlayerData[i][E_IPCODE] = IP2Code(pIP);
 	}
 
+	db_free_result(db_query(gAlarDB, "END TRANSACTION"));
+
 	SetTimer("alar_pingkick", PINGTIME * 1000, 1);
-	SetTimer("alar_pausecheck", 500, 1);
+	SetTimer("alar_pausecheck", 400, 1);
 
 	if(!existproperty(.value = ALAR_PROPERTY_ID)) {
 		setproperty(.name = !#ALAR_VERSION, .value = ALAR_PROPERTY_ID);
@@ -969,6 +1152,10 @@ public OnFilterScriptInit()
 
 public OnFilterScriptExit()
 {
+	new exittime = gettime();
+
+	db_free_result(db_query(gAlarDB, "BEGIN TRANSACTION"));
+
 	LoopPlayers(i) {
 		if(gPlayerData[i][E_SPECTATING]) {
 			if(gPlayerData[i][E_SPECID] == INVALID_PLAYER_ID) {
@@ -985,16 +1172,12 @@ public OnFilterScriptExit()
 			if(gPlayerData[i][E_STATE] & ADMIN_STATE_FROZEN) alar_unfreeze(i);
 			CallRemoteFunction("OnAdminStateChange", "iii", i, 0, gPlayerData[i][E_STATE]);
 		}
+
+		if(!IsPlayerNPC(i)) Alias_Update(gAlarDB, ReturnPlayerName(i), Code2IP(gPlayerData[i][E_IPCODE]), exittime - gPlayerData[i][E_JOIN_TIME]);
+
 		if(gPlayerData[i][E_ADMINLEVEL] > 0) {
 			AllowPlayerTeleport(i, false);
-			#if LOG_LINES > 0 && LOG_PAGES > 0
-				new logininfo[E_LOGINDATA];
-				if(GetPlayerData(gPlayerData[i][E_NAME], logininfo)) {
-					logininfo[E_LOGIN_PAGE] = gPlayerData[i][E_LOGKEYS] ? gPlayerData[i][E_LOG_PAGE] : -gPlayerData[i][E_LOG_PAGE] - 1;
-					logininfo[E_LOGIN_HUD] = gPlayerData[i][E_SHOWHUD];
-					SetPlayerData(gPlayerData[i][E_NAME], logininfo);
-				}
-			#endif
+			Admin_Update(gAlarDB, gPlayerData[i][E_NAME], "", gPlayerData[i][E_STATE] & ADMIN_STATE_HIDDEN != 0, gPlayerData[i][E_LOGKEYS] ? gPlayerData[i][E_LOG_PAGE] : -gPlayerData[i][E_LOG_PAGE] - 1, gPlayerData[i][E_SHOWHUD]);
 			CallRemoteFunction("OnAdminLogout", "i", i);
 		}
 
@@ -1032,9 +1215,14 @@ public OnFilterScriptExit()
 		DestroyVehicle(i);
 	}
 
+	TempBan_UnbanAll(gAlarDB);
+
+	db_free_result(db_query(gAlarDB, "END TRANSACTION"));
+
+	db_close(gAlarDB);
+
 	SendClientMessageToAll(COLOUR_HELP, "Any Last Administrative Requests unloaded");
 	LogAction("Any Last Administrative Requests unloaded (Version " #ALAR_VERSION ")");
-
 
 	CallRemoteFunction("OnAlarExit", "");
 	if(existproperty(.value = ALAR_PROPERTY_ID)) {
@@ -1043,8 +1231,8 @@ public OnFilterScriptExit()
 	return 1;
 }
 
-public OnGameModeInit() {
-
+public OnGameModeInit()
+{
 	if(gServerData[E_FIX_RUNNING]) {
 		UsePlayerPedAnims();
 	}
@@ -1108,20 +1296,12 @@ public OnGameModeInit() {
 	#endif
 
 	#if SPEC_TXT_TIME > 0
-		if(g_txtSpecMode[0] == INVALID_TEXT_DRAW) {
-			g_txtSpecMode[0] = TextDrawCreate(10.0, 390.0, "Normal Spectate");
-		}
-		if(g_txtSpecMode[1] == INVALID_TEXT_DRAW) {
-			g_txtSpecMode[1] = TextDrawCreate(10.0, 390.0, "Player Spectate");
-		}
-		if(g_txtSpecMode[2] == INVALID_TEXT_DRAW) {
-			g_txtSpecMode[2] = TextDrawCreate(10.0, 390.0, "Side Spectate");
-		}
-		if(g_txtSpecMode[3] == INVALID_TEXT_DRAW) {
-			g_txtSpecMode[3] = TextDrawCreate(10.0, 390.0, "Free Spectate");
-		}
+		if(g_txtSpecMode[0] == INVALID_TEXT_DRAW) g_txtSpecMode[0] = TextDrawCreate(10.0, 390.0, "Normal Spectate");
+		if(g_txtSpecMode[1] == INVALID_TEXT_DRAW) g_txtSpecMode[1] = TextDrawCreate(10.0, 390.0, "Player Spectate");
+		if(g_txtSpecMode[2] == INVALID_TEXT_DRAW) g_txtSpecMode[2] = TextDrawCreate(10.0, 390.0, "Side Spectate");
+		if(g_txtSpecMode[3] == INVALID_TEXT_DRAW) g_txtSpecMode[3] = TextDrawCreate(10.0, 390.0, "Free Spectate");
 
-		for(new i; i < 4; i++) {
+		for(new i; i < sizeof(g_txtSpecMode); i++) {
 			TextDrawUseBox(g_txtSpecMode[i], 0);
 			TextDrawSetOutline(g_txtSpecMode[i], 0);
 			TextDrawColor(g_txtSpecMode[i], COLOUR_SPECMODE);
@@ -1134,8 +1314,8 @@ public OnGameModeInit() {
 
 	// Clear join times
 	for(new i; i < sizeof(gJoinList); i++) {
-		gJoinList[i][E_LASTIP] = 0;
-		gJoinList[i][E_LASTJOIN] = 0;
+		gJoinList[i][E_LASTIP] = Unsigned:0;
+		gJoinList[i][E_LASTTIME] = 0;
 	}
 	return 1;
 }
@@ -1143,6 +1323,8 @@ public OnGameModeInit() {
 public OnGameModeExit()
 {
 	Bit_SetAll(gCreatedVehicles, 0, sizeof(gCreatedVehicles));
+
+	gSpawnMethod = DEFAULT_SPAWNTYPE;
 
 	#if LOG_LINES > 0 && LOG_PAGES > 0
 		#if LOG_PAGES > 1
@@ -1185,94 +1367,151 @@ public OnPlayerConnect(playerid)
 	gPlayerData[playerid] = gDefaultPlayerData;
 	Bit_Set(g_bitAdmins, playerid, 0);
 
-	if(FloodCheck(playerid)) return 1;
-
 	new pname[MAX_PLAYER_NAME],
 		pIP[MAX_IP],
-		msg[MAX_INPUT];
+		msg[MAX_INPUT * 2];
 
 	GetPlayerName(playerid, pname, sizeof(pname));
 	GetPlayerIp(playerid, pIP, sizeof(pIP));
 
-	gPlayerData[playerid][E_WHITELISTED] = IsNameWhitelisted(pname);
+	gPlayerData[playerid][E_JOIN_TIME] = gettime();
 
-	new BanData[E_ALAR_BAN];
-	if(GetBanInfo(pname, pIP, BanData, gPlayerData[playerid][E_WHITELISTED])) {
-		format(msg, sizeof(msg), "You are banned from this server (%s)", BanData[E_BAN_REASON]);
-		SendClientMessage(playerid, COLOUR_WARNING, msg);
-		if(gServerData[E_RANGEBAN_MSG][0] != '\0' && strfind(BanData[E_BAN_IP], "*") != -1) {
-			SendBanMsg(playerid, gServerData[E_RANGEBAN_MSG], BanData[E_BAN_DATE], BanData[E_BAN_TIME], BanData[E_BAN_ADMIN]);
-		} else if(gServerData[E_BAN_MSG][0] != '\0') {
-			SendBanMsg(playerid, gServerData[E_BAN_MSG], BanData[E_BAN_DATE], BanData[E_BAN_TIME], BanData[E_BAN_ADMIN]);
-		}
+	db_free_result(db_query(gAlarDB, "BEGIN TRANSACTION"));
 
-		format(msg, sizeof(msg), "%s(%i) is banned from this server (%s)", pname, playerid, BanData[E_BAN_REASON]);
-		if(gServerData[E_HIDE_BANS]) {
-			gPlayerData[playerid][E_HIDEEXIT] = 3;
-		} else {
-			gPlayerData[playerid][E_HIDEEXIT] = 1;
-			AddJoinString(playerid, COLOUR_BAN, msg);
-		}
+	if(!IsPlayerNPC(playerid)) {
+		#if JOINCOUNT > 1
+			if(JoinFloodCheck(playerid)) return 1;
+		#endif
 
-		format(msg, sizeof(msg), "%s(%i) [%s:%s] is banned from this server (%s)", pname, playerid, BanData[E_BAN_NAME], BanData[E_BAN_IP], BanData[E_BAN_REASON]);
-		AddLogString(msg);
-		LogAction(msg);
-		//Kick(playerid);
-		SetTimerEx("alar_fixkick", 0, 0, "i", playerid);
-		return 1;
-	}
+		gPlayerData[playerid][E_WHITELISTED] = Whitelist_IsNameWhitelisted(gAlarDB, pname, true);
 
-	new SuspendData[E_ALAR_SUSPENSION],
-		bool:unsuspended = false;
-	while(GetSuspendInfo(pname, pIP, SuspendData, gPlayerData[playerid][E_WHITELISTED])) {
-		new curyear,
-			curmonth,
-			curday,
-			curhour,
-			curmin,
-			cursec;
-		getdate(curyear, curmonth, curday);
-		gettime(curhour, curmin, cursec);
-		if(SuspendData[E_SUSPEND_YEAR] < curyear || (SuspendData[E_SUSPEND_YEAR] == curyear && (SuspendData[E_SUSPEND_MONTH] < curmonth || (SuspendData[E_SUSPEND_MONTH] == curmonth && (SuspendData[E_SUSPEND_DAY] < curday || (SuspendData[E_SUSPEND_DAY] == curday && SuspendData[E_SUSPEND_HOUR] < (curhour + floatdiv(curmin, 60) + floatdiv(cursec, 3600)))))))) {
-			UnsuspendPlayer(pname, pIP, SuspendData);
-			format(msg, sizeof(msg), "%s(%i) [%s:%s] has been unsuspended (%s)", ReturnPlayerName(playerid), playerid, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
-			LogAction(msg);
-			AddLogString(msg);
-			unsuspended = true;
-		} else {
-			new minute = floatround((SuspendData[E_SUSPEND_HOUR] - floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor)) * 60);
-			format(msg, sizeof(msg), "You are suspended from this server until %02i/%02i/%i %02i:%02i (%s)", SuspendData[E_SUSPEND_DAY], SuspendData[E_SUSPEND_MONTH], SuspendData[E_SUSPEND_YEAR], floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor), minute, SuspendData[E_SUSPEND_REASON]);
-			SendClientMessage(playerid, COLOUR_WARNING, msg);
-			if(gServerData[E_RANGESUSPEND_MSG][0] != '\0' && strfind(SuspendData[E_SUSPEND_IP], "*") != -1) {
-				SendBanMsg(playerid, gServerData[E_RANGESUSPEND_MSG], SuspendData[E_SUSPEND_DATE], SuspendData[E_SUSPEND_TIME], SuspendData[E_SUSPEND_ADMIN]);
-			} else if(gServerData[E_SUSPEND_MSG][0] != '\0') {
-				SendBanMsg(playerid, gServerData[E_SUSPEND_MSG], SuspendData[E_SUSPEND_DATE], SuspendData[E_SUSPEND_TIME], SuspendData[E_SUSPEND_ADMIN]);
+		new BanData[E_ALAR_BAN];
+		if(Bans_GetBanInfo(gAlarDB, pname, pIP, BanData, gPlayerData[playerid][E_WHITELISTED], false, true)) {
+			if(BanData[E_BAN_REASON][0]) {
+				format(msg, sizeof(msg), "You are banned from this server (%s)", BanData[E_BAN_REASON]);
+			} else {
+				msg = "You are banned from this server";
 			}
-			format(msg, sizeof(msg), "%s(%i) is suspended from this server until %02i/%02i/%i %02i:%02i (%s)", pname, playerid, SuspendData[E_SUSPEND_DAY], SuspendData[E_SUSPEND_MONTH], SuspendData[E_SUSPEND_YEAR], floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor), minute, SuspendData[E_SUSPEND_REASON]);
+			SendWrappedMessageToPlayer(playerid, COLOUR_WARNING, msg);
+			if(gServerData[E_RANGEBAN_MSG][0] != '\0' && strfind(BanData[E_BAN_IP], "*") != -1) {
+				SendBanMsg(playerid, gServerData[E_RANGEBAN_MSG], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN]);
+			} else if(gServerData[E_BAN_MSG][0] != '\0') {
+				SendBanMsg(playerid, gServerData[E_BAN_MSG], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN]);
+			}
+
+			if(BanData[E_BAN_REASON][0]) {
+				strtruncate(BanData[E_BAN_REASON], BanData[E_BAN_REASON], MAX_REASON, .maxlength=sizeof(SIZE_E_ALAR_BAN[E_BAN_REASON]));
+				format(msg, sizeof(msg), "%s(%i) is banned from this server (%s)", pname, playerid, BanData[E_BAN_REASON]);
+			} else {
+				format(msg, sizeof(msg), "%s(%i) is banned from this server", pname, playerid);
+			}
 			if(gServerData[E_HIDE_BANS]) {
 				gPlayerData[playerid][E_HIDEEXIT] = 3;
 			} else {
 				gPlayerData[playerid][E_HIDEEXIT] = 1;
-				AddJoinString(playerid, COLOUR_SUSPEND, msg);
+				AddJoinString(playerid, COLOUR_BAN, msg);
 			}
 
-			format(msg, sizeof(msg), "%s(%i) [%s:%s] is suspended from this server (%s)", pname, playerid, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
+			if(BanData[E_BAN_REASON][0]) {
+				if(BanData[E_BAN_NAME][0]) {
+					if(BanData[E_BAN_IP][0]) {
+						format(msg, sizeof(msg), "%s(%i) [%s:%s] is banned from this server (%s)", pname, playerid, BanData[E_BAN_NAME], BanData[E_BAN_IP], BanData[E_BAN_REASON]);
+					} else {
+						format(msg, sizeof(msg), "%s(%i) [%s] is banned from this server (%s)", pname, playerid, BanData[E_BAN_NAME], BanData[E_BAN_REASON]);
+					}
+				} else {
+					format(msg, sizeof(msg), "%s(%i) [%s] is banned from this server (%s)", pname, playerid, BanData[E_BAN_IP], BanData[E_BAN_REASON]);
+				}
+			} else {
+				if(BanData[E_BAN_NAME][0]) {
+					if(BanData[E_BAN_IP][0]) {
+						format(msg, sizeof(msg), "%s(%i) [%s:%s] is banned from this server", pname, playerid, BanData[E_BAN_NAME], BanData[E_BAN_IP]);
+					} else {
+						format(msg, sizeof(msg), "%s(%i) [%s] is banned from this server", pname, playerid, BanData[E_BAN_NAME]);
+					}
+				} else {
+					format(msg, sizeof(msg), "%s(%i) [%s] is banned from this server", pname, playerid, BanData[E_BAN_IP]);
+				}
+			}
 			AddLogString(msg);
 			LogAction(msg);
-
 			//Kick(playerid);
+			db_free_result(db_query(gAlarDB, "END TRANSACTION"));
 			SetTimerEx("alar_fixkick", 0, 0, "i", playerid);
 			return 1;
 		}
-	}
-	if(unsuspended) {
-		SendClientMessage(playerid, COLOUR_PLAYER, "You have been unsuspended");
-		format(msg, sizeof(msg), "%s(%i) has been unsuspended", ReturnPlayerName(playerid), playerid);
 
-		LoopPlayers(i) {
-			if(gPlayerData[i][E_ADMINLEVEL] > 0) {
-				SendClientMessage(i, COLOUR_ADMIN, msg);
+		new SuspendData[E_ALAR_SUSPENSION],
+			bool:unsuspended = false;
+		while(Suspensions_GetSuspendInfo(gAlarDB, pname, pIP, SuspendData, gPlayerData[playerid][E_WHITELISTED], false, true)) {
+			if(SuspendData[E_SUSPEND_EXPIRED]) {
+				Suspensions_UnsuspendPlayer(gAlarDB, pname, pIP, SuspendData);
+				if(SuspendData[E_SUSPEND_REASON][0]) {
+					strtruncate(SuspendData[E_SUSPEND_REASON], SuspendData[E_SUSPEND_REASON], MAX_REASON, .maxlength=sizeof(SIZE_E_ALAR_SUSPENSION[E_SUSPEND_REASON]));
+					format(msg, sizeof(msg), "%s(%i) [%s:%s] has been unsuspended (%s)", ReturnPlayerName(playerid), playerid, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
+				} else {
+					format(msg, sizeof(msg), "%s(%i) [%s:%s] has been unsuspended", ReturnPlayerName(playerid), playerid, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP]);
+				}
+				LogAction(msg);
+				AddLogString(msg);
+				unsuspended = true;
+			} else {
+				if(SuspendData[E_SUSPEND_REASON][0]) {
+					format(msg, sizeof(msg), "You are suspended from this server until %s (%s)", SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_REASON]);
+				} else {
+					format(msg, sizeof(msg), "You are suspended from this server until %s", SuspendData[E_SUSPEND_EXPIRES]);
+				}
+				SendWrappedMessageToPlayer(playerid, COLOUR_WARNING, msg);
+				if(gServerData[E_RANGESUSPEND_MSG][0] != '\0' && strfind(SuspendData[E_SUSPEND_IP], "*") != -1) {
+					SendBanMsg(playerid, gServerData[E_RANGESUSPEND_MSG], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN]);
+				} else if(gServerData[E_SUSPEND_MSG][0] != '\0') {
+					SendBanMsg(playerid, gServerData[E_SUSPEND_MSG], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN]);
+				}
+				if(SuspendData[E_SUSPEND_REASON][0]) {
+					strtruncate(SuspendData[E_SUSPEND_REASON], SuspendData[E_SUSPEND_REASON], MAX_REASON, .maxlength=sizeof(SIZE_E_ALAR_SUSPENSION[E_SUSPEND_REASON]));
+					format(msg, sizeof(msg), "%s(%i) is suspended from this server until %s (%s)", pname, playerid, SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_REASON]);
+				} else {
+					format(msg, sizeof(msg), "%s(%i) is suspended from this server until %s", pname, playerid, SuspendData[E_SUSPEND_EXPIRES]);
+				}
+				if(gServerData[E_HIDE_BANS]) {
+					gPlayerData[playerid][E_HIDEEXIT] = 3;
+				} else {
+					gPlayerData[playerid][E_HIDEEXIT] = 1;
+					AddJoinString(playerid, COLOUR_SUSPEND, msg);
+				}
+
+				if(SuspendData[E_SUSPEND_REASON][0]) {
+					if(SuspendData[E_SUSPEND_NAME][0]) {
+						if(SuspendData[E_SUSPEND_IP][0]) {
+							format(msg, sizeof(msg), "%s(%i) [%s:%s] is suspended from this server (%s)", pname, playerid, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
+						} else {
+							format(msg, sizeof(msg), "%s(%i) [%s] is suspended from this server (%s)", pname, playerid, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_REASON]);
+						}
+					} else {
+						format(msg, sizeof(msg), "%s(%i) [%s] is suspended from this server (%s)", pname, playerid, SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
+					}
+				} else {
+					if(SuspendData[E_SUSPEND_NAME][0]) {
+						if(SuspendData[E_SUSPEND_IP][0]) {
+							format(msg, sizeof(msg), "%s(%i) [%s:%s] is suspended from this server", pname, playerid, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP]);
+						} else {
+							format(msg, sizeof(msg), "%s(%i) [%s] is suspended from this server", pname, playerid, SuspendData[E_SUSPEND_NAME]);
+						}
+					} else {
+						format(msg, sizeof(msg), "%s(%i) [%s] is suspended from this server", pname, playerid, SuspendData[E_SUSPEND_IP]);
+					}
+				}
+				AddLogString(msg);
+				LogAction(msg);
+
+				//Kick(playerid);
+				db_free_result(db_query(gAlarDB, "END TRANSACTION"));
+				SetTimerEx("alar_fixkick", 0, 0, "i", playerid);
+				return 1;
 			}
+		}
+		if(unsuspended) {
+			SendClientMessage(playerid, COLOUR_PLAYER, "You have been unsuspended");
 		}
 	}
 
@@ -1284,15 +1523,13 @@ public OnPlayerConnect(playerid)
 		AddLogString(msg);
 		LogAction(msg);
 		//Kick(playerid);
+		db_free_result(db_query(gAlarDB, "END TRANSACTION"));
 		SetTimerEx("alar_fixkick", 0, 0, "i", playerid);
 		return 1;
 	}
 
-	if(gServerData[E_ALIAS_LEVEL] > 0) WriteAlias(playerid);
-	strcpy(gPlayerData[playerid][E_COUNTRY], ReturnCuntCode(pIP), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
-
 	new logininfo[E_LOGINDATA];
-	if(GetPlayerData(pname, logininfo)) {
+	if(Admin_GetData(gAlarDB, pname, logininfo)) {
 		LoopPlayers(i) {
 			if(gPlayerData[i][E_NAME][0] != '\0' && strcmp(pname, gPlayerData[i][E_NAME], true) == 0) {
 				format(msg, sizeof(msg), "%s(%i) has been kicked from the server (Admin impersonation)", pname, playerid);
@@ -1302,6 +1539,7 @@ public OnPlayerConnect(playerid)
 				AddLogString(msg);
 				LogAction(msg);
 				//Kick(playerid);
+				db_free_result(db_query(gAlarDB, "END TRANSACTION"));
 				SetTimerEx("alar_fixkick", 0, 0, "i", playerid);
 				return 1;
 			}
@@ -1355,11 +1593,79 @@ public OnPlayerConnect(playerid)
 		}
 	}
 
-	if(gServerData[E_JOIN_MSGS]) {
-		if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
-			if(gServerData[E_LOG_LOGINS]) {
-				AddLogString(msg);
+	if(gServerData[E_STORE_ALIASES] && !IsPlayerNPC(playerid)) Alias_Add(gAlarDB, pname, pIP);
+	strcpy(gPlayerData[playerid][E_COUNTRY], ReturnCuntCode(gAlarDB, pIP), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
+	gPlayerData[playerid][E_IPCODE] = IP2Code(pIP);
 
+	db_free_result(db_query(gAlarDB, "END TRANSACTION"));
+
+	if(gServerData[E_JOIN_MSGS]) {
+		if(!IsPlayerNPC(playerid)) {
+			if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
+				if(gServerData[E_LOG_LOGINS]) {
+					AddLogString(msg);
+
+					if(gServerData[E_JOIN_COUNTRIES] && gPlayerData[playerid][E_COUNTRY][0]) {
+						format(msg, sizeof(msg), "*** %s(%i) has joined the server (%s)", pname, playerid, ReturnCuntName(gPlayerData[playerid][E_COUNTRY]));
+						AddJoinChatLine(playerid, COLOUR_CONNECT, msg);
+						#if CHATHISTORY_SIZE > 0
+							if(gServerData[E_CHAT_JOINS]) AddHistoryLine(COLOUR_CONNECT, msg, playerid);
+						#endif
+
+						#if JOINMSG_LINES > 0
+							format(msg, sizeof(msg), "%s(%i) has joined the server", pname, playerid);
+							AddJoinTextLine(COLOUR_CONNECT, msg);
+						#endif
+					} else {
+						format(msg, sizeof(msg), "%s(%i) has joined the server", pname, playerid);
+						AddJoinString(playerid, COLOUR_CONNECT, msg);
+					}
+				} else {
+					new string[MAX_INPUT];
+					#if JOINMSG_LINES > 0
+						format(string, sizeof(string), "%s(%i) has joined the server", pname, playerid);
+						AddJoinTextLine(COLOUR_CONNECT, string);
+					#endif
+
+					new amsg[MAX_INPUT];
+					if(gServerData[E_JOIN_COUNTRIES] && gPlayerData[playerid][E_COUNTRY][0]) {
+						new cuntname[100];
+						strcpy(cuntname, ReturnCuntName(gPlayerData[playerid][E_COUNTRY]));
+						format(string, sizeof(string), "*** %s(%i) has joined the server (%s)", pname, playerid, cuntname);
+						format(amsg, sizeof(amsg), "*** %s(%i) has joined the server as a level %i admin (%s)", pname, playerid, gPlayerData[playerid][E_ADMINLEVEL], cuntname);
+					} else {
+						format(string, sizeof(string), "*** %s(%i) has joined the server", pname, playerid);
+						format(amsg, sizeof(amsg), "*** %s(%i) has joined the server as a level %i admin", pname, playerid, gPlayerData[playerid][E_ADMINLEVEL]);
+					}
+					#if CHATHISTORY_SIZE > 0
+						if(gServerData[E_CHAT_JOINS]) {
+							AddHistoryLine(COLOUR_ADMIN, amsg, playerid, HISTORY_ADMIN_ONLY);
+							AddHistoryLine(COLOUR_CONNECT, msg, playerid, HISTORY_PLAYER_ONLY);
+						}
+					#endif
+					LoopPlayers(i) {
+						if(!IsPlayerNPC(i) && playerid != i) {
+							#if JOINMSG_LINES > 0
+								if(gPlayerData[i][E_JOINTEXT]) {
+									if(gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0) {
+										SendClientMessage(i, COLOUR_ADMIN, amsg);
+									} else {
+										SendClientMessage(i, COLOUR_CONNECT, string);
+									}
+								} else if(gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0) {
+									SendClientMessage(i, COLOUR_ADMIN, msg);
+								}
+							#else
+								if(gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0) {
+									SendClientMessage(i, COLOUR_ADMIN, amsg);
+								} else {
+									SendClientMessage(i, COLOUR_CONNECT, string);
+								}
+							#endif
+						}
+					}
+				}
+			} else {
 				if(gServerData[E_JOIN_COUNTRIES] && gPlayerData[playerid][E_COUNTRY][0]) {
 					format(msg, sizeof(msg), "*** %s(%i) has joined the server (%s)", pname, playerid, ReturnCuntName(gPlayerData[playerid][E_COUNTRY]));
 					AddJoinChatLine(playerid, COLOUR_CONNECT, msg);
@@ -1367,66 +1673,32 @@ public OnPlayerConnect(playerid)
 						if(gServerData[E_CHAT_JOINS]) AddHistoryLine(COLOUR_CONNECT, msg, playerid);
 					#endif
 
-					format(msg, sizeof(msg), "%s(%i) has joined the server", pname, playerid);
-					AddJoinTextLine(COLOUR_CONNECT, msg);
+					#if JOINMSG_LINES > 0
+						format(msg, sizeof(msg), "%s(%i) has joined the server", pname, playerid);
+						AddJoinTextLine(COLOUR_CONNECT, msg);
+					#endif
 				} else {
 					format(msg, sizeof(msg), "%s(%i) has joined the server", pname, playerid);
 					AddJoinString(playerid, COLOUR_CONNECT, msg);
 				}
-			} else {
-				new string[MAX_INPUT];
-				format(string, sizeof(string), "%s(%i) has joined the server", pname, playerid);
-				AddJoinTextLine(COLOUR_CONNECT, string);
-
-				new amsg[MAX_INPUT];
-				if(gServerData[E_JOIN_COUNTRIES] && gPlayerData[playerid][E_COUNTRY][0]) {
-					new cuntname[100];
-					strcpy(cuntname, ReturnCuntName(gPlayerData[playerid][E_COUNTRY]));
-					format(string, sizeof(string), "*** %s(%i) has joined the server (%s)", pname, playerid, cuntname);
-					format(amsg, sizeof(amsg), "*** %s(%i) has joined the server as a level %i admin (%s)", pname, playerid, gPlayerData[playerid][E_ADMINLEVEL], cuntname);
-				} else {
-					format(string, sizeof(string), "*** %s(%i) has joined the server", pname, playerid);
-					format(amsg, sizeof(amsg), "*** %s(%i) has joined the server as a level %i admin", pname, playerid, gPlayerData[playerid][E_ADMINLEVEL]);
-				}
-				#if CHATHISTORY_SIZE > 0
-					if(gServerData[E_CHAT_JOINS]) {
-						AddHistoryLine(COLOUR_ADMIN, amsg, playerid, HISTORY_ADMIN_ONLY);
-						AddHistoryLine(COLOUR_CONNECT, msg, playerid, HISTORY_PLAYER_ONLY);
-					}
-				#endif
-				LoopPlayers(i) {
-					if(playerid != i) {
-						if(gPlayerData[i][E_JOINTEXT]) {
-							if(gPlayerData[i][E_ADMINLEVEL] > 0) {
-								SendClientMessage(i, COLOUR_ADMIN, amsg);
-							} else {
-								SendClientMessage(i, COLOUR_CONNECT, string);
-							}
-						} else if(gPlayerData[i][E_ADMINLEVEL] > 0) {
-							SendClientMessage(i, COLOUR_ADMIN, msg);
-						}
-					}
-				}
 			}
-		} else {
-			if(gServerData[E_JOIN_COUNTRIES] && gPlayerData[playerid][E_COUNTRY][0]) {
-				format(msg, sizeof(msg), "*** %s(%i) has joined the server (%s)", pname, playerid, ReturnCuntName(gPlayerData[playerid][E_COUNTRY]));
-				AddJoinChatLine(playerid, COLOUR_CONNECT, msg);
-				#if CHATHISTORY_SIZE > 0
-					if(gServerData[E_CHAT_JOINS]) AddHistoryLine(COLOUR_CONNECT, msg, playerid);
-				#endif
-
-				format(msg, sizeof(msg), "%s(%i) has joined the server", pname, playerid);
-				AddJoinTextLine(COLOUR_CONNECT, msg);
-			} else {
-				format(msg, sizeof(msg), "%s(%i) has joined the server", pname, playerid);
-				AddJoinString(playerid, COLOUR_CONNECT, msg);
+			gPlayerData[playerid][E_HIDEEXIT] = 1;
+		} else if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
+			LoopPlayers(i) {
+				if(!IsPlayerNPC(i) && (gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0) && i != playerid) {
+					SendClientMessage(i, COLOUR_ADMIN, msg);
+				}
 			}
 		}
-		gPlayerData[playerid][E_HIDEEXIT] = 1;
+	} else if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
+		LoopPlayers(i) {
+			if(!IsPlayerNPC(i) && (gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0) && i != playerid) {
+				SendClientMessage(i, COLOUR_ADMIN, msg);
+			}
+		}
 	}
 
-	LoadPlayerData(playerid);
+	if(!IsPlayerNPC(playerid)) LoadPlayerData(playerid);
 
 	if(gPlayerData[playerid][E_STATE] != 0) {
 		if(gPlayerData[playerid][E_STATE] != ADMIN_STATE_HIDDEN) {
@@ -1444,39 +1716,35 @@ public OnPlayerConnect(playerid)
 			}
 
 			new string[MAX_INPUT];
-			format(string, sizeof(string), "%s(%i) is permanently %s", ReturnPlayerName(playerid), playerid, statstring);
+			format(string, sizeof(string), "%s(%i) is %s", ReturnPlayerName(playerid), playerid, statstring);
 			LogAction(string);
 			AddLogString(string);
-			format(string, sizeof(string), "You are permanently %s", statstring);
+			format(string, sizeof(string), "You are %s", statstring);
 			SendClientMessage(playerid, COLOUR_WARNING, string);
 		}
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], 0);
 	}
 
-	if(!gPlayerData[playerid][E_JOINTEXT]) {
-		for(new i; i < sizeof(gJoinMessage); i++) {
-			if(gJoinMessage[i][E_TEXTBOX_COLOUR] & 0x000000FF != 0) {
-				TextDrawShowForPlayer(playerid, gJoinMessage[i][E_TEXTBOX_TEXT]);
+	gPlayerData[playerid][E_LAST_ACTIVE] = gPlayerData[playerid][E_LAST_WARNING] = GetTickCount();
+
+	#if JOINMSG_LINES > 0
+		if(!gPlayerData[playerid][E_JOINTEXT]) {
+			for(new i; i < sizeof(gJoinMessage); i++) {
+				if(gJoinMessage[i][E_TEXTBOX_COLOUR] & 0x000000FF != 0) {
+					TextDrawShowForPlayer(playerid, gJoinMessage[i][E_TEXTBOX_TEXT]);
+				}
 			}
 		}
-	}
+	#endif
 	return 1;
 }
 
 public OnPlayerDisconnect(playerid, reason)
 {
-	if(gPlayerData[playerid][E_KICK]) {
-		KillTimer(gPlayerData[playerid][E_KICK]);
-	}
-	if(gPlayerData[playerid][E_UNMUTE]) {
-		KillTimer(gPlayerData[playerid][E_UNMUTE]);
-	}
-	if(gPlayerData[playerid][E_UNJAIL]) {
-		KillTimer(gPlayerData[playerid][E_UNJAIL]);
-	}
-	if(gPlayerData[playerid][E_UNFREEZE]) {
-		KillTimer(gPlayerData[playerid][E_UNFREEZE]);
-	}
+	if(gPlayerData[playerid][E_KICK]) KillTimer(gPlayerData[playerid][E_KICK]);
+	if(gPlayerData[playerid][E_UNMUTE]) KillTimer(gPlayerData[playerid][E_UNMUTE]);
+	if(gPlayerData[playerid][E_UNJAIL]) KillTimer(gPlayerData[playerid][E_UNJAIL]);
+	if(gPlayerData[playerid][E_UNFREEZE]) KillTimer(gPlayerData[playerid][E_UNFREEZE]);
 
 	LoopPlayers(i) {
 		if(gPlayerData[i][E_LAST_SPECID] == playerid) {
@@ -1499,7 +1767,6 @@ public OnPlayerDisconnect(playerid, reason)
 	} else {
 		LoopPlayers(i) {
 			if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == playerid) {
-				//ObserverSwitchPlayer(i, gPlayerData[i][E_SPECID] + 1);
 				ObserverSwitchPlayer(i, FindClosestPlayer(playerid));
 				if(gPlayerData[i][E_SPECID] == playerid) {	// technically the player is still connected :(
 					gPlayerData[i][E_SPECMODE] = 3;
@@ -1516,16 +1783,13 @@ public OnPlayerDisconnect(playerid, reason)
 		}
 	}
 
+	if(!IsPlayerNPC(playerid) && gettime() - gPlayerData[playerid][E_JOIN_TIME] > 10) {
+		Alias_Update(gAlarDB, ReturnPlayerName(playerid), Code2IP(gPlayerData[playerid][E_IPCODE]), gettime() - gPlayerData[playerid][E_JOIN_TIME]);
+	}
+
+	Bit_Set(g_bitAdmins, playerid, 0);
 	if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
-		Bit_Set(g_bitAdmins, playerid, 0);
-		#if LOG_LINES > 0 && LOG_PAGES > 0
-			new logininfo[E_LOGINDATA];
-			if(GetPlayerData(gPlayerData[playerid][E_NAME], logininfo)) {
-				logininfo[E_LOGIN_PAGE] = gPlayerData[playerid][E_LOGKEYS] ? gPlayerData[playerid][E_LOG_PAGE] : -gPlayerData[playerid][E_LOG_PAGE] - 1;
-				logininfo[E_LOGIN_HUD] = gPlayerData[playerid][E_SHOWHUD];
-				SetPlayerData(gPlayerData[playerid][E_NAME], logininfo);
-			}
-		#endif
+		Admin_Update(gAlarDB, gPlayerData[playerid][E_NAME], "", gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN != 0, gPlayerData[playerid][E_LOGKEYS] ? gPlayerData[playerid][E_LOG_PAGE] : -gPlayerData[playerid][E_LOG_PAGE] - 1, gPlayerData[playerid][E_SHOWHUD]);
 		CallRemoteFunction("OnAdminLogout", "i", playerid);
 	}
 
@@ -1549,7 +1813,7 @@ public OnPlayerDisconnect(playerid, reason)
 		}
 	#endif
 
-	if(gServerData[E_JOIN_MSGS] && gPlayerData[playerid][E_HIDEEXIT] < 3) {
+	if(gServerData[E_JOIN_MSGS] && !IsPlayerNPC(playerid) && gPlayerData[playerid][E_HIDEEXIT] < 3) {
 		if(gPlayerData[playerid][E_HIDEEXIT] == 1) gPlayerData[playerid][E_HIDEEXIT] = 0;
 		new msg[MAX_INPUT];
 		switch(reason) {
@@ -1572,6 +1836,7 @@ public OnPlayerDisconnect(playerid, reason)
 			}
 		}
 	}
+
 	#if CHATHISTORY_SIZE > 0
 		for(new i; i < sizeof(gChatHistory); i++) {
 			if(gChatHistory[i][E_HISTORY_ID] == playerid) {
@@ -1584,13 +1849,15 @@ public OnPlayerDisconnect(playerid, reason)
 	return 1;
 }
 
-#if CHATHISTORY_SIZE > 0
-	public OnPlayerRequestClass(playerid, classid)
-	{
-		if(!gPlayerData[playerid][E_HISTORY_SENT]) {
+public OnPlayerRequestClass(playerid, classid)
+{
+	gPlayerData[playerid][E_LAST_ACTIVE] = GetTickCount();
+
+	#if CHATHISTORY_SIZE > 0
+		if(!gPlayerData[playerid][E_HISTORY_SENT] && !IsPlayerNPC(playerid)) {
 			gPlayerData[playerid][E_HISTORY_SENT] = true;
 
-			if(gPlayerData[playerid][E_ADMINLEVEL] > 0 ? gServerData[E_CHAT_HISTORY] != 0 : gServerData[E_CHAT_HISTORY] == 1) {
+			if(gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0 ? gServerData[E_CHAT_HISTORY] > 0 : gServerData[E_CHAT_HISTORY] == 1) {
 				new originalcolour,
 					colour,
 					pname[MAX_PLAYER_NAME],
@@ -1598,24 +1865,18 @@ public OnPlayerDisconnect(playerid, reason)
 
 				GetPlayerName(playerid, pname, sizeof(pname));
 				GetPlayerName(playerid, originalname, sizeof(originalname));
-				if(!(colour = GetPlayerColor(playerid))) {
-					SetPlayerColor(playerid, (colour = GetDefaultColour(playerid)));
-				}
-				originalcolour = colour;
+				originalcolour = colour = GetPlayerColor(playerid);
 
 				for(new i; i < sizeof(gChatHistory); i++) {
 					if(gChatHistory[i][E_HISTORY_ID] != playerid) {
 						if(gChatHistory[i][E_HISTORY_MESSAGE][0] != '\0') {
-							if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 ? ~gChatHistory[i][E_HISTORY_FLAGS] & HISTORY_ADMIN_ONLY : ~gChatHistory[i][E_HISTORY_FLAGS] & HISTORY_PLAYER_ONLY) {
+							if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0 ? ~gChatHistory[i][E_HISTORY_FLAGS] & HISTORY_ADMIN_ONLY : ~gChatHistory[i][E_HISTORY_FLAGS] & HISTORY_PLAYER_ONLY) {
 								if(gChatHistory[i][E_HISTORY_NAME][0] != '\0') {
 									if(strcmp(gChatHistory[i][E_HISTORY_NAME], pname)) {
 										new bool:skip = false;
 										LoopPlayers(j) {
 											if(strcmp(ReturnPlayerName(j), gChatHistory[i][E_HISTORY_NAME], true) == 0) {
 												new othercolour = GetPlayerColor(j);
-												if(!othercolour) {
-													SetPlayerColor(j, (othercolour = GetDefaultColour(j)));
-												}
 												if(othercolour != gChatHistory[i][E_HISTORY_COLOUR]) {
 													SetPlayerColor(j, gChatHistory[i][E_HISTORY_COLOUR]);
 													SendPlayerMessageToPlayer(playerid, j, gChatHistory[i][E_HISTORY_MESSAGE]);
@@ -1659,9 +1920,10 @@ public OnPlayerDisconnect(playerid, reason)
 				gChatHistory[i][E_HISTORY_ID] = INVALID_PLAYER_ID;
 			}
 		}
-		return 1;
-	}
-#endif
+	#endif
+
+	return 1;
+}
 
 public OnPlayerSpawn(playerid)
 {
@@ -1670,9 +1932,11 @@ public OnPlayerSpawn(playerid)
 		ClearAnimations(playerid);	// for some reason animations get suck no matter what params are used
 		gPlayerData[playerid][E_PRELOADED] = true;
 	}
+
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_JAILED) {
 		SetTimerEx("alar_jailplayer", 500, 0, "i", playerid);	// stops stupid gamemode spawn stuff
 	}
+
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_FROZEN) {
 		TogglePlayerControllable(playerid, false);
 	}
@@ -1692,7 +1956,6 @@ public OnPlayerDeath(playerid, killerid, reason)
 
 	LoopPlayers(i) {
 		if(i != playerid && gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == playerid) {
-			//ObserverSwitchPlayer(i, IsSpawned(killerid) ? killerid : gPlayerData[i][E_SPECID] + 1);
 			ObserverSwitchPlayer(i, IsSpawned(killerid) ? killerid : FindClosestPlayer(playerid));
 		}
 	}
@@ -1701,6 +1964,8 @@ public OnPlayerDeath(playerid, killerid, reason)
 
 public OnPlayerText(playerid, text[])
 {
+	gPlayerData[playerid][E_LAST_ACTIVE] = GetTickCount();
+
 	#if MUTECHAT
 		if(SpamCheck(playerid, text)) return 0;
 
@@ -1717,7 +1982,7 @@ public OnPlayerText(playerid, text[])
 		}
 	#endif
 
-	if(gPlayerData[playerid][E_ADMINLEVEL] > 0 && gChatPrefix[0][E_CHAT_LEN]) {
+	if(gChatPrefix[0][E_CHAT_LEN] && (gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0)) {
 		for(new i; i < sizeof(gChatPrefix); i++) {
 			if(gChatPrefix[i][E_CHAT_LEN] != 0 && strcmp(text, gChatPrefix[i][E_CHAT_STRING], true, gChatPrefix[i][E_CHAT_LEN]) == 0) {
 				if(text[gChatPrefix[i][E_CHAT_LEN]] == '\0') return 0;
@@ -1748,33 +2013,10 @@ public OnPlayerText(playerid, text[])
 	return 1;
 }
 
-public OnPlayerPrivmsg(playerid, recieverid, text[])
-{
-	#if MUTEPMS
-		if(SpamCheck(playerid, text, true)) return 0;
-
-		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_MUTED) {
-			SendClientMessage(playerid, COLOUR_WARNING, "You are muted");
-			return 0;	// Do nothing :S
-		}
-	#endif
-
-	if(gServerData[E_SHOW_PMS]) {
-		new msg[MAX_INPUT + 2 * MAX_PLAYER_NAME + 20], Bit:players[Bit_Bits(MAX_PLAYERS)];
-		players = g_bitAdmins;
-		Bit_Set(players, playerid, 0);
-		Bit_Set(players, recieverid, 0);
-		format(msg, sizeof(msg), "PM from %s(%i) to %s(%i): %s", ReturnPlayerName(playerid), playerid, ReturnPlayerName(recieverid), recieverid, text);
-		SendWrappedMessageToClients(players, COLOUR_MSG, msg);
-		#if CHATHISTORY_SIZE > 0
-			alar_AddLineToHistory(COLOUR_MSG, msg, HISTORY_ADMIN_ONLY | HISTORY_WRAPPED);
-		#endif
-	}
-	return 1;
-}
-
 public OnPlayerCommandText(playerid, cmdtext[])
 {
+	gPlayerData[playerid][E_LAST_ACTIVE] = GetTickCount();
+
 	// stupid strcmp returning true for ""
 	if(cmdtext[1] == '\0') return 0;
 
@@ -1801,7 +2043,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	#endif
 
 	// For using something like "//" as the chat prefix
-	if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
+	if(gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0) {
 		for(new i; i < sizeof(gChatPrefix); i++) {
 			if(gChatPrefix[i][E_CHAT_STRING][0] == '/' && strcmp(cmdtext, gChatPrefix[i][E_CHAT_STRING], true, gChatPrefix[i][E_CHAT_LEN]) == 0) {
 				if(cmdtext[gChatPrefix[i][E_CHAT_LEN]] == '\0' || SpamCheck(playerid, cmdtext)) return 1;
@@ -1818,6 +2060,9 @@ public OnPlayerCommandText(playerid, cmdtext[])
 					new msg[MAX_INPUT + MAX_PLAYER_NAME + 20];
 					format(msg, sizeof(msg), "<Adminchat> %s: %s", ReturnPlayerName(playerid), cmdtext[gChatPrefix[i][E_CHAT_LEN]]);
 					SendWrappedMessageToClients(g_bitAdmins, COLOUR_MSG, msg);
+					#if CHATHISTORY_SIZE > 0
+						alar_AddLineToHistory(COLOUR_MSG, msg, HISTORY_ADMIN_ONLY | HISTORY_WRAPPED);
+					#endif
 					LogAction(msg);
 				}
 				return 1;
@@ -1828,853 +2073,12 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	// disable all commands (if the filterscript is first on the list)
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_JAILED) return 1;
 
-	// Not an admin command
-	if(cmdtext[1] != 'a' && cmdtext[1] != 'A') return 0;
-
-/*
-	#if JOINMSG_LINES > 0
-		cmd(ajoins, cmdtext);
-	#endif
-
-	cmd(admins, cmdtext);
-	cmd(adesynced, cmdtext);
-	cmd(afrozen, cmdtext);
-	cmd(ajailed, cmdtext);
-	cmd(amuted, cmdtext);
-	cmd(asinfo, cmdtext);
-	cmd(acommands, cmdtext);
-
-	dcmd(apm, 3, cmdtext);
-	dcmd(alogin, 6, cmdtext);
-
-	if(gServerData[E_ALIAS_ADMINS]) {
-		dcmd(aloginas, 8, cmdtext);
-	}
-*/
-	#if CHATHISTORY_SIZE > 0
-		if(gServerData[E_CHAT_HISTORY] == 1) cmd(ahistory, cmdtext);
-	#endif
-
-	#if JOINMSG_LINES > 0
-		switch(strcmp(cmdtext[1], "ajailed" , true)) {
-			case -1: {
-				switch(strcmp(cmdtext[1], "adesynced" , true)) {
-					case -1: {
-						if(strcmp(cmdtext[1], "acommands", true) == 0) {
-							return cmd_acommands(playerid);
-						}
-					}
-					case 0: {
-						return cmd_adesynced(playerid);
-					}
-					case 1: {
-						switch(strcmp(cmdtext[1], "admins" , true)) {
-							case 0: {
-								return cmd_admins(playerid);
-							}
-							case 1: {
-								if(strcmp(cmdtext[1], "afrozen", true) == 0) {
-									return cmd_afrozen(playerid);
-								}
-							}
-						}
-					}
-				}
-			}
-			case 0: {
-				return cmd_ajailed(playerid);
-			}
-			case 1: {
-				switch(strcmp(cmdtext[1], "amuted" , true)) {
-					case -1: {
-						switch(strcmp(cmdtext[1], "ajoins" , true)) {
-							case 0: {
-								return cmd_ajoins(playerid);
-							}
-							case 1: {
-								if(strcmp(cmdtext[1], "alogin", true, 6) == 0) {
-									if(cmdtext[7] == '\0') return dcmd_alogin(playerid, "");
-									if(cmdtext[7] == ' ') return dcmd_alogin(playerid, cmdtext[8]);
-									if(gServerData[E_ALIAS_ADMINS] && strcmp(cmdtext[7], "as", true, 2) == 0) {
-										if(cmdtext[9] == '\0') return dcmd_aloginas(playerid, "");
-										if(cmdtext[9] == ' ') return dcmd_aloginas(playerid, cmdtext[10]);
-									}
-									return 0;
-								}
-							}
-						}
-					}
-					case 0: {
-						return cmd_amuted(playerid);
-					}
-					case 1: {
-						switch(strcmp(cmdtext[1], "apm" , true, 3)) {
-							case 0: {
-								if(cmdtext[4] == '\0') return dcmd_apm(playerid, "");
-								if(cmdtext[4] == ' ') return dcmd_apm(playerid, cmdtext[5]);
-							}
-							case 1: {
-								if(strcmp(cmdtext[1], "asinfo", true) == 0) {
-									return cmd_asinfo(playerid);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	#else
-		switch(strcmp(cmdtext[1], "ajailed" , true)) {
-			case -1: {
-				switch(strcmp(cmdtext[1], "adesynced" , true)) {
-					case -1: {
-						if(strcmp(cmdtext[1], "acommands", true) == 0) {
-							return cmd_acommands(playerid);
-						}
-					}
-					case 0: {
-						return cmd_adesynced(playerid);
-					}
-					case 1: {
-						switch(strcmp(cmdtext[1], "admins" , true)) {
-							case 0: {
-								return cmd_admins(playerid);
-							}
-							case 1: {
-								if(strcmp(cmdtext[1], "afrozen", true) == 0) {
-									return cmd_afrozen(playerid);
-								}
-							}
-						}
-					}
-				}
-			}
-			case 0: {
-				return cmd_ajailed(playerid);
-			}
-			case 1: {
-				switch(strcmp(cmdtext[1], "amuted" , true)) {
-					case -1: {
-						if(strcmp(cmdtext[1], "alogin", true, 6) == 0) {
-							if(cmdtext[7] == '\0') return dcmd_alogin(playerid, "");
-							if(cmdtext[7] == ' ') return dcmd_alogin(playerid, cmdtext[8]);
-							if(gServerData[E_ALIAS_ADMINS] && strcmp(cmdtext[7], "as", true, 2) == 0) {
-								if(cmdtext[9] == '\0') return dcmd_aloginas(playerid, "");
-								if(cmdtext[9] == ' ') return dcmd_aloginas(playerid, cmdtext[10]);
-							}
-							return 0;
-						}
-					}
-					case 0: {
-						return cmd_amuted(playerid);
-					}
-					case 1: {
-						switch(strcmp(cmdtext[1], "apm" , true, 3)) {
-							case 0: {
-								if(cmdtext[4] == '\0') return dcmd_apm(playerid, "");
-								if(cmdtext[4] == ' ') return dcmd_apm(playerid, cmdtext[5]);
-							}
-							case 1: {
-								if(strcmp(cmdtext[1], "asinfo", true) == 0) {
-									return cmd_asinfo(playerid);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	#endif
-
-	if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
-		#if LOG_LINES > 0 && LOG_PAGES > 0
-			dcmd(alog, 4, cmdtext);
-		#endif
-/*
-		cmd(aautologin, cmdtext);
-		cmd(aclearbans, cmdtext);
-		cmd(aclearstatus, cmdtext);
-		cmd(aclr, cmdtext);
-		cmd(aejectall, cmdtext);
-		cmd(ahelp, cmdtext);
-		cmd(ahide, cmdtext);
-*/
-		#if CHATHISTORY_SIZE > 0
-			if(gServerData[E_CHAT_HISTORY]) cmd(ahistory, cmdtext);
-		#endif
-/*
-		cmd(aipupdate, cmdtext);
-		cmd(alistmodes, cmdtext);
-		cmd(alogout, cmdtext);
-		cmd(apaused, cmdtext);
-		cmd(areloaddata, cmdtext);
-		cmd(aremallcash, cmdtext);
-		cmd(aremallweapons, cmdtext);
-		cmd(aspectating, cmdtext);
-		cmd(aunhide, cmdtext);
-
-		dcmd(aalias, 6, cmdtext);
-		dcmd(aalias2, 7, cmdtext);
-		dcmd(aarmour, 7, cmdtext);
-		dcmd(aarmourall, 10, cmdtext);
-		dcmd(aban, 4, cmdtext);
-		dcmd(abancheck, 9, cmdtext);
-		dcmd(abanip, 6, cmdtext);
-		dcmd(abanname, 8, cmdtext);
-		dcmd(abring, 6, cmdtext);
-		dcmd(acarcolour, 10, cmdtext);
-		dcmd(achangemode, 11, cmdtext);
-		dcmd(achangepw, 9, cmdtext);
-		dcmd(acreate, 7, cmdtext);
-		dcmd(adestroy, 8, cmdtext);
-		dcmd(adesync, 7, cmdtext);
-		dcmd(adrop, 5, cmdtext);
-		dcmd(aeject, 6, cmdtext);
-		dcmd(aexplode, 8, cmdtext);
-		dcmd(aflip, 5, cmdtext);
-		dcmd(afreeze, 7, cmdtext);
-		dcmd(agiveallcash, 12, cmdtext);
-		dcmd(agiveallweapon, 14, cmdtext);
-		dcmd(agivecash, 9, cmdtext);
-		dcmd(agiveweapon, 11, cmdtext);
-		dcmd(agoto, 5, cmdtext);
-		dcmd(agravity, 8, cmdtext);
-		dcmd(aheal, 5, cmdtext);
-		dcmd(ahealall, 8, cmdtext);
-		dcmd(aimitate, 8, cmdtext);
-		dcmd(aimmune, 7, cmdtext);
-		dcmd(ainfo, 5, cmdtext);
-		dcmd(ainterior, 9, cmdtext);
-		dcmd(aip, 3, cmdtext);
-		dcmd(ajail, 5, cmdtext);
-		dcmd(akick, 5, cmdtext);
-		dcmd(amsg, 4, cmdtext);
-		dcmd(amute, 5, cmdtext);
-		dcmd(apunch, 6, cmdtext);
-		dcmd(ar, 2, cmdtext);
-		dcmd(arape, 5, cmdtext);
-		dcmd(aremcash, 8, cmdtext);
-		dcmd(aremweapons, 11, cmdtext);
-		dcmd(arepair, 7, cmdtext);
-		dcmd(arespawn, 8, cmdtext);
-		dcmd(asay, 4, cmdtext);
-		dcmd(aselect, 7, cmdtext);
-		dcmd(aservername, 11, cmdtext);
-		dcmd(asetadmin, 9, cmdtext);
-		dcmd(asetname, 8, cmdtext);
-		dcmd(asetping, 8, cmdtext);
-		dcmd(ashout, 6, cmdtext);
-		dcmd(aslap, 5, cmdtext);
-		dcmd(aslay, 5, cmdtext);
-		dcmd(aspawn, 6, cmdtext);
-		dcmd(aspec, 5, cmdtext);
-		dcmd(asuspend, 8, cmdtext);
-		dcmd(asuspendip, 10, cmdtext);
-		dcmd(asuspendname, 12, cmdtext);
-		dcmd(atime, 5, cmdtext);
-		dcmd(aunban, 6, cmdtext);
-		dcmd(aundesync, 9, cmdtext);
-		dcmd(aunfreeze, 9, cmdtext);
-		dcmd(aunjail, 7, cmdtext);
-		dcmd(aunmute, 7, cmdtext);
-		dcmd(aunrape, 7, cmdtext);
-		dcmd(aunsuspend, 10, cmdtext);
-		dcmd(aunwhitelist, 12, cmdtext);
-		dcmd(aweather, 8, cmdtext);
-		dcmd(awhitelist, 10, cmdtext);
-		dcmd(aworld, 6, cmdtext);
-*/
-
-		switch(strcmp(cmdtext[1], "ajail" , true, 5)) {
-			case -1: {
-				switch(strcmp(cmdtext[1], "aexplode" , true, 8)) {
-					case -1: {
-						switch(strcmp(cmdtext[1], "achangepw" , true, 9)) {
-							case -1: {
-								switch(strcmp(cmdtext[1], "aban" , true, 4)) {
-									case -1: {
-										switch(strcmp(cmdtext[1], "aarmour" , true, 7)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "aalias", true, 6) == 0) {
-													if(cmdtext[7] == '\0') return dcmd_aalias(playerid, "");
-													if(cmdtext[7] == ' ') return dcmd_aalias(playerid, cmdtext[8]);
-													switch(strcmp(cmdtext[7], "2" , true, 1)) {
-														case 0: {
-															if(cmdtext[8] == '\0') return dcmd_aalias2(playerid, "");
-															if(cmdtext[8] == ' ') return dcmd_aalias2(playerid, cmdtext[9]);
-														}
-														case 1: {
-															if(cmdtext[7] == '3') {
-																if(cmdtext[8] == '\0') return dcmd_aalias3(playerid, "");
-																if(cmdtext[8] == ' ') return dcmd_aalias3(playerid, cmdtext[9]);
-															}
-														}
-													}
-												}
-											}
-											case 0: {
-												if(cmdtext[8] == '\0') return dcmd_aarmour(playerid, "");
-												if(cmdtext[8] == ' ') return dcmd_aarmour(playerid, cmdtext[9]);
-												if(strcmp(cmdtext[8], "all", true, 3) == 0) {
-													if(cmdtext[11] == '\0') return dcmd_aarmourall(playerid, "");
-													if(cmdtext[11] == ' ') return dcmd_aarmourall(playerid, cmdtext[12]);
-												}
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "aautologin", true) == 0) {
-													return cmd_aautologin(playerid);
-												}
-											}
-										}
-									}
-									case 0: {
-										if(cmdtext[5] == '\0') return dcmd_aban(playerid, "");
-										if(cmdtext[5] == ' ') return dcmd_aban(playerid, cmdtext[6]);
-										switch(strcmp(cmdtext[5], "ip" , true, 2)) {
-											case -1: {
-												if(strcmp(cmdtext[5], "check", true, 5) == 0) {
-													if(cmdtext[10] == '\0') return dcmd_abancheck(playerid, "");
-													if(cmdtext[10] == ' ') return dcmd_abancheck(playerid, cmdtext[11]);
-												}
-											}
-											case 0: {
-												if(cmdtext[7] == '\0') return dcmd_abanip(playerid, "");
-												if(cmdtext[7] == ' ') return dcmd_abanip(playerid, cmdtext[8]);
-											}
-											case 1: {
-												if(strcmp(cmdtext[5], "name", true, 4) == 0) {
-													if(cmdtext[9] == '\0') return dcmd_abanname(playerid, "");
-													if(cmdtext[9] == ' ') return dcmd_abanname(playerid, cmdtext[10]);
-												}
-											}
-										}
-									}
-									case 1: {
-										switch(strcmp(cmdtext[1], "acarcolour" , true, 10)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "abring", true, 6) == 0) {
-													if(cmdtext[7] == '\0') return dcmd_abring(playerid, "");
-													if(cmdtext[7] == ' ') return dcmd_abring(playerid, cmdtext[8]);
-												}
-											}
-											case 0: {
-												if(cmdtext[11] == '\0') return dcmd_acarcolour(playerid, "");
-												if(cmdtext[11] == ' ') return dcmd_acarcolour(playerid, cmdtext[12]);
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "achangemode", true, 11) == 0) {
-													if(cmdtext[12] == '\0') return dcmd_achangemode(playerid, "");
-													if(cmdtext[12] == ' ') return dcmd_achangemode(playerid, cmdtext[13]);
-												}
-											}
-										}
-									}
-								}
-							}
-							case 0: {
-								if(cmdtext[10] == '\0') return dcmd_achangepw(playerid, "");
-								if(cmdtext[10] == ' ') return dcmd_achangepw(playerid, cmdtext[11]);
-							}
-							case 1: {
-								switch(strcmp(cmdtext[1], "acreate" , true, 7)) {
-									case -1: {
-										switch(strcmp(cmdtext[1], "aclearstatus" , true)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "aclearbans", true) == 0) {
-													return cmd_aclearbans(playerid);
-												}
-											}
-											case 0: {
-												return cmd_aclearstatus(playerid);
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "aclr", true) == 0) {
-													return cmd_aclr(playerid);
-												}
-											}
-										}
-									}
-									case 0: {
-										if(cmdtext[8] == '\0') return dcmd_acreate(playerid, "");
-										if(cmdtext[8] == ' ') return dcmd_acreate(playerid, cmdtext[9]);
-									}
-									case 1: {
-										switch(strcmp(cmdtext[1], "adesync" , true, 7)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "adestroy", true, 8) == 0) {
-													if(cmdtext[9] == '\0') return dcmd_adestroy(playerid, "");
-													if(cmdtext[9] == ' ') return dcmd_adestroy(playerid, cmdtext[10]);
-												}
-											}
-											case 0: {
-												if(cmdtext[8] == '\0') return dcmd_adesync(playerid, "");
-												if(cmdtext[8] == ' ') return dcmd_adesync(playerid, cmdtext[9]);
-											}
-											case 1: {
-												switch(strcmp(cmdtext[1], "adrop" , true, 5)) {
-													case 0: {
-														if(cmdtext[6] == '\0') return dcmd_adrop(playerid, "");
-														if(cmdtext[6] == ' ') return dcmd_adrop(playerid, cmdtext[7]);
-													}
-													case 1: {
-														if(strcmp(cmdtext[1], "aeject", true, 6) == 0) {
-															if(cmdtext[7] == '\0') return dcmd_aeject(playerid, "");
-															if(cmdtext[7] == ' ') return dcmd_aeject(playerid, cmdtext[8]);
-															if(strcmp(cmdtext[7], "all", true) == 0) {
-																return cmd_aejectall(playerid);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					case 0: {
-						if(cmdtext[9] == '\0') return dcmd_aexplode(playerid, "");
-						if(cmdtext[9] == ' ') return dcmd_aexplode(playerid, cmdtext[10]);
-					}
-					case 1: {
-						switch(strcmp(cmdtext[1], "agravity" , true, 8)) {
-							case -1: {
-								switch(strcmp(cmdtext[1], "agiveallweapon" , true, 14)) {
-									case -1: {
-										switch(strcmp(cmdtext[1], "afreeze" , true, 7)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "aflip", true, 5) == 0) {
-													if(cmdtext[6] == '\0') return dcmd_aflip(playerid, "");
-													if(cmdtext[6] == ' ') return dcmd_aflip(playerid, cmdtext[7]);
-												}
-											}
-											case 0: {
-												if(cmdtext[8] == '\0') return dcmd_afreeze(playerid, "");
-												if(cmdtext[8] == ' ') return dcmd_afreeze(playerid, cmdtext[9]);
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "agiveallcash", true, 12) == 0) {
-													if(cmdtext[13] == '\0') return dcmd_agiveallcash(playerid, "");
-													if(cmdtext[13] == ' ') return dcmd_agiveallcash(playerid, cmdtext[14]);
-												}
-											}
-										}
-									}
-									case 0: {
-										if(cmdtext[15] == '\0') return dcmd_agiveallweapon(playerid, "");
-										if(cmdtext[15] == ' ') return dcmd_agiveallweapon(playerid, cmdtext[16]);
-									}
-									case 1: {
-										switch(strcmp(cmdtext[1], "agiveweapon" , true, 11)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "agivecash", true, 9) == 0) {
-													if(cmdtext[10] == '\0') return dcmd_agivecash(playerid, "");
-													if(cmdtext[10] == ' ') return dcmd_agivecash(playerid, cmdtext[11]);
-												}
-											}
-											case 0: {
-												if(cmdtext[12] == '\0') return dcmd_agiveweapon(playerid, "");
-												if(cmdtext[12] == ' ') return dcmd_agiveweapon(playerid, cmdtext[13]);
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "agoto", true, 5) == 0) {
-													if(cmdtext[6] == '\0') return dcmd_agoto(playerid, "");
-													if(cmdtext[6] == ' ') return dcmd_agoto(playerid, cmdtext[7]);
-												}
-											}
-										}
-									}
-								}
-							}
-							case 0: {
-								if(cmdtext[9] == '\0') return dcmd_agravity(playerid, "");
-								if(cmdtext[9] == ' ') return dcmd_agravity(playerid, cmdtext[10]);
-							}
-							case 1: {
-								switch(strcmp(cmdtext[1], "aimitate" , true, 8)) {
-									case -1: {
-										switch(strcmp(cmdtext[1], "ahelp" , true)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "aheal", true, 5) == 0) {
-													if(cmdtext[6] == '\0') return dcmd_aheal(playerid, "");
-													if(cmdtext[6] == ' ') return dcmd_aheal(playerid, cmdtext[7]);
-													if(strcmp(cmdtext[6], "all", true, 3) == 0) {
-														if(cmdtext[9] == '\0') return dcmd_ahealall(playerid, "");
-														if(cmdtext[9] == ' ') return dcmd_ahealall(playerid, cmdtext[10]);
-													}
-												}
-											}
-											case 0: {
-												return cmd_ahelp(playerid);
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "ahide", true) == 0) {
-													return cmd_ahide(playerid);
-												}
-											}
-										}
-									}
-									case 0: {
-										if(cmdtext[9] == '\0') return dcmd_aimitate(playerid, "");
-										if(cmdtext[9] == ' ') return dcmd_aimitate(playerid, cmdtext[10]);
-									}
-									case 1: {
-										switch(strcmp(cmdtext[1], "ainfo" , true, 5)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "aimmune", true, 7) == 0) {
-													if(cmdtext[8] == '\0') return dcmd_aimmune(playerid, "");
-													if(cmdtext[8] == ' ') return dcmd_aimmune(playerid, cmdtext[9]);
-												}
-											}
-											case 0: {
-												if(cmdtext[6] == '\0') return dcmd_ainfo(playerid, "");
-												if(cmdtext[6] == ' ') return dcmd_ainfo(playerid, cmdtext[7]);
-											}
-											case 1: {
-												switch(strcmp(cmdtext[1], "ainterior" , true, 9)) {
-													case 0: {
-														if(cmdtext[10] == '\0') return dcmd_ainterior(playerid, "");
-														if(cmdtext[10] == ' ') return dcmd_ainterior(playerid, cmdtext[11]);
-													}
-													case 1: {
-														if(strcmp(cmdtext[1], "aip", true, 3) == 0) {
-															if(cmdtext[4] == '\0') return dcmd_aip(playerid, "");
-															if(cmdtext[4] == ' ') return dcmd_aip(playerid, cmdtext[5]);
-															if(strcmp(cmdtext[4], "update", true) == 0) {
-																return cmd_aipupdate(playerid);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			case 0: {
-				if(cmdtext[6] == '\0') return dcmd_ajail(playerid, "");
-				if(cmdtext[6] == ' ') return dcmd_ajail(playerid, cmdtext[7]);
-			}
-			case 1: {
-				switch(strcmp(cmdtext[1], "aslay" , true, 5)) {
-					case -1: {
-						switch(strcmp(cmdtext[1], "ar" , true, 2)) {
-							case -1: {
-								switch(strcmp(cmdtext[1], "amsg" , true, 4)) {
-									case -1: {
-										switch(strcmp(cmdtext[1], "alistmodes" , true)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "akick", true, 5) == 0) {
-													if(cmdtext[6] == '\0') return dcmd_akick(playerid, "");
-													if(cmdtext[6] == ' ') return dcmd_akick(playerid, cmdtext[7]);
-												}
-											}
-											case 0: {
-												return cmd_alistmodes(playerid);
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "alogout", true) == 0) {
-													return cmd_alogout(playerid);
-												}
-											}
-										}
-									}
-									case 0: {
-										if(cmdtext[5] == '\0') return dcmd_amsg(playerid, "");
-										if(cmdtext[5] == ' ') return dcmd_amsg(playerid, cmdtext[6]);
-									}
-									case 1: {
-										switch(strcmp(cmdtext[1], "apaused" , true)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "amute", true, 5) == 0) {
-													if(cmdtext[6] == '\0') return dcmd_amute(playerid, "");
-													if(cmdtext[6] == ' ') return dcmd_amute(playerid, cmdtext[7]);
-												}
-											}
-											case 0: {
-												return cmd_apaused(playerid);
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "apunch", true, 6) == 0) {
-													if(cmdtext[7] == '\0') return dcmd_apunch(playerid, "");
-													if(cmdtext[7] == ' ') return dcmd_apunch(playerid, cmdtext[8]);
-												}
-											}
-										}
-									}
-								}
-							}
-							case 0: {
-								if(cmdtext[3] == '\0') return dcmd_ar(playerid, "");
-								if(cmdtext[3] == ' ') return dcmd_ar(playerid, cmdtext[4]);
-								switch(strcmp(cmdtext[3], "emallweapons" , true)) {
-									case -1: {
-										switch(strcmp(cmdtext[3], "eloaddata" , true)) {
-											case -1: {
-												if(strcmp(cmdtext[3], "ape", true, 3) == 0) {
-													if(cmdtext[6] == '\0') return dcmd_arape(playerid, "");
-													if(cmdtext[6] == ' ') return dcmd_arape(playerid, cmdtext[7]);
-												}
-											}
-											case 0: {
-												return cmd_areloaddata(playerid);
-											}
-											case 1: {
-												if(strcmp(cmdtext[3], "emallcash", true) == 0) {
-													return cmd_aremallcash(playerid);
-												}
-											}
-										}
-									}
-									case 0: {
-										return cmd_aremallweapons(playerid);
-									}
-									case 1: {
-										switch(strcmp(cmdtext[3], "emweapons" , true, 9)) {
-											case -1: {
-												if(strcmp(cmdtext[3], "emcash", true, 6) == 0) {
-													if(cmdtext[9] == '\0') return dcmd_aremcash(playerid, "");
-													if(cmdtext[9] == ' ') return dcmd_aremcash(playerid, cmdtext[10]);
-												}
-											}
-											case 0: {
-												if(cmdtext[12] == '\0') return dcmd_aremweapons(playerid, "");
-												if(cmdtext[12] == ' ') return dcmd_aremweapons(playerid, cmdtext[13]);
-											}
-											case 1: {
-												switch(strcmp(cmdtext[3], "epair" , true, 5)) {
-													case 0: {
-														if(cmdtext[8] == '\0') return dcmd_arepair(playerid, "");
-														if(cmdtext[8] == ' ') return dcmd_arepair(playerid, cmdtext[9]);
-													}
-													case 1: {
-														if(strcmp(cmdtext[3], "espawn", true, 6) == 0) {
-															if(cmdtext[9] == '\0') return dcmd_arespawn(playerid, "");
-															if(cmdtext[9] == ' ') return dcmd_arespawn(playerid, cmdtext[10]);
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							case 1: {
-								switch(strcmp(cmdtext[1], "asetadmin" , true, 9)) {
-									case -1: {
-										switch(strcmp(cmdtext[1], "aselect" , true, 7)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "asay", true, 4) == 0) {
-													if(cmdtext[5] == '\0') return dcmd_asay(playerid, "");
-													if(cmdtext[5] == ' ') return dcmd_asay(playerid, cmdtext[6]);
-												}
-											}
-											case 0: {
-												if(cmdtext[8] == '\0') return dcmd_aselect(playerid, "");
-												if(cmdtext[8] == ' ') return dcmd_aselect(playerid, cmdtext[9]);
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "aservername", true, 11) == 0) {
-													if(cmdtext[12] == '\0') return dcmd_aservername(playerid, "");
-													if(cmdtext[12] == ' ') return dcmd_aservername(playerid, cmdtext[13]);
-												}
-											}
-										}
-									}
-									case 0: {
-										if(cmdtext[10] == '\0') return dcmd_asetadmin(playerid, "");
-										if(cmdtext[10] == ' ') return dcmd_asetadmin(playerid, cmdtext[11]);
-									}
-									case 1: {
-										switch(strcmp(cmdtext[1], "asetping" , true, 8)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "asetname", true, 8) == 0) {
-													if(cmdtext[9] == '\0') return dcmd_asetname(playerid, "");
-													if(cmdtext[9] == ' ') return dcmd_asetname(playerid, cmdtext[10]);
-												}
-											}
-											case 0: {
-												if(cmdtext[9] == '\0') return dcmd_asetping(playerid, "");
-												if(cmdtext[9] == ' ') return dcmd_asetping(playerid, cmdtext[10]);
-											}
-											case 1: {
-												switch(strcmp(cmdtext[1], "ashout" , true, 6)) {
-													case 0: {
-														if(cmdtext[7] == '\0') return dcmd_ashout(playerid, "");
-														if(cmdtext[7] == ' ') return dcmd_ashout(playerid, cmdtext[8]);
-													}
-													case 1: {
-														if(strcmp(cmdtext[1], "aslap", true, 5) == 0) {
-															if(cmdtext[6] == '\0') return dcmd_aslap(playerid, "");
-															if(cmdtext[6] == ' ') return dcmd_aslap(playerid, cmdtext[7]);
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					case 0: {
-						if(cmdtext[6] == '\0') return dcmd_aslay(playerid, "");
-						if(cmdtext[6] == ' ') return dcmd_aslay(playerid, cmdtext[7]);
-					}
-					case 1: {
-						switch(strcmp(cmdtext[1], "aunhide" , true)) {
-							case -1: {
-								switch(strcmp(cmdtext[1], "atime" , true, 5)) {
-									case -1: {
-										switch(strcmp(cmdtext[1], "aspec" , true, 5)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "aspawn", true, 6) == 0) {
-													if(cmdtext[7] == '\0') return dcmd_aspawn(playerid, "");
-													if(cmdtext[7] == ' ') return dcmd_aspawn(playerid, cmdtext[8]);
-												}
-											}
-											case 0: {
-												if(cmdtext[6] == '\0') return dcmd_aspec(playerid, "");
-												if(cmdtext[6] == ' ') return dcmd_aspec(playerid, cmdtext[7]);
-												if(strcmp(cmdtext[6], "tating", true) == 0) {
-													return cmd_aspectating(playerid);
-												}
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "asuspend", true, 8) == 0) {
-													if(cmdtext[9] == '\0') return dcmd_asuspend(playerid, "");
-													if(cmdtext[9] == ' ') return dcmd_asuspend(playerid, cmdtext[10]);
-													switch(strcmp(cmdtext[9], "ip" , true, 2)) {
-														case 0: {
-															if(cmdtext[11] == '\0') return dcmd_asuspendip(playerid, "");
-															if(cmdtext[11] == ' ') return dcmd_asuspendip(playerid, cmdtext[12]);
-														}
-														case 1: {
-															if(strcmp(cmdtext[9], "name", true, 4) == 0) {
-																if(cmdtext[13] == '\0') return dcmd_asuspendname(playerid, "");
-																if(cmdtext[13] == ' ') return dcmd_asuspendname(playerid, cmdtext[14]);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-									case 0: {
-										if(cmdtext[6] == '\0') return dcmd_atime(playerid, "");
-										if(cmdtext[6] == ' ') return dcmd_atime(playerid, cmdtext[7]);
-									}
-									case 1: {
-										switch(strcmp(cmdtext[1], "aundesync" , true, 9)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "aunban", true, 6) == 0) {
-													if(cmdtext[7] == '\0') return dcmd_aunban(playerid, "");
-													if(cmdtext[7] == ' ') return dcmd_aunban(playerid, cmdtext[8]);
-												}
-											}
-											case 0: {
-												if(cmdtext[10] == '\0') return dcmd_aundesync(playerid, "");
-												if(cmdtext[10] == ' ') return dcmd_aundesync(playerid, cmdtext[11]);
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "aunfreeze", true, 9) == 0) {
-													if(cmdtext[10] == '\0') return dcmd_aunfreeze(playerid, "");
-													if(cmdtext[10] == ' ') return dcmd_aunfreeze(playerid, cmdtext[11]);
-												}
-											}
-										}
-									}
-								}
-							}
-							case 0: {
-								return cmd_aunhide(playerid);
-							}
-							case 1: {
-								switch(strcmp(cmdtext[1], "aunsuspend" , true, 10)) {
-									case -1: {
-										switch(strcmp(cmdtext[1], "aunmute" , true, 7)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "aunjail", true, 7) == 0) {
-													if(cmdtext[8] == '\0') return dcmd_aunjail(playerid, "");
-													if(cmdtext[8] == ' ') return dcmd_aunjail(playerid, cmdtext[9]);
-												}
-											}
-											case 0: {
-												if(cmdtext[8] == '\0') return dcmd_aunmute(playerid, "");
-												if(cmdtext[8] == ' ') return dcmd_aunmute(playerid, cmdtext[9]);
-											}
-											case 1: {
-												if(strcmp(cmdtext[1], "aunrape", true, 7) == 0) {
-													if(cmdtext[8] == '\0') return dcmd_aunrape(playerid, "");
-													if(cmdtext[8] == ' ') return dcmd_aunrape(playerid, cmdtext[9]);
-												}
-											}
-										}
-									}
-									case 0: {
-										if(cmdtext[11] == '\0') return dcmd_aunsuspend(playerid, "");
-										if(cmdtext[11] == ' ') return dcmd_aunsuspend(playerid, cmdtext[12]);
-									}
-									case 1: {
-										switch(strcmp(cmdtext[1], "aweather" , true, 8)) {
-											case -1: {
-												if(strcmp(cmdtext[1], "aunwhitelist", true, 12) == 0) {
-													if(cmdtext[13] == '\0') return dcmd_aunwhitelist(playerid, "");
-													if(cmdtext[13] == ' ') return dcmd_aunwhitelist(playerid, cmdtext[14]);
-												}
-											}
-											case 0: {
-												if(cmdtext[9] == '\0') return dcmd_aweather(playerid, "");
-												if(cmdtext[9] == ' ') return dcmd_aweather(playerid, cmdtext[10]);
-											}
-											case 1: {
-												switch(strcmp(cmdtext[1], "awhitelist" , true, 10)) {
-													case 0: {
-														if(cmdtext[11] == '\0') return dcmd_awhitelist(playerid, "");
-														if(cmdtext[11] == ' ') return dcmd_awhitelist(playerid, cmdtext[12]);
-													}
-													case 1: {
-														if(strcmp(cmdtext[1], "aworld", true, 6) == 0) {
-															if(cmdtext[7] == '\0') return dcmd_aworld(playerid, "");
-															if(cmdtext[7] == ' ') return dcmd_aworld(playerid, cmdtext[8]);
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
 	return 0;
 }
 
-public OnVehicleSpawn(vehicleid)
+public OnVehicleMod(playerid, vehicleid, componentid)
 {
-	if(Bit_Get(gCreatedVehicles, vehicleid)) {
-		if(gServerData[E_RESPAWN_VEHICLES] == false) {
-			DestroyVehicle(vehicleid);
-			Bit_Vet(gCreatedVehicles, vehicleid);
-		} else if(gServerData[E_DEFAULT_NUM_PLATE][0] != '\0') {
-			SetVehicleNumberPlate(vehicleid, ReturnNumPlateTxt(vehicleid));
-		}
-	}
-	return 1;
-}
-
-#if CHECKMODS
-	public OnVehicleMod(playerid, vehicleid, componentid)
-	{
+	if(gServerData[E_CHECK_MODS]) {
 		new modelid = GetVehicleModel(vehicleid);
 		if(isValidVehicleMod(modelid, componentid)) {
 			return true;
@@ -2686,73 +2090,27 @@ public OnVehicleSpawn(vehicleid)
 			return false;
 		}
 	}
-#endif
+	return true;
+}
+
+public OnVehiclePaintjob(playerid, vehicleid, paintjobid)
+{
+	if(gServerData[E_CHECK_MODS]) {
+		if(-1 <= paintjobid <= 5) {
+			return true;
+		} else {
+			new msg[MAX_INPUT];
+			format(msg, sizeof(msg), "Invalid vehicle paintjob used by %s(%i) [%s:%i]", ReturnPlayerName(playerid), playerid, ReturnPlayerVehicleName(playerid), paintjobid);
+			AddLogString(msg);
+			LogAction(msg);
+			return false;
+		}
+	}
+	return true;
+}
 
 public OnPlayerStateChange(playerid, newstate, oldstate)
 {
-	if(newstate == PLAYER_STATE_SPAWNED) {
-		if(gPlayerData[playerid][E_SETINFO]) {
-			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_POSITION) {
-				SetPlayerPos(playerid, gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ]);
-				SetPlayerFacingAngle(playerid, gPlayerData[playerid][E_ROT]);
-				SetCameraBehindPlayer(playerid);
-			}
-			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_WORLD) {
-				SetPlayerInterior(playerid, gPlayerData[playerid][E_INTERIOR]);
-				if(GetPlayerVirtualWorld(playerid) != gPlayerData[playerid][E_WORLD]) {
-					SetPlayerVirtualWorld(playerid, gPlayerData[playerid][E_WORLD]);
-					alar_OnPlayerWorldChange(playerid, gPlayerData[playerid][E_WORLD]);
-				}
-			}
-			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_HEALTH) {
-				SetPlayerHealth(playerid, gPlayerData[playerid][E_HEALTH]);
-			}
-			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_ARMOUR) {
-				SetPlayerArmour(playerid, gPlayerData[playerid][E_ARMOUR]);
-			}
-			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_CASH) {
-				ResetPlayerMoney(playerid);
-				GivePlayerMoney(playerid, gPlayerData[playerid][E_CASH]);
-			}
-			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_WEAPONS) {
-				ResetPlayerWeapons(playerid);
-				for(new i; i < 13; i++) {
-					if(gPlayerData[playerid][E_WEAPON][i] != 0) {
-						GivePlayerWeapon(playerid, gPlayerData[playerid][E_WEAPON][i], gPlayerData[playerid][E_AMMO][i]);
-						gPlayerData[playerid][E_WEAPON][i] = 0;
-					}
-				}
-			}
-
-			gPlayerData[playerid][E_SETINFO] = E_INFOTYPE:0;
-			ClearSpawnData(playerid);
-		}
-	} else if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER) {
-		if(newstate == PLAYER_STATE_ONFOOT) {
-			LoopPlayers(i) {
-				if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == playerid) {
-					if(gPlayerData[i][E_SPECMODE] != 1) {
-						PlayerSpectatePlayer(i, playerid);
-					}
-					#if SPEC_TXT_TIME > 0
-						if(gPlayerData[i][E_SPECMODE] != 0) {
-							gPlayerData[i][E_SPECMODE] = 0;
-							ShowSpecTxt(i);
-						}
-					#endif
-				}
-			}
-		}
-	} else if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER) {
-		new vehicleid = GetPlayerVehicleID(playerid);
-		if(oldstate == PLAYER_STATE_ONFOOT) {
-			LoopPlayers(i) {
-				if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == playerid) {
-					PlayerSpectateVehicle(i, vehicleid, SPECTATE_MODE_NORMAL);
-				}
-			}
-		}
-	}
 	if(oldstate == PLAYER_STATE_SPECTATING) {
 		if(gPlayerData[playerid][E_SPECTATING]) {
 			gPlayerData[playerid][E_SPECTATING] = false;
@@ -2787,10 +2145,86 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 		}
 	}
+	if(newstate == PLAYER_STATE_SPAWNED) {
+		gPlayerData[playerid][E_SPECID] = INVALID_PLAYER_ID;
+
+		if((~gPlayerData[playerid][E_STATE] & ADMIN_STATE_JAILED) && gPlayerData[playerid][E_SETINFO]) {
+			new bool:isinvehicle = false;
+			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_VEHICLE) {
+				if(GetVehicleModel(gPlayerData[playerid][E_VEHICLEID]) != INVALID_MODEL_ID) {
+					if(IsVehicleSeatFree(gPlayerData[playerid][E_VEHICLEID], gPlayerData[playerid][E_SEATID])) {
+						if((gPlayerData[playerid][E_WORLD] = GetVehicleVirtualWorld(gPlayerData[playerid][E_VEHICLEID])) != GetPlayerVirtualWorld(playerid)) {
+							SetPlayerVirtualWorld(playerid, gPlayerData[playerid][E_WORLD]);
+							alar_OnPlayerWorldChange(playerid, gPlayerData[playerid][E_WORLD]);
+						}
+						isinvehicle = true;
+						PutPlayerInVehicle(playerid, gPlayerData[playerid][E_VEHICLEID], gPlayerData[playerid][E_SEATID]);
+						SetCameraBehindPlayer(playerid);
+					}
+				}
+			}
+			if(!isinvehicle && gPlayerData[playerid][E_SETINFO] & INFOTYPE_POSITION) {
+				SetPlayerPos(playerid, gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ]);
+				SetPlayerFacingAngle(playerid, gPlayerData[playerid][E_ROT]);
+				SetCameraBehindPlayer(playerid);
+			}
+			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_WORLD) {
+				SetPlayerInterior(playerid, gPlayerData[playerid][E_INTERIOR]);
+				if(GetPlayerVirtualWorld(playerid) != gPlayerData[playerid][E_WORLD]) {
+					SetPlayerVirtualWorld(playerid, gPlayerData[playerid][E_WORLD]);
+					alar_OnPlayerWorldChange(playerid, gPlayerData[playerid][E_WORLD]);
+				}
+			}
+			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_HEALTH) {
+				SetPlayerHealth(playerid, gPlayerData[playerid][E_HEALTH]);
+			}
+			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_ARMOUR) {
+				SetPlayerArmour(playerid, gPlayerData[playerid][E_ARMOUR]);
+			}
+			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_CASH) {
+				ResetPlayerMoney(playerid);
+				GivePlayerMoney(playerid, gPlayerData[playerid][E_CASH]);
+			}
+			if(gPlayerData[playerid][E_SETINFO] & INFOTYPE_WEAPONS) {
+				ResetPlayerWeapons(playerid);
+				for(new i; i < 13; i++) {
+					if(gPlayerData[playerid][E_WEAPON][i] != 0) {
+						GivePlayerWeapon(playerid, gPlayerData[playerid][E_WEAPON][i], gPlayerData[playerid][E_AMMO][i]);
+					}
+				}
+				SetPlayerArmedWeapon(playerid, gPlayerData[playerid][E_ARMED]);
+			}
+			ClearSpawnData(playerid);
+		}
+	} else if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER) {
+		if(newstate == PLAYER_STATE_ONFOOT) {
+			LoopPlayers(i) {
+				if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == playerid) {
+					if(gPlayerData[i][E_SPECMODE] != 1) {
+						PlayerSpectatePlayer(i, playerid);
+					}
+					#if SPEC_TXT_TIME > 0
+						if(gPlayerData[i][E_SPECMODE] != 0) {
+							gPlayerData[i][E_SPECMODE] = 0;
+							ShowSpecTxt(i);
+						}
+					#endif
+				}
+			}
+		}
+	} else if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER) {
+		new vehicleid = GetPlayerVehicleID(playerid);
+		if(oldstate == PLAYER_STATE_ONFOOT) {
+			LoopPlayers(i) {
+				if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == playerid) {
+					PlayerSpectateVehicle(i, vehicleid, SPECTATE_MODE_NORMAL);
+				}
+			}
+		}
+	}
 	if(newstate == PLAYER_STATE_SPECTATING) {
-		for(new i; i < gMaxPlayers; i++) {
+		LoopPlayers(i) {
 			if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == playerid) {
-				//ObserverSwitchPlayer(i, gPlayerData[i][E_SPECID] + 1);
 				ObserverSwitchPlayer(i, FindClosestPlayer(playerid));
 			}
 		}
@@ -2807,12 +2241,12 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		if(gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID) {
  			if(IsKeyJustDown(KEY_WALK, newkeys, oldkeys)) {
 				new target = INVALID_PLAYER_ID,
-					Float:dist = INFINITY,
+					Float:dist = FLOAT_INF,
 					Float:px,
 					Float:py,
 					Float:pz,
 					Float:tmp;
-				for(new i; i < gMaxPlayers; i++) {
+				LoopPlayers(i) {
 					if(IsSpawned(i)) {
 						GetPlayerPos(i, px, py, pz);
 						tmp = floatpower(gPlayerData[playerid][E_CAM_POS_X] - px, 2.0) + floatpower(gPlayerData[playerid][E_CAM_POS_Y] - py, 2.0) + floatpower(gPlayerData[playerid][E_CAM_POS_Z] - pz, 2.0);
@@ -2850,6 +2284,10 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 				gPlayerData[playerid][E_INTERIOR] = GetPlayerInterior(playerid);
 				gPlayerData[playerid][E_WORLD] = GetPlayerVirtualWorld(playerid);
+
+				gPlayerData[playerid][E_VEHICLEID] = INVALID_VEHICLE_ID;
+				gPlayerData[playerid][E_SEATID] = INVALID_VEHICLE_ID;
+
 				SpawnUsingPosition(playerid);
 				return;
 			}
@@ -2884,6 +2322,23 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				gPlayerData[playerid][E_POSZ] = Z + 3.0;
 				gPlayerData[playerid][E_INTERIOR] = GetPlayerInterior(gPlayerData[playerid][E_SPECID]);
 				gPlayerData[playerid][E_WORLD] = GetPlayerVirtualWorld(gPlayerData[playerid][E_SPECID]);
+
+				if(IsPlayerInAnyVehicle(gPlayerData[playerid][E_SPECID])) {
+					new vid = GetPlayerVehicleID(gPlayerData[playerid][E_SPECID]);
+					if((gPlayerData[playerid][E_SEATID] = GetVehicleFreeSeat(vid)) != INVALID_SEAT_ID) {
+						gPlayerData[playerid][E_VEHICLEID] = vid;
+					} else {
+						new trailerid = GetVehicleTrailer(vid);
+						for(; trailerid && trailerid != vid && (gPlayerData[playerid][E_SEATID] = GetVehicleFreeSeat(trailerid, false)) == INVALID_SEAT_ID;) {
+							trailerid = GetVehicleTrailer(trailerid);
+						}
+						if(gPlayerData[playerid][E_SEATID] != INVALID_SEAT_ID) {
+							gPlayerData[playerid][E_VEHICLEID] = trailerid;
+						} else {
+							gPlayerData[playerid][E_VEHICLEID] = INVALID_VEHICLE_ID;
+						}
+					}
+				}
 
 				SpawnUsingPosition(playerid);
 
@@ -3010,9 +2465,32 @@ public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
 
 public OnPlayerUpdate(playerid)
 {
-	gPlayerData[playerid][E_LAST_ACTIVE] = GetTickCount();
+	gPlayerData[playerid][E_LAST_UPDATE] = GetTickCount();
+	new keys, updown, leftright;
+	GetPlayerKeys(playerid, keys, updown, leftright);
+	if(keys || updown || leftright) gPlayerData[playerid][E_LAST_ACTIVE] = GetTickCount();
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_DESYNCED) return 0;
 	return 1;
+}
+
+public OnPlayerClickPlayer(playerid, clickedplayerid, source)
+{
+	if(gPlayerData[playerid][E_SPECTATING]) {
+		if(gPlayerData[playerid][E_SPECID] == clickedplayerid) return 0;
+		if(IsSpawned(clickedplayerid)) {
+			#if SPEC_TXT_TIME > 0
+				if(gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID) {
+					gPlayerData[playerid][E_SPECMODE] = 0;
+					ShowSpecTxt(playerid);
+				}
+			#endif
+			gPlayerData[playerid][E_LAST_SPECID] = clickedplayerid;
+			ObserverSwitchPlayer(playerid, clickedplayerid);
+			return 1;
+		}
+
+	}
+	return 0;
 }
 
 public OnRconCommand(cmd[])
@@ -3038,1307 +2516,276 @@ public OnRconCommand(cmd[])
 		rdcmd(aip, 3, cmd);
 		rdcmd(asetping, 8, cmd);
 		rdcmd(apm, 3, cmd);
+		rdcmd(awarnings, 9, cmd);
 	}
 	return 0;
 }
 
+public OnRconLoginAttempt(ip[], password[], success)
+{
+	if(success) {
+		new Unsigned:IPCode = IP2Code(ip);
+		#if RCONCOUNT > 1
+			for(new i; i < sizeof(gRconList); i++) {
+				if(gRconList[i][E_LASTIP] == IPCode) gRconList[i][E_LASTIP] = Unsigned:0;
+			}
+		#endif
+		SetTimerEx("alar_rconupdate", 100, 0, "i", _:IPCode);
+	} else {
+		#if RCONCOUNT > 1
+			RconFloodCheck(ip);
+		#endif
+	}
+	return 1;
+}
+
+public OnVehicleSpawn(vehicleid)
+{
+	if(Bit_Get(gCreatedVehicles, vehicleid)) {
+		if(gServerData[E_RESPAWN_VEHICLES] == false) {
+			DestroyVehicle(vehicleid);
+			Bit_Vet(gCreatedVehicles, vehicleid);
+		} else if(gServerData[E_DEFAULT_NUM_PLATE][0] != '\0') {
+			SetVehicleNumberPlate(vehicleid, ReturnNumPlateTxt(vehicleid));
+		}
+	}
+	LoopPlayers(i) {
+		if(gPlayerData[i][E_VEHICLEID] == vehicleid) {
+			gPlayerData[i][E_VEHICLEID] = INVALID_VEHICLE_ID;
+			gPlayerData[i][E_SEATID] = INVALID_SEAT_ID;
+		}
+	}
+	return 1;
+}
 
 //-----------
 // COMMANDS
 //-----------
 
-cmd_aautologin(const playerid)
+acmd:aalias(const playerid, const params[], const bool:help)
 {
-	if(!gServerData[E_AUTO_LOGIN]) return 0;
-
-	new logininfo[E_LOGINDATA];
-	if(GetPlayerData(gPlayerData[playerid][E_NAME], logininfo)) {
-		if(logininfo[E_LOGIN_MANUAL]) {
-			SendClientMessage(playerid, COLOUR_ADMIN, "Automatic login has been enabled");
-			logininfo[E_LOGIN_MANUAL] = false;
-		} else {
-			SendClientMessage(playerid, COLOUR_ADMIN, "Automatic login has been disabled");
-			logininfo[E_LOGIN_MANUAL] = true;
-		}
-		#if LOG_LINES > 0 && LOG_PAGES > 0
-			logininfo[E_LOGIN_PAGE] = gPlayerData[playerid][E_LOGKEYS] ? gPlayerData[playerid][E_LOG_PAGE] : -gPlayerData[playerid][E_LOG_PAGE] - 1;
-		#endif
-		logininfo[E_LOGIN_HUD] = gPlayerData[playerid][E_SHOWHUD];
-
-		SetPlayerData(gPlayerData[playerid][E_NAME], logininfo);
-	}
-	return 1;
-}
-
-cmd_aclearbans(const playerid)
-{
-	if(LevelCheck(playerid, E_CLEARBANS_LEVEL)) return 1;
-
-	if(fexist(BANFILE)) fremove(BANFILE);
-	if(fexist(SUSPENDFILE)) fremove(SUSPENDFILE);
-	if(fexist(WHITELISTFILE)) fremove(WHITELISTFILE);
-	CreateData();
-
-	LoopPlayers(i) {
-		if(gPlayerData[i][E_WHITELISTED]) {
-			gPlayerData[i][E_WHITELISTED] = false;
-		}
-	}
-
-	new msg[MAX_INPUT];
-	format(msg, sizeof(msg), "%s has cleared all bans", ReturnPlayerName(playerid));
-	LogAction(msg);
-	AddLogString(msg);
-	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		SendClientMessageToAll(COLOUR_PLAYER, "All bans have been cleared");
-	} else {
-		SendClientMessageToAll(COLOUR_PLAYER, msg);
-	}
-	return 1;
-}
-
-cmd_aclearstatus(const playerid)
-{
-	if(LevelCheck(playerid, E_CLEARSTATUS_LEVEL)) return 1;
-
-	if(fexist(STATUSFILE)) fremove(STATUSFILE);
-	CreateData();
-
-	LoopPlayers(i) {
-		new oldstatus = gPlayerData[i][E_STATE];
-
-		if(gPlayerData[i][E_STATE] & ADMIN_STATE_MUTED) {
-			gPlayerData[i][E_STATE] &= ~ADMIN_STATE_MUTED;
-			if(gPlayerData[i][E_UNMUTE]) {
-				KillTimer(gPlayerData[i][E_UNMUTE]);
-				gPlayerData[i][E_UNMUTE] = 0;
-			}
-			gPlayerData[i][E_MUTE_TIME] = 0;
-		}
-		if(gPlayerData[i][E_STATE] & ADMIN_STATE_FROZEN) {
-			TogglePlayerControllable(playerid, true);
-			gPlayerData[i][E_STATE] &= ~ADMIN_STATE_FROZEN;
-			if(gPlayerData[i][E_UNFREEZE]) {
-				KillTimer(gPlayerData[i][E_UNFREEZE]);
-				gPlayerData[i][E_UNFREEZE] = 0;
-			}
-			gPlayerData[i][E_FREEZE_TIME] = 0;
-		}
-		if(gPlayerData[i][E_STATE] & ADMIN_STATE_JAILED) {
-			gPlayerData[i][E_STATE] &= ~ADMIN_STATE_JAILED;
-
-			if(gPlayerData[i][E_HEALTH]) {
-				switch(gSpawnMethod) {
-					case SPAWN_ALAR_SPAWN: {
-						if(gSpawnSaves & INFOTYPE_POSITION) {
-							SetSpawnInfo(i, GetPlayerTeam(i), GetPlayerSkin(i), gPlayerData[i][E_POSX], gPlayerData[i][E_POSY], gPlayerData[i][E_POSZ], gPlayerData[i][E_ROT], 0, 0, 0, 0, 0, 0);
-						}
-						gPlayerData[i][E_SETINFO] = (INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
-						SpawnPlayer(i);
-					}
-					case SPAWN_ALAR_TIMER: {
-						SpawnPlayer(i);
-						SetTimerEx("alar_setspawndata", 500, 0, "i", i);	// stops stupid gamemode spawn stuff
-					}
-					default: {
-						gPlayerData[i][E_SETINFO] = (INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
-						SpawnPlayer(i);
-					}
-				}
-			} else {
-				SetPlayerVirtualWorld(i, 0);
-				alar_OnPlayerWorldChange(i, 0);
-				SetPlayerInterior(i, 0);
-				SpawnPlayer(i);
-			}
-
-			if(gPlayerData[i][E_UNJAIL]) {
-				KillTimer(gPlayerData[i][E_UNJAIL]);
-				gPlayerData[i][E_UNJAIL] = 0;
-			}
-			gPlayerData[i][E_JAIL_TIME] = 0;
-		}
-
-		if(oldstatus != gPlayerData[i][E_STATE]) {
-			CallRemoteFunction("OnAdminStateChange", "iii", i, gPlayerData[i][E_STATE], oldstatus);
-			LoopPlayers(j) {
-				if(gPlayerData[j][E_SPECTATING] && gPlayerData[j][E_SPECID] == i) {
-					SpecHUDUpdate(j);
-				}
-			}
-		}
-
-	}
-
-	new msg[MAX_INPUT];
-	format(msg, sizeof(msg), "%s has unmuted/unfrozen/unjailed all players", ReturnPlayerName(playerid));
-	LogAction(msg);
-	AddLogString(msg);
-	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		SendClientMessageToAll(COLOUR_PLAYER, "All players have been unmuted/unfrozen/unjailed");
-	} else {
-		SendClientMessageToAll(COLOUR_PLAYER, msg);
-	}
-	return 1;
-}
-
-cmd_aclr(const playerid)
-{
-	if(LevelCheck(playerid, E_CLR_LEVEL)) return 1;
-
-	for(new i; i < 50; i++) SendClientMessageToAll(COLOUR_MSG, " ");
-	#if CHATHISTORY_SIZE > 0
-		alar_ClearHistory();
-	#endif
-
-	new msg[MAX_INPUT];
-	format(msg, sizeof(msg), "%s cleared the chat window", ReturnPlayerName(playerid));
-	LogAction(msg);
-	AddLogString(msg);
-	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		SendClientMessageToAll(COLOUR_PLAYER, "The chat window has been cleared");
-	} else {
-		SendClientMessageToAll(COLOUR_PLAYER, msg);
-	}
-	return 1;
-}
-
-cmd_acommands(const playerid)
-{
-	if(playerid == INVALID_PLAYER_ID) {
-		new msg[200] = "Admin Commands:";
-		if(gServerData[E_RCON_LEVEL] >= gServerData[E_ALIAS_LEVEL] && gServerData[E_ALIAS_LEVEL] > 0) {
-			strcat(msg, "\n  aalias");
-		}
-		if(gServerData[E_RCON_LEVEL] >= gServerData[E_ALIAS2_LEVEL] && gServerData[E_ALIAS2_LEVEL] > 0) {
-			strcat(msg, "\n  aalias2");
-		}
-		if(gServerData[E_RCON_LEVEL] >= gServerData[E_ALIAS3_LEVEL] && gServerData[E_ALIAS3_LEVEL] > 0) {
-			strcat(msg, "\n  aalias3");
-		}
-		strcat(msg, "\n  abancheck\n  adesynced\n  admins\n  afrozen");
-		if(gServerData[E_RCON_LEVEL] >= gServerData[E_INFO_LEVEL] && gServerData[E_INFO_LEVEL] > 0) {
-			strcat(msg, "\n  ainfo");
-		}
-		if(gServerData[E_RCON_LEVEL] >= gServerData[E_IP_LEVEL] && gServerData[E_IP_LEVEL] > 0) {
-			strcat(msg, "\n  aip");
-		}
-/*		if(gServerData[E_RCON_LEVEL] >= gServerData[E_IPUPDATE_LEVEL] && gServerData[E_IPUPDATE_LEVEL] > 0) {
-			strcat(msg, "\n  aipupdate");
-		}
-*/		strcat(msg, "\n  ajailed\n  amuted\n  apaused");
-		if(gServerData[E_ADMIN_PMS]) {
-			strcat(msg, "\n  apm");
-		}
-		if(gServerData[E_RCON_LEVEL] >= gServerData[E_RELOADDATA_LEVEL] && gServerData[E_RELOADDATA_LEVEL] > 0) {
-			strcat(msg, "\n  areloaddata");
-		}
-		if(gServerData[E_RCON_LEVEL] >= gServerData[E_SETPING_LEVEL] && gServerData[E_SETPING_LEVEL] > 0) {
-			strcat(msg, "\n  asetping");
-		}
-		strcat(msg, "\n  asinfo\n  aspectating");
-
-		print(msg);
-	} else if(gPlayerData[playerid][E_ADMINLEVEL] > 0 ) {
-		new msg[1000] = "ADMIN COMMANDS:";
-
-		if(cmdchk(playerid, E_ALIAS_LEVEL)) strcat(msg, " /aalias");
-		if(cmdchk(playerid, E_ALIAS2_LEVEL)) strcat(msg, " /aalias2");
-		if(cmdchk(playerid, E_ALIAS3_LEVEL)) strcat(msg, " /aalias3");
-		if(cmdchk(playerid, E_ARMOUR_LEVEL)) strcat(msg, " /aarmour");
-		if(cmdchk(playerid, E_ARMOURALL_LEVEL)) strcat(msg, " /aarmourall");
-		if(gServerData[E_AUTO_LOGIN]) strcat(msg, " /aautologin");
-		if(cmdchk(playerid, E_BAN_LEVEL)) strcat(msg, " /aban");
-		if(cmdchk(playerid, E_BANCHECK_LEVEL)) strcat(msg, " /abancheck");
-		if(cmdchk(playerid, E_BAN_LEVEL)) strcat(msg, " /abanip /abanname");
-		if(cmdchk(playerid, E_BRING_LEVEL)) strcat(msg, " /abring");
-		if(cmdchk(playerid, E_CARCOLOUR_LEVEL)) strcat(msg, " /acarcolour");
-		if(cmdchk(playerid, E_CHANGEMODE_LEVEL)) strcat(msg, " /achangemode");
-		if(cmdchk(playerid, E_CHANGEPW_LEVEL)) strcat(msg, " /achangepw");
-		if(cmdchk(playerid, E_CLEARBANS_LEVEL)) strcat(msg, " /aclearbans");
-		if(cmdchk(playerid, E_CLEARSTATUS_LEVEL)) strcat(msg, " /aclearstatus");
-		if(cmdchk(playerid, E_CLR_LEVEL)) strcat(msg, " /aclr");
-		if(cmdchk(playerid, E_CREATE_LEVEL)) strcat(msg, " /acreate");
-		if(cmdchk(playerid, E_DESTROY_LEVEL)) strcat(msg, " /adestroy");
-		if(cmdchk(playerid, E_DESYNC_LEVEL)) strcat(msg, " /adesync");
-		strcat(msg, " /adesynced");
-		if(cmdchk(playerid, E_DROP_LEVEL)) strcat(msg, " /adrop");
-		strcat(msg, " /admins");
-		if(cmdchk(playerid, E_EJECT_LEVEL)) strcat(msg, " /aeject");
-		if(cmdchk(playerid, E_EJECTALL_LEVEL)) strcat(msg, " /aejectall");
-		if(cmdchk(playerid, E_EXPLODE_LEVEL)) strcat(msg, " /aexplode");
-		if(cmdchk(playerid, E_FLIP_LEVEL)) strcat(msg, " /aflip");
-		if(cmdchk(playerid, E_FREEZE_LEVEL)) strcat(msg, " /afreeze");
-		strcat(msg, " /afrozen");
-		if(cmdchk(playerid, E_GIVEALLCASH_LEVEL)) strcat(msg, " /agiveallcash");
-		if(cmdchk(playerid, E_GIVEALLWEAPON_LEVEL)) strcat(msg, " /agiveallweapon");
-		if(cmdchk(playerid, E_GIVECASH_LEVEL)) strcat(msg, " /agivecash");
-		if(cmdchk(playerid, E_GIVEWEAPON_LEVEL)) strcat(msg, " /agiveweapon");
-		if(cmdchk(playerid, E_GOTO_LEVEL)) strcat(msg, " /agoto");
-		if(cmdchk(playerid, E_GRAVITY_LEVEL)) strcat(msg, " /agravity");
-		strcat(msg, " /ahelp");
-		if(cmdchk(playerid, E_HEALALL_LEVEL)) strcat(msg, " /ahealall");
-		if(cmdchk(playerid, E_HEAL_LEVEL)) strcat(msg, " /aheal");
-		strcat(msg, " /ahide");
-		#if CHATHISTORY_SIZE > 0
-			if(gServerData[E_CHAT_HISTORY]) strcat(msg, " /ahistory");
-		#endif
-		if(cmdchk(playerid, E_IMITATE_LEVEL)) strcat(msg, " /aimitate");
-		if(cmdchk(playerid, E_IMMUNE_LEVEL)) strcat(msg, " /aimmune");
-		if(cmdchk(playerid, E_INFO_LEVEL)) strcat(msg, " /ainfo");
-		if(cmdchk(playerid, E_INTERIOR_LEVEL)) strcat(msg, " /ainterior");
-		if(cmdchk(playerid, E_IP_LEVEL)) strcat(msg, " /aip");
-		if(cmdchk(playerid, E_IPUPDATE_LEVEL)) strcat(msg, " /aipupdate");
-		if(cmdchk(playerid, E_JAIL_LEVEL)) strcat(msg, " /ajail");
-		#if JOINMSG_LINES > 0
-			strcat(msg, " /ajailed /ajoins");
-		#else
-			strcat(msg, " /ajailed");
-		#endif
-		if(cmdchk(playerid, E_KICK_LEVEL)) strcat(msg, " /akick");
-		if(cmdchk(playerid, E_CHANGEMODE_LEVEL)) strcat(msg, " /alistmodes");
-		#if LOG_LINES > 0 && LOG_PAGES > 0
-			if(cmdchk(playerid, E_LOG_LEVEL)) strcat(msg, " /alog");
-		#endif
-		strcat(msg, " /alogout");
-		if(cmdchk(playerid, E_MSG_LEVEL)) strcat(msg, " /amsg");
-		if(cmdchk(playerid, E_MUTE_LEVEL)) strcat(msg, " /amute");
-		strcat(msg, " /amuted");
-		if(gServerData[E_ADMIN_PMS]) strcat(msg, " /apm");
-		if(cmdchk(playerid, E_PUNCH_LEVEL)) strcat(msg, " /apunch");
-		if(cmdchk(playerid, E_REPAIR_LEVEL)) strcat(msg, " /ar");
-		if(cmdchk(playerid, E_RAPE_LEVEL)) strcat(msg, " /arape");
-		if(cmdchk(playerid, E_RELOADDATA_LEVEL)) strcat(msg, " /areloadata");
-		if(cmdchk(playerid, E_REMALLCASH_LEVEL)) strcat(msg, " /aremallcash");
-		if(cmdchk(playerid, E_REMALLWEAPONS_LEVEL)) strcat(msg, " /aremallweapons");
-		if(cmdchk(playerid, E_REMCASH_LEVEL)) strcat(msg, " /aremcash");
-		if(cmdchk(playerid, E_REMWEAPONS_LEVEL)) strcat(msg, " /aremweapons");
-		if(cmdchk(playerid, E_REPAIR_LEVEL)) strcat(msg, " /arepair");
-		if(cmdchk(playerid, E_RESPAWN_LEVEL)) strcat(msg, " /arespawn");
-		if(cmdchk(playerid, E_SAY_LEVEL)) strcat(msg, " /asay");
-		if(cmdchk(playerid, E_SERVERNAME_LEVEL)) strcat(msg, " /aservername");
-		if(cmdchk(playerid, E_SELECT_LEVEL)) strcat(msg, " /aselect");
-		if(cmdchk(playerid, E_SETADMIN_LEVEL)) strcat(msg, " /asetadmin");
-		if(cmdchk(playerid, E_SETNAME_LEVEL)) strcat(msg, " /asetname");
-		if(cmdchk(playerid, E_SETPING_LEVEL)) strcat(msg, " /asetping");
-		if(cmdchk(playerid, E_SHOUT_LEVEL)) strcat(msg, " /ashout");
-		strcat(msg, " /asinfo");
-		if(cmdchk(playerid, E_SLAP_LEVEL)) strcat(msg, " /aslap");
-		if(cmdchk(playerid, E_SLAY_LEVEL)) strcat(msg, " /aslay");
-		if(cmdchk(playerid, E_SPAWN_LEVEL)) strcat(msg, " /aspawn");
-		if(cmdchk(playerid, E_SPEC_LEVEL)) strcat(msg, " /aspec");
-		strcat(msg, " /aspectating");
-		if(cmdchk(playerid, E_SUSPEND_LEVEL)) strcat(msg, " /asuspend /asuspendip /asuspendname");
-		if(cmdchk(playerid, E_TIME_LEVEL)) strcat(msg, " /atime");
-		if(cmdchk(playerid, E_UNBAN_LEVEL)) strcat(msg, " /aunban");
-		if(cmdchk(playerid, E_UNDESYNC_LEVEL)) strcat(msg, " /aundesync");
-		if(cmdchk(playerid, E_UNFREEZE_LEVEL)) strcat(msg, " /aunfreeze");
-		strcat(msg, " /aunhide");
-		if(cmdchk(playerid, E_UNJAIL_LEVEL)) strcat(msg, " /aunjail");
-		if(cmdchk(playerid, E_UNMUTE_LEVEL)) strcat(msg, " /aunmute");
-		if(cmdchk(playerid, E_UNRAPE_LEVEL)) strcat(msg, " /aunrape");
-		if(cmdchk(playerid, E_UNSUSPEND_LEVEL)) strcat(msg, " /aunsuspend");
-		if(cmdchk(playerid, E_UNWHITELIST_LEVEL)) strcat(msg, " /aunwhitelist");
-		if(cmdchk(playerid, E_WEATHER_LEVEL)) strcat(msg, " /aweather");
-		if(cmdchk(playerid, E_WHITELIST_LEVEL)) strcat(msg, " /awhitelist");
-		if(cmdchk(playerid, E_WORLD_LEVEL)) strcat(msg, " /aworld");
-		SendWrappedMessageToPlayer(playerid, COLOUR_HELP, msg);
-	} else {
-		new string[MAX_INPUT] = "ADMIN COMMANDS: /adesynced /admins /afrozen";
-		#if CHATHISTORY_SIZE > 0
-			if(gServerData[E_CHAT_HISTORY] == 1) strcat(string, " /ahistory");
-		#endif
-		strcat(string, " /ajailed");
-		#if JOINMSG_LINES > 0
-			if(gServerData[E_JOIN_MSGS]) strcat(string, " /ajoins");
-		#endif
-		strcat(string, " /alogin");
-		if(gServerData[E_ALIAS_ADMINS]) strcat(string, " /aloginas");
-		strcat(string, " /amuted");
-		if(gServerData[E_ADMIN_PMS]) strcat(string, " /apm");
-		strcat(string, " /asinfo");
-		SendWrappedMessageToPlayer(playerid, COLOUR_HELP, string);
-	}
-	return 1;
-}
-
-cmd_adesynced(const playerid)
-{
-	new msg[512] = "Desynced players:";
-	LoopPlayers(i) {
-		if(gPlayerData[i][E_STATE] & ADMIN_STATE_DESYNCED) {
-			new time = gPlayerData[i][E_DESYNC_TIME] - gettime();
-			if(time > 3600) {
-				new hours = time / 3600,
-					minutes = (time - hours * 3600) / 60;
-				format(msg, sizeof(msg), "%s %s(%i:%02i:%02i)", msg, ReturnPlayerName(i), hours, minutes, time - hours * 3600 - minutes * 60);
-			} else if(time > 60) {
-				new minutes = time / 60;
-				format(msg, sizeof(msg), "%s %s(%i:%02i)", msg, ReturnPlayerName(i), minutes, time - minutes * 60);
-			} else if(time > 0) {
-				format(msg, sizeof(msg), "%s %s(%i)", msg, ReturnPlayerName(i), time);
-			} else {
-				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(i));
-			}
-		}
-	}
-	if(playerid == INVALID_PLAYER_ID) {
-		print(msg);
-	} else {
-		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
-	}
-	return 1;
-}
-
-cmd_admins(const playerid)
-{
-	new msg[512] = "Admins online:";
-	LoopPlayers(i) {
-		if(gPlayerData[i][E_ADMINLEVEL] > 0) {
-			if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
-				new pname[MAX_PLAYER_NAME];
-				GetPlayerName(i, pname, sizeof(pname));
-				format(msg, sizeof(msg), "%s %s%s%s%s(%i)", msg, pname, gPlayerData[i][E_STATE] & ADMIN_STATE_HIDDEN ? ("°") : (""), IsPlayerAdmin(i) ? ("®") : (""), strcmp(pname, gPlayerData[i][E_NAME], true) ? ("©") : (""), gPlayerData[i][E_ADMINLEVEL]);
-			} else if(~gPlayerData[i][E_STATE] & ADMIN_STATE_HIDDEN) {
-				format(msg, sizeof(msg), "%s %s%s(%i)", msg, ReturnPlayerName(i), IsPlayerAdmin(i) ? ("®") : (""), gPlayerData[i][E_ADMINLEVEL]);
-			}
-		} else if(IsPlayerAdmin(i)) {
-			format(msg, sizeof(msg), "%s %s®", msg, ReturnPlayerName(i));
-		}
-	}
-	if(playerid == INVALID_PLAYER_ID) {
-		print(msg);
-	} else {
-		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
-	}
-	return 1;
-}
-
-cmd_aejectall(const playerid)
-{
-	if(LevelCheck(playerid, E_EJECTALL_LEVEL)) return 1;
-
-	new msg[MAX_INPUT], num_ejected, num_notejected;
-
-	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		msg = "You have been ejected";
-	} else {
-		format(msg, sizeof(msg), "%s has ejected you", ReturnPlayerName(playerid));
-	}
-
-	LoopPlayers(i) {
-		if((gPlayerData[i][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) && (i != playerid)) {
-			if(GetPlayerSpecialAction(i) == SPECIAL_ACTION_USEJETPACK || IsPlayerInAnyVehicle(i)) num_notejected++;
-		} else {
-			if(GetPlayerSpecialAction(i) == SPECIAL_ACTION_USEJETPACK) {
-				if(i != playerid) SendClientMessage(i, COLOUR_WARNING, msg);
-				ClearAnimations(i);
-				num_ejected++;
-			} else if(IsPlayerInAnyVehicle(i)){
-				if(i != playerid) SendClientMessage(i, COLOUR_WARNING, msg);
-				RemovePlayerFromVehicle(i);
-				num_ejected++;
-			}
-		}
-	}
-
-	if(num_ejected == 0) {
-		SendClientMessage(playerid, COLOUR_WARNING, "There is noone to eject");
-		return 1;
-	}
-
-	if(num_notejected > 0) format(msg, sizeof(msg), "You have ejected %i players (%i players not ejected)", num_ejected, num_notejected);
-	else format(msg, sizeof(msg), "You have ejected %i players", num_ejected);
-	SendClientMessage(playerid, COLOUR_ADMIN, msg);
-
-	format(msg, sizeof(msg), "%s has ejected everyone", ReturnPlayerName(playerid));
-	LogAction(msg);
-	AddLogString(msg);
-	return 1;
-}
-
-cmd_afrozen(const playerid)
-{
-	new msg[512]="Frozen players:";
-	LoopPlayers(i) {
-		if(gPlayerData[i][E_STATE] & ADMIN_STATE_FROZEN) {
-			new time = gPlayerData[i][E_FREEZE_TIME] - gettime();
-			if(time > 3600) {
-				new hours = time / 3600,
-					minutes = (time - hours * 3600) / 60;
-				format(msg, sizeof(msg), "%s %s(%i:%02i:%02i)", msg, ReturnPlayerName(i), hours, minutes, time - hours * 3600 - minutes * 60);
-			} else if(time > 60) {
-				new minutes = time / 60;
-				format(msg, sizeof(msg), "%s %s(%i:%02i)", msg, ReturnPlayerName(i), minutes, time - minutes * 60);
-			} else if(time > 0) {
-				format(msg, sizeof(msg), "%s %s(%i)", msg, ReturnPlayerName(i), time);
-			} else {
-				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(i));
-			}
-		}
-	}
-	if(playerid == INVALID_PLAYER_ID) {
-		print(msg);
-	} else {
-		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
-	}
-	return 1;
-}
-
-cmd_ahelp(const playerid)
-{
-	SendClientMessage(playerid, COLOUR_HELP, "For a complete command list type /acommands");
-	SendClientMessage(playerid, COLOUR_HELP, "A playerid or part of a player's name may be used for commands with [player] as a parameter");
-	if(gChatPrefix[0][E_CHAT_LEN]) {
-		new msg[MAX_INPUT];
-		format(msg, sizeof(msg), "Admin chat can be used by typing \"%s\"", gChatPrefix[0][E_CHAT_STRING]);
-		for(new i = 1; i < sizeof(gChatPrefix); i++) {
-			if(gChatPrefix[i][E_CHAT_STRING] != '\0') {
-				format(msg, sizeof(msg), "%s or \"%s\"", msg, gChatPrefix[i][E_CHAT_STRING]);
-			} else {
-				break;
-			}
-		}
-		strcat(msg, " infront of your text");
-		SendClientMessage(playerid, COLOUR_HELP, msg);
-	}
-	if(cmdchk(playerid, E_SPEC_LEVEL)) {
-		SendClientMessage(playerid, COLOUR_HELP, "While spectating, you can switch players with " NAME_SPEC_LEFT " and " NAME_SPEC_RIGHT " keys, change mode with the " NAME_SPEC_MODE " key and exit with the " NAME_SPEC_EXIT " key");
-	}
-	if(cmdchk(playerid, E_TELE_LEVEL)) {
-		SendClientMessage(playerid, COLOUR_HELP, "You can teleport to anywhere by right clicking the ingame map");
-	}
-	#if LOG_LINES > 0 && LOG_PAGES > 0
-		if(cmdchk(playerid, E_LOG_LEVEL)) {
-			#if LOG_PAGES == 1
-				SendClientMessage(playerid, COLOUR_HELP, "By pressing the " NAME_LOG_DOWN " key, you can view the recent admin activity");
-			#else
-				SendClientMessage(playerid, COLOUR_HELP, "By pressing the " NAME_LOG_DOWN " and " NAME_LOG_UP " keys, you can view the recent admin activity");
-			#endif
-		}
-	#endif
-	return 1;
-}
-
-cmd_ahide(const playerid)
-{
-	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		SendClientMessage(playerid, COLOUR_WARNING, "You are already hidden from the admin list");
-		return 1;
-	}
-	new logininfo[E_LOGINDATA];
-	if(GetPlayerData(gPlayerData[playerid][E_NAME], logininfo)) {
-		logininfo[E_LOGIN_HIDDEN] = true;
-		#if LOG_LINES > 0 && LOG_PAGES > 0
-			logininfo[E_LOGIN_PAGE] = gPlayerData[playerid][E_LOGKEYS] ? gPlayerData[playerid][E_LOG_PAGE] : -gPlayerData[playerid][E_LOG_PAGE] - 1;
-		#endif
-		logininfo[E_LOGIN_HUD] = gPlayerData[playerid][E_SHOWHUD];
-		SetPlayerData(gPlayerData[playerid][E_NAME], logininfo);
-	}
-	gPlayerData[playerid][E_STATE] |= ADMIN_STATE_HIDDEN;
-	SendClientMessage(playerid, COLOUR_ADMIN, "You have been hidden from the admin list");
-	CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] & ~ADMIN_STATE_HIDDEN);
-	return 1;
-}
-
-stock cmd_ahistory(const playerid)
-{
-	SendClientMessage(playerid, COLOUR_ADMIN, "/--------------        Chat History        --------------\\");
-
-	new originalcolour,
-		colour,
-		pname[MAX_PLAYER_NAME],
-		originalname[MAX_PLAYER_NAME];
-
-	GetPlayerName(playerid, pname, sizeof(pname));
-	GetPlayerName(playerid, originalname, sizeof(originalname));
-	if(!(colour = GetPlayerColor(playerid))) {
-		SetPlayerColor(playerid, (colour = GetDefaultColour(playerid)));
-	}
-	originalcolour = colour;
-
-	for(new i; i < sizeof(gChatHistory); i++) {
-		if(gChatHistory[i][E_HISTORY_MESSAGE][0] != '\0') {
-			if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 ? ~gChatHistory[i][E_HISTORY_FLAGS] & HISTORY_ADMIN_ONLY : ~gChatHistory[i][E_HISTORY_FLAGS] & HISTORY_PLAYER_ONLY) {
-				if(gChatHistory[i][E_HISTORY_NAME][0] != '\0') {
-					if(strcmp(gChatHistory[i][E_HISTORY_NAME], pname)) {
-						new bool:skip = false;
-						LoopPlayers(j) {
-							if(strcmp(ReturnPlayerName(j), gChatHistory[i][E_HISTORY_NAME], true) == 0) {
-								new othercolour = GetPlayerColor(j);
-								if(!othercolour) {
-									SetPlayerColor(j, (othercolour = GetDefaultColour(j)));
-								}
-								if(othercolour != gChatHistory[i][E_HISTORY_COLOUR]) {
-									SetPlayerColor(j, gChatHistory[i][E_HISTORY_COLOUR]);
-									SendPlayerMessageToPlayer(playerid, j, gChatHistory[i][E_HISTORY_MESSAGE]);
-									SetPlayerColor(j, othercolour);
-								} else {
-									SendPlayerMessageToPlayer(playerid, j, gChatHistory[i][E_HISTORY_MESSAGE]);
-								}
-								skip = true;
-								break;
-							}
-						}
-						if(skip) continue;
-						strcpy(pname, gChatHistory[i][E_HISTORY_NAME]);
-						SetPlayerName(playerid, pname);
-					}
-					if(colour != gChatHistory[i][E_HISTORY_COLOUR]) {
-						SetPlayerColor(playerid, (colour = gChatHistory[i][E_HISTORY_COLOUR]));
-					}
-					SendPlayerMessageToPlayer(playerid, playerid, gChatHistory[i][E_HISTORY_MESSAGE]);
-				} else {
-					if(gChatHistory[i][E_HISTORY_FLAGS] & HISTORY_WRAPPED) {
-						SendWrappedMessageToPlayer(playerid, gChatHistory[i][E_HISTORY_COLOUR], gChatHistory[i][E_HISTORY_MESSAGE]);
-					} else {
-						SendClientMessage(playerid, gChatHistory[i][E_HISTORY_COLOUR], gChatHistory[i][E_HISTORY_MESSAGE]);
-					}
-				}
-			}
-		}
-	}
-	if(strcmp(pname, originalname)) {
-		SetPlayerName(playerid, originalname);
-	}
-	if(originalcolour != colour) {
-		SetPlayerColor(playerid, originalcolour);
-	}
-
-
-	SendClientMessage(playerid, COLOUR_ADMIN, "\\--------------        Chat History        --------------/");
-	return 1;
-}
-
-cmd_aipupdate(const playerid)
-{
-	if(LevelCheck(playerid, E_IPUPDATE_LEVEL)) return 1;
-
-	new counter = CreateCuntDefinitions();
-	if(counter) {
-		new msg[MAX_INPUT];
-		format(msg, sizeof(msg), "You have updated the IP definitions (%i entries written)", counter);
-		SendMessage(playerid, COLOUR_ADMIN, msg);
-
-		format(msg, sizeof(msg), "%s has updated the IP definitions (%i entries written)", ReturnPlayerName(playerid), counter);
-		LogAction(msg);
-
-		format(msg, sizeof(msg), "%s has updated the IP definitions", ReturnPlayerName(playerid));
-		AddLogString(msg);
-	} else {
-		SendMessage(playerid, COLOUR_WARNING, "IP definitions update failed");
-	}
-	return 1;
-}
-
-cmd_ajailed(const playerid)
-{
-	new msg[512] = "Jailed players:";
-	LoopPlayers(i) {
-		if(gPlayerData[i][E_STATE] & ADMIN_STATE_JAILED) {
-			new time = gPlayerData[i][E_JAIL_TIME] - gettime();
-			if(time > 3600) {
-				new hours = time / 3600,
-					minutes = (time - hours * 3600) / 60;
-				format(msg, sizeof(msg), "%s %s(%i:%02i:%02i)", msg, ReturnPlayerName(i), hours, minutes, time - hours * 3600 - minutes * 60);
-			} else if(time > 60) {
-				new minutes = time / 60;
-				format(msg, sizeof(msg), "%s %s(%i:%02i)", msg, ReturnPlayerName(i), minutes, time - minutes * 60);
-			} else if(time > 0) {
-				format(msg, sizeof(msg), "%s %s(%i)", msg, ReturnPlayerName(i), time);
-			} else {
-				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(i));
-			}
-		}
-	}
-	if(playerid == INVALID_PLAYER_ID) {
-		print(msg);
-	} else {
-		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
-	}
-	return 1;
-}
-
-stock cmd_ajoins(const playerid)
-{
-	if(!gServerData[E_JOIN_MSGS]) return 0;
-	new filename[MAX_STRING];
-	format(filename, sizeof(filename), PLAYERFOLDER "settings_%s.ini", ReturnPlayerName(playerid));
-	dini_Create(filename);
-	if(!gPlayerData[playerid][E_JOINTEXT]) {
-		for(new i; i < sizeof(gJoinMessage); i++) {
-			TextDrawHideForPlayer(playerid, gJoinMessage[i][E_TEXTBOX_TEXT]);
-		}
-		SendClientMessage(playerid, COLOUR_PLAYER, "Connect/Disconnect messages will now be shown in chat");
-	} else {
-		for(new i; i < sizeof(gJoinMessage); i++) {
-			TextDrawShowForPlayer(playerid, gJoinMessage[i][E_TEXTBOX_TEXT]);
-		}
-		SendClientMessage(playerid, COLOUR_PLAYER, "Connect/Disconnect messages will now be shown outside of chat");
-	}
-	gPlayerData[playerid][E_JOINTEXT] = !gPlayerData[playerid][E_JOINTEXT];
-	dini_BoolSet(filename, "JoinText", gPlayerData[playerid][E_JOINTEXT]);
-	return 1;
-}
-
-cmd_alistmodes(const playerid)
-{
-	if(LevelCheck(playerid, E_CHANGEMODE_LEVEL)) return 1;
-
-	new File:handle = fopen(MODESFILE, io_read);
-	if(!handle) {
-		SendClientMessage(playerid, COLOUR_WARNING, "No gamemodes are listed in " MODESFILE);
-		return 1;
-	}
-	new msg[700] = "Gamemodes:", line[MAX_STRING];
-	while(fread(handle, line)) {
-		if(line[0] != '\0' && line[0] != '#') {
-			strstripnewline(line);
-			format(msg, sizeof(msg), "%s  %s", msg, line);
-		}
-	}
-	fclose(handle);
-	if(msg[10] == '\0') {
-		SendClientMessage(playerid, COLOUR_WARNING, "No gamemodes are listed in " MODESFILE);
-		return 1;
-	}
-
-	SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
-	return 1;
-}
-
-cmd_alogout(const playerid)
-{
-	new logininfo[E_LOGINDATA];
-	if(!GetPlayerData(gPlayerData[playerid][E_NAME], logininfo)) {	// Admin account not found
-		SendClientMessage(playerid, COLOUR_WARNING, "You have been logged out");
-	} else {
-		SendClientMessage(playerid, COLOUR_PLAYER, "You have been logged out");
-		if(!logininfo[E_LOGIN_MANUAL]) {	// no need to remove the IP if they won't autologin
-			strcpy(logininfo[E_LOGIN_IP], "Blank", sizeof(SIZE_E_LOGINDATA[E_LOGIN_IP]));
-			#if LOG_LINES > 0 && LOG_PAGES > 0
-				logininfo[E_LOGIN_PAGE] = gPlayerData[playerid][E_LOGKEYS] ? gPlayerData[playerid][E_LOG_PAGE] : -gPlayerData[playerid][E_LOG_PAGE] - 1;
-			#endif
-			logininfo[E_LOGIN_HUD] = gPlayerData[playerid][E_SHOWHUD];
-			SetPlayerData(gPlayerData[playerid][E_NAME], logininfo);
-		}
-	}
-
-	Bit_Set(g_bitAdmins, playerid, 0);
-	gPlayerData[playerid][E_ADMINLEVEL] = 0;
-	gPlayerData[playerid][E_NAME][0] = '\0';
-	gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_HIDDEN;
-
-	#if LOG_LINES > 0 && LOG_PAGES > 0
-		if(gPlayerData[playerid][E_LOG_PAGE]) {
-			#if LOG_PAGES > 1
-				TextDrawHideForPlayer(playerid, gLogPage[gPlayerData[playerid][E_LOG_PAGE]-1]);
-			#endif
-			for(new i, offset = (gPlayerData[playerid][E_LOG_PAGE] - 1) * LOG_LINES; i < LOG_LINES; i++) {
-				TextDrawHideForPlayer(playerid, gAdminLog[i + offset][E_TEXTBOX_TEXT]);
-			}
-			gPlayerData[playerid][E_LOG_PAGE] = 0;
-		}
-	#endif
-	if(gPlayerData[playerid][E_SPECTATING]) {
-		SpawnUsingData(playerid);
-	}
-	AllowPlayerTeleport(playerid, false);
-
-	new msg[MAX_PLAYER_NAME + 20];
-	format(msg, sizeof(msg), "%s has logged out", ReturnPlayerName(playerid));
-
-	if(gServerData[E_LOG_LOGINS]) {
-		AddLogString(msg);
-	} else {
-		LoopPlayers(i) {
-			if(gPlayerData[i][E_ADMINLEVEL] > 0 && i != playerid) {
-				SendClientMessage(i, COLOUR_ADMIN, msg);
-			}
-		}
-	}
-	LogAction(msg);
-
-	CallRemoteFunction("OnAdminLogout", "i", playerid);
-	return 1;
-}
-
-cmd_amuted(const playerid)
-{
-	new msg[512] = "Muted players:";
-	LoopPlayers(i) {
-		if(gPlayerData[i][E_STATE] & ADMIN_STATE_MUTED) {
-			new time = gPlayerData[i][E_MUTE_TIME] - gettime();
-			if(time > 3600) {
-				new hours = time / 3600,
-					minutes = (time - hours * 3600) / 60;
-				format(msg, sizeof(msg), "%s %s(%i:%02i:%02i)", msg, ReturnPlayerName(i), hours, minutes, time - hours * 3600 - minutes * 60);
-			} else if(time > 60) {
-				new minutes = time / 60;
-				format(msg, sizeof(msg), "%s %s(%i:%02i)", msg, ReturnPlayerName(i), minutes, time - minutes * 60);
-			} else if(time > 0) {
-				format(msg, sizeof(msg), "%s %s(%i)", msg, ReturnPlayerName(i), time);
-			} else {
-				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(i));
-			}
-		}
-	}
-	if(playerid == INVALID_PLAYER_ID) {
-		print(msg);
-	} else {
-		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
-	}
-	return 1;
-}
-
-cmd_apaused(const playerid)
-{
-	new msg[512] = "Paused players:",
-		tick = GetTickCount();
-	LoopPlayers(i) {
-		if(!IsSpawned(i)) continue;		// Goddamn it sa-mp...
-		new time = (tick - gPlayerData[i][E_LAST_ACTIVE]) / 1000;
-		if(time > 3600) {
-			new hours = time / 3600,
-				minutes = (time - hours * 3600) / 60;
-			format(msg, sizeof(msg), "%s %s(%i:%02i:%02i)", msg, ReturnPlayerName(i), hours, minutes, time - hours * 3600 - minutes * 60);
-		} else if(time > 60) {
-			new minutes = time / 60;
-			format(msg, sizeof(msg), "%s %s(%i:%02i)", msg, ReturnPlayerName(i), minutes, time - minutes * 60);
-		} else if(time > 1){
-			format(msg, sizeof(msg), "%s %s(%i)", msg, ReturnPlayerName(i), time);
-		}
-	}
-	if(playerid == INVALID_PLAYER_ID) {
-		print(msg);
-	} else {
-		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
-	}
-	return 1;
-}
-
-cmd_areloaddata(const playerid)
-{
-	if(LevelCheck(playerid, E_RELOADDATA_LEVEL)) return 1;
-
-	new msg[MAX_INPUT] = "Server data reloaded by the console";
-	if(playerid != INVALID_PLAYER_ID) {
-		format(msg, sizeof(msg), "%s has reloaded the server data", ReturnPlayerName(playerid));
-	}
-
-	LoadData();
-
-	LoopPlayers(i) {
-		AllowPlayerTeleport(i, cmdchk(i, E_TELE_LEVEL));
-
-		if(gPlayerData[i][E_SPECTATING]) {
-			if(!cmdchk(i, E_SPEC_LEVEL)) {
-				SpawnUsingData(i);
-			} else if(!gServerData[E_EXTRA_SPEC_VIEWS] && (gPlayerData[i][E_SPECMODE] == 1 || gPlayerData[i][E_SPECMODE] == 2)) {
-				gPlayerData[i][E_SPECMODE] = 0;
-				if(IsPlayerInAnyVehicle(gPlayerData[i][E_SPECID])) {
-					PlayerSpectateVehicle(i, GetPlayerVehicleID(gPlayerData[i][E_SPECID]));
-				}
-			}
-		}
-
-		#if LOG_LINES > 0 && LOG_PAGES > 0
-			if(gPlayerData[i][E_LOG_PAGE] && !cmdchk(i, E_LOG_LEVEL)) {
-				#if LOG_PAGES > 1
-					TextDrawHideForPlayer(playerid, gLogPage[gPlayerData[playerid][E_LOG_PAGE]-1]);
-				#endif
-				for(new j, offset = (gPlayerData[i][E_LOG_PAGE] - 1) * LOG_LINES; j < LOG_LINES; j++) {
-					TextDrawHideForPlayer(i, gAdminLog[j + offset][E_TEXTBOX_TEXT]);
-				}
-				gPlayerData[i][E_LOG_PAGE] = 0;
-			}
-		#endif
-
-		#if JOINMSG_LINES > 0
-			if(!gPlayerData[i][E_JOINTEXT]) {
-				if(gServerData[E_JOIN_MSGS]) {
-					for(new j; j < sizeof(gJoinMessage); j++) {
-						TextDrawHideForPlayer(i, gJoinMessage[j][E_TEXTBOX_TEXT]);
-					}
-				} else {
-					for(new j; j < sizeof(gJoinMessage); j++) {
-						TextDrawShowForPlayer(i, gJoinMessage[j][E_TEXTBOX_TEXT]);
-					}
-				}
-			}
-		#endif
-
-		if(gPlayerData[i][E_SPECHUD] != INVALID_TEXT_DRAW && !gServerData[E_SPEC_HUD]) {
-			SpecHUDHide(i);
-		}
-
-		if(gPlayerData[i][E_ADMINLEVEL] > 0) {
-			SendClientMessage(i, COLOUR_ADMIN, msg);
-		}
-	}
-
-	LogAction(msg);
-	AddLogString(msg);
-	return 1;
-}
-
-cmd_aremallcash(const playerid)
-{
-	if(LevelCheck(playerid, E_REMALLCASH_LEVEL)) return 1;
-
-	LoopPlayers(i) {
-		ResetPlayerMoney(i);
-	}
-
-	new msg[MAX_INPUT];
-	format(msg, sizeof(msg), "%s has bankrupted everyone", ReturnPlayerName(playerid));
-	LogAction(msg);
-	AddLogString(msg);
-	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		SendClientMessageToAll(COLOUR_PLAYER, "Everyone has been bankrupted");
-	} else {
-		SendClientMessageToAll(COLOUR_PLAYER, msg);
-	}
-	return 1;
-}
-
-cmd_aremallweapons(const playerid)
-{
-	if(LevelCheck(playerid, E_REMALLWEAPONS_LEVEL)) return 1;
-
-	LoopPlayers(i) {
-		ResetPlayerWeapons(i);
-	}
-
-	new msg[MAX_INPUT];
-	format(msg, sizeof(msg), "%s has disarmed everyone", ReturnPlayerName(playerid));
-	LogAction(msg);
-	AddLogString(msg);
-	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		SendClientMessageToAll(COLOUR_PLAYER, "Everyone has been disarmed");
-	} else {
-		SendClientMessageToAll(COLOUR_PLAYER, msg);
-	}
-	return 1;
-}
-
-cmd_asinfo(const playerid)
-{
-	new msg[MAX_INPUT],
-		numplayers,
-		numadmins,
-		numdesynced,
-		numfrozen,
-		numjailed,
-		nummuted;
-
-	LoopPlayers(i) {
-		numplayers++;
-		if(gPlayerData[i][E_STATE] & ADMIN_STATE_MUTED) {
-			nummuted++;
-		}
-		if(gPlayerData[i][E_STATE] & ADMIN_STATE_FROZEN) {
-			numfrozen++;
-		}
-		if(gPlayerData[i][E_STATE] & ADMIN_STATE_JAILED) {
-			numjailed++;
-		}
-		if(gPlayerData[i][E_STATE] & ADMIN_STATE_DESYNCED) {
-			numdesynced++;
-		}
-		if(gPlayerData[i][E_ADMINLEVEL] > 0 && (~gPlayerData[i][E_STATE] & ADMIN_STATE_HIDDEN || playerid == INVALID_PLAYER_ID || gPlayerData[playerid][E_ADMINLEVEL] > 0)) {
-			numadmins++;
-		}
-	}
-
-	format(msg, sizeof(msg), "Server: %s  Website: %s  Gamemode: %s", ReturnServerVar("hostname"), ReturnServerVar("weburl"), ReturnServerVar("gamemodetext"));
-	SendMessage(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
-	format(msg, sizeof(msg), "Players: %i/%i  Admins: %i  Desynced: %i  Frozen: %i  Jailed: %i  Muted: %i", numplayers, gMaxPlayers, numadmins, numdesynced, numfrozen, numjailed, nummuted);
-	SendMessage(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
-	if(playerid == INVALID_PLAYER_ID || gPlayerData[playerid][E_ADMINLEVEL] > 0) {
-		new numpaused,
-			numimmune,
-			numwhitelisted,
-			numspectating,
-			tick = GetTickCount();
-
-		LoopPlayers(i) {
-			if(IsSpawned(i) && tick - gPlayerData[i][E_LAST_ACTIVE] > 1000) {
-				numpaused++;
-			}
-			if(gPlayerData[i][E_SPECTATING]) {
-				numspectating++;
-			}
-			if(gPlayerData[i][E_WHITELISTED]) {
-				numwhitelisted++;
-			}
-			if(gPlayerData[i][E_IMMUNE]) {
-				numimmune++;
-			}
-		}
-		format(msg, sizeof(msg), "Alar Version: " #ALAR_VERSION "  Admin Vehicles: %i  Paused: %i  Immune: %i  Whitelisted: %i  Admins Spectating: %i", Bit_GetCount(gCreatedVehicles), numpaused, numimmune, numwhitelisted, numspectating);
-		SendMessage(playerid, COLOUR_ADMIN, msg);
-	}
-	format(msg, sizeof(msg), "Time: %s  Gravity: %s  Weather: %i", ReturnServerVar("worldtime"), ReturnServerVar("gravity"), ReturnServerVar("weather"));
-	if(gServerData[E_MAX_PING] > 0) {
-		format(msg, sizeof(msg), "%s  Max Ping: %i", msg, gServerData[E_MAX_PING]);
-	}
-	SendMessage(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
-	return 1;
-}
-
-cmd_aspectating(const playerid)
-{
-	new msg[512] = "Spectating admins:",
-		admins,
-		players,
-		adminheads[MAX_PLAYERS] = {INVALID_PLAYER_ID, ...},
-		playerheads[MAX_PLAYERS] = {INVALID_PLAYER_ID, ...},
-		adminfreehead = INVALID_PLAYER_ID,
-		playerfreehead = INVALID_PLAYER_ID,
-		speclist[MAX_PLAYERS] = {INVALID_PLAYER_ID, ...};
-
-	// put spectating players into ordered lists
-	LoopPlayers(i) {
-		if(gPlayerData[i][E_SPECTATING]) {
-			if(gPlayerData[i][E_SPECID] != INVALID_PLAYER_ID) {
-				if(adminheads[gPlayerData[i][E_SPECID]] == INVALID_PLAYER_ID) {
-					adminheads[gPlayerData[i][E_SPECID]] = i;
-				} else {
-					new id = adminheads[gPlayerData[i][E_SPECID]];
-					while(speclist[id] != INVALID_PLAYER_ID) id = speclist[id];
-					speclist[id] = i;
-				}
-			} else {
-				if(adminfreehead == INVALID_PLAYER_ID) {
-					adminfreehead = i;
-				} else {
-					new id = adminfreehead;
-					while(speclist[id] != INVALID_PLAYER_ID) id = speclist[id];
-					speclist[id] = i;
-				}
-			}
-			admins++;
-		} else if(GetPlayerState(i) == PLAYER_STATE_SPECTATING) {
-			if(gPlayerData[i][E_SPECID] != INVALID_PLAYER_ID) {
-				if(playerheads[gPlayerData[i][E_SPECID]] == INVALID_PLAYER_ID) {
-					playerheads[gPlayerData[i][E_SPECID]] = i;
-				} else {
-					new id = playerheads[gPlayerData[i][E_SPECID]];
-					while(speclist[id] != INVALID_PLAYER_ID) id = speclist[id];
-					speclist[id] = i;
-				}
-			} else {
-				if(playerfreehead == INVALID_PLAYER_ID) {
-					playerfreehead = i;
-				} else {
-					new id = playerfreehead;
-					while(speclist[id] != INVALID_PLAYER_ID) id = speclist[id];
-					speclist[id] = i;
-				}
-			}
-			players++;
-		}
-	}
-
-	if(admins) {
-		// add each list to the string
-		for(new i; i < sizeof(adminheads); i++) {
-			if(adminheads[i] != INVALID_PLAYER_ID) {
-				if(speclist[adminheads[i]] == INVALID_PLAYER_ID) {
-					format(msg, sizeof(msg), "%s %s(%i)", msg, ReturnPlayerName(adminheads[i]), i);
-				} else {
-					format(msg, sizeof(msg), "%s <%s", msg, ReturnPlayerName(adminheads[i]));
-					for(new j = adminheads[i]; speclist[j] != INVALID_PLAYER_ID; j = speclist[j]) {
-						format(msg, sizeof(msg), "%s, %s", msg, ReturnPlayerName(speclist[j]));
-					}
-					format(msg, sizeof(msg), "%s>(%i)", msg, i);
-				}
-			}
-		}
-
-		// add the admins in free spec
-		if(adminfreehead != INVALID_PLAYER_ID) {
-			format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(adminfreehead));
-			for(new j = adminfreehead; speclist[j] != INVALID_PLAYER_ID; j = speclist[j]) {
-				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(speclist[j]));
-			}
-		}
-
-		if(playerid == INVALID_PLAYER_ID) {
-			print(msg);
-		} else {
-			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
-		}
-	}
-
-	if(players) {
-		msg = "Spectating players:";
-
-		// add each list to the string
-		for(new i; i < sizeof(playerheads); i++) {
-			if(playerheads[i] != INVALID_PLAYER_ID) {
-				if(speclist[playerheads[i]] == INVALID_PLAYER_ID) {
-					format(msg, sizeof(msg), "%s %s(%i)", msg, ReturnPlayerName(playerheads[i]), i);
-				} else {
-					format(msg, sizeof(msg), "%s <%s", msg, ReturnPlayerName(playerheads[i]));
-					for(new j = playerheads[i]; speclist[j] != INVALID_PLAYER_ID; j = speclist[j]) {
-						format(msg, sizeof(msg), "%s, %s", msg, ReturnPlayerName(speclist[j]));
-					}
-					format(msg, sizeof(msg), "%s>(%i)", msg, i);
-				}
-			}
-		}
-
-		// add the players spectating someone unknown
-		if(playerfreehead != INVALID_PLAYER_ID) {
-			format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(playerfreehead));
-			for(new j = playerfreehead; speclist[j] != INVALID_PLAYER_ID; j = speclist[j]) {
-				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(speclist[j]));
-			}
-		}
-
-		if(playerid == INVALID_PLAYER_ID) {
-			print(msg);
-		} else {
-			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
-		}
-	} else if(admins == 0) {
-		SendMessage(playerid, COLOUR_ADMIN, "No players are currently spectating");
-	}
-	return 1;
-}
-
-cmd_aunhide(const playerid)
-{
-	if(~gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		SendClientMessage(playerid, COLOUR_WARNING, "You are not hidden from the admin list");
-		return 1;
-	}
-	new logininfo[E_LOGINDATA];
-	if(GetPlayerData(gPlayerData[playerid][E_NAME], logininfo)) {
-		logininfo[E_LOGIN_HIDDEN] = false;
-		#if LOG_LINES > 0 && LOG_PAGES > 0
-			logininfo[E_LOGIN_PAGE] = gPlayerData[playerid][E_LOGKEYS] ? gPlayerData[playerid][E_LOG_PAGE] : -gPlayerData[playerid][E_LOG_PAGE] - 1;
-		#endif
-		logininfo[E_LOGIN_HUD] = gPlayerData[playerid][E_SHOWHUD];
-		SetPlayerData(gPlayerData[playerid][E_NAME], logininfo);
-	}
-	gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_HIDDEN;
-	SendClientMessage(playerid, COLOUR_ADMIN, "You have been unhidden from the admin list");
-	CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] | ADMIN_STATE_HIDDEN);
-	return 1;
-}
-
-dcmd_aalias(const playerid, params[])
-{
+	if(!gServerData[E_STORE_ALIASES] || (playerid != INVALID_PLAYER_ID && gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0)) return 0;
 	if(LevelCheck(playerid, E_ALIAS_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendMessage(playerid, COLOUR_HELP, "USAGE: /aalias [player] or [player name] or [IP]");
+		SendMessage(playerid, COLOUR_HELP, "Displays the other names a player has used on the server");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendMessage(playerid, COLOUR_HELP, "USAGE: /aalias [player] or [player name] or [IP]");
 		return 1;
 	}
 
-	new pIP[MAX_IP], pid = INVALID_PLAYER_ID, line[MAX_STRING];
-	if(!IPisvalid(params, false)) {
-		pid = FindPlayer(params);
-		if(pid == INVALID_PLAYER_ID) {
-			new file[MAX_STRING];
-			format(file, sizeof(file), ALIASFOLDER "name_%c.ini", toupper(params[0]));
-			if(dini_Get(file, params, line)) {
-				new space;
-				for(new idx; line[idx] != '\0'; idx++) {
-					if(line[idx] == ' ') space = idx + 1;
+	new string[512],
+		pid;
+	if(params[0] == '"' && (pid = strlen(params)) > 2 && params[pid-1] == '"') {
+		new pname[MAX_PLAYER_NAME];
+		strmid(pname, params, 1, pid-1);
+		if(isValidName(pname)) {
+			format(string, sizeof(string), "%s's Aliases: ", pname);
+			if(Alias_GetAliasFromName(gAlarDB, pname, string)) {
+				if(playerid == INVALID_PLAYER_ID) {
+					print(string);
+				} else {
+					SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
 				}
-				strcpy(pIP, line[space]);
 			} else {
-				SendMessage(playerid, COLOUR_WARNING, "Player not found");
-				return 1;
+				format(string, sizeof(string), "No aliases found for %s", params);
+				SendMessage(playerid, COLOUR_WARNING, string);
 			}
 		} else {
-			GetPlayerIp(pid, pIP, sizeof(pIP));
+			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+		}
+	} else if(IPisvalid(params, false)) {
+		format(string, sizeof(string), "%s's Aliases: ", params);
+		if(Alias_GetAliasFromIP(gAlarDB, params, string)) {
+			if(playerid == INVALID_PLAYER_ID) {
+				print(string);
+			} else {
+				SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+			}
+		} else {
+			format(string, sizeof(string), "No aliases found for %s", params);
+			SendMessage(playerid, COLOUR_WARNING, string);
+		}
+	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID) {
+		format(string, sizeof(string), "%s's Aliases: ", ReturnPlayerName(pid));
+		if(Alias_GetAliasFromIP(gAlarDB, ReturnPlayerIP(pid), string)) {
+			if(playerid == INVALID_PLAYER_ID) {
+				print(string);
+			} else {
+				SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+			}
+		} else {
+			format(string, sizeof(string), "No aliases found for %s", ReturnPlayerName(pid));
+			SendMessage(playerid, COLOUR_WARNING, string);
+		}
+	} else if(isValidName(params)) {
+		format(string, sizeof(string), "%s's Aliases: ", params);
+		if(Alias_GetAliasFromName(gAlarDB, params, string)) {
+			if(playerid == INVALID_PLAYER_ID) {
+				print(string);
+			} else {
+				SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+			}
+		} else {
+			format(string, sizeof(string), "No aliases found for %s", params);
+			SendMessage(playerid, COLOUR_WARNING, string);
 		}
 	} else {
-		strcpy(pIP, params);
-	}
-
-	new string[MAX_STRING + MAX_PLAYER_NAME + 20];
-	format(string, sizeof(string), ALIASFOLDER "ip_%i.ini", strval(pIP));
-	if(!dini_Get(string, pIP, line)) {
-		if(pid == INVALID_PLAYER_ID) format(string, sizeof(string), "No aliases found for %s", params);
-		else format(string, sizeof(string), "No aliases found for %s", ReturnPlayerName(pid));
-		SendMessage(playerid, COLOUR_WARNING, string);
-		return 1;
-	}
-
-	if(pid == INVALID_PLAYER_ID) format(string, sizeof(string), "%s's Aliases: %s", params, line);
-	else format(string, sizeof(string), "%s's Aliases: %s", ReturnPlayerName(pid), line);
-
-	if(playerid == INVALID_PLAYER_ID) {
-		print(string);
-	} else {
-		SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+		SendMessage(playerid, COLOUR_HELP, "USAGE: /aalias [player] or [player name] or [IP]");
 	}
 	return 1;
 }
 
-dcmd_aalias2(const playerid, params[])
+acmd:aalias2(const playerid, const params[], const bool:help)
 {
+	if(!gServerData[E_STORE_ALIASES] || (playerid != INVALID_PLAYER_ID && gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0)) return 0;
 	if(LevelCheck(playerid, E_ALIAS2_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendMessage(playerid, COLOUR_HELP, "USAGE: /aalias2 [player] or [player name] or [IP]");
+		SendMessage(playerid, COLOUR_HELP, "Displays the names of other players on the same subnet");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendMessage(playerid, COLOUR_HELP, "USAGE: /aalias2 [player] or [player name] or [IP]");
 		return 1;
 	}
 
-	new pIP[MAX_IP], pid = INVALID_PLAYER_ID, line[MAX_STRING];
-	if(!IPisvalid(params, false)) {
-		pid = FindPlayer(params);
-		if(pid == INVALID_PLAYER_ID) {
-			new file[MAX_STRING];
-			format(file, sizeof(file), ALIASFOLDER "name_%c.ini", toupper(params[0]));
-			if(dini_Get(file, params, line)) {
-				new space;
-				for(new idx; line[idx] != '\0'; idx++) {
-					if(line[idx] == ' ') space = idx + 1;
-				}
-				strcpy(pIP, line[space]);
-			} else {
-				SendMessage(playerid, COLOUR_WARNING, "Player not found");
-				return 1;
+	new pIP[MAX_IP],
+		pid;
+	if(params[0] == '"' && (pid = strlen(params)) > 2 && params[pid-1] == '"') {
+		new pname[MAX_PLAYER_NAME];
+		strmid(pname, params, 1, pid-1);
+		if(isValidName(pname)) {
+			pIP = Alias_GetLastIP(gAlarDB, pname);
+			if(!isnull(pIP)) {
+				pIP = IPsubnet(pIP);
 			}
 		} else {
-			GetPlayerIp(pid, pIP, sizeof(pIP));
+			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+			return 1;
+		}
+	} else if(IPisvalid(params, false)) {
+		pIP = IPsubnet(params);
+	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID) {
+		GetPlayerIp(pid, pIP, sizeof(pIP));
+		pIP = IPsubnet(pIP);
+	} else if(isValidName(params)) {
+		pIP = Alias_GetLastIP(gAlarDB, params);
+		if(!isnull(pIP)) {
+			pIP = IPsubnet(pIP);
 		}
 	} else {
-		strcpy(pIP, params);
-	}
-
-	for(new i, bool:j; (pIP[i] != '\0') && (i + 4 < sizeof(pIP)); i++) {
-		if(pIP[i] == '.') {
-			if(j) {
-				pIP[i+1] = '*';
-				pIP[i+2] = '.';
-				pIP[i+3] = '*';
-				pIP[i+4] = '\0';
-				break;
-			} else {
-				j = true;
-			}
-		}
-	}
-
-	new file[MAX_STRING], adata[512];
-	format(file, sizeof(file), ALIASFOLDER "ip_%i.ini", strval(pIP));
-	new File:handle = fopen(file, io_read);
-	if(handle) {
-		while(fread(handle, line)) {
-			if(line[0] == '#') continue;
-			new pos = strfind(line, "=", false);
-			if(pos != -1) {
-				line[pos] = '\0';
-				if(IPcompare(pIP, line)) {
-					strstripnewline(line[pos + 1]);
-					straddword(adata, line[pos + 1]);
-					if(adata[sizeof(adata) - 2] != '\0') break;
-				}
-			}
-		}
-		fclose(handle);
-	}
-
-	if(adata[0] == '\0') {
-		if(pid == INVALID_PLAYER_ID) format(line, sizeof(line), "No aliases found for %s", params);
-		else format(line, sizeof(line), "No aliases found for %s", ReturnPlayerName(pid));
-		SendMessage(playerid, COLOUR_WARNING, line);
+		SendMessage(playerid, COLOUR_HELP, "USAGE: /aalias2 [player] or [player name] or [IP]");
 		return 1;
 	}
 
-	format(adata, sizeof(adata), "%s's Aliases: %s", pIP, adata);
-	if(playerid == INVALID_PLAYER_ID) {
-		print(adata);
+	new string[512];
+	if(!isnull(pIP)) {
+		format(string, sizeof(string), "%s's Aliases: ", pIP);
+		if(Alias_GetAliasFromIP(gAlarDB, pIP, string, sizeof(string))) {
+			if(playerid == INVALID_PLAYER_ID) {
+				print(string);
+			} else {
+				SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+			}
+		} else {
+			format(string, sizeof(string), "No aliases found for %s", pIP);
+			SendMessage(playerid, COLOUR_WARNING, string);
+		}
 	} else {
-		SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, adata);
+		format(string, sizeof(string), "No aliases found for %s", params);
+		SendMessage(playerid, COLOUR_WARNING, string);
 	}
 	return 1;
 }
 
-dcmd_aalias3(const playerid, params[])
+acmd:aalias3(const playerid, const params[], const bool:help)
 {
+	if(!gServerData[E_STORE_ALIASES] || (playerid != INVALID_PLAYER_ID && gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0)) return 0;
 	if(LevelCheck(playerid, E_ALIAS3_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendMessage(playerid, COLOUR_HELP, "USAGE: /aalias3 [player] or [player name]");
+		SendMessage(playerid, COLOUR_HELP, "Display the other names used by all the player's previous IPs");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendMessage(playerid, COLOUR_HELP, "USAGE: /aalias3 [player] or [player name]");
 		return 1;
 	}
 
-	new pname[MAX_PLAYER_NAME],
-		pid = FindPlayer(params);
-	if(pid == INVALID_PLAYER_ID) {
-		if(!isValidName(params)) {
+	new pid,
+		string[512];
+	if(params[0] == '"' && (pid = strlen(params)) > 2 && params[pid-1] == '"') {
+		new pname[MAX_PLAYER_NAME];
+		strmid(pname, params, 1, pid-1);
+		if(isValidName(pname)) {
+			format(string, sizeof(string), "%s's Aliases: ", params);
+			if(Alias_GetAlias3FromName(gAlarDB, params, string, sizeof(string))) {
+				if(playerid == INVALID_PLAYER_ID) {
+					print(string);
+				} else {
+					SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+				}
+			} else {
+				format(string, sizeof(string), "No aliases found for %s", params);
+				SendMessage(playerid, COLOUR_WARNING, string);
+			}
+		} else {
 			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
 			return 1;
 		}
-		strcpy(pname, params);
-	} else {
+	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID) {
+		new pname[MAX_PLAYER_NAME];
 		GetPlayerName(pid, pname, sizeof(pname));
-	}
-
-	new string[MAX_STRING], ips[MAX_STRING];
-	format(string, sizeof(string), ALIASFOLDER "name_%c.ini", toupper(pname[0]));
-	if(!dini_Get(string, pname, ips)) {
-		if(pid == INVALID_PLAYER_ID) format(string, sizeof(string), "No IPs found for %s", params);
-		else format(string, sizeof(string), "No IPs found for %s", ReturnPlayerName(pid));
-		SendMessage(playerid, COLOUR_WARNING, string);
-		return 1;
-	}
-
-	new adata[512];
-	for(new i=1; i < 255; i++) {
-		format(string, sizeof(string), " %i", i);
-		if(strval(ips) == i || strfind(ips, string) != -1) {
-			new line[MAX_STRING];
-			format(string, sizeof(string), ALIASFOLDER "ip_%i.ini", i);
-			new File:handle = fopen(string, io_read);
-			if(handle) {
-				while(fread(handle, line)) {
-					if(line[0] == '#') continue;
-					new pos = strfind(line, "=", false);
-					if(pos != -1) {
-						line[pos] = '\0';
-						if(strfindword(ips, line, true) != -1) {
-							strstripnewline(line[pos + 1]);
-							straddword(adata, line[pos + 1]);
-							if(adata[sizeof(adata) - 2] != '\0') break;
-						}
-					}
-				}
-				fclose(handle);
+		format(string, sizeof(string), "%s's Aliases: ", pname);
+		if(Alias_GetAlias3FromName(gAlarDB, pname, string, sizeof(string))) {
+			if(playerid == INVALID_PLAYER_ID) {
+				print(string);
+			} else {
+				SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
 			}
+		} else {
+			format(string, sizeof(string), "No aliases found for %s", pname);
+			SendMessage(playerid, COLOUR_WARNING, string);
 		}
-	}
-
-	if(adata[0] == '\0') {
-		if(pid == INVALID_PLAYER_ID) format(string, sizeof(string), "No aliases found for %s", params);
-		else format(string, sizeof(string), "No aliases found for %s", ReturnPlayerName(pid));
-		SendMessage(playerid, COLOUR_WARNING, string);
-		return 1;
-	}
-
-	format(adata, sizeof(adata), "%s's Aliases:%s", pname, adata);
-	if(playerid == INVALID_PLAYER_ID) {
-		print(adata);
+	} else if(isValidName(params)) {
+		format(string, sizeof(string), "%s's Aliases: ", params);
+		if(Alias_GetAlias3FromName(gAlarDB, params, string, sizeof(string))) {
+			if(playerid == INVALID_PLAYER_ID) {
+				print(string);
+			} else {
+				SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+			}
+		} else {
+			format(string, sizeof(string), "No aliases found for %s", params);
+			SendMessage(playerid, COLOUR_WARNING, string);
+		}
 	} else {
-		SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, adata);
+		SendMessage(playerid, COLOUR_WARNING, "Invalid name");
 	}
 	return 1;
 }
 
-dcmd_aarmour(const playerid, params[])
+acmd:aarmour(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_ARMOUR_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aarmour [player] (armour)");
+		SendClientMessage(playerid, COLOUR_HELP, "Gives armour to a player, or removes if armour is 0");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aarmour [player] (armour)");
 		return 1;
 	}
@@ -4423,14 +2870,22 @@ dcmd_aarmour(const playerid, params[])
 			format(msg, sizeof(msg), "%s has set %s's armour to %0.1f", ReturnPlayerName(playerid), ReturnPlayerName(pid), armour);
 		}
 	}
+
 	LogAction(msg);
 	AddLogString(msg);
 	return 1;
 }
 
-dcmd_aarmourall(const playerid, params[])
+acmd:aarmourall(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_ARMOURALL_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aarmourall (armour)");
+		SendClientMessage(playerid, COLOUR_HELP, "Gives armour to all players, or removes if armour is 0");
+		return 1;
+	}
 
 	new Float:armour;
 	if(!isFloat(params)) {
@@ -4479,16 +2934,42 @@ dcmd_aarmourall(const playerid, params[])
 	return 1;
 }
 
-dcmd_aban(const playerid, params[])
+acmd:aautologin(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) return 0;
+	if(!gServerData[E_AUTO_LOGIN]) return 0;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aautologin");
+		SendClientMessage(playerid, COLOUR_HELP, "Toggles autologin by IP, useful for shared computers");
+		return 1;
+	}
+
+	if(Admin_Manuallogin(gAlarDB, gPlayerData[playerid][E_NAME])) {
+		SendClientMessage(playerid, COLOUR_ADMIN, "Automatic login has been disabled");
+	} else {
+		SendClientMessage(playerid, COLOUR_ADMIN, "Automatic login has been enabled");
+	}
+	return 1;
+}
+
+acmd:aban(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_BAN_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aban [player] (reason)");
+		SendClientMessage(playerid, COLOUR_HELP, "Bans a player by both IP and name");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aban [player] (reason)");
 		return 1;
 	}
 
-	new breason[MAX_REASON] = "No reason", pid;
+	new breason[MAX_INPUT] = DEFAULT_REASON, pid;
 	strscan(params, "pz", pid, breason, sizeof(breason));
 
 	if(pid == INVALID_PLAYER_ID) {
@@ -4499,9 +2980,13 @@ dcmd_aban(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "You cannot ban yourself");
 		return 1;
 	}
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot ban NPCs");
+		return 1;
+	}
 
-	new msg[MAX_INPUT];
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+	new msg[MAX_INPUT * 2];
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot ban level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
@@ -4512,75 +2997,91 @@ dcmd_aban(const playerid, params[])
 	GetPlayerIp(pid, bIP, sizeof(bIP));
 	GetPlayerName(pid, pname, sizeof(pname));
 
-	new File:handle=fopen(USERFILE, io_read);
-	if(handle) {
-		new pLEVEL, pIP[MAX_IP];
-		while(fread(handle, msg)) {
-			if(msg[0] == '#') continue;
-			strstripnewline(msg);
-			strscan(dini_ExtractValue(msg), "is ", pLEVEL, pIP, sizeof(pIP));
-			if((strwild(dini_ExtractKey(msg), pname, true) || IPcompare(pIP, bIP)) && (pLEVEL >= gPlayerData[playerid][E_ADMINLEVEL])) {
-				format(msg, sizeof(msg), "You cannot ban level %i admins", pLEVEL);
-				fclose(handle);
-				SendClientMessage(playerid, COLOUR_WARNING, msg);
-				return 1;
-			}
-		}
-		fclose(handle);
+	new bool:IPonly = gServerData[E_LOGGEDIN_FUNC][0] == '\0' || !CallRemoteFunction(gServerData[E_LOGGEDIN_FUNC], "i", pid),
+		level;
+	if(IPonly) {
+		level = Admin_GetHighestLevel(gAlarDB, "", bIP);
+	} else {
+		level = Admin_GetHighestLevel(gAlarDB, pname, bIP);
+	}
+	if(level >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
+		format(msg, sizeof(msg), "You cannot ban level %i admins", level);
+		SendClientMessage(playerid, COLOUR_WARNING, msg);
+		return 1;
 	}
 
-	BanPlayer(pname, bIP, breason, gPlayerData[playerid][E_NAME]);
-
-	format(msg, sizeof(msg), "Name: \"%s\" successfully banned", pname);
-	SendClientMessage(playerid, COLOUR_ADMIN, msg);
+	if(!IPonly) {
+		format(msg, sizeof(msg), "Name: \"%s\" successfully banned", pname);
+		SendClientMessage(playerid, COLOUR_ADMIN, msg);
+	}
 	format(msg, sizeof(msg), "IP: \"%s\" successfully banned", bIP);
 	SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-	format(msg, sizeof(msg), "You have been banned from the server (%s)", breason);
-	SendClientMessage(pid, COLOUR_WARNING, msg);
+	if(breason[0]) {
+		format(msg, sizeof(msg), "You have been banned from the server (%s)", breason);
+		SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+	} else {
+		SendClientMessage(pid, COLOUR_WARNING, "You have been banned from the server");
+	}
 
-	new date[15],
-		time[10];
+	new datetime[MAX_TIMESTAMP],
+		shortreason[MAX_REASON];
+	datetime = ReturnTimeStamp();
 
 	if(gServerData[E_BAN_MSG][0] != '\0') {
-		new year,
-			month,
-			day,
-			hour,
-			minute;
-
-		getdate(year, month, day);
-		gettime(hour, minute);
-		format(date, sizeof(date), "%02i/%02i/%i", day, month, year);
-		format(time, sizeof(time), "%02i:%02i", hour, minute);
-
-		SendBanMsg(pid, gServerData[E_BAN_MSG], date, time, gPlayerData[playerid][E_NAME]);
+		if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+			SendBanMsg(pid, gServerData[E_BAN_MSG], datetime, "");
+		} else {
+			SendBanMsg(pid, gServerData[E_BAN_MSG], datetime, gPlayerData[playerid][E_NAME]);
+		}
 	}
-	format(msg, sizeof(msg), "%s(%i) has been banned from the server by %s (%s)", pname, pid, ReturnPlayerName(playerid), breason);
+	if(breason[0]) {
+		strtruncate(shortreason, breason);
+		format(msg, sizeof(msg), "%s(%i) has been banned from the server by %s (%s)", pname, pid, ReturnPlayerName(playerid), shortreason);
+	} else {
+		format(msg, sizeof(msg), "%s(%i) has been banned from the server by %s", pname, pid, ReturnPlayerName(playerid));
+	}
 
 	AddLogString(msg);
 	LogAction(msg);
 
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		format(msg, sizeof(msg), "%s(%i) has been banned from the server (%s)", pname, pid, breason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s(%i) has been banned from the server (%s)", pname, pid, shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s(%i) has been banned from the server", pname, pid);
+		}
 	}
 	AddJoinString(pid, COLOUR_BAN, msg);
 	Kick(pid);
 
+	new hits = 1;
 	if(gServerData[E_KICK_ALL_IPS]) {
 		LoopPlayers(i) {
-			if(i != pid && IPcompare(bIP, ReturnPlayerIP(i))) {
-				format(msg, sizeof(msg), "You are banned from the server (%s)", breason);
-				SendClientMessage(i, COLOUR_WARNING, msg);
-				if(gServerData[E_BAN_MSG][0] != '\0') {
-					SendBanMsg(i, gServerData[E_BAN_MSG], date, time, gPlayerData[playerid][E_NAME]);
+			if(i != pid && !IsPlayerNPC(i) && IPcompare(bIP, ReturnPlayerIP(i))) {
+				if(breason[0]) {
+					format(msg, sizeof(msg), "You are banned from the server (%s)", breason);
+					SendWrappedMessageToPlayer(i, COLOUR_WARNING, msg);
+				} else {
+					SendClientMessage(i, COLOUR_WARNING, "You are banned from the server");
 				}
-				format(msg, sizeof(msg), "%s(%i) is banned from the server (%s)", ReturnPlayerName(i), i, breason);
-
+				if(gServerData[E_BAN_MSG][0] != '\0') {
+					if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+						SendBanMsg(i, gServerData[E_BAN_MSG], datetime, "");
+					} else {
+						SendBanMsg(i, gServerData[E_BAN_MSG], datetime, gPlayerData[playerid][E_NAME]);
+					}
+				}
+				if(shortreason[0]) {
+					format(msg, sizeof(msg), "%s(%i) is banned from the server (%s)", ReturnPlayerName(i), i, shortreason);
+				} else {
+					format(msg, sizeof(msg), "%s(%i) is banned from the server", ReturnPlayerName(i), i);
+				}
 				LogAction(msg);
 				AddLogString(msg);
 				AddJoinString(i, COLOUR_BAN, msg);
 				Kick(i);
+				hits++;
 			}
 		}
 	} else {
@@ -4594,24 +3095,93 @@ dcmd_aban(const playerid, params[])
 			SendWrappedMessageToPlayer(playerid, COLOUR_WARNING, msg);
 		}
 	}
+
+	if(IPonly) {
+		if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+			Bans_BanIP(gAlarDB, bIP, breason, "", ReturnPlayerIP(playerid), hits);
+		} else {
+			Bans_BanIP(gAlarDB, bIP, breason, gPlayerData[playerid][E_NAME], ReturnPlayerIP(playerid), hits);
+		}
+	} else {
+		if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+			Bans_BanPlayer(gAlarDB, pname, bIP, breason, "", ReturnPlayerIP(playerid), hits);
+		} else {
+			Bans_BanPlayer(gAlarDB, pname, bIP, breason, gPlayerData[playerid][E_NAME], ReturnPlayerIP(playerid), hits);
+		}
+	}
 	return 1;
 }
 
-dcmd_abancheck(const playerid, params[])
+acmd:abancheck(const playerid, const params[], const bool:help)
 {
+	if(playerid != INVALID_PLAYER_ID && gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_BANCHECK_LEVEL)) return 1;
 
-	new bool:isanip = IPisvalid(params, false);
-	if(params[0] == '\0' || (!isanip && !isValidName(params))) {
+	if(help) {
 		SendMessage(playerid, COLOUR_HELP, "USAGE: /abancheck [player name] or [IP]");
+		SendMessage(playerid, COLOUR_HELP, "Checks if a player name or IP is currently banned or suspened");
 		return 1;
 	}
 
+	new bool:isanip,
+		check[MAX_IP + MAX_PLAYER_NAME];
+	if(params[0] == '"') {
+		new len = strlen(params);
+		if(len > 2 && params[len-1] == '"') {
+			new pname[MAX_PLAYER_NAME];
+			strmid(pname, params, 1, len-1);
+			if(isValidName(pname)) {
+				strcpy(check, pname);
+			} else {
+				SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+				return 1;
+			}
+		} else {
+			SendMessage(playerid, COLOUR_HELP, "USAGE: /abancheck [player name] or [IP]");
+			return 1;
+		}
+	} else {
+		isanip = IPisvalid(params, false);
+		if(isnull(params) || (!isanip && !isValidName(params))) {
+			SendMessage(playerid, COLOUR_HELP, "USAGE: /abancheck [player name] or [IP]");
+			return 1;
+		}
+		strcpy(check, params);
+	}
+
 	new BanData[E_ALAR_BAN],
-		msg[MAX_STRING];
+		msg[MAX_INPUT * 2];
 	if(isanip) {
-		if(GetBanInfo("", params, BanData)) {
-			format(msg, sizeof(msg), "The ip %s is banned [%s %s %s] (%s)", BanData[E_BAN_IP], BanData[E_BAN_DATE], BanData[E_BAN_TIME], BanData[E_BAN_ADMIN], BanData[E_BAN_REASON]);
+		if(Bans_GetBanInfo(gAlarDB, "", check, BanData)) {
+			if(BanData[E_BAN_REASON][0]) {
+				if(BanData[E_BAN_ADMIN][0]) {
+					if(BanData[E_BAN_DATETIME][0]) {
+						format(msg, sizeof(msg), "The ip %s is banned [%s %s] (%s)", BanData[E_BAN_IP], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN], BanData[E_BAN_REASON]);
+					} else {
+						format(msg, sizeof(msg), "The ip %s is banned [%s] (%s)", BanData[E_BAN_IP], BanData[E_BAN_ADMIN], BanData[E_BAN_REASON]);
+					}
+				} else {
+					if(BanData[E_BAN_DATETIME][0]) {
+						format(msg, sizeof(msg), "The ip %s is banned [%s] (%s)", BanData[E_BAN_IP], BanData[E_BAN_DATETIME], BanData[E_BAN_REASON]);
+					} else {
+						format(msg, sizeof(msg), "The ip %s is banned (%s)", BanData[E_BAN_IP], BanData[E_BAN_REASON]);
+					}
+				}
+			} else {
+				if(BanData[E_BAN_ADMIN][0]) {
+					if(BanData[E_BAN_DATETIME][0]) {
+						format(msg, sizeof(msg), "The ip %s is banned [%s %s]", BanData[E_BAN_IP], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN]);
+					} else {
+						format(msg, sizeof(msg), "The ip %s is banned [%s]", BanData[E_BAN_IP], BanData[E_BAN_ADMIN]);
+					}
+				} else {
+					if(BanData[E_BAN_DATETIME][0]) {
+						format(msg, sizeof(msg), "The ip %s is banned [%s]", BanData[E_BAN_IP], BanData[E_BAN_DATETIME]);
+					} else {
+						format(msg, sizeof(msg), "The ip %s is banned", BanData[E_BAN_IP]);
+					}
+				}
+			}
 			if(playerid == INVALID_PLAYER_ID) {
 				print(msg);
 			} else {
@@ -4620,8 +3190,36 @@ dcmd_abancheck(const playerid, params[])
 			return 1;
 		}
 	} else {
-		if(GetBanInfo(params, "", BanData)) {
-			format(msg, sizeof(msg), "The name %s is banned [%s %s %s] (%s)", BanData[E_BAN_NAME], BanData[E_BAN_DATE], BanData[E_BAN_TIME], BanData[E_BAN_ADMIN], BanData[E_BAN_REASON]);
+		if(Bans_GetBanInfo(gAlarDB, check, "", BanData)) {
+			if(BanData[E_BAN_REASON][0]) {
+				if(BanData[E_BAN_ADMIN][0]) {
+					if(BanData[E_BAN_DATETIME][0]) {
+						format(msg, sizeof(msg), "The name %s is banned [%s %s] (%s)", BanData[E_BAN_NAME], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN], BanData[E_BAN_REASON]);
+					} else {
+						format(msg, sizeof(msg), "The name %s is banned [%s] (%s)", BanData[E_BAN_NAME], BanData[E_BAN_ADMIN], BanData[E_BAN_REASON]);
+					}
+				} else {
+					if(BanData[E_BAN_DATETIME][0]) {
+						format(msg, sizeof(msg), "The name %s is banned [%s] (%s)", BanData[E_BAN_NAME], BanData[E_BAN_DATETIME], BanData[E_BAN_REASON]);
+					} else {
+						format(msg, sizeof(msg), "The name %s is banned (%s)", BanData[E_BAN_NAME], BanData[E_BAN_REASON]);
+					}
+				}
+			} else {
+				if(BanData[E_BAN_ADMIN][0]) {
+					if(BanData[E_BAN_DATETIME][0]) {
+						format(msg, sizeof(msg), "The name %s is banned [%s %s]", BanData[E_BAN_NAME], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN]);
+					} else {
+						format(msg, sizeof(msg), "The name %s is banned [%s]", BanData[E_BAN_NAME], BanData[E_BAN_ADMIN]);
+					}
+				} else {
+					if(BanData[E_BAN_DATETIME][0]) {
+						format(msg, sizeof(msg), "The name %s is banned [%s]", BanData[E_BAN_NAME], BanData[E_BAN_DATETIME]);
+					} else {
+						format(msg, sizeof(msg), "The name %s is banned", BanData[E_BAN_NAME]);
+					}
+				}
+			}
 			if(playerid == INVALID_PLAYER_ID) {
 				print(msg);
 			} else {
@@ -4633,9 +3231,36 @@ dcmd_abancheck(const playerid, params[])
 
 	new SuspendData[E_ALAR_SUSPENSION];
 	if(isanip) {
-		if(GetSuspendInfo("", params, SuspendData)) {
-			new minute = floatround((SuspendData[E_SUSPEND_HOUR] - floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor)) * 60);
-			format(msg, sizeof(msg), "The ip %s is suspended until %02i/%02i/%i %02i:%02i [%s %s %s] (%s)", SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_DAY], SuspendData[E_SUSPEND_MONTH], SuspendData[E_SUSPEND_YEAR], floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor), minute, SuspendData[E_SUSPEND_DATE], SuspendData[E_SUSPEND_TIME], SuspendData[E_SUSPEND_ADMIN], SuspendData[E_SUSPEND_REASON]);
+		if(Suspensions_GetSuspendInfo(gAlarDB, "", check, SuspendData)) {
+			if(SuspendData[E_SUSPEND_REASON][0]) {
+				if(SuspendData[E_SUSPEND_ADMIN][0]) {
+					if(SuspendData[E_SUSPEND_DATETIME][0]) {
+						format(msg, sizeof(msg), "The ip %s is suspended until %s [%s %s] (%s)", SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN], SuspendData[E_SUSPEND_REASON]);
+					} else {
+						format(msg, sizeof(msg), "The ip %s is suspended until %s [%s] (%s)", SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_ADMIN], SuspendData[E_SUSPEND_REASON]);
+					}
+				} else {
+					if(SuspendData[E_SUSPEND_DATETIME][0]) {
+						format(msg, sizeof(msg), "The ip %s is suspended until %s [%s] (%s)", SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_REASON]);
+					} else {
+						format(msg, sizeof(msg), "The ip %s is suspended until %s (%s)", SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_REASON]);
+					}
+				}
+			} else {
+				if(SuspendData[E_SUSPEND_ADMIN][0]) {
+					if(SuspendData[E_SUSPEND_DATETIME][0]) {
+						format(msg, sizeof(msg), "The ip %s is suspended until %s [%s %s]", SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN]);
+					} else {
+						format(msg, sizeof(msg), "The ip %s is suspended until %s [%s]", SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_ADMIN]);
+					}
+				} else {
+					if(SuspendData[E_SUSPEND_DATETIME][0]) {
+						format(msg, sizeof(msg), "The ip %s is suspended until %s [%s]", SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_DATETIME]);
+					} else {
+						format(msg, sizeof(msg), "The ip %s is suspended until %s", SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES]);
+					}
+				}
+			}
 			if(playerid == INVALID_PLAYER_ID) {
 				print(msg);
 			} else {
@@ -4644,9 +3269,36 @@ dcmd_abancheck(const playerid, params[])
 			return 1;
 		}
 	} else {
-		if(GetSuspendInfo(params, "", SuspendData)) {
-			new minute = floatround((SuspendData[E_SUSPEND_HOUR] - floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor)) * 60);
-			format(msg, sizeof(msg), "The name %s is suspended until %02i/%02i/%i %02i:%02i [%s %s %s] (%s)", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_DAY], SuspendData[E_SUSPEND_MONTH], SuspendData[E_SUSPEND_YEAR], floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor), minute, SuspendData[E_SUSPEND_DATE], SuspendData[E_SUSPEND_TIME], SuspendData[E_SUSPEND_ADMIN], SuspendData[E_SUSPEND_REASON]);
+		if(Suspensions_GetSuspendInfo(gAlarDB, check, "", SuspendData)) {
+			if(SuspendData[E_SUSPEND_REASON][0]) {
+				if(SuspendData[E_SUSPEND_ADMIN][0]) {
+					if(SuspendData[E_SUSPEND_DATETIME][0]) {
+						format(msg, sizeof(msg), "The name %s is suspended until %s [%s %s] (%s)", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN], SuspendData[E_SUSPEND_REASON]);
+					} else {
+						format(msg, sizeof(msg), "The name %s is suspended until %s [%s] (%s)", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_ADMIN], SuspendData[E_SUSPEND_REASON]);
+					}
+				} else {
+					if(SuspendData[E_SUSPEND_DATETIME][0]) {
+						format(msg, sizeof(msg), "The name %s is suspended until %s [%s] (%s)", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_REASON]);
+					} else {
+						format(msg, sizeof(msg), "The name %s is suspended until %s (%s)", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_REASON]);
+					}
+				}
+			} else {
+				if(SuspendData[E_SUSPEND_ADMIN][0]) {
+					if(SuspendData[E_SUSPEND_DATETIME][0]) {
+						format(msg, sizeof(msg), "The name %s is suspended until %s [%s %s]", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN]);
+					} else {
+						format(msg, sizeof(msg), "The name %s is suspended until %s [%s]", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_ADMIN]);
+					}
+				} else {
+					if(SuspendData[E_SUSPEND_DATETIME][0]) {
+						format(msg, sizeof(msg), "The name %s is suspended until %s [%s]", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_DATETIME]);
+					} else {
+						format(msg, sizeof(msg), "The name %s is suspended until %s", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES]);
+					}
+				}
+			}
 			if(playerid == INVALID_PLAYER_ID) {
 				print(msg);
 			} else {
@@ -4655,21 +3307,32 @@ dcmd_abancheck(const playerid, params[])
 			return 1;
 		}
 	}
-	format(msg, sizeof(msg), "The %s %s is not banned", isanip ? ("ip") : ("name"), params);
+	format(msg, sizeof(msg), "The %s %s is not banned", isanip ? ("ip") : ("name"), check);
 	SendMessage(playerid, COLOUR_ADMIN, msg);
 	return 1;
 }
 
-dcmd_abanip(const playerid, params[])
+acmd:abanip(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_BAN_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /abanip [IP] or [player] (reason)");
+		if(cmdchk(playerid, E_RANGEBAN_LEVEL)) {
+			SendClientMessage(playerid, COLOUR_HELP, "Bans an IP or a player by their IP, an IP range such as 127.0.*.* may also be used");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "Bans an IP or a player by their IP");
+		}
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /abanip [IP] or [player] (reason)");
 		return 1;
 	}
 
-	new breason[MAX_REASON] = "No reason",
+	new breason[MAX_INPUT] = DEFAULT_REASON,
 	#if MAX_IP > MAX_PLAYER_NAME
 		bIP[MAX_IP];
 	#else
@@ -4687,179 +3350,236 @@ dcmd_abanip(const playerid, params[])
 		}
 	}
 
-	new msg[MAX_INPUT];
-	if(!IsIPNotBanned(bIP)) {
+	new msg[MAX_INPUT * 2];
+	if(!Bans_IsIPNotBanned(gAlarDB, bIP)) {
 		format(msg, sizeof(msg), "IP: \"%s\" is already banned", bIP);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
-	new File:handle=fopen(USERFILE, io_read);
-	if(handle) {
-		new pLEVEL, pIP[MAX_IP];
-		while(fread(handle, msg)) {
-			if(msg[0] == '#') continue;
-			strstripnewline(msg);
-			strscan(dini_ExtractValue(msg), "is ", pLEVEL, pIP, sizeof(pIP));
-			if((pLEVEL >= gPlayerData[playerid][E_ADMINLEVEL]) && IPcompare(pIP, bIP)) {
-				format(msg, sizeof(msg), "You cannot ban level %i admins", pLEVEL);
-				fclose(handle);
-				SendClientMessage(playerid, COLOUR_WARNING, msg);
-				return 1;
-			}
-		}
-		fclose(handle);
+	new level = Admin_GetHighestLevel(gAlarDB, "", bIP);
+	if(level >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
+		format(msg, sizeof(msg), "You cannot ban level %i admins", level);
+		SendClientMessage(playerid, COLOUR_WARNING, msg);
+		return 1;
 	}
-
-	BanIP(bIP, breason, gPlayerData[playerid][E_NAME]);
 
 	format(msg, sizeof(msg), "IP: %s successfully banned", bIP);
 	SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-	format(msg, sizeof(msg), "%s has banned the ip %s (%s)", ReturnPlayerName(playerid), bIP, breason);
+	new shortreason[MAX_REASON];
+	if(breason[0]) {
+		strtruncate(shortreason, breason);
+		format(msg, sizeof(msg), "%s has banned the ip %s (%s)", ReturnPlayerName(playerid), bIP, shortreason);
+	} else {
+		format(msg, sizeof(msg), "%s has banned the ip %s", ReturnPlayerName(playerid), bIP);
+	}
 
 	LogAction(msg);
 	AddLogString(msg);
 
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		format(msg, sizeof(msg), "The ip %s has been banned (%s)", bIP, breason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "The ip %s has been banned (%s)", bIP, shortreason);
+		} else {
+			format(msg, sizeof(msg), "The ip %s has been banned", bIP);
+		}
 	}
 	SendClientMessageToAll(COLOUR_PLAYER, msg);
 
-	new year,
-		month,
-		day,
-		hour,
-		minute,
-		date[15],
-		time[10];
+	new datetime[MAX_TIMESTAMP];
+	datetime = ReturnTimeStamp();
 
-	getdate(year, month, day);
-	gettime(hour, minute);
-	format(date, sizeof(date), "%02i/%02i/%i", day, month, year);
-	format(time, sizeof(time), "%02i:%02i", hour, minute);
-
+	new hits;
 	LoopPlayers(i) {
-		if(IPcompare(bIP, ReturnPlayerIP(i))) {
-			format(msg, sizeof(msg), "You have been banned from the server (%s)", breason);
-			SendClientMessage(i, COLOUR_WARNING, msg);
-			if(gServerData[E_RANGEBAN_MSG][0] != '\0' && strfind(bIP, "*") != -1) {
-				SendBanMsg(i, gServerData[E_RANGEBAN_MSG], date, time, gPlayerData[playerid][E_NAME]);
-			} else if(gServerData[E_BAN_MSG][0] != '\0') {
-				SendBanMsg(i, gServerData[E_BAN_MSG], date, time, gPlayerData[playerid][E_NAME]);
+		if(!IsPlayerNPC(i) && IPcompare(bIP, ReturnPlayerIP(i))) {
+			if(breason[0]) {
+				format(msg, sizeof(msg), "You have been banned from the server (%s)", breason);
+				SendWrappedMessageToPlayer(i, COLOUR_WARNING, msg);
+			} else {
+				SendClientMessage(i, COLOUR_WARNING, "You have been banned from the server");
 			}
-			format(msg, sizeof(msg), "%s(%i) has been banned from the server by %s (%s)", ReturnPlayerName(i), i, ReturnPlayerName(playerid), breason);
+			if(gServerData[E_RANGEBAN_MSG][0] != '\0' && strfind(bIP, "*") != -1) {
+				if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+					SendBanMsg(i, gServerData[E_RANGEBAN_MSG], datetime, "");
+				} else {
+					SendBanMsg(i, gServerData[E_RANGEBAN_MSG], datetime, gPlayerData[playerid][E_NAME]);
+				}
+			} else if(gServerData[E_BAN_MSG][0] != '\0') {
+				if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+					SendBanMsg(i, gServerData[E_BAN_MSG], datetime, "");
+				} else {
+					SendBanMsg(i, gServerData[E_BAN_MSG], datetime, gPlayerData[playerid][E_NAME]);
+				}
+			}
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s(%i) has been banned from the server by %s (%s)", ReturnPlayerName(i), i, ReturnPlayerName(playerid), shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s(%i) has been banned from the server by %s", ReturnPlayerName(i), i, ReturnPlayerName(playerid));
+			}
 
 			LogAction(msg);
 			AddLogString(msg);
 
 			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-				format(msg, sizeof(msg), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(i), i, breason);
+				if(shortreason[0]) {
+					format(msg, sizeof(msg), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(i), i, shortreason);
+				} else {
+					format(msg, sizeof(msg), "%s(%i) has been banned from the server", ReturnPlayerName(i), i);
+				}
 			}
 
 			AddJoinString(i, COLOUR_BAN, msg);
 			Kick(i);
+			hits++;
 		}
+	}
+
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+		Bans_BanIP(gAlarDB, bIP, breason, "", ReturnPlayerIP(playerid), hits);
+	} else {
+		Bans_BanIP(gAlarDB, bIP, breason, gPlayerData[playerid][E_NAME], ReturnPlayerIP(playerid), hits);
 	}
 	return 1;
 }
 
-dcmd_abanname(const playerid, params[])
+acmd:abanname(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_BAN_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /abanname [player name] (reason)");
+		if(cmdchk(playerid, E_WILDBAN_LEVEL)) {
+			SendClientMessage(playerid, COLOUR_HELP, "Bans a name from the server, the wildcards * and ? may be used");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "Bans a name from the server");
+		}
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /abanname [player name] (reason)");
 		return 1;
 	}
 
-	new breason[MAX_REASON] = "No reason", bname[MAX_PLAYER_NAME];
+	new breason[MAX_INPUT] = DEFAULT_REASON, bname[MAX_PLAYER_NAME + 2];
 	strscan(params, "sz", bname, sizeof(bname), breason, sizeof(breason));
+
+	if(bname[0] == '"') {
+		new len = strlen(bname);
+		if(len > 2 && bname[len-1] == '"') {
+			strmid(bname, bname, 1, len-1);
+		} else {
+			SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
+			return 1;
+		}
+	}
 
 	if(!isValidName(bname, cmdchk(playerid, E_WILDBAN_LEVEL))) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 		return 1;
 	}
 
-	new msg[MAX_INPUT];
-	if(!IsNameNotBanned(bname)) {
+	new msg[MAX_INPUT * 2];
+	if(!Bans_IsNameNotBanned(gAlarDB, bname)) {
 		format(msg, sizeof(msg), "Name: \"%s\" is already banned", bname);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
-	new File:handle=fopen(USERFILE, io_read);
-	if(handle) {
-		new pLEVEL;
-		while(fread(handle, msg)) {
-			if(msg[0] == '#') continue;
-			pLEVEL = strval(dini_ExtractValue(msg));
-			if(strwild(bname, dini_ExtractKey(msg), true) && (pLEVEL >= gPlayerData[playerid][E_ADMINLEVEL])) {
-				format(msg, sizeof(msg), "You cannot ban level %i admins", pLEVEL);
-				fclose(handle);
-				SendClientMessage(playerid, COLOUR_WARNING, msg);
-				return 1;
-			}
-		}
-		fclose(handle);
+	new level = Admin_GetHighestLevel(gAlarDB, bname);
+	if(level >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
+		format(msg, sizeof(msg), "You cannot ban level %i admins", level);
+		SendClientMessage(playerid, COLOUR_WARNING, msg);
+		return 1;
 	}
-
-	BanName(bname, breason, gPlayerData[playerid][E_NAME]);
 
 	format(msg, sizeof(msg), "Name: \"%s\" successfully banned", bname);
 	SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-	format(msg, sizeof(msg), "%s has banned the name %s (%s)", ReturnPlayerName(playerid), bname, breason);
+
+	new shortreason[MAX_REASON];
+	if(breason[0]) {
+		strtruncate(shortreason, breason);
+		format(msg, sizeof(msg), "%s has banned the name %s (%s)", ReturnPlayerName(playerid), bname, shortreason);
+	} else {
+		format(msg, sizeof(msg), "%s has banned the name %s", ReturnPlayerName(playerid), bname);
+	}
 
 	LogAction(msg);
 	AddLogString(msg);
 
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		format(msg, sizeof(msg), "The name %s has been banned (%s)", bname, breason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "The name %s has been banned (%s)", bname, shortreason);
+		} else {
+			format(msg, sizeof(msg), "The name %s has been banned", bname);
+		}
 	}
 	SendClientMessageToAll(COLOUR_PLAYER, msg);
 
-	new year,
-		month,
-		day,
-		hour,
-		minute,
-		date[15],
-		time[10];
+	new datetime[MAX_TIMESTAMP];
+	datetime = ReturnTimeStamp();
 
-	getdate(year, month, day);
-	gettime(hour, minute);
-	format(date, sizeof(date), "%02i/%02i/%i", day, month, year);
-	format(time, sizeof(time), "%02i:%02i", hour, minute);
-
+	new hits;
 	LoopPlayers(i) {
-		if(strwild(bname, ReturnPlayerName(i), true)) {
-			format(msg, sizeof(msg), "You have been banned from the server (%s)", breason);
-			SendClientMessage(i, COLOUR_WARNING, msg);
-			if(gServerData[E_BAN_MSG][0] != '\0') {
-				SendBanMsg(i, gServerData[E_BAN_MSG], date, time, gPlayerData[playerid][E_NAME]);
+		if(!IsPlayerNPC(i) && strwild(bname, ReturnPlayerName(i), true)) {
+			if(breason[0]) {
+				format(msg, sizeof(msg), "You have been banned from the server (%s)", breason);
+				SendWrappedMessageToPlayer(i, COLOUR_WARNING, msg);
+			} else {
+				SendClientMessage(i, COLOUR_WARNING, "You have been banned from the server");
 			}
-			format(msg, sizeof(msg), "%s(%i) has been banned from the server by %s (%s)", ReturnPlayerName(i), i, ReturnPlayerName(playerid), breason);
+			if(gServerData[E_BAN_MSG][0] != '\0') {
+				if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+					SendBanMsg(i, gServerData[E_BAN_MSG], datetime, "");
+				} else {
+					SendBanMsg(i, gServerData[E_BAN_MSG], datetime, gPlayerData[playerid][E_NAME]);
+				}
+			}
 
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s(%i) has been banned from the server by %s (%s)", ReturnPlayerName(i), i, ReturnPlayerName(playerid), shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s(%i) has been banned from the server by %s", ReturnPlayerName(i), i, ReturnPlayerName(playerid));
+			}
 			LogAction(msg);
 			AddLogString(msg);
 
 			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-				format(msg, sizeof(msg), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(i), i, breason);
+				if(shortreason[0]) {
+					format(msg, sizeof(msg), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(i), i, shortreason);
+				} else {
+					format(msg, sizeof(msg), "%s(%i) has been banned from the server", ReturnPlayerName(i), i);
+				}
 			}
-
 			AddJoinString(i, COLOUR_BAN, msg);
 			Kick(i);
+			hits++;
 		}
+	}
+
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+		Bans_BanName(gAlarDB, bname, breason, "", ReturnPlayerIP(playerid), hits);
+	} else {
+		Bans_BanName(gAlarDB, bname, breason, gPlayerData[playerid][E_NAME], ReturnPlayerIP(playerid), hits);
 	}
 	return 1;
 }
 
-dcmd_abring(const playerid, params[])
+acmd:abring(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_BRING_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /abring [player] (target)");
+		SendClientMessage(playerid, COLOUR_HELP, "Brings a player to your current location");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /abring [player] (target)");
 		return 1;
 	}
@@ -4869,6 +3589,10 @@ dcmd_abring(const playerid, params[])
 
 	if(pid == INVALID_PLAYER_ID) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
+		return 1;
+	}
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot bring NPCs");
 		return 1;
 	}
 	if(gPlayerData[pid][E_STATE] & ADMIN_STATE_JAILED) {
@@ -4993,10 +3717,8 @@ dcmd_abring(const playerid, params[])
 				gPlayerData[pid][E_CAM_POS_Y] = gPlayerData[tid][E_CAM_POS_Y];
 				gPlayerData[pid][E_CAM_POS_Z] = gPlayerData[tid][E_CAM_POS_Z];
 				gPlayerData[pid][E_CAM_ROT_XY] = gPlayerData[tid][E_CAM_ROT_XY];
-
 				SetPlayerVirtualWorld(pid, GetPlayerVirtualWorld(tid));
 				SetPlayerInterior(pid, GetPlayerInterior(tid));
-
 				gPlayerData[pid][E_SPECTATING] = true;
 
 				#if SPEC_TXT_TIME > 0
@@ -5020,17 +3742,11 @@ dcmd_abring(const playerid, params[])
 				}
 				LogAction(msg);
 				AddLogString(msg);
-
 				gPlayerData[pid][E_SPECID] = gPlayerData[tid][E_SPECID];
 				gPlayerData[pid][E_SPECMODE] = 0;
-
-				if(gSpawnMethod <= SPAWN_DEFAULT) {
-					StoreSpawnData(pid);
-				}
+				if(gSpawnMethod <= SPAWN_DEFAULT) StoreSpawnData(pid);
 				CallRemoteFunction("OnAdminSpectate", "iii", pid, gPlayerData[pid][E_SPECID], INVALID_PLAYER_ID);
-
 				TogglePlayerSpectating(pid, true);
-
 				gPlayerData[pid][E_SPECTATING] = true;
 				SetPlayerSpectating(pid, gPlayerData[tid][E_SPECID]);
 
@@ -5072,6 +3788,23 @@ dcmd_abring(const playerid, params[])
 		gPlayerData[pid][E_POSY] = Y + 4*floatsin(ang + 90.0, degrees);
 		gPlayerData[pid][E_POSZ] = Z + 1.0;
 
+		if(IsPlayerInAnyVehicle(tid)) {
+			new vid = GetPlayerVehicleID(tid);
+			if((gPlayerData[pid][E_SEATID] = GetVehicleFreeSeat(vid)) != INVALID_SEAT_ID) {
+				gPlayerData[pid][E_VEHICLEID] = vid;
+			} else {
+				new trailerid = GetVehicleTrailer(vid);
+				for(; trailerid && trailerid != vid && (gPlayerData[pid][E_SEATID] = GetVehicleFreeSeat(trailerid, false)) == INVALID_SEAT_ID;) {
+					trailerid = GetVehicleTrailer(trailerid);
+				}
+				if(gPlayerData[pid][E_SEATID] != INVALID_SEAT_ID) {
+					gPlayerData[pid][E_VEHICLEID] = vid;
+				} else {
+					gPlayerData[pid][E_VEHICLEID] = INVALID_VEHICLE_ID;
+				}
+			}
+		}
+
 		SpawnUsingPosition(pid);
 	} else {
 		new interiorid = GetPlayerInterior(tid),
@@ -5088,7 +3821,7 @@ dcmd_abring(const playerid, params[])
 			SetVehicleVirtualWorld(vid, GetPlayerVirtualWorld(tid));
 
 			LoopPlayers(i) {
-				if(i != pid && i != tid && GetPlayerVehicleID(i) == vid) {
+				if(i != pid && i != tid && IsPlayerInAnyVehicle(i) && GetPlayerVehicleID(i) == vid) {
 					SetPlayerInterior(i, interiorid);
 					SetPlayerVirtualWorld(i, worldid);
 					alar_OnPlayerWorldChange(i, worldid);
@@ -5098,7 +3831,27 @@ dcmd_abring(const playerid, params[])
 			SetPlayerPos(pid, X + 4*floatcos(ang + 90.0, degrees), Y + 4*floatsin(ang + 90.0, degrees), Z + 1.0);
 			SetPlayerSpecialAction(pid, SPECIAL_ACTION_USEJETPACK);
 		} else {
-			SetPlayerPos(pid, X + 4*floatcos(ang + 90.0, degrees), Y + 4*floatsin(ang + 90.0, degrees), Z + 1.0);
+			new bool:wasseated = false;
+			if(IsPlayerInAnyVehicle(tid)) {
+				new vid = GetPlayerVehicleID(tid),
+					seatid = GetVehicleFreeSeat(vid);
+				if(seatid != INVALID_SEAT_ID) {
+					wasseated = true;
+					PutPlayerInVehicle(pid, vid, seatid);
+				} else {
+					new trailerid = GetVehicleTrailer(vid);
+					for(; trailerid && trailerid != vid && (seatid = GetVehicleFreeSeat(trailerid, false)) == INVALID_SEAT_ID;) {
+						trailerid = GetVehicleTrailer(trailerid);
+					}
+					if(seatid != INVALID_SEAT_ID) {
+						wasseated = true;
+						PutPlayerInVehicle(pid, trailerid, seatid);
+					}
+				}
+			}
+			if(!wasseated) {
+				SetPlayerPos(pid, X + 4*floatcos(ang + 90.0, degrees), Y + 4*floatsin(ang + 90.0, degrees), Z + 1.0);
+			}
 		}
 	}
 
@@ -5120,11 +3873,18 @@ dcmd_abring(const playerid, params[])
 	return 1;
 }
 
-dcmd_acarcolour(const playerid, params[])
+acmd:acarcolour(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_CARCOLOUR_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /acarcolour [player] [colour1] (colour2)");
+		SendClientMessage(playerid, COLOUR_HELP, "Changes a player's vehicle colour, either gta colour codes -1 - 127 or colour names can be used");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /acarcolour [player] [colour1] (colour2)");
 		return 1;
 	}
@@ -5187,60 +3947,61 @@ dcmd_acarcolour(const playerid, params[])
 	return 1;
 }
 
-dcmd_achangemode(const playerid, params[])
+acmd:achangemode(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_CHANGEMODE_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /achangemode [gamemode]");
+		SendClientMessage(playerid, COLOUR_HELP, "Changes the server gamemode, only modes listed with alistmodes can be changed to");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /achangemode [gamemode]");
 		return 1;
 	}
 
-	if(!fexist(MODESFILE)) {
-		SendClientMessage(playerid, COLOUR_WARNING, "No gamemodes are listed in " MODESFILE);
-		return 1;
-	}
+	new string[128];
+	if(Gamemodes_Exists(gAlarDB, params, string)) {
+		new msg[MAX_STRING];
+		format(msg, sizeof(msg), "%s is changing the gamemode to %s", ReturnPlayerName(playerid), string);
+		LogAction(msg);
+		AddLogString(msg);
 
-	new File:handle = fopen(MODESFILE, io_read), line[MAX_STRING], msg[MAX_INPUT], pos;
-	while(fread(handle, line)) {
-		if(line[0] == '#') continue;
-		strstripnewline(line);
-		pos = strfind(line, params, true);
-		if((pos == 0) && (strlen(params) == strlen(line))) {
-			strcpy(msg, line);
-			break;
-		} else if((pos != -1) && (msg[0] == '\0')) {
-			strcpy(msg, line);
+		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+			format(msg, sizeof(msg), "The gamemode has been changed to %s", string);
 		}
+		SendClientMessageToAll(COLOUR_PLAYER, msg);
+
+		format(msg, sizeof(msg), "changemode %s", string);
+		SendRconCommand(msg);
+	} else {
+		format(string, sizeof(string), "Gamemode \"%s\" not found", params);
+		SendClientMessage(playerid, COLOUR_WARNING, string);
 	}
-	fclose(handle);
-
-	if(msg[0] == '\0') {
-		format(msg, sizeof(msg), "Gamemode \"%s\" not found", params);
-		SendClientMessage(playerid, COLOUR_WARNING, msg);
-		return 1;
-	}
-
-	format(line, sizeof(line), "%s is changing the gamemode to %s", ReturnPlayerName(playerid), msg);
-	LogAction(line);
-	AddLogString(line);
-
-	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		format(line, sizeof(line), "The gamemode has been changed to %s", msg);
-	}
-	SendClientMessageToAll(COLOUR_PLAYER, line);
-
-	format(line, sizeof(line), "changemode %s", msg);
-	SendRconCommand(line);
 	return 1;
 }
 
-dcmd_achangepw(const playerid, params[])
+acmd:achangepw(const playerid, const params[], const bool:help)
 {
-	new logininfo[E_LOGINDATA];
-	if(!GetPlayerData(gPlayerData[playerid][E_NAME], logininfo) || (strcmp(MD5_Hash(gServerData[E_DEFAULT_PW]), logininfo[E_LOGIN_PW], true) != 0 && LevelCheck(playerid, E_CHANGEPW_LEVEL))) return 1;
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) return 0;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /achangepw [new password]");
+		if(cmdchk(playerid, E_CHANGEPW_LEVEL)) {
+			SendClientMessage(playerid, COLOUR_HELP, "Changes your alar password");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "Changes your alar password, this command is only available if your password has not been changed yet");
+		}
+		return 1;
+	}
+
+	new logininfo[E_LOGINDATA];
+	if(!Admin_GetData(gAlarDB, gPlayerData[playerid][E_NAME], logininfo) || (!Hash_Compare(gServerData[E_DEFAULT_PW], logininfo[E_LOGIN_HASH]) && LevelCheck(playerid, E_CHANGEPW_LEVEL))) return 1;
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /achangepw [new password]");
 		return 1;
 	}
@@ -5252,40 +4013,356 @@ dcmd_achangepw(const playerid, params[])
 		return 1;
 	}
 
-	#if LOG_LINES > 0 && LOG_PAGES > 0
-		logininfo[E_LOGIN_PAGE] = gPlayerData[playerid][E_LOGKEYS] ? gPlayerData[playerid][E_LOG_PAGE] : -gPlayerData[playerid][E_LOG_PAGE] - 1;
-	#endif
-	logininfo[E_LOGIN_HUD] = gPlayerData[playerid][E_SHOWHUD];
-	strcpy(logininfo[E_LOGIN_PW], MD5_Hash(params), sizeof(SIZE_E_LOGINDATA[E_LOGIN_PW]));
-	SetPlayerData(gPlayerData[playerid][E_NAME], logininfo);
+	Admin_Password(gAlarDB, gPlayerData[playerid][E_NAME], Hash_String(params));
 
 	format(msg, sizeof(msg), "%s has changed their password", ReturnPlayerName(playerid));
 	LogAction(msg);
 	AddLogString(msg);
 	format(msg, sizeof(msg), "Your password has been set to \"%s\"", params);
 	SendClientMessage(playerid, COLOUR_ADMIN, msg);
-
 	return 1;
 }
 
-dcmd_acreate(const playerid, params[])
+acmd:aclearbans(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_CLEARBANS_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aclearbans");
+		SendClientMessage(playerid, COLOUR_HELP, "Removes all bans, suspensions and whilelisted names");
+		return 1;
+	}
+
+	Bans_Clear(gAlarDB);
+	Suspensions_Clear(gAlarDB);
+	Whitelist_Clear(gAlarDB);
+
+	LoopPlayers(i) {
+		if(gPlayerData[i][E_WHITELISTED]) {
+			gPlayerData[i][E_WHITELISTED] = false;
+		}
+	}
+
+	new msg[MAX_INPUT];
+	format(msg, sizeof(msg), "%s has cleared all bans", ReturnPlayerName(playerid));
+	LogAction(msg);
+	AddLogString(msg);
+	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+		SendClientMessageToAll(COLOUR_PLAYER, "All bans have been cleared");
+	} else {
+		SendClientMessageToAll(COLOUR_PLAYER, msg);
+	}
+	return 1;
+}
+
+acmd:aclearstatus(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_CLEARSTATUS_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aclearstatus");
+		SendClientMessage(playerid, COLOUR_HELP, "Removes all freezes/jails and mutes");
+		return 1;
+	}
+
+	Player_ClearAllStatus(gAlarDB);
+
+	LoopPlayers(i) {
+		new oldstatus = gPlayerData[i][E_STATE];
+
+		if(gPlayerData[i][E_STATE] & ADMIN_STATE_MUTED) {
+			gPlayerData[i][E_STATE] &= ~ADMIN_STATE_MUTED;
+			if(gPlayerData[i][E_UNMUTE]) {
+				KillTimer(gPlayerData[i][E_UNMUTE]);
+				gPlayerData[i][E_UNMUTE] = 0;
+			}
+			gPlayerData[i][E_MUTE_TIME] = 0;
+		}
+		if(gPlayerData[i][E_STATE] & ADMIN_STATE_FROZEN) {
+			TogglePlayerControllable(playerid, true);
+			gPlayerData[i][E_STATE] &= ~ADMIN_STATE_FROZEN;
+			if(gPlayerData[i][E_UNFREEZE]) {
+				KillTimer(gPlayerData[i][E_UNFREEZE]);
+				gPlayerData[i][E_UNFREEZE] = 0;
+			}
+			gPlayerData[i][E_FREEZE_TIME] = 0;
+		}
+		if(gPlayerData[i][E_STATE] & ADMIN_STATE_JAILED) {
+			gPlayerData[i][E_STATE] &= ~ADMIN_STATE_JAILED;
+
+			if(gPlayerData[i][E_HEALTH]) {
+				switch(gSpawnMethod) {
+					case SPAWN_ALAR_SPAWN: {
+						if(gSpawnSaves & INFOTYPE_POSITION) {
+							SetSpawnInfo(i, GetPlayerTeam(i), GetPlayerSkin(i), gPlayerData[i][E_POSX], gPlayerData[i][E_POSY], gPlayerData[i][E_POSZ], gPlayerData[i][E_ROT], 0, 0, 0, 0, 0, 0);
+						}
+						gPlayerData[i][E_SETINFO] = (INFOTYPE_VEHICLE | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+						SpawnPlayer(i);
+					}
+					case SPAWN_ALAR_TIMER: {
+						SpawnPlayer(i);
+						SetTimerEx("alar_setspawndata", 500, 0, "i", i);	// stops stupid gamemode spawn stuff
+					}
+					default: {
+						gPlayerData[i][E_SETINFO] = (INFOTYPE_VEHICLE | INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+						SpawnPlayer(i);
+					}
+				}
+			} else {
+				SetPlayerVirtualWorld(i, 0);
+				alar_OnPlayerWorldChange(i, 0);
+				SetPlayerInterior(i, 0);
+				SpawnPlayer(i);
+			}
+
+			if(gPlayerData[i][E_UNJAIL]) {
+				KillTimer(gPlayerData[i][E_UNJAIL]);
+				gPlayerData[i][E_UNJAIL] = 0;
+			}
+			gPlayerData[i][E_JAIL_TIME] = 0;
+		}
+
+		if(oldstatus != gPlayerData[i][E_STATE]) {
+			CallRemoteFunction("OnAdminStateChange", "iii", i, gPlayerData[i][E_STATE], oldstatus);
+			LoopPlayers(j) {
+				if(gPlayerData[j][E_SPECTATING] && gPlayerData[j][E_SPECID] == i) {
+					SpecHUDUpdate(j);
+				}
+			}
+		}
+	}
+
+	new msg[MAX_INPUT];
+	format(msg, sizeof(msg), "%s has unmuted/unfrozen/unjailed all players", ReturnPlayerName(playerid));
+	LogAction(msg);
+	AddLogString(msg);
+	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+		SendClientMessageToAll(COLOUR_PLAYER, "All players have been unmuted/unfrozen/unjailed");
+	} else {
+		SendClientMessageToAll(COLOUR_PLAYER, msg);
+	}
+	return 1;
+}
+
+acmd:aclr(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_CLR_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aclr");
+		SendClientMessage(playerid, COLOUR_HELP, "Clears the chatbox of all messages");
+		return 1;
+	}
+
+	for(new i; i < 100; i++) SendClientMessageToAll(COLOUR_MSG, " ");
+	#if CHATHISTORY_SIZE > 0
+		alar_ClearHistory();
+	#endif
+
+	new msg[MAX_INPUT];
+	format(msg, sizeof(msg), "%s cleared the chat window", ReturnPlayerName(playerid));
+	LogAction(msg);
+	AddLogString(msg);
+	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+		SendClientMessageToAll(COLOUR_PLAYER, "The chat window has been cleared");
+	} else {
+		SendClientMessageToAll(COLOUR_PLAYER, msg);
+	}
+	return 1;
+}
+
+acmd:acommands(const playerid, const params[], const bool:help)
+{
+	if(help) {
+		SendMessage(playerid, COLOUR_HELP, "USAGE: /acommands");
+		SendMessage(playerid, COLOUR_HELP, "Displays a list of all available commands");
+		return 1;
+	}
+
+	if(playerid == INVALID_PLAYER_ID) {
+		new msg[200] = "Admin Commands:";
+		if(gServerData[E_STORE_ALIASES]) {
+			if(gServerData[E_RCON_LEVEL] >= gServerData[E_ALIAS_LEVEL] && gServerData[E_ALIAS_LEVEL] > 0) {
+				strcat(msg, "\n  aalias");
+			}
+			if(gServerData[E_RCON_LEVEL] >= gServerData[E_ALIAS2_LEVEL] && gServerData[E_ALIAS2_LEVEL] > 0) {
+				strcat(msg, "\n  aalias2");
+			}
+			if(gServerData[E_RCON_LEVEL] >= gServerData[E_ALIAS3_LEVEL] && gServerData[E_ALIAS3_LEVEL] > 0) {
+				strcat(msg, "\n  aalias3");
+			}
+		}
+		strcat(msg, "\n  abancheck\n  adesynced\n  admins\n  afrozen");
+		if(gServerData[E_RCON_LEVEL] >= gServerData[E_INFO_LEVEL] && gServerData[E_INFO_LEVEL] > 0) {
+			strcat(msg, "\n  ainfo");
+		}
+		if(gServerData[E_RCON_LEVEL] >= gServerData[E_IP_LEVEL] && gServerData[E_IP_LEVEL] > 0) {
+			strcat(msg, "\n  aip");
+		}
+/*		if(gServerData[E_RCON_LEVEL] >= gServerData[E_IPUPDATE_LEVEL] && gServerData[E_IPUPDATE_LEVEL] > 0) {
+			strcat(msg, "\n  aipupdate");
+		}
+*/		strcat(msg, "\n  ajailed\n  amuted\n  apaused");
+		if(gServerData[E_ADMIN_PMS]) {
+			strcat(msg, "\n  apm");
+		}
+		if(gServerData[E_RCON_LEVEL] >= gServerData[E_RELOADDATA_LEVEL] && gServerData[E_RELOADDATA_LEVEL] > 0) {
+			strcat(msg, "\n  areloaddata");
+		}
+		if(gServerData[E_RCON_LEVEL] >= gServerData[E_SETPING_LEVEL] && gServerData[E_SETPING_LEVEL] > 0) {
+			strcat(msg, "\n  asetping");
+		}
+		strcat(msg, "\n  asinfo\n  aspectating\n  awarnings");
+
+		print(msg);
+	} else if(gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0) {
+		new msg[1000] = "ADMIN COMMANDS:";
+
+		if(gServerData[E_STORE_ALIASES]) {
+			if(cmdchk(playerid, E_ALIAS_LEVEL)) strcat(msg, " /aalias");
+			if(cmdchk(playerid, E_ALIAS2_LEVEL)) strcat(msg, " /aalias2");
+			if(cmdchk(playerid, E_ALIAS3_LEVEL)) strcat(msg, " /aalias3");
+		}
+		if(cmdchk(playerid, E_ARMOUR_LEVEL)) strcat(msg, " /aarmour");
+		if(cmdchk(playerid, E_ARMOURALL_LEVEL)) strcat(msg, " /aarmourall");
+		if(gServerData[E_AUTO_LOGIN] && gPlayerData[playerid][E_ADMINLEVEL] > 0) strcat(msg, " /aautologin");
+		if(cmdchk(playerid, E_BAN_LEVEL)) strcat(msg, " /aban");
+		if(cmdchk(playerid, E_BANCHECK_LEVEL)) strcat(msg, " /abancheck");
+		if(cmdchk(playerid, E_BAN_LEVEL)) strcat(msg, " /abanip /abanname");
+		if(cmdchk(playerid, E_BRING_LEVEL)) strcat(msg, " /abring");
+		if(cmdchk(playerid, E_CARCOLOUR_LEVEL)) strcat(msg, " /acarcolour");
+		if(cmdchk(playerid, E_CHANGEMODE_LEVEL)) strcat(msg, " /achangemode");
+		if(cmdchk(playerid, E_CHANGEPW_LEVEL)) strcat(msg, " /achangepw");
+		if(cmdchk(playerid, E_CLEARBANS_LEVEL)) strcat(msg, " /aclearbans");
+		if(cmdchk(playerid, E_CLEARSTATUS_LEVEL)) strcat(msg, " /aclearstatus");
+		if(cmdchk(playerid, E_CLR_LEVEL)) strcat(msg, " /aclr");
+		if(cmdchk(playerid, E_CREATE_LEVEL)) strcat(msg, " /acreate");
+		if(cmdchk(playerid, E_DESTROY_LEVEL)) strcat(msg, " /adestroy");
+		if(cmdchk(playerid, E_DESYNC_LEVEL)) strcat(msg, " /adesync");
+		strcat(msg, " /adesynced");
+		if(cmdchk(playerid, E_DROP_LEVEL)) strcat(msg, " /adrop");
+		strcat(msg, " /admins");
+		if(cmdchk(playerid, E_EJECT_LEVEL)) strcat(msg, " /aeject");
+		if(cmdchk(playerid, E_EJECTALL_LEVEL)) strcat(msg, " /aejectall");
+		if(cmdchk(playerid, E_EXPLODE_LEVEL)) strcat(msg, " /aexplode");
+		if(cmdchk(playerid, E_FLIP_LEVEL)) strcat(msg, " /aflip");
+		if(cmdchk(playerid, E_FREEZE_LEVEL)) strcat(msg, " /afreeze");
+		strcat(msg, " /afrozen");
+		if(cmdchk(playerid, E_GIVEALLCASH_LEVEL)) strcat(msg, " /agiveallcash");
+		if(cmdchk(playerid, E_GIVEALLWEAPON_LEVEL)) strcat(msg, " /agiveallweapon");
+		if(cmdchk(playerid, E_GIVECASH_LEVEL)) strcat(msg, " /agivecash");
+		if(cmdchk(playerid, E_GIVEWEAPON_LEVEL)) strcat(msg, " /agiveweapon");
+		if(cmdchk(playerid, E_GOTO_LEVEL)) strcat(msg, " /agoto");
+		if(cmdchk(playerid, E_GRAVITY_LEVEL)) strcat(msg, " /agravity");
+		strcat(msg, " /ahelp");
+		if(cmdchk(playerid, E_HEALALL_LEVEL)) strcat(msg, " /ahealall");
+		if(cmdchk(playerid, E_HEAL_LEVEL)) strcat(msg, " /aheal");
+		strcat(msg, " /ahide");
+		#if CHATHISTORY_SIZE > 0
+			if(gServerData[E_CHAT_HISTORY] > 0) strcat(msg, " /ahistory");
+		#endif
+		if(cmdchk(playerid, E_IMITATE_LEVEL)) strcat(msg, " /aimitate");
+		if(cmdchk(playerid, E_IMMUNE_LEVEL)) strcat(msg, " /aimmune");
+		if(cmdchk(playerid, E_INFO_LEVEL)) strcat(msg, " /ainfo");
+		if(cmdchk(playerid, E_INTERIOR_LEVEL)) strcat(msg, " /ainterior");
+		if(cmdchk(playerid, E_IP_LEVEL)) strcat(msg, " /aip");
+		if(cmdchk(playerid, E_IPUPDATE_LEVEL)) strcat(msg, " /aipupdate");
+		if(cmdchk(playerid, E_JAIL_LEVEL)) strcat(msg, " /ajail");
+		#if JOINMSG_LINES > 0
+			strcat(msg, " /ajailed /ajoins");
+		#else
+			strcat(msg, " /ajailed");
+		#endif
+		if(cmdchk(playerid, E_KICK_LEVEL)) strcat(msg, " /akick");
+		if(cmdchk(playerid, E_CHANGEMODE_LEVEL)) strcat(msg, " /alistmodes");
+		#if LOG_LINES > 0 && LOG_PAGES > 0
+			if(cmdchk(playerid, E_LOG_LEVEL)) strcat(msg, " /alog");
+		#endif
+		if(gPlayerData[playerid][E_ADMINLEVEL] > 0) strcat(msg, " /alogout");
+		if(cmdchk(playerid, E_MSG_LEVEL)) strcat(msg, " /amsg");
+		if(cmdchk(playerid, E_MUTE_LEVEL)) strcat(msg, " /amute");
+		strcat(msg, " /amuted");
+		if(gServerData[E_ADMIN_PMS]) strcat(msg, " /apm");
+		if(cmdchk(playerid, E_PUNCH_LEVEL)) strcat(msg, " /apunch");
+		if(cmdchk(playerid, E_REPAIR_LEVEL)) strcat(msg, " /ar");
+		if(cmdchk(playerid, E_RAPE_LEVEL)) strcat(msg, " /arape");
+		if(cmdchk(playerid, E_RELOADDATA_LEVEL)) strcat(msg, " /areloadata");
+		if(cmdchk(playerid, E_REMALLCASH_LEVEL)) strcat(msg, " /aremallcash");
+		if(cmdchk(playerid, E_REMALLWEAPONS_LEVEL)) strcat(msg, " /aremallweapons");
+		if(cmdchk(playerid, E_REMCASH_LEVEL)) strcat(msg, " /aremcash");
+		if(cmdchk(playerid, E_REMWEAPONS_LEVEL)) strcat(msg, " /aremweapons");
+		if(cmdchk(playerid, E_REPAIR_LEVEL)) strcat(msg, " /arepair");
+		if(cmdchk(playerid, E_RESPAWN_LEVEL)) strcat(msg, " /arespawn");
+		if(cmdchk(playerid, E_SAY_LEVEL)) strcat(msg, " /asay");
+		if(cmdchk(playerid, E_SERVERNAME_LEVEL)) strcat(msg, " /aservername");
+		if(cmdchk(playerid, E_SELECT_LEVEL)) strcat(msg, " /aselect");
+		if(cmdchk(playerid, E_SETADMIN_LEVEL)) strcat(msg, " /asetadmin");
+		if(cmdchk(playerid, E_SETNAME_LEVEL)) strcat(msg, " /asetname");
+		if(cmdchk(playerid, E_SETPING_LEVEL)) strcat(msg, " /asetping");
+		if(cmdchk(playerid, E_SHOUT_LEVEL)) strcat(msg, " /ashout");
+		strcat(msg, " /asinfo");
+		if(cmdchk(playerid, E_SLAP_LEVEL)) strcat(msg, " /aslap");
+		if(cmdchk(playerid, E_SLAY_LEVEL)) strcat(msg, " /aslay");
+		if(cmdchk(playerid, E_SPAWN_LEVEL)) strcat(msg, " /aspawn");
+		if(cmdchk(playerid, E_SPEC_LEVEL)) strcat(msg, " /aspec");
+		strcat(msg, " /aspectating");
+		if(cmdchk(playerid, E_SUSPEND_LEVEL)) strcat(msg, " /asuspend /asuspendip /asuspendname");
+		if(cmdchk(playerid, E_TIME_LEVEL)) strcat(msg, " /atime");
+		if(cmdchk(playerid, E_UNBAN_LEVEL)) strcat(msg, " /aunban");
+		if(cmdchk(playerid, E_UNDESYNC_LEVEL)) strcat(msg, " /aundesync");
+		if(cmdchk(playerid, E_UNFREEZE_LEVEL)) strcat(msg, " /aunfreeze");
+		strcat(msg, " /aunhide");
+		if(cmdchk(playerid, E_UNJAIL_LEVEL)) strcat(msg, " /aunjail");
+		if(cmdchk(playerid, E_UNMUTE_LEVEL)) strcat(msg, " /aunmute");
+		if(cmdchk(playerid, E_UNRAPE_LEVEL)) strcat(msg, " /aunrape");
+		if(cmdchk(playerid, E_UNSUSPEND_LEVEL)) strcat(msg, " /aunsuspend");
+		if(cmdchk(playerid, E_UNWARN_LEVEL)) strcat(msg, " /aunwarn");
+		if(cmdchk(playerid, E_UNWHITELIST_LEVEL)) strcat(msg, " /aunwhitelist");
+		if(cmdchk(playerid, E_WARN_LEVEL)) strcat(msg, " /awarn");
+		strcat(msg, " /awarnings");
+		if(cmdchk(playerid, E_WEATHER_LEVEL)) strcat(msg, " /aweather");
+		if(cmdchk(playerid, E_WHITELIST_LEVEL)) strcat(msg, " /awhitelist");
+		if(cmdchk(playerid, E_WORLD_LEVEL)) strcat(msg, " /aworld");
+		SendWrappedMessageToPlayer(playerid, COLOUR_HELP, msg);
+	} else {
+		new string[MAX_INPUT] = "ADMIN COMMANDS: /adesynced /admins /afrozen /ahelp";
+		#if CHATHISTORY_SIZE > 0
+			if(gServerData[E_CHAT_HISTORY] == 1) strcat(string, " /ahistory");
+		#endif
+		strcat(string, " /ajailed");
+		#if JOINMSG_LINES > 0
+			if(gServerData[E_JOIN_MSGS]) strcat(string, " /ajoins");
+		#endif
+		strcat(string, " /alogin");
+		if(gServerData[E_ALIAS_ADMINS]) strcat(string, " /aloginas");
+		strcat(string, " /amuted");
+		if(gServerData[E_ADMIN_PMS]) strcat(string, " /apm");
+		strcat(string, " /asinfo");
+		SendWrappedMessageToPlayer(playerid, COLOUR_HELP, string);
+	}
+	return 1;
+}
+
+acmd:acreate(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_CREATE_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /acreate [vehicle name] or [model ID]");
+		SendClientMessage(playerid, COLOUR_HELP, "Creates a vehicle");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /acreate [vehicle name] or [model ID]");
 		return 1;
 	}
-
 	if(!IsSpawned(playerid)) {
 		SendClientMessage(playerid, COLOUR_WARNING, "You must be spawned to use this command");
-		return 1;
-	}
-
-	new number, types;
-	GetServerVehicleInfo(number, types);
-	if(number >= MAX_VEHICLES) {
-		SendClientMessage(playerid, COLOUR_WARNING, "Vehicle limit reached");
 		return 1;
 	}
 
@@ -5313,11 +4390,6 @@ dcmd_acreate(const playerid, params[])
 		}
 	}
 
-	if(types >= MAX_VEHICLE_MODELS && !ExistsVehicleModel(modid)) {
-		SendClientMessage(playerid, COLOUR_WARNING, "Vehicle type limit reached");
-		return 1;
-	}
-
 	// cant get in rc cars (441, 464, 465, 501, 564, 594), trains (449, 569, 537, 538, 570, 590) are crashy
 	if(modid == 441 || modid == 464 || modid == 465 || modid == 501 || modid == 564 || modid == 594 || modid == 569 || modid == 449 || modid == 537 || modid == 538 || modid == 570 || modid == 590) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Unsupported vehicle");
@@ -5339,13 +4411,11 @@ dcmd_acreate(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "Vehicle limit reached");
 		return 1;
 	}
-
 	if(vid >= MAX_VEHICLES) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Unable to create vehicle");
 		DestroyVehicle(vid);
 		return 1;
 	}
-
 	if(gServerData[E_DEFAULT_NUM_PLATE][0] != '\0') {
 		SetVehicleNumberPlate(vid, ReturnNumPlateTxt(vid));
 		SetVehicleToRespawn(vid);
@@ -5366,43 +4436,32 @@ dcmd_acreate(const playerid, params[])
 	return 1;
 }
 
-dcmd_adestroy(const playerid, params[])
+acmd:adestroy(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_DESTROY_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
-		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /adestroy [vehicle ID] or \"all\"");
-		new start = INVALID_VEHICLE_ID, lastid = INVALID_VEHICLE_ID, string[512] = "Vehicle IDs:";
-		Bit_Loop(gCreatedVehicles, vid) {
-			if(start == INVALID_VEHICLE_ID) {
-				start = vid;
-			} else if(lastid != vid - 1) {
-				if(start == lastid) {
-					format(string, sizeof(string), "%s %i", string, start);
-				} else if(start == lastid - 1) {
-					format(string, sizeof(string), "%s %i %i", string, start, lastid);
-				} else {
-					format(string, sizeof(string), "%s %i-%i", string, start, lastid);
-				}
-				start = vid;
-			}
-			lastid = vid;
-		}
-		if(lastid != INVALID_VEHICLE_ID) {
-			if(start != INVALID_VEHICLE_ID) {
-				if(start == lastid) {
-					format(string, sizeof(string), "%s %i", string, lastid);
-				} else if(start == lastid - 1) {
-					format(string, sizeof(string), "%s %i %i", string, start, lastid);
-				} else {
-					format(string, sizeof(string), "%s %i-%i", string, start, lastid);
-				}
-			}
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /adestroy [vehicle ID] or \"all\" or \"visible\" or \"current\"");
+		SendClientMessage(playerid, COLOUR_HELP, "Destroys vehicles created with acreate");
+		return 1;
+	}
+
+	new string[512];
+	if(isnull(params)) {
+		if(Bit_GetStringFromArray(gCreatedVehicles, string)) {
+			strins(string, "Vehicle IDs: ", 0);
 			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+			#if VEHICLE_TAGS_TIME > 0 && VEHICLE_TAGS_NUMBER > 0
+				ShowVehicleTags(playerid);
+			#endif
+		} else {
+			SendClientMessage(playerid, COLOUR_ADMIN, "There are no admin created vehicles");
 		}
 		return 1;
 	}
 
+	new vid;
 	if(strcmp("all", params, true) == 0) {
 		new num;
 		Bit_Loop(gCreatedVehicles, i) {
@@ -5415,57 +4474,131 @@ dcmd_adestroy(const playerid, params[])
 		}
 		Bit_SetAll(gCreatedVehicles, 0, sizeof(gCreatedVehicles));
 
-		new msg[MAX_INPUT];
-		format(msg, sizeof(msg), "You have destroyed all %i created vehicles", num);
-		SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		format(string, sizeof(string), "You have destroyed all %i created vehicles", num);
+		SendClientMessage(playerid, COLOUR_ADMIN, string);
 
-		format(msg, sizeof(msg), "%s has destroyed all %i created vehicles", ReturnPlayerName(playerid), num);
-		LogAction(msg);
-		AddLogString(msg);
+		format(string, sizeof(string), "%s has destroyed all %i created vehicles", ReturnPlayerName(playerid), num);
+		LogAction(string);
+		AddLogString(string);
 		return 1;
-	}
+	} else if(strcmp("current", params, true) == 0) {
+		if(!IsPlayerInAnyVehicle(playerid)) {
+			SendClientMessage(playerid, COLOUR_WARNING, "You are not in a vehicle");
+			return 1;
+		}
+		vid = GetPlayerVehicleID(playerid);
+		if(!Bit_Get(gCreatedVehicles, vid)) {
+			SendClientMessage(playerid, COLOUR_WARNING, "You are not in an admin created vehicle");
+			return 1;
+		}
 
-	if(!isNumeric(params)) {
-		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /adestroy [vehicle ID] or \"all\"");
-		return 1;
-	}
+	} else if(strcmp("visible", params, true) == 0) {
+		new num,
+			Bit:destroyed[Bit_Bits(MAX_VEHICLES)];
+		Bit_Loop(gCreatedVehicles, i) {
+			if(IsVehicleStreamedIn(i, playerid)) {
+				Bit_Let(destroyed, i);
+				num++;
+				vid = i;
+			}
+		}
+		if(num == 0) {
+			SendClientMessage(playerid, COLOUR_WARNING, "There are no visible admin vehicles");
+			return 1;
+		} else if(num > 0) {
+			Bit_Loop(destroyed, i) {
+				DestroyVehicle(i);
+				Bit_Vet(gCreatedVehicles, i);
+			}
+			Bit_GetStringFromArray(destroyed, string);
+			strins(string, "You have destroyed vehicles ", 0);
+			SendClientMessage(playerid, COLOUR_ADMIN, string);
 
-	new vid = strval(params);
-	if(vid <= 0 || vid > MAX_VEHICLES) {
-		SendClientMessage(playerid, COLOUR_WARNING, "Invalid Vehicle ID");
-		return 1;
-	}
+			format(string, sizeof(string), "%s has destroyed %i created vehicles", ReturnPlayerName(playerid), num);
+			LogAction(string);
+			AddLogString(string);
+			return 1;
+		}
+	} else {
+		if(!isNumeric(params)) {
+			new num,
+				Bit:destroyed[Bit_Bits(MAX_VEHICLES)];
+			if(Bit_GetArrayFromString(destroyed, params)) {
+				Bit_Loop(destroyed, i) {
+					if(!Bit_Get(gCreatedVehicles, i)) {
+						Bit_Vet(destroyed, i);
+					} else {
+						num++;
+						vid = i;
+					}
+				}
+				if(num == 0) {
+					SendClientMessage(playerid, COLOUR_WARNING, "There are no admin vehicles in the list");
+					return 1;
+				} else if(num > 1) {
+					Bit_Loop(destroyed, i) {
+						DestroyVehicle(i);
+						Bit_Vet(gCreatedVehicles, i);
+					}
+					Bit_GetStringFromArray(destroyed, string);
+					strins(string, "You have destroyed vehicles ", 0);
+					SendClientMessage(playerid, COLOUR_ADMIN, string);
 
-	new msg[MAX_INPUT];
-	if(!Bit_Get(gCreatedVehicles, vid)) {
-		format(msg, sizeof(msg), "Vehicle ID %i is not an admin created vehicle", vid);
-		SendClientMessage(playerid, COLOUR_WARNING, msg);
-		return 1;
+					format(string, sizeof(string), "%s has destroyed %i created vehicles", ReturnPlayerName(playerid), num);
+					LogAction(string);
+					AddLogString(string);
+					return 1;
+				}
+			} else {
+
+				SendClientMessage(playerid, COLOUR_HELP, "USAGE: /adestroy [vehicle IDs] or \"all\" or \"visible\" or \"current\"");
+				return 1;
+			}
+		}
+
+		vid = strval(params);
+		if(vid <= 0 || vid > MAX_VEHICLES) {
+			SendClientMessage(playerid, COLOUR_WARNING, "Invalid Vehicle ID");
+			return 1;
+		}
+
+		if(!Bit_Get(gCreatedVehicles, vid)) {
+			format(string, sizeof(string), "Vehicle ID %i is not an admin created vehicle", vid);
+			SendClientMessage(playerid, COLOUR_WARNING, string);
+			return 1;
+		}
 	}
 
 	Bit_Vet(gCreatedVehicles, vid);
 	new model = GetVehicleModel(vid);
 	DestroyVehicle(vid);
 
-	format(msg, sizeof(msg), "You have destroyed vehicle %i(%s)", vid, ReturnVehicleName(model));
-	SendClientMessage(playerid, COLOUR_ADMIN, msg);
+	format(string, sizeof(string), "You have destroyed vehicle %i(%s)", vid, ReturnVehicleName(model));
+	SendClientMessage(playerid, COLOUR_ADMIN, string);
 
-	format(msg, sizeof(msg), "%s has destroyed vehicle %i(%s)", ReturnPlayerName(playerid), vid, ReturnVehicleName(model));
-	LogAction(msg);
-	AddLogString(msg);
+	format(string, sizeof(string), "%s has destroyed vehicle %i(%s)", ReturnPlayerName(playerid), vid, ReturnVehicleName(model));
+	LogAction(string);
+	AddLogString(string);
 	return 1;
 }
 
-dcmd_adesync(const playerid, params[])
+acmd:adesync(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_DESYNC_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /adesync [player] (seconds) (reason)");
+		SendClientMessage(playerid, COLOUR_HELP, "Desyncs a player to other people");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /adesync [player] (seconds) (reason)");
 		return 1;
 	}
 
-	new timestr[20], pid, reason[MAX_REASON];
+	new timestr[20], pid, reason[MAX_INPUT];
 	strscan(params, "pzz", pid, timestr, sizeof(timestr), reason, sizeof(reason));
 
 	if(pid == INVALID_PLAYER_ID) {
@@ -5476,18 +4609,20 @@ dcmd_adesync(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "You cannot desync yourself");
 		return 1;
 	}
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot desync NPCs");
+		return 1;
+	}
 
-	new msg[MAX_INPUT];
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+	new msg[MAX_INPUT * 2];
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot desync level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
 	new desynctime = strval(timestr);
-	if(0 < desynctime < MIN_ACTION_TIME) {
-		desynctime = MIN_ACTION_TIME;
-	}
+	if(0 < desynctime < MIN_ACTION_TIME) desynctime = MIN_ACTION_TIME;
 
 	if(gPlayerData[pid][E_STATE] & ADMIN_STATE_DESYNCED) {
 		if(gPlayerData[pid][E_DESYNC_TIME] == 0) {
@@ -5529,42 +4664,106 @@ dcmd_adesync(const playerid, params[])
 
 	if(desynctime != 0) {
 		if(reason[0] == '\0') {
-			reason = "No reason";
+			reason = DEFAULT_REASON;
 		}
-	}
-	else if(reason[0] != '\0') {
+	} else if(reason[0] != '\0') {
 		format(reason, sizeof(reason), "%s %s", timestr, reason);
-
-	}
-	else if(timestr[0] != '\0') {
+	} else if(timestr[0] != '\0') {
 		strcpy(reason, timestr);
-	}
-	else {
-		reason = "No reason";
+	} else {
+		reason = DEFAULT_REASON;
 	}
 
 	gPlayerData[pid][E_STATE] |= ADMIN_STATE_DESYNCED;
 
+	new shortreason[MAX_REASON];
+	if(reason[0]) {
+		strtruncate(shortreason, reason);
+	}
+
 	if(desynctime > 0) {
-		format(msg, sizeof(msg), "%s has been desynced by %s for %i seconds (%s)", ReturnPlayerName(pid), ReturnPlayerName(playerid), desynctime, reason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s has been desynced by %s for %i seconds (%s)", ReturnPlayerName(pid), ReturnPlayerName(playerid), desynctime, shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s has been desynced by %s for %i seconds", ReturnPlayerName(pid), ReturnPlayerName(playerid), desynctime);
+		}
 		LogAction(msg);
 		AddLogString(msg);
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			format(msg, sizeof(msg), "%s has been desynced for %i seconds (%s)", ReturnPlayerName(pid), desynctime, reason);
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s has been desynced for %i seconds (%s)", ReturnPlayerName(pid), desynctime, shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s has been desynced for %i seconds", ReturnPlayerName(pid), desynctime);
+			}
 		}
-		SendClientMessageToAll(COLOUR_WARNING, msg);
+		LoopPlayers(i) {
+			if(i != playerid && i != pid) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+			}
+		}
+		if(reason[0]) {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been desynced for %i seconds (%s)", desynctime, reason);
+			} else {
+				format(msg, sizeof(msg), "You have been desynced for %i seconds by %s (%s)", desynctime, ReturnPlayerName(playerid), reason);
+			}
+			SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "%s has been desynced for %i seconds (%s)", ReturnPlayerName(pid), desynctime, reason);
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		} else {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been desynced for %i seconds", desynctime);
+			} else {
+				format(msg, sizeof(msg), "You have been desynced for %i seconds by %s", desynctime, ReturnPlayerName(playerid));
+			}
+			SendClientMessage(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "%s has been desynced for %i seconds", ReturnPlayerName(pid), desynctime);
+			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		}
 		if(gPlayerData[pid][E_UNDESYNC]) KillTimer(gPlayerData[pid][E_UNDESYNC]);
 		gPlayerData[pid][E_UNDESYNC] = SetTimerEx("alar_undesync", desynctime * 1000, 0, "i", pid);
 		gPlayerData[pid][E_DESYNC_TIME] = gettime() + desynctime;
 	} else {
-		format(msg, sizeof(msg), "%s has been desynced by %s (%s)" , ReturnPlayerName(pid), ReturnPlayerName(playerid), reason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s has been desynced by %s (%s)" , ReturnPlayerName(pid), ReturnPlayerName(playerid), shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s has been desynced by %s" , ReturnPlayerName(pid), ReturnPlayerName(playerid));
+		}
 		LogAction(msg);
 		AddLogString(msg);
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			format(msg, sizeof(msg), "%s has been desynced (%s)", ReturnPlayerName(pid), reason);
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s has been desynced (%s)", ReturnPlayerName(pid), shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s has been desynced", ReturnPlayerName(pid));
+			}
 		}
-		SendClientMessageToAll(COLOUR_WARNING, msg);
+		LoopPlayers(i) {
+			if(i != playerid && i != pid) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+			}
+		}
+		if(reason[0]) {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been desynced (%s)", reason);
+			} else {
+				format(msg, sizeof(msg), "You have been desynced by %s (%s)", ReturnPlayerName(playerid), reason);
+			}
+			SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "%s has been desynced (%s)", ReturnPlayerName(pid), reason);
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		} else {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				msg = "You have been desynced";
+			} else {
+				format(msg, sizeof(msg), "You have been desynced by %s", ReturnPlayerName(playerid));
+			}
+			SendClientMessage(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "%s has been desynced", ReturnPlayerName(pid));
+			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		}
 	}
+
 	LoopPlayers(i) {
 		if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == pid) {
 			SpecHUDUpdate(i);
@@ -5574,11 +4773,86 @@ dcmd_adesync(const playerid, params[])
 	return 1;
 }
 
-dcmd_adrop(const playerid, params[])
+acmd:adesynced(const playerid, const params[], const bool:help)
 {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /adesynced");
+		SendClientMessage(playerid, COLOUR_HELP, "Displays a list of currently desynced players");
+		return 1;
+	}
+
+	new msg[512] = "Desynced players:";
+	LoopPlayers(i) {
+		if(gPlayerData[i][E_STATE] & ADMIN_STATE_DESYNCED) {
+			new time = gPlayerData[i][E_DESYNC_TIME] - gettime();
+			if(time > 3600) {
+				new hours = time / 3600,
+					minutes = (time - hours * 3600) / 60;
+				format(msg, sizeof(msg), "%s %s(%i:%02i:%02i)", msg, ReturnPlayerName(i), hours, minutes, time - hours * 3600 - minutes * 60);
+			} else if(time > 60) {
+				new minutes = time / 60;
+				format(msg, sizeof(msg), "%s %s(%i:%02i)", msg, ReturnPlayerName(i), minutes, time - minutes * 60);
+			} else if(time > 0) {
+				format(msg, sizeof(msg), "%s %s(%i)", msg, ReturnPlayerName(i), time);
+			} else {
+				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(i));
+			}
+		}
+	}
+	if(playerid == INVALID_PLAYER_ID) {
+		print(msg);
+	} else {
+		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
+	}
+	return 1;
+}
+
+acmd:admins(const playerid, const params[], const bool:help)
+{
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /admins");
+		if(gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0) {
+			SendWrappedMessageToPlayer(playerid, COLOUR_HELP, "Displays a list of online admins, ® appears for RCON admins, ° shows the admin is hidden from non-admins, and © appears for admins who are under logged in under a different name");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "Displays a list of online admins, ® appears for RCON admins");
+		}
+		return 1;
+	}
+
+	new msg[512] = "Admins online:";
+	LoopPlayers(i) {
+		if(gPlayerData[i][E_ADMINLEVEL] > 0) {
+			if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
+				new pname[MAX_PLAYER_NAME];
+				GetPlayerName(i, pname, sizeof(pname));
+				format(msg, sizeof(msg), "%s %s%s%s%s(%i)", msg, pname, gPlayerData[i][E_STATE] & ADMIN_STATE_HIDDEN ? ("°") : (""), IsPlayerAdmin(i) ? ("®") : (""), strcmp(pname, gPlayerData[i][E_NAME], true) ? ("©") : (""), gPlayerData[i][E_ADMINLEVEL]);
+			} else if(~gPlayerData[i][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "%s %s%s(%i)", msg, ReturnPlayerName(i), IsPlayerAdmin(i) ? ("®") : (""), gPlayerData[i][E_ADMINLEVEL]);
+			}
+		} else if(IsPlayerAdmin(i)) {
+			format(msg, sizeof(msg), "%s %s®", msg, ReturnPlayerName(i));
+		}
+	}
+	if(playerid == INVALID_PLAYER_ID) {
+		print(msg);
+	} else {
+		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
+	}
+	return 1;
+}
+
+acmd:adrop(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_DROP_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /adrop [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Drops a player, potentially removing them from their vehicle");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /adrop [player]");
 		return 1;
 	}
@@ -5588,8 +4862,12 @@ dcmd_adrop(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot drop NPCs");
+		return 1;
+	}
 
-	if((gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) && (pid != playerid)) {
+	if(pid != playerid && max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot drop level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
@@ -5633,11 +4911,18 @@ dcmd_adrop(const playerid, params[])
 	return 1;
 }
 
-dcmd_aeject(const playerid, params[])
+acmd:aeject(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_EJECT_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aeject [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Ejects a player from their vehicle");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aeject [player]");
 		return 1;
 	}
@@ -5648,11 +4933,17 @@ dcmd_aeject(const playerid, params[])
 		return 1;
 	}
 
-	if((gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) && (pid != playerid)) {
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot eject NPCs");
+		return 1;
+	}
+
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL]) && (pid != playerid)) {
 		format(msg, sizeof(msg), "You cannot eject level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
+
 	if(GetPlayerSpecialAction(pid) == SPECIAL_ACTION_USEJETPACK) {
 		if(playerid == pid) {
 			SendClientMessage(pid, COLOUR_WARNING, "You have ejected yourself");
@@ -5678,6 +4969,7 @@ dcmd_aeject(const playerid, params[])
 		}
 		return 1;
 	}
+
 	if(!IsPlayerInAnyVehicle(pid)) {
 		format(msg, sizeof(msg), "%s is not in a vehicle", ReturnPlayerName(pid));
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
@@ -5710,11 +5002,70 @@ dcmd_aeject(const playerid, params[])
 	return 1;
 }
 
-dcmd_aexplode(const playerid, params[])
+acmd:aejectall(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_EJECTALL_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aejectall");
+		SendClientMessage(playerid, COLOUR_HELP, "Ejects all players from their vehicle");
+		return 1;
+	}
+
+	new msg[MAX_INPUT], num_ejected, num_notejected;
+
+	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+		msg = "You have been ejected";
+	} else {
+		format(msg, sizeof(msg), "%s has ejected you", ReturnPlayerName(playerid));
+	}
+
+	LoopPlayers(i) {
+		if(!IsPlayerNPC(i)) {
+			if(max(gPlayerData[i][E_ADMINLEVEL], gPlayerData[i][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL]) && (i != playerid)) {
+				if(GetPlayerSpecialAction(i) == SPECIAL_ACTION_USEJETPACK || IsPlayerInAnyVehicle(i)) num_notejected++;
+			} else {
+				if(GetPlayerSpecialAction(i) == SPECIAL_ACTION_USEJETPACK) {
+					if(i != playerid) SendClientMessage(i, COLOUR_WARNING, msg);
+					ClearAnimations(i);
+					num_ejected++;
+				} else if(IsPlayerInAnyVehicle(i)){
+					if(i != playerid) SendClientMessage(i, COLOUR_WARNING, msg);
+					RemovePlayerFromVehicle(i);
+					num_ejected++;
+				}
+			}
+		}
+	}
+
+	if(num_ejected == 0) {
+		SendClientMessage(playerid, COLOUR_WARNING, "There is noone to eject");
+		return 1;
+	}
+
+	if(num_notejected > 0) format(msg, sizeof(msg), "You have ejected %i players (%i players not ejected)", num_ejected, num_notejected);
+	else format(msg, sizeof(msg), "You have ejected %i players", num_ejected);
+	SendClientMessage(playerid, COLOUR_ADMIN, msg);
+
+	format(msg, sizeof(msg), "%s has ejected everyone", ReturnPlayerName(playerid));
+	LogAction(msg);
+	AddLogString(msg);
+	return 1;
+}
+
+acmd:aexplode(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_EXPLODE_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aexplode [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Creates an explosion where a player is");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aexplode [player]");
 		return 1;
 	}
@@ -5725,7 +5076,7 @@ dcmd_aexplode(const playerid, params[])
 		return 1;
 	}
 
-	if((gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) && (pid != playerid)) {
+	if(pid != playerid && max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot explode level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
@@ -5764,12 +5115,19 @@ dcmd_aexplode(const playerid, params[])
 	return 1;
 }
 
-dcmd_aflip(const playerid, params[])
+acmd:aflip(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_FLIP_LEVEL)) return 1;
 
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aflip (player)");
+		SendClientMessage(playerid, COLOUR_HELP, "Flips a player's vehicle, or your own if no player is specified");
+		return 1;
+	}
+
 	new pid = INVALID_PLAYER_ID;
-	if(params[0] == '\0') {
+	if(isnull(params)) {
 		if(gPlayerData[playerid][E_SPECID] != INVALID_PLAYER_ID) {
 			pid = gPlayerData[playerid][E_SPECID];
 		} else if(IsPlayerInAnyVehicle(playerid)) {
@@ -5823,16 +5181,23 @@ dcmd_aflip(const playerid, params[])
 	return 1;
 }
 
-dcmd_afreeze(const playerid, params[])
+acmd:afreeze(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_FREEZE_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /afreeze [player] (seconds) (reason)");
+		SendClientMessage(playerid, COLOUR_HELP, "Freezes a player, permanently if no time is specified");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /afreeze [player] (seconds) (reason)");
 		return 1;
 	}
 
-	new timestr[20], pid, reason[MAX_REASON];
+	new timestr[20], pid, reason[MAX_INPUT];
 	strscan(params, "pzz", pid, timestr, sizeof(timestr), reason, sizeof(reason));
 
 	if(pid == INVALID_PLAYER_ID) {
@@ -5843,18 +5208,20 @@ dcmd_afreeze(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "You cannot freeze yourself");
 		return 1;
 	}
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot freeze NPCs");
+		return 1;
+	}
 
-	new msg[MAX_INPUT];
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+	new msg[MAX_INPUT * 2];
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot freeze level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
 	new freezetime = strval(timestr);
-	if(0 < freezetime < MIN_ACTION_TIME) {
-		freezetime = MIN_ACTION_TIME;
-	}
+	if(0 < freezetime < MIN_ACTION_TIME) freezetime = MIN_ACTION_TIME;
 
 	if(gPlayerData[pid][E_STATE] & ADMIN_STATE_FROZEN) {
 		if(gPlayerData[pid][E_FREEZE_TIME] == 0) {
@@ -5863,7 +5230,9 @@ dcmd_afreeze(const playerid, params[])
 				SendClientMessage(playerid, COLOUR_WARNING, msg);
 				return 1;
 			} else {
-				UnwriteAdminState(pid, ADMIN_STATE_FROZEN);
+				if(!IsPlayerNPC(pid)) {
+					Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_FROZEN, freezetime);
+				}
 				gPlayerData[pid][E_UNFREEZE] = SetTimerEx("alar_unfreeze", freezetime * 1000, 0, "i", pid);
 				gPlayerData[pid][E_FREEZE_TIME] = gettime() + freezetime;
 
@@ -5873,7 +5242,9 @@ dcmd_afreeze(const playerid, params[])
 			}
 		} else {
 			if(freezetime <= 0) {
-				WriteAdminState(pid, ADMIN_STATE_FROZEN);
+				if(!IsPlayerNPC(pid)) {
+					Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_FROZEN);
+				}
 				if(gPlayerData[pid][E_UNFREEZE]) KillTimer(gPlayerData[pid][E_UNFREEZE]);
 				gPlayerData[pid][E_FREEZE_TIME] = 0;
 
@@ -5883,6 +5254,9 @@ dcmd_afreeze(const playerid, params[])
 			} else {
 				new timediff = gettime() + freezetime - gPlayerData[pid][E_FREEZE_TIME];
 
+				if(!IsPlayerNPC(pid)) {
+					Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_FROZEN, freezetime);
+				}
 				if(gPlayerData[pid][E_UNFREEZE]) KillTimer(gPlayerData[pid][E_UNFREEZE]);
 				gPlayerData[pid][E_UNFREEZE] = SetTimerEx("alar_unfreeze", freezetime * 1000, 0, "i", pid);
 				gPlayerData[pid][E_FREEZE_TIME] += timediff;
@@ -5899,43 +5273,112 @@ dcmd_afreeze(const playerid, params[])
 
 	if(freezetime != 0) {
 		if(reason[0] == '\0') {
-			reason = "No reason";
+			reason = DEFAULT_REASON;
 		}
-	}
-	else if(reason[0] != '\0') {
+	} else if(reason[0] != '\0') {
 		format(reason, sizeof(reason), "%s %s", timestr, reason);
-	}
-	else if(timestr[0] != '\0') {
+	} else if(timestr[0] != '\0') {
 		strcpy(reason, timestr);
-	}
-	else {
-		reason = "No reason";
+	} else {
+		reason = DEFAULT_REASON;
 	}
 
 	gPlayerData[pid][E_STATE] |= ADMIN_STATE_FROZEN;
 	TogglePlayerControllable(pid, false);
 	SetCameraBehindPlayer(pid);
 
+	new shortreason[MAX_REASON];
+	if(reason[0]) {
+		strtruncate(shortreason, reason);
+	}
+
 	if(freezetime > 0) {
-		format(msg, sizeof(msg), "%s has been frozen by %s for %i seconds (%s)", ReturnPlayerName(pid), ReturnPlayerName(playerid), freezetime, reason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s has been frozen by %s for %i seconds (%s)", ReturnPlayerName(pid), ReturnPlayerName(playerid), freezetime, shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s has been frozen by %s for %i seconds", ReturnPlayerName(pid), ReturnPlayerName(playerid), freezetime);
+		}
 		LogAction(msg);
 		AddLogString(msg);
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			format(msg, sizeof(msg), "%s has been frozen for %i seconds (%s)", ReturnPlayerName(pid), freezetime, reason);
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s has been frozen for %i seconds (%s)", ReturnPlayerName(pid), freezetime, shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s has been frozen for %i seconds", ReturnPlayerName(pid), freezetime);
+			}
 		}
-		SendClientMessageToAll(COLOUR_WARNING, msg);
+		LoopPlayers(i) {
+			if(i != playerid && i != pid) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+			}
+		}
+		if(reason[0]) {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been frozen for %i seconds (%s)", freezetime, reason);
+			} else {
+				format(msg, sizeof(msg), "You have been frozen for %i seconds by %s (%s)", freezetime, ReturnPlayerName(playerid), reason);
+			}
+			SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have frozen %s for %i seconds (%s)", ReturnPlayerName(pid), freezetime, reason);
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		} else {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been frozen for %i seconds", freezetime);
+			} else {
+				format(msg, sizeof(msg), "You have been frozen for %i seconds by %s", freezetime, ReturnPlayerName(playerid));
+			}
+			SendClientMessage(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have frozen %s for %i seconds", ReturnPlayerName(pid), freezetime);
+			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		}
 		if(gPlayerData[pid][E_UNFREEZE]) KillTimer(gPlayerData[pid][E_UNFREEZE]);
+		if(!IsPlayerNPC(pid)) {
+			Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_FROZEN, freezetime);
+		}
 		gPlayerData[pid][E_UNFREEZE] = SetTimerEx("alar_unfreeze", freezetime * 1000, 0, "i", pid);
 		gPlayerData[pid][E_FREEZE_TIME] = gettime() + freezetime;
 	} else {
-		format(msg, sizeof(msg), "%s has been frozen by %s (%s)" , ReturnPlayerName(pid), ReturnPlayerName(playerid), reason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s has been frozen by %s (%s)" , ReturnPlayerName(pid), ReturnPlayerName(playerid), shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s has been frozen by %s" , ReturnPlayerName(pid), ReturnPlayerName(playerid));
+		}
 		LogAction(msg);
 		AddLogString(msg);
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			format(msg, sizeof(msg), "%s has been frozen (%s)" , ReturnPlayerName(pid), reason);
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s has been frozen (%s)", ReturnPlayerName(pid), shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s has been frozen", ReturnPlayerName(pid));
+			}
 		}
-		SendClientMessageToAll(COLOUR_WARNING, msg);
-		WriteAdminState(pid, ADMIN_STATE_FROZEN);
+		LoopPlayers(i) {
+			if(i != playerid && i != pid) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+			}
+		}
+		if(reason[0]) {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been frozen (%s)", reason);
+			} else {
+				format(msg, sizeof(msg), "You have been frozen by %s (%s)", ReturnPlayerName(playerid), reason);
+			}
+			SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have frozen %s (%s)", ReturnPlayerName(pid), reason);
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		} else {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				msg = "You have been frozen";
+			} else {
+				format(msg, sizeof(msg), "You have been frozen by %s", ReturnPlayerName(playerid));
+			}
+			SendClientMessage(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have frozen %s", ReturnPlayerName(pid));
+			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		}
+		if(!IsPlayerNPC(pid)) {
+			Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_FROZEN);
+		}
 	}
 	LoopPlayers(i) {
 		if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == pid) {
@@ -5946,11 +5389,52 @@ dcmd_afreeze(const playerid, params[])
 	return 1;
 }
 
-dcmd_agiveallcash(const playerid, params[])
+acmd:afrozen(const playerid, const params[], const bool:help)
 {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /afrozen");
+		SendClientMessage(playerid, COLOUR_HELP, "Displays a list of all currently frozen players");
+		return 1;
+	}
+
+	new msg[512]="Frozen players:";
+	LoopPlayers(i) {
+		if(gPlayerData[i][E_STATE] & ADMIN_STATE_FROZEN) {
+			new time = gPlayerData[i][E_FREEZE_TIME] - gettime();
+			if(time > 3600) {
+				new hours = time / 3600,
+					minutes = (time - hours * 3600) / 60;
+				format(msg, sizeof(msg), "%s %s(%i:%02i:%02i)", msg, ReturnPlayerName(i), hours, minutes, time - hours * 3600 - minutes * 60);
+			} else if(time > 60) {
+				new minutes = time / 60;
+				format(msg, sizeof(msg), "%s %s(%i:%02i)", msg, ReturnPlayerName(i), minutes, time - minutes * 60);
+			} else if(time > 0) {
+				format(msg, sizeof(msg), "%s %s(%i)", msg, ReturnPlayerName(i), time);
+			} else {
+				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(i));
+			}
+		}
+	}
+	if(playerid == INVALID_PLAYER_ID) {
+		print(msg);
+	} else {
+		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
+	}
+	return 1;
+}
+
+acmd:agiveallcash(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_GIVEALLCASH_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /agiveallcash [amount]");
+		SendClientMessage(playerid, COLOUR_HELP, "Gives all players the specified amount of money");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /agiveallcash [amount]");
 		return 1;
 	}
@@ -5977,11 +5461,18 @@ dcmd_agiveallcash(const playerid, params[])
 	return 1;
 }
 
-dcmd_agiveallweapon(const playerid, params[])
+acmd:agiveallweapon(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_GIVEALLWEAPON_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /agiveallweapon [weapon name] (ammo)");
+		SendClientMessage(playerid, COLOUR_HELP, "Gives all players the specified weapon");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /agiveallweapon [weapon name] (ammo)");
 		return 1;
 	}
@@ -6030,11 +5521,18 @@ dcmd_agiveallweapon(const playerid, params[])
 	}
 }
 
-dcmd_agivecash(const playerid, params[])
+acmd:agivecash(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_GIVECASH_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /agivecash [player] [amount]");
+		SendClientMessage(playerid, COLOUR_HELP, "Gives a player the specified amount of money");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /agivecash [player] [amount]");
 		return 1;
 	}
@@ -6046,7 +5544,6 @@ dcmd_agivecash(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
-
 	new amt = strval(tmp);
 	if(!isInteger(tmp) || amt > 10000000 || amt < -10000000) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid amount");
@@ -6082,11 +5579,17 @@ dcmd_agivecash(const playerid, params[])
 	}
 }
 
-dcmd_agiveweapon(const playerid, params[])
+acmd:agiveweapon(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_GIVEWEAPON_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /agiveweapon [player] [weapon name] (ammo)");
+		SendClientMessage(playerid, COLOUR_HELP, "Gives a player the specified weapon");
+		return 1;
+	}
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /agiveweapon [player] [weapon name] (ammo)");
 		return 1;
 	}
@@ -6167,26 +5670,44 @@ dcmd_agiveweapon(const playerid, params[])
 	}
 }
 
-dcmd_agoto(const playerid, params[])
+acmd:agoto(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_GOTO_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /agoto [player] (x offset) (y offset) (z offset)");
+		SendClientMessage(playerid, COLOUR_HELP, "Teleports you to a player with an optional offset");
+		return 1;
+	}
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /agoto [player] (x offset) (y offset) (z offset)");
 		return 1;
 	}
-
 	if(!IsSpawned(playerid) && !gPlayerData[playerid][E_SPECTATING]) {
 		SendClientMessage(playerid, COLOUR_WARNING, "You must be spawned to use this command");
 		return 1;
 	}
 
 	new pid,
-		Float:xoff,
-		Float:yoff = -1.0,
-		Float:zoff = 3.0;
+		bool:nooffset,
+		Float:xoff = FLOAT_NAN,
+		Float:yoff = FLOAT_NAN,// = -1.0,
+		Float:zoff = FLOAT_NAN;// = 3.0;
 
 	strscan(params, "pfff", pid, xoff, yoff, zoff);
+
+	if(xoff != xoff) {
+		nooffset = true;
+		xoff = 0.0;
+		yoff = -1.0;
+		zoff = 3.0;
+	} else if(yoff != yoff) {
+		yoff = -1.0;
+		zoff = 3.0;
+	} else if(zoff != zoff) {
+		zoff = 3.0;
+	}
 
 	if(pid == INVALID_PLAYER_ID) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
@@ -6325,7 +5846,7 @@ dcmd_agoto(const playerid, params[])
 			SetVehiclePos(vid, X + xoff, Y + yoff, Z + zoff);
 
 			LoopPlayers(i) {
-				if(i != pid && GetPlayerVehicleID(i) == vid) {
+				if(i != pid && IsPlayerInAnyVehicle(i) && GetPlayerVehicleID(i) == vid) {
 					SetPlayerInterior(i, interiorid);
 					SetPlayerVirtualWorld(i, worldid);
 					alar_OnPlayerWorldChange(i, worldid);
@@ -6338,8 +5859,25 @@ dcmd_agoto(const playerid, params[])
 				gPlayerData[playerid][E_INTERIOR] = GetPlayerInterior(pid);
 				gPlayerData[playerid][E_WORLD] = GetPlayerVirtualWorld(pid);
 
+				if(IsPlayerInAnyVehicle(pid) && nooffset) {
+					new vid = GetPlayerVehicleID(pid);
+					if((gPlayerData[playerid][E_SEATID] = GetVehicleFreeSeat(vid)) != INVALID_SEAT_ID) {
+						gPlayerData[playerid][E_VEHICLEID] = vid;
+					} else {
+						new trailerid = GetVehicleTrailer(vid);
+						for(; trailerid && trailerid != vid && (gPlayerData[playerid][E_SEATID] = GetVehicleFreeSeat(trailerid, false)) == INVALID_SEAT_ID;) {
+							trailerid = GetVehicleTrailer(trailerid);
+						}
+						if(gPlayerData[playerid][E_SEATID] != INVALID_SEAT_ID) {
+							gPlayerData[playerid][E_VEHICLEID] = trailerid;
+						} else {
+							gPlayerData[playerid][E_VEHICLEID] = INVALID_VEHICLE_ID;
+						}
+					}
+				}
+
 				SpawnUsingPosition(playerid);
-		} else if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK){
+		} else if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK) {
 			SetPlayerPos(playerid, X + xoff, Y + yoff, Z + zoff);
 			SetPlayerInterior(playerid, GetPlayerInterior(pid));
 			new worldid = GetPlayerVirtualWorld(pid);
@@ -6347,11 +5885,33 @@ dcmd_agoto(const playerid, params[])
 			alar_OnPlayerWorldChange(playerid, worldid);
 			SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USEJETPACK);
 		} else {
-			SetPlayerPos(playerid, X + xoff, Y + yoff, Z + zoff);
 			SetPlayerInterior(playerid, GetPlayerInterior(pid));
 			new worldid = GetPlayerVirtualWorld(pid);
-			SetPlayerVirtualWorld(playerid, worldid);
-			alar_OnPlayerWorldChange(playerid, worldid);
+			if(GetPlayerVirtualWorld(playerid) != worldid) {
+				SetPlayerVirtualWorld(playerid, worldid);
+				alar_OnPlayerWorldChange(playerid, worldid);
+			}
+			new bool:wasseated = false;
+			if(IsPlayerInAnyVehicle(pid) && nooffset) {
+				new vid = GetPlayerVehicleID(pid),
+					seatid = GetVehicleFreeSeat(vid);
+				if(seatid != INVALID_SEAT_ID) {
+					wasseated = true;
+					PutPlayerInVehicle(playerid, vid, seatid);
+				} else {
+					new trailerid = GetVehicleTrailer(vid);
+					for(; trailerid && trailerid != vid && (seatid = GetVehicleFreeSeat(trailerid, false)) == INVALID_SEAT_ID;) {
+						trailerid = GetVehicleTrailer(trailerid);
+					}
+					if(seatid != INVALID_SEAT_ID) {
+						wasseated = true;
+						PutPlayerInVehicle(playerid, trailerid, seatid);
+					}
+				}
+			}
+			if(!wasseated) {
+				SetPlayerPos(playerid, X + xoff, Y + yoff, Z + zoff);
+			}
 		}
 
 		format(msg, sizeof(msg), "%s has teleported to %s", ReturnPlayerName(playerid), playerid == pid ? ("themself") : ReturnPlayerName(pid));
@@ -6364,12 +5924,17 @@ dcmd_agoto(const playerid, params[])
 	return 1;
 }
 
-dcmd_agravity(const playerid, params[])
+acmd:agravity(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_GRAVITY_LEVEL)) return 1;
 
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /agravity [value] or \"default\"");
+		SendClientMessage(playerid, COLOUR_HELP, "Changes the server gravity, the default value is 0.008");
+		return 1;
+	}
 	new Float:gid = floatstr(params);
-
 	if(!isFloat(params)) {
 		if(params[0] != '\0' && strcmp("default", params, true) == 0) gid = 0.008;
 		else {
@@ -6377,12 +5942,10 @@ dcmd_agravity(const playerid, params[])
 			return 1;
 		}
 	}
-
 	if(gid < -1.0 || gid > 1.0) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Gravity must be between -1 and 1");
 		return 1;
 	}
-
 	SetGravity(gid);
 	new msg[MAX_INPUT];
 	format(msg, sizeof(msg), "%s has set the gravity to %f", ReturnPlayerName(playerid), gid);
@@ -6396,18 +5959,22 @@ dcmd_agravity(const playerid, params[])
 	return 1;
 }
 
-dcmd_aheal(const playerid, params[])
+acmd:aheal(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_HEAL_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aheal [player] (health)");
+		SendClientMessage(playerid, COLOUR_HELP, "Heals a player, can also be used to set a player's health");
+		return 1;
+	}
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aheal [player] (health)");
 		return 1;
 	}
-
 	new pid, Float:health;
 	strscan(params, "pf", pid, health);
-
 	if(pid == INVALID_PLAYER_ID) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
@@ -6444,22 +6011,22 @@ dcmd_aheal(const playerid, params[])
 	} else {
 		SetPlayerHealth(pid, health);
 		if(pid == playerid) {
-			format(msg, sizeof(msg), "You have set your health to %0.1f", health);
+			format(msg, sizeof(msg), "You have set your health to %0.0f", health);
 			SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-			format(msg, sizeof(msg), "%s has set their health to %0.1f", ReturnPlayerName(playerid), health);
+			format(msg, sizeof(msg), "%s has set their health to %0.0f", ReturnPlayerName(playerid), health);
 		} else {
 			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-				format(msg, sizeof(msg), "Your health has been set to %0.1f", health);
+				format(msg, sizeof(msg), "Your health has been set to %0.0f", health);
 			} else {
-				format(msg, sizeof(msg), "%s has set your health to %0.1f", ReturnPlayerName(playerid), health);
+				format(msg, sizeof(msg), "%s has set your health to %0.0f", ReturnPlayerName(playerid), health);
 			}
 			SendClientMessage(pid, COLOUR_PLAYER, msg);
 
-			format(msg, sizeof(msg), "You have set %s's health to %0.1f", ReturnPlayerName(pid), health);
+			format(msg, sizeof(msg), "You have set %s's health to %0.0f", ReturnPlayerName(pid), health);
 			SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-			format(msg, sizeof(msg), "%s has set %s's health to %0.1f", ReturnPlayerName(playerid), ReturnPlayerName(pid), health);
+			format(msg, sizeof(msg), "%s has set %s's health to %0.0f", ReturnPlayerName(playerid), ReturnPlayerName(pid), health);
 		}
 	}
 	LogAction(msg);
@@ -6467,9 +6034,16 @@ dcmd_aheal(const playerid, params[])
 	return 1;
 }
 
-dcmd_ahealall(const playerid, params[])
+acmd:ahealall(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_HEALALL_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ahealall (health)");
+		SendClientMessage(playerid, COLOUR_HELP, "Heals all players, can also be used to set the health of all players");
+		return 1;
+	}
 
 	new Float:health = floatstr(params);
 
@@ -6501,11 +6075,172 @@ dcmd_ahealall(const playerid, params[])
 	return 1;
 }
 
-dcmd_aimitate(const playerid, params[])
+acmd:ahelp(const playerid, const params[], const bool:help)
 {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ahelp (command)");
+		if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) {
+			SendClientMessage(playerid, COLOUR_HELP, "Displays help about a command");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "Displays help about a command, or useful information if no command is specified");
+		}
+		return 1;
+	}
+
+	if(!isnull(params)) {
+		if(!ACMD_FunctionHelp(playerid, params)) {
+			SendClientMessage(playerid, COLOUR_WARNING, "Unknown command, for a complete command list type /acommands");
+		}
+		return 1;
+	} else if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ahelp (command)");
+		return 1;
+	}
+
+	SendClientMessage(playerid, COLOUR_HELP, "For a complete command list type /acommands");
+	SendClientMessage(playerid, COLOUR_HELP, "A playerid or part of a player's name may be used for commands with [player] as a parameter");
+	if(gChatPrefix[0][E_CHAT_LEN]) {
+		new msg[MAX_INPUT];
+		format(msg, sizeof(msg), "Admin chat can be used by typing \"%s\"", gChatPrefix[0][E_CHAT_STRING]);
+		for(new i = 1; i < sizeof(gChatPrefix) && gChatPrefix[i][E_CHAT_STRING][0]; i++) {
+			if(i == sizeof(gChatPrefix) - 1 || gChatPrefix[i+1][E_CHAT_STRING] == '\0') {
+				format(msg, sizeof(msg), "%s or \"%s\"", msg, gChatPrefix[i][E_CHAT_STRING]);
+				break;
+			} else {
+				format(msg, sizeof(msg), "%s, \"%s\"", msg, gChatPrefix[i][E_CHAT_STRING]);
+			}
+		}
+		strcat(msg, " infront of your text");
+		SendClientMessage(playerid, COLOUR_HELP, msg);
+	}
+	if(cmdchk(playerid, E_SPEC_LEVEL)) {
+		SendClientMessage(playerid, COLOUR_HELP, "While spectating, you can switch players with " NAME_SPEC_LEFT " and " NAME_SPEC_RIGHT " keys, change mode with the " NAME_SPEC_MODE " key and exit with the " NAME_SPEC_EXIT " key");
+	}
+	if(cmdchk(playerid, E_TELE_LEVEL)) {
+		SendClientMessage(playerid, COLOUR_HELP, "You can teleport to anywhere by right clicking the ingame map");
+	}
+	#if LOG_LINES > 0 && LOG_PAGES > 0
+		if(cmdchk(playerid, E_LOG_LEVEL)) {
+			#if LOG_PAGES == 1
+				SendClientMessage(playerid, COLOUR_HELP, "By pressing the " NAME_LOG_DOWN " key, you can view the recent admin activity");
+			#else
+				SendClientMessage(playerid, COLOUR_HELP, "By pressing the " NAME_LOG_DOWN " and " NAME_LOG_UP " keys, you can view the recent admin activity");
+			#endif
+		}
+	#endif
+	return 1;
+}
+
+acmd:ahide(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ahide");
+		SendClientMessage(playerid, COLOUR_HELP, "Hides your admin status from non-admin players");
+		return 1;
+	}
+
+	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You are already hidden from the admin list");
+		return 1;
+	}
+
+	if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
+		Admin_Hidden(gAlarDB, gPlayerData[playerid][E_NAME], true);
+	}
+
+	gPlayerData[playerid][E_STATE] |= ADMIN_STATE_HIDDEN;
+	SendClientMessage(playerid, COLOUR_ADMIN, "You have been hidden from the admin list");
+	CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] & ~ADMIN_STATE_HIDDEN);
+	return 1;
+}
+
+#if CHATHISTORY_SIZE > 0
+	acmd:ahistory(const playerid, const params[], const bool:help)
+	{
+		if((gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) ? gServerData[E_CHAT_HISTORY] != 1 : gServerData[E_CHAT_HISTORY] <= 0) return 0;
+
+		if(help) {
+			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ahistory");
+			SendClientMessage(playerid, COLOUR_HELP, "Shows the previous chat messages");
+			return 1;
+		}
+
+		SendClientMessage(playerid, COLOUR_ADMIN, "/--------------        Chat History        --------------\\");
+		new originalcolour,
+			colour,
+			pname[MAX_PLAYER_NAME],
+			originalname[MAX_PLAYER_NAME];
+
+		GetPlayerName(playerid, pname, sizeof(pname));
+		GetPlayerName(playerid, originalname, sizeof(originalname));
+		originalcolour = colour = GetPlayerColor(playerid);
+
+		for(new i; i < sizeof(gChatHistory); i++) {
+			if(gChatHistory[i][E_HISTORY_MESSAGE][0] != '\0') {
+				if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0 ? ~gChatHistory[i][E_HISTORY_FLAGS] & HISTORY_ADMIN_ONLY : ~gChatHistory[i][E_HISTORY_FLAGS] & HISTORY_PLAYER_ONLY) {
+					if(gChatHistory[i][E_HISTORY_NAME][0] != '\0') {
+						if(strcmp(gChatHistory[i][E_HISTORY_NAME], pname)) {
+							new bool:skip = false;
+							LoopPlayers(j) {
+								if(strcmp(ReturnPlayerName(j), gChatHistory[i][E_HISTORY_NAME], true) == 0) {
+									new othercolour = GetPlayerColor(j);
+									if(othercolour != gChatHistory[i][E_HISTORY_COLOUR]) {
+										SetPlayerColor(j, gChatHistory[i][E_HISTORY_COLOUR]);
+										SendPlayerMessageToPlayer(playerid, j, gChatHistory[i][E_HISTORY_MESSAGE]);
+										SetPlayerColor(j, othercolour);
+									} else {
+										SendPlayerMessageToPlayer(playerid, j, gChatHistory[i][E_HISTORY_MESSAGE]);
+									}
+									skip = true;
+									break;
+								}
+							}
+							if(skip) continue;
+							strcpy(pname, gChatHistory[i][E_HISTORY_NAME]);
+							SetPlayerName(playerid, pname);
+						}
+						if(colour != gChatHistory[i][E_HISTORY_COLOUR]) {
+							SetPlayerColor(playerid, (colour = gChatHistory[i][E_HISTORY_COLOUR]));
+						}
+						SendPlayerMessageToPlayer(playerid, playerid, gChatHistory[i][E_HISTORY_MESSAGE]);
+					} else {
+						if(gChatHistory[i][E_HISTORY_FLAGS] & HISTORY_WRAPPED) {
+							SendWrappedMessageToPlayer(playerid, gChatHistory[i][E_HISTORY_COLOUR], gChatHistory[i][E_HISTORY_MESSAGE]);
+						} else {
+							SendClientMessage(playerid, gChatHistory[i][E_HISTORY_COLOUR], gChatHistory[i][E_HISTORY_MESSAGE]);
+						}
+					}
+				}
+			}
+		}
+
+		if(strcmp(pname, originalname)) {
+			SetPlayerName(playerid, originalname);
+		}
+
+		if(originalcolour != colour) {
+			SetPlayerColor(playerid, originalcolour);
+		}
+
+		SendClientMessage(playerid, COLOUR_ADMIN, "\\--------------        Chat History        --------------/");
+		return 1;
+	}
+#endif
+
+acmd:aimitate(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_IMITATE_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aimitate [player] [message]");
+		SendClientMessage(playerid, COLOUR_HELP, "Imitates a player's chat message");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aimitate [player] [message]");
 		return 1;
 	}
@@ -6516,19 +6251,23 @@ dcmd_aimitate(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
+
 	if(pid == playerid) {
 		SendClientMessage(playerid, COLOUR_WARNING, "You cannot imitate yourself");
 		return 1;
 	}
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot imitate level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
+
 	if(msg[0] == '\0') {
-		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aimitate [player] [message]");
+		SendClientMessage(playerid, COLOUR_WARNING, "Invalid message");
 		return 1;
 	}
+
 	SendPlayerMessageToAll(pid, msg);
 	#if CHATHISTORY_SIZE > 0
 		alar_AddMessageToHistory(ReturnPlayerName(pid), GetPlayerColor(pid), msg, 0);
@@ -6540,13 +6279,18 @@ dcmd_aimitate(const playerid, params[])
 	return 1;
 }
 
-dcmd_aimmune(const playerid, params[])
+acmd:aimmune(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_IMMUNE_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aimmune [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Toggles a player's immunity from the ping kicker");
+		return 1;
+	}
 
+	if(isnull(params)) {
 		new msg[512] = "Immune players:";
 		LoopPlayers(i) {
 			if(gPlayerData[i][E_IMMUNE]) {
@@ -6555,86 +6299,146 @@ dcmd_aimmune(const playerid, params[])
 		}
 		if(msg[15]) {
 			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		} else {
+			SendClientMessage(playerid, COLOUR_ADMIN, "None of the connected players are immune from the ping kicker");
 		}
 		return 1;
 	}
 
-	new pid = FindPlayer(params);
-	if(pid == INVALID_PLAYER_ID) {
-		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
+	new pid = INVALID_PLAYER_ID,
+		pname[MAX_PLAYER_NAME];
+	if(params[0] == '"') {
+		new len = strlen(params);
+		if(len > 2 && params[len-1] == '"') {
+			strmid(pname, params, 1, len-1);
+		}
+		if(!isValidName(pname)) {
+			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+			return 1;
+		}
+		LoopPlayers(i) {
+			if(strcmp(pname, ReturnPlayerName(i), true) == 0) {
+				GetPlayerName(i, pname, sizeof(pname));
+				pid = i;
+				break;
+			}
+		}
+	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID) {
+		GetPlayerName(pid, pname, sizeof(pname));
+	} else {
+		if(!isValidName(params)) {
+			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+			return 1;
+		}
+		strcpy(pname, params);
+	}
+
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "NPCs cannot be made immune");
 		return 1;
 	}
 
-	new msg[MAX_INPUT], filename[MAX_STRING];
-	format(filename, sizeof(filename), PLAYERFOLDER "settings_%s.ini", ReturnPlayerName(pid));
-	if(gPlayerData[pid][E_IMMUNE]) {
-		if(pid != playerid) {
-			format(msg, sizeof(msg), "%s's immunity from the ping kicker has been removed", ReturnPlayerName(pid));
+	new msg[MAX_INPUT],
+		bool:toggle;
+	if(pid == INVALID_PLAYER_ID) {
+		if((toggle = !Player_GetImmune(gAlarDB, pname))) {
+			format(msg, sizeof(msg), "You have made the name %s immune from the ping kicker", pname);
 			SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-				SendClientMessage(pid, COLOUR_WARNING, "Your immunity from the ping kicker has been removed");
-			} else {
-				format(msg, sizeof(msg), "%s has removed your immunity from the pingkicker", ReturnPlayerName(playerid));
-				SendClientMessage(pid, COLOUR_WARNING, msg);
-			}
-
-			format(msg, sizeof(msg), "%s has removed %s's immunity from the ping kicker", ReturnPlayerName(playerid), ReturnPlayerName(pid));
+			format(msg, sizeof(msg), "%s has made the name %s immune from the ping kicker", ReturnPlayerName(playerid), pname);
 		} else {
-			SendClientMessage(playerid, COLOUR_WARNING, "You have removed your immunity from the pingkicker");
-			format(msg, sizeof(msg), "%s has removed their immunity from the ping kicker", ReturnPlayerName(playerid));
+			format(msg, sizeof(msg), "You have removed the name %s's immunity from the ping kicker", pname);
+			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+
+			format(msg, sizeof(msg), "%s has removed the name %s's immunity from the ping kicker", ReturnPlayerName(playerid), pname);
 		}
 	} else {
-		dini_Create(filename);
-		if(pid != playerid) {
-			format(msg, sizeof(msg), "%s has been made immune from the ping kicker", ReturnPlayerName(pid));
-			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		if(gPlayerData[pid][E_IMMUNE]) {
+			if(pid != playerid) {
+				format(msg, sizeof(msg), "%s's immunity from the ping kicker has been removed", pname);
+				SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-				SendClientMessage(pid, COLOUR_PLAYER, "You have been made immune from the ping kicker");
+				if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+					SendClientMessage(pid, COLOUR_WARNING, "Your immunity from the ping kicker has been removed");
+				} else {
+					format(msg, sizeof(msg), "%s has removed your immunity from the pingkicker", ReturnPlayerName(playerid));
+					SendClientMessage(pid, COLOUR_WARNING, msg);
+				}
+
+				format(msg, sizeof(msg), "%s has removed %s's immunity from the ping kicker", ReturnPlayerName(playerid), pname);
 			} else {
-				format(msg, sizeof(msg), "%s has made you immune from the pingkicker", ReturnPlayerName(playerid));
-				SendClientMessage(pid, COLOUR_PLAYER, msg);
+				SendClientMessage(playerid, COLOUR_WARNING, "You have removed your immunity from the pingkicker");
+				format(msg, sizeof(msg), "%s has removed their immunity from the ping kicker", ReturnPlayerName(playerid));
 			}
-
-			format(msg, sizeof(msg), "%s has made %s immune from the ping kicker", ReturnPlayerName(playerid), ReturnPlayerName(pid));
 		} else {
-			SendClientMessage(playerid, COLOUR_ADMIN, "You have made yourself immune from the pingkicker");
-			format(msg, sizeof(msg), "%s has made themself immune from the ping kicker", ReturnPlayerName(playerid));
+			if(pid != playerid) {
+				format(msg, sizeof(msg), "%s has been made immune from the ping kicker", pname);
+				SendClientMessage(playerid, COLOUR_ADMIN, msg);
+
+				if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+					SendClientMessage(pid, COLOUR_PLAYER, "You have been made immune from the ping kicker");
+				} else {
+					format(msg, sizeof(msg), "%s has made you immune from the pingkicker", ReturnPlayerName(playerid));
+					SendClientMessage(pid, COLOUR_PLAYER, msg);
+				}
+
+				format(msg, sizeof(msg), "%s has made %s immune from the ping kicker", ReturnPlayerName(playerid), pname);
+			} else {
+				SendClientMessage(playerid, COLOUR_ADMIN, "You have made yourself immune from the pingkicker");
+				format(msg, sizeof(msg), "%s has made themself immune from the ping kicker", ReturnPlayerName(playerid));
+			}
 		}
+		gPlayerData[pid][E_IMMUNE] = toggle = !gPlayerData[pid][E_IMMUNE];
 	}
-	gPlayerData[pid][E_IMMUNE] = !gPlayerData[pid][E_IMMUNE];
-	dini_BoolSet(filename, "PingImmunity", gPlayerData[pid][E_IMMUNE]);
+
+	Player_SetImmune(gAlarDB, pname, toggle);
 
 	LogAction(msg);
 	AddLogString(msg);
 	return 1;
 }
 
-dcmd_ainfo(const playerid, params[])
+acmd:ainfo(const playerid, const params[], const bool:help)
 {
+	if(playerid != INVALID_PLAYER_ID && (playerid != INVALID_PLAYER_ID && gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0)) return 0;
 	if(LevelCheck(playerid, E_INFO_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		if(playerid == INVALID_PLAYER_ID) {
+			print("USAGE: /ainfo (player)");
+			print("Displays information about a player, or all players if no player is specified");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ainfo [player]");
+			SendClientMessage(playerid, COLOUR_HELP, "Displays information about a player");
+		}
+		return 1;
+	}
+
+	if(isnull(params)) {
 		if(playerid == INVALID_PLAYER_ID) {
 			print("ID   Name              Level  Ping  IP               Location");
 			LoopPlayers(i) {
 				printf("%3i  %16s  %5i %5i  %15s  %s", i, ReturnPlayerName(i), gPlayerData[i][E_ADMINLEVEL], GetAvePing(i), ReturnPlayerIP(i), ReturnCuntName(gPlayerData[i][E_COUNTRY]));
 			}
-		} else {
+			return 1;
+		} else if(!gPlayerData[playerid][E_SPECTATING] || gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID) {
 			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ainfo [player]");
+			return 1;
 		}
-		return 1;
 	}
 
-	new pid = FindPlayer(params);
+	new pid = isnull(params) ? gPlayerData[playerid][E_SPECID] : FindPlayer(params);
 	if(pid == INVALID_PLAYER_ID) {
 		SendMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
 
 	new Float:phel, Float:parm, msg[MAX_INPUT];
-	format(msg, sizeof(msg), "Name: %s  ID: %i  Level: %i", ReturnPlayerName(pid), pid, gPlayerData[pid][E_ADMINLEVEL]);
+	if(IsPlayerNPC(pid)) {
+		format(msg, sizeof(msg), "Name: %s [NPC]  ID: %i  Level: %i", ReturnPlayerName(pid), pid, gPlayerData[pid][E_ADMINLEVEL]);
+	} else {
+		format(msg, sizeof(msg), "Name: %s  ID: %i  Level: %i", ReturnPlayerName(pid), pid, gPlayerData[pid][E_ADMINLEVEL]);
+	}
 	if(gPlayerData[pid][E_ADMINLEVEL] > 0 && strcmp(gPlayerData[pid][E_NAME], ReturnPlayerName(pid), true)) {
 		format(msg, sizeof(msg), "%s  Admin name: %s", msg, gPlayerData[pid][E_NAME]);
 	}
@@ -6655,7 +6459,13 @@ dcmd_ainfo(const playerid, params[])
 	}
 	SendMessage(playerid, COLOUR_ADMIN, msg);
 
-	format(msg, sizeof(msg), "IP: %s  Location: %s  Ping: %i  Ave Ping: %i", ReturnPlayerIP(pid), ReturnCuntName(gPlayerData[pid][E_COUNTRY]), GetPlayerPing(pid), GetAvePing(pid));
+	format(msg, sizeof(msg), "    IP: %s  Location: %s  Ping: %i  Ave Ping: %i", ReturnPlayerIP(pid), ReturnCuntName(gPlayerData[pid][E_COUNTRY]), GetPlayerPing(pid), GetAvePing(pid));
+	if(gAlarDB) {
+		new warnings = Warnings_GetWarningCount(gAlarDB, ReturnPlayerName(pid), gServerData[E_WARN_TIMEOUT]);
+		if(warnings) {
+			format(msg, sizeof(msg), "%s  Warnings: %i", msg, warnings);
+		}
+	}
 	if(gPlayerData[pid][E_IMMUNE]) {
 		if(gPlayerData[pid][E_WHITELISTED]) strcat(msg, " (immune+whitelisted)");
 		else strcat(msg, " (immune)");
@@ -6667,55 +6477,59 @@ dcmd_ainfo(const playerid, params[])
 	GetPlayerHealth(pid, phel);
 	GetPlayerArmour(pid, parm);
 
-	new time = (GetTickCount() - gPlayerData[pid][E_LAST_ACTIVE]) / 1000;
+	new time = (GetTickCount() - gPlayerData[pid][E_LAST_UPDATE]) / 1000;
 	if(!IsSpawned(pid) || time <= 1) {
-		format(msg, sizeof(msg), "Health: %0.1f  Armour: %0.1f  Cash: %i", phel, parm, GetPlayerMoney(pid));
+		format(msg, sizeof(msg), "    Health: %0.1f  Armour: %0.1f  Cash: %i", phel, parm, GetPlayerMoney(pid));
 	} else if(time > 3600) {
 		new hours = time / 3600,
 			minutes = (time - hours * 3600) / 60;
-		format(msg, sizeof(msg), "Health: %0.1f  Armour: %0.1f  Cash: %i  Idle: %i hrs %i min %i sec", phel, parm, GetPlayerMoney(pid), hours, minutes, time - hours * 3600 - minutes * 60);
+		format(msg, sizeof(msg), "    Health: %0.1f  Armour: %0.1f  Cash: %i  Paused: %i hrs %i min %i sec", phel, parm, GetPlayerMoney(pid), hours, minutes, time - hours * 3600 - minutes * 60);
 	} else if(time > 60) {
 		new minutes = time / 60;
-		format(msg, sizeof(msg), "Health: %0.1f  Armour: %0.1f  Cash: %i  Idle: %i min %i sec", phel, parm, GetPlayerMoney(pid), minutes, time - minutes * 60);
+		format(msg, sizeof(msg), "    Health: %0.1f  Armour: %0.1f  Cash: %i  Paused: %i min %i sec", phel, parm, GetPlayerMoney(pid), minutes, time - minutes * 60);
 	} else {
-		format(msg, sizeof(msg), "Health: %0.1f  Armour: %0.1f  Cash: %i  Idle: %i sec", phel, parm, GetPlayerMoney(pid), time);
+		format(msg, sizeof(msg), "    Health: %0.1f  Armour: %0.1f  Cash: %i  Paused: %i sec", phel, parm, GetPlayerMoney(pid), time);
 	}
 	SendMessage(playerid, COLOUR_ADMIN, msg);
 
-	format(msg, sizeof(msg), "Position: %s  Interior: %i  World: %i", ReturnPlayerZone(pid), GetPlayerInterior(pid), GetPlayerVirtualWorld(pid));
+	format(msg, sizeof(msg), "    Position: %s  Interior: %i  World: %i", ReturnPlayerZone(pid), GetPlayerInterior(pid), GetPlayerVirtualWorld(pid));
 	SendMessage(playerid, COLOUR_ADMIN, msg);
 
 	if(IsPlayerInAnyVehicle(pid)) {
 		GetVehicleHealth(GetPlayerVehicleID(pid), phel);
-		format(msg, sizeof(msg), "Vehicle: %s  VehicleID: %i  Vehicle Health: %i", ReturnPlayerVehicleName(pid), GetPlayerVehicleID(pid), floatround(phel));
+		format(msg, sizeof(msg), "    Vehicle: %s  Seat: %i  VehicleID: %i  Vehicle Health: %i", ReturnPlayerVehicleName(pid), GetPlayerVehicleSeat(pid), GetPlayerVehicleID(pid), floatround(phel));
 		SendMessage(playerid, COLOUR_ADMIN, msg);
 	} else if(GetPlayerSpecialAction(pid) == SPECIAL_ACTION_USEJETPACK) {
-		SendMessage(playerid, COLOUR_ADMIN, "Vehicle: Jetpack");
+		SendMessage(playerid, COLOUR_ADMIN, "    Vehicle: Jetpack");
 	} else if(GetPlayerState(pid) == PLAYER_STATE_SPECTATING) {
 		if(gPlayerData[pid][E_SPECTATING]) {
 			if(gPlayerData[pid][E_SPECID] != INVALID_PLAYER_ID) {
-				format(msg, sizeof(msg), "Admin Spectating: %s(%i)", ReturnPlayerName(gPlayerData[pid][E_SPECID]), gPlayerData[pid][E_SPECID]);
+				format(msg, sizeof(msg), "    Admin Spectating: %s(%i)", ReturnPlayerName(gPlayerData[pid][E_SPECID]), gPlayerData[pid][E_SPECID]);
 				SendMessage(playerid, COLOUR_ADMIN, msg);
 			} else {
-				SendMessage(playerid, COLOUR_ADMIN, "Admin Spectating: Unknown");
+				SendMessage(playerid, COLOUR_ADMIN, "    Admin Spectating: Unknown");
 			}
 		} else {
 			if(gPlayerData[pid][E_SPECID] != INVALID_PLAYER_ID) {
-				format(msg, sizeof(msg), "Spectating: %s(%i)", ReturnPlayerName(gPlayerData[pid][E_SPECID]), gPlayerData[pid][E_SPECID]);
+				format(msg, sizeof(msg), "    Spectating: %s(%i)", ReturnPlayerName(gPlayerData[pid][E_SPECID]), gPlayerData[pid][E_SPECID]);
 				SendMessage(playerid, COLOUR_ADMIN, msg);
 			} else {
-				SendMessage(playerid, COLOUR_ADMIN, "Spectating: Unknown");
+				SendMessage(playerid, COLOUR_ADMIN, "    Spectating: Unknown");
 			}
 		}
+	} else if(GetPlayerSurfingVehicleID(pid) != INVALID_VEHICLE_ID) {
+		new vid = GetPlayerSurfingVehicleID(pid);
+		format(msg, sizeof(msg), "    Surfing: %s(%i)", ReturnVehicleName(GetVehicleModel(vid)), vid);
+		SendMessage(playerid, COLOUR_ADMIN, msg);
 	}
 
 	new pweapon,
 		pammo,
-		string[512] = "Weapons:";
+		string[512] = "    Weapons:";
 	for(new i; i < 13; i++) {
 		GetPlayerWeaponData(pid, i, pweapon, pammo);
 		if(pweapon != 0) {
-			if(pammo == 0xFFFF || pammo == 1) format(string, sizeof(string), "%s %s", string, ReturnWeaponName(pweapon));
+			if(pammo == -1) format(string, sizeof(string), "%s %s", string, ReturnWeaponName(pweapon));
 			else format(string, sizeof(string), "%s %s(%i)", string, ReturnWeaponName(pweapon), pammo);
 		}
 	}
@@ -6723,17 +6537,24 @@ dcmd_ainfo(const playerid, params[])
 		if(playerid == INVALID_PLAYER_ID) {
 			print(string);
 		} else {
-			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string, .prefix="        ");
 		}
 	}
 	return 1;
 }
 
-dcmd_ainterior(const playerid, params[])
+acmd:ainterior(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_INTERIOR_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ainterior [player] [interior]");
+		SendClientMessage(playerid, COLOUR_HELP, "Sets a player's interior");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ainterior [player] [interior]");
 		return 1;
 	}
@@ -6763,11 +6584,11 @@ dcmd_ainterior(const playerid, params[])
 
 	SetPlayerInterior(pid, interior);
 
-	new vid = GetPlayerVehicleID(pid);
-	if(vid) {
+	if(IsPlayerInAnyVehicle(pid)) {
+		new vid = GetPlayerVehicleID(pid);
 		LinkVehicleToInterior(vid, interior);
 		LoopPlayers(i) {
-			if(GetPlayerVehicleID(i) == vid) {
+			if(IsPlayerInAnyVehicle(i) && GetPlayerVehicleID(i) == vid) {
 				SetPlayerInterior(i, interior);
 			}
 		}
@@ -6797,65 +6618,145 @@ dcmd_ainterior(const playerid, params[])
 	return 1;
 }
 
-dcmd_aip(const playerid, params[])
+acmd:aip(const playerid, const params[], const bool:help)
 {
+	if(playerid != INVALID_PLAYER_ID && gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_IP_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
-		SendMessage(playerid, COLOUR_HELP, "USAGE: /aip [player] or [player name]");
+	if(help) {
+		if(gServerData[E_STORE_ALIASES]) {
+			SendMessage(playerid, COLOUR_HELP, "USAGE: /aip [player] or [player name]");
+			SendMessage(playerid, COLOUR_HELP, "Displays the current and previous IPs of a player");
+		} else {
+			SendMessage(playerid, COLOUR_HELP, "USAGE: /aip [player]");
+			SendMessage(playerid, COLOUR_HELP, "Displays the current IP and country of a player");
+		}
 		return 1;
 	}
 
-	new pid = FindPlayer(params), file[MAX_STRING], string[MAX_STRING];
-	if(pid == INVALID_PLAYER_ID) {
-		format(file, sizeof(file), ALIASFOLDER "name_%c.ini", toupper(params[0]));
-		if(dini_Get(file, params, string)) {
-			format(string, sizeof(string), "%s's IPs: %s", params, string);
-			if(playerid == INVALID_PLAYER_ID) {
-				print(string);
+	if(isnull(params) && (!gPlayerData[playerid][E_SPECTATING] || gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID)) {
+		if(gServerData[E_STORE_ALIASES]) {
+			SendMessage(playerid, COLOUR_HELP, "USAGE: /aip [player] or [player name]");
+		} else {
+			SendMessage(playerid, COLOUR_HELP, "USAGE: /aip [player]");
+		}
+		return 1;
+	}
+
+	new pid;
+	if(gServerData[E_STORE_ALIASES]) {
+		new string[512],
+			pname[MAX_PLAYER_NAME];
+		if((pid = isnull(params) ? gPlayerData[playerid][E_SPECID] : FindPlayer(params)) == INVALID_PLAYER_ID) {
+			if(params[0] == '"') {
+				new len = strlen(params);
+				if(len > 2 && params[len-1] == '"') {
+					strmid(pname, params, 1, len-1);
+				} else {
+					SendMessage(playerid, COLOUR_HELP, "USAGE: /aip [player] or [player name]");
+					return 1;
+				}
 			} else {
-				SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+				strcpy(pname, params);
 			}
+			if(!isValidName(pname)) {
+				SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+				return 1;
+			}
+			format(string, sizeof(string), "%s's IPs: ", params);
+			if(Alias_GetIPsFromName(gAlarDB, params, string)) {
+				if(playerid == INVALID_PLAYER_ID) {
+					print(string);
+				} else {
+					SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+				}
+				return 1;
+			}
+			SendMessage(playerid, COLOUR_WARNING, "Player not found");
 			return 1;
 		}
+
+		new pIP[MAX_IP];
+		GetPlayerIp(pid, pIP, sizeof(pIP));
+		GetPlayerName(pid, pname, sizeof(pname));
+		format(string, sizeof(string), "Player: %s  IP: %s  Location: %s", pname, pIP, ReturnCuntName(gPlayerData[pid][E_COUNTRY]));
+		SendMessage(playerid, COLOUR_ADMIN, string);
+
+		string = "Old IPs: ";
+		new number = Alias_GetIPsFromName(gAlarDB, pname, string);
+		if(number) {
+			if(number - strdelword(string, pIP) > 0) {
+				if(playerid == INVALID_PLAYER_ID) {
+					print(string);
+				} else {
+					SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+				}
+			}
+		}
+	} else if((pid = FindPlayer(params)) == INVALID_PLAYER_ID) {
 		SendMessage(playerid, COLOUR_WARNING, "Player not found");
-		return 1;
-	}
-
-	new pIP[MAX_IP], pname[MAX_PLAYER_NAME];
-	GetPlayerIp(pid, pIP, sizeof(pIP));
-	GetPlayerName(pid, pname, sizeof(pname));
-	format(string, sizeof(string), "Player: %s  IP: %s  Location: %s", pname, pIP, ReturnCuntName(gPlayerData[pid][E_COUNTRY]));
-	SendMessage(playerid, COLOUR_ADMIN, string);
-
-	format(file, sizeof(file), ALIASFOLDER "name_%c.ini", toupper(pname[0]));
-	dini_Get(file, pname, string);
-
-	new idx = strfindword(string, pIP);
-	if(idx != -1) {
-		strdel(string, idx, idx + strlen(pIP) + 1);
-	}
-
-	if(string[0] == '\0') return 1;
-	format(string, sizeof(string), "Old IPs: %s", string);
-	if(playerid == INVALID_PLAYER_ID) {
-		print(string);
 	} else {
-		SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+		new string[MAX_INPUT];
+		format(string, sizeof(string), "Player: %s  IP: %s  Location: %s", ReturnPlayerName(pid), ReturnPlayerIP(pid), ReturnCuntName(gPlayerData[pid][E_COUNTRY]));
+		SendMessage(playerid, COLOUR_ADMIN, string);
 	}
+
 	return 1;
 }
 
-dcmd_ajail(const playerid, params[])
+acmd:aipupdate(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_IPUPDATE_LEVEL)) return 1;
+
+	if(help) {
+		SendMessage(playerid, COLOUR_HELP, "USAGE: /aipupdate");
+		SendMessage(playerid, COLOUR_HELP, "Updates the IP to Country files from a CVS file (may cause server lag)");
+		return 1;
+	}
+
+	db_free_result(db_query(gAlarDB, "BEGIN TRANSACTION"));
+
+	new counter = CreateCuntDefinitions(gAlarDB);
+
+	if(counter) {
+		new msg[MAX_INPUT];
+		format(msg, sizeof(msg), "You have updated the IP definitions (%i entries written)", counter);
+		SendMessage(playerid, COLOUR_ADMIN, msg);
+
+		format(msg, sizeof(msg), "%s has updated the IP definitions (%i entries written)", ReturnPlayerName(playerid), counter);
+		LogAction(msg);
+
+		format(msg, sizeof(msg), "%s has updated the IP definitions", ReturnPlayerName(playerid));
+		AddLogString(msg);
+
+		LoopPlayers(i) {
+			strcpy(gPlayerData[i][E_COUNTRY], ReturnCuntCode(gAlarDB, ReturnPlayerIP(i)), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
+		}
+	} else {
+		SendMessage(playerid, COLOUR_WARNING, "IP definitions update failed");
+	}
+	db_free_result(db_query(gAlarDB, "END TRANSACTION"));
+	return 1;
+}
+
+acmd:ajail(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_JAIL_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ajail [player] (seconds) (reason)");
+		SendClientMessage(playerid, COLOUR_HELP, "Jails a player, permanently if no time is specified");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ajail [player] (seconds) (reason)");
 		return 1;
 	}
 
-	new timestr[20], pid, reason[MAX_REASON];
+	new timestr[20], pid, reason[MAX_INPUT];
 	strscan(params, "pzz", pid, timestr, sizeof(timestr), reason, sizeof(reason));
 
 	if(pid == INVALID_PLAYER_ID) {
@@ -6866,18 +6767,20 @@ dcmd_ajail(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "You cannot jail yourself");
 		return 1;
 	}
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot jail NPCs");
+		return 1;
+	}
 
-	new msg[MAX_INPUT];
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+	new msg[MAX_INPUT * 2];
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot jail level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
 	new jailtime = strval(timestr);
-	if(0 < jailtime < MIN_ACTION_TIME) {
-		jailtime = MIN_ACTION_TIME;
-	}
+	if(0 < jailtime < MIN_ACTION_TIME) jailtime = MIN_ACTION_TIME;
 
 	if(gPlayerData[pid][E_STATE] & ADMIN_STATE_JAILED) {
 		if(gPlayerData[pid][E_JAIL_TIME] == 0) {
@@ -6886,7 +6789,9 @@ dcmd_ajail(const playerid, params[])
 				SendClientMessage(playerid, COLOUR_WARNING, msg);
 				return 1;
 			} else {
-				UnwriteAdminState(pid, ADMIN_STATE_JAILED);
+				if(!IsPlayerNPC(pid)) {
+					Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_JAILED, jailtime);
+				}
 				gPlayerData[pid][E_UNJAIL] = SetTimerEx("alar_unjail", jailtime * 1000, 0, "i", pid);
 				gPlayerData[pid][E_JAIL_TIME] = gettime() + jailtime;
 
@@ -6896,7 +6801,9 @@ dcmd_ajail(const playerid, params[])
 			}
 		} else {
 			if(jailtime <= 0) {
-				WriteAdminState(pid, ADMIN_STATE_JAILED);
+				if(!IsPlayerNPC(pid)) {
+					Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_JAILED);
+				}
 				if(gPlayerData[pid][E_UNJAIL]) KillTimer(gPlayerData[pid][E_UNJAIL]);
 				gPlayerData[pid][E_JAIL_TIME] = 0;
 
@@ -6906,6 +6813,9 @@ dcmd_ajail(const playerid, params[])
 			} else {
 				new timediff = gettime() + jailtime - gPlayerData[pid][E_JAIL_TIME];
 
+				if(!IsPlayerNPC(pid)) {
+					Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_JAILED, jailtime);
+				}
 				if(gPlayerData[pid][E_UNJAIL]) KillTimer(gPlayerData[pid][E_UNJAIL]);
 				gPlayerData[pid][E_UNJAIL] = SetTimerEx("alar_unjail", jailtime * 1000, 0, "i", pid);
 				gPlayerData[pid][E_JAIL_TIME] += timediff;
@@ -6922,17 +6832,14 @@ dcmd_ajail(const playerid, params[])
 
 	if(jailtime != 0) {
 		if(reason[0] == '\0') {
-			reason = "No reason";
+			reason = DEFAULT_REASON;
 		}
-	}
-	else if(reason[0] != '\0') {
+	} else if(reason[0] != '\0') {
 		format(reason, sizeof(reason), "%s %s", timestr, reason);
-	}
-	else if(timestr[0] != '\0') {
+	} else if(timestr[0] != '\0') {
 		strcpy(reason, timestr);
-	}
-	else {
-		reason = "No reason";
+	} else {
+		reason = DEFAULT_REASON;
 	}
 
 	gPlayerData[pid][E_STATE] |= ADMIN_STATE_JAILED;
@@ -6946,33 +6853,105 @@ dcmd_ajail(const playerid, params[])
 		SetPlayerFacingAngle(pid, 0.0);
 		SetPlayerInterior(pid, 3);
 	} else if(GetPlayerState(pid) == PLAYER_STATE_SPECTATING) {
-		if(gPlayerData[pid][E_SPECTATING] && gPlayerData[pid][E_SPECID] != INVALID_PLAYER_ID) ClearSpawnData(pid);
+		//if(gPlayerData[pid][E_SPECTATING]) ClearSpawnData(pid);
 		TogglePlayerSpectating(pid, false);
-		SetTimerEx("alar_jailplayer", 500, 0, "i", pid);
+		//SetTimerEx("alar_jailplayer", 500, 0, "i", pid);
+	}
+
+	new shortreason[MAX_REASON];
+	if(reason[0]) {
+		strtruncate(shortreason, reason);
 	}
 
 	if(jailtime > 0) {
-		format(msg, sizeof(msg), "%s has been jailed by %s for %i seconds (%s)", ReturnPlayerName(pid), ReturnPlayerName(playerid), jailtime, reason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s has been jailed by %s for %i seconds (%s)", ReturnPlayerName(pid), ReturnPlayerName(playerid), jailtime, shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s has been jailed by %s for %i seconds", ReturnPlayerName(pid), ReturnPlayerName(playerid), jailtime);
+		}
 		LogAction(msg);
 		AddLogString(msg);
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			format(msg, sizeof(msg), "%s has been jailed for %i seconds (%s)", ReturnPlayerName(pid), jailtime, reason);
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s has been jailed for %i seconds (%s)", ReturnPlayerName(pid), jailtime, shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s has been jailed for %i seconds", ReturnPlayerName(pid), jailtime);
+			}
 		}
-		SendClientMessageToAll(COLOUR_WARNING, msg);
+		LoopPlayers(i) {
+			if(i != playerid && i != pid) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+			}
+		}
+		if(reason[0]) {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been jailed for %i seconds (%s)", jailtime, reason);
+			} else {
+				format(msg, sizeof(msg), "You have been jailed for %i seconds by %s (%s)", jailtime, ReturnPlayerName(playerid), reason);
+			}
+			SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have jailed %s for %i seconds (%s)", ReturnPlayerName(pid), jailtime, reason);
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		} else {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been jailed for %i seconds", jailtime);
+			} else {
+				format(msg, sizeof(msg), "You have been jailed for %i seconds by %s", jailtime, ReturnPlayerName(playerid));
+			}
+			SendClientMessage(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have jailed %s for %i seconds", ReturnPlayerName(pid), jailtime);
+			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		}
+		if(!IsPlayerNPC(pid)) {
+			Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_JAILED, jailtime);
+		}
 		if(gPlayerData[pid][E_UNJAIL]) KillTimer(gPlayerData[pid][E_UNJAIL]);
 		gPlayerData[pid][E_UNJAIL] = SetTimerEx("alar_unjail", jailtime * 1000, 0, "i", pid);
 		gPlayerData[pid][E_JAIL_TIME] = gettime() + jailtime;
 	} else {
-		format(msg, sizeof(msg), "%s has been jailed by %s (%s)" , ReturnPlayerName(pid), ReturnPlayerName(playerid), reason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s has been jailed by %s (%s)" , ReturnPlayerName(pid), ReturnPlayerName(playerid), shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s has been jailed by %s" , ReturnPlayerName(pid), ReturnPlayerName(playerid));
+		}
 		LogAction(msg);
 		AddLogString(msg);
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			format(msg, sizeof(msg), "%s has been jailed (%s)" , ReturnPlayerName(pid), reason);
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s has been jailed (%s)", ReturnPlayerName(pid), shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s has been jailed", ReturnPlayerName(pid));
+			}
 		}
-		SendClientMessageToAll(COLOUR_WARNING, msg);
-
-		WriteAdminState(pid, ADMIN_STATE_JAILED);
+		LoopPlayers(i) {
+			if(i != playerid && i != pid) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+			}
+		}
+		if(reason[0]) {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been jailed (%s)", reason);
+			} else {
+				format(msg, sizeof(msg), "You have been jailed by %s (%s)", ReturnPlayerName(playerid), reason);
+			}
+			SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have jailed %s (%s)", ReturnPlayerName(pid), reason);
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		} else {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				msg = "You have been jailed";
+			} else {
+				format(msg, sizeof(msg), "You have been jailed by %s", ReturnPlayerName(playerid));
+			}
+			SendClientMessage(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have jailed %s", ReturnPlayerName(pid));
+			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		}
+		if(!IsPlayerNPC(pid)) {
+			Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_JAILED);
+		}
 	}
+
 	LoopPlayers(i) {
 		if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == pid) {
 			SpecHUDUpdate(i);
@@ -6982,42 +6961,229 @@ dcmd_ajail(const playerid, params[])
 	return 1;
 }
 
-dcmd_akick(const playerid, params[])
+acmd:ajailed(const playerid, const params[], const bool:help)
 {
-	if(LevelCheck(playerid, E_KICK_LEVEL)) return 1;
-
-	if(params[0] == '\0') {
-		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /akick [player]");
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ajailed");
+		SendClientMessage(playerid, COLOUR_HELP, "Displays a list of all currently jailed players");
 		return 1;
 	}
-	new reason[MAX_REASON] = "No reason", pid;
-	strscan(params, "pz", pid, reason, sizeof(reason));
 
-	if(pid == INVALID_PLAYER_ID) {
+	new msg[512] = "Jailed players:";
+	LoopPlayers(i) {
+		if(gPlayerData[i][E_STATE] & ADMIN_STATE_JAILED) {
+			new time = gPlayerData[i][E_JAIL_TIME] - gettime();
+			if(time > 3600) {
+				new hours = time / 3600,
+					minutes = (time - hours * 3600) / 60;
+				format(msg, sizeof(msg), "%s %s(%i:%02i:%02i)", msg, ReturnPlayerName(i), hours, minutes, time - hours * 3600 - minutes * 60);
+			} else if(time > 60) {
+				new minutes = time / 60;
+				format(msg, sizeof(msg), "%s %s(%i:%02i)", msg, ReturnPlayerName(i), minutes, time - minutes * 60);
+			} else if(time > 0) {
+				format(msg, sizeof(msg), "%s %s(%i)", msg, ReturnPlayerName(i), time);
+			} else {
+				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(i));
+			}
+		}
+	}
+	if(playerid == INVALID_PLAYER_ID) {
+		print(msg);
+	} else {
+		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
+	}
+	return 1;
+}
+
+#if JOINMSG_LINES > 0
+	acmd:ajoins(const playerid, const params[], const bool:help)
+	{
+		if(!gServerData[E_JOIN_MSGS] || IsPlayerNPC(playerid)) return 0;
+
+		if(help) {
+			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ajoins");
+			SendClientMessage(playerid, COLOUR_HELP, "Toggles the join messages between textdraws and chatbox messages");
+			return 1;
+		}
+
+		if(!gPlayerData[playerid][E_JOINTEXT]) {
+			for(new i; i < sizeof(gJoinMessage); i++) {
+				TextDrawHideForPlayer(playerid, gJoinMessage[i][E_TEXTBOX_TEXT]);
+			}
+			SendClientMessage(playerid, COLOUR_PLAYER, "Connect/Disconnect messages will now be shown in chat");
+		} else {
+			for(new i; i < sizeof(gJoinMessage); i++) {
+				TextDrawShowForPlayer(playerid, gJoinMessage[i][E_TEXTBOX_TEXT]);
+			}
+			SendClientMessage(playerid, COLOUR_PLAYER, "Connect/Disconnect messages will now be shown outside of chat");
+		}
+
+		gPlayerData[playerid][E_JOINTEXT] = !gPlayerData[playerid][E_JOINTEXT];
+
+		Player_SetJointext(gAlarDB, ReturnPlayerName(playerid), gPlayerData[playerid][E_JOINTEXT]);
+		return 1;
+	}
+#endif
+
+acmd:akick(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_KICK_LEVEL)) return 1;
+
+	if(help) {
+		if(cmdchk(playerid, E_WILDKICK_LEVEL)) {
+			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /akick [player] or [player name] or [IP]");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /akick [player] or [IP]");
+		}
+		SendClientMessage(playerid, COLOUR_HELP, "Kicks a player(s) from the server");
+		return 1;
+	}
+
+	if(isnull(params)) {
+		if(cmdchk(playerid, E_WILDKICK_LEVEL)) {
+			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /akick [player] or [player name] or [IP]");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /akick [player] or [IP]");
+		}
+		return 1;
+	}
+
+	new reason[MAX_INPUT] = DEFAULT_REASON, target[MAX_PLAYER_NAME+MAX_IP];
+	strscan(params, "sz", target, sizeof(target), reason, sizeof(reason));
+
+	new pid;
+	if(target[0] == '"' || (pid = FindPlayer(target)) == INVALID_PLAYER_ID) {
+		if(target[0] != '"') {
+			if(IPisvalid(target, cmdchk(playerid, E_RANGEKICK_LEVEL))) {
+				new count,
+					kickstring[MAX_INPUT * 2],
+					msg[MAX_INPUT];
+				if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+					if(reason[0]) {
+						format(kickstring, sizeof(kickstring), "You have been kicked from the server (%s)", reason);
+					} else {
+						kickstring = "You have been kicked from the server";
+					}
+				} else {
+					if(reason[0]) {
+						format(kickstring, sizeof(kickstring), "You have been kicked from the server by %s (%s)", ReturnPlayerName(playerid), reason);
+					} else {
+						format(kickstring, sizeof(kickstring), "You have been kicked from the server by %s", ReturnPlayerName(playerid));
+					}
+				}
+				strtruncate(reason, reason, MAX_REASON);
+				LoopPlayers(i) {
+					if(max(gPlayerData[i][E_ADMINLEVEL], gPlayerData[i][E_RCONLEVEL]) < max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL]) && IPcompare(target, ReturnPlayerIP(i))) {
+						SendWrappedMessageToPlayer(i, COLOUR_WARNING, kickstring);
+						format(msg, sizeof(msg), "%s(%i) has been kicked from the server by %s (%s)", ReturnPlayerName(i), i, ReturnPlayerName(playerid), reason);
+						LogAction(msg);
+						AddLogString(msg);
+						if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+							format(msg, sizeof(msg), "%s(%i) has been kicked from the server (%s)", ReturnPlayerName(i), i, reason);
+						}
+						AddJoinString(i, COLOUR_KICK, msg);
+						Kick(i);
+						count++;
+					}
+				}
+				if(count == 0) {
+					format(msg, sizeof(msg), "No players found with the IP %s", target);
+					SendClientMessage(playerid, COLOUR_WARNING, msg);
+				}
+				return 1;
+			}
+		} else {
+			new len = strlen(target);
+			if(len > 2 && target[len-1] == '"') {	// "
+				strmid(target, target, 1, len-1);
+			} else {
+				if(cmdchk(playerid, E_WILDKICK_LEVEL)) {
+					SendClientMessage(playerid, COLOUR_HELP, "USAGE: /akick [player] or [player name] or [IP]");
+				} else {
+					SendClientMessage(playerid, COLOUR_HELP, "USAGE: /akick [player] or [IP]");
+				}
+				return 1;
+			}
+		}
+		if(cmdchk(playerid, E_WILDKICK_LEVEL) && (strfind(target, "*") != -1 || strfind(target, "?") != -1)) {
+			if(!isValidName(target, true)) {
+				SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
+				return 1;
+			}
+			new count,
+				kickstring[MAX_INPUT],
+				msg[MAX_INPUT];
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				if(reason[0]) {
+					format(kickstring, sizeof(kickstring), "You have been kicked from the server (%s)", reason);
+				} else {
+					kickstring = "You have been kicked from the server";
+				}
+			} else {
+				if(reason[0]) {
+					format(kickstring, sizeof(kickstring), "You have been kicked from the server by %s (%s)", ReturnPlayerName(playerid), reason);
+				} else {
+					format(kickstring, sizeof(kickstring), "You have been kicked from the server by %s", ReturnPlayerName(playerid));
+				}
+			}
+			strtruncate(reason, reason, MAX_REASON);
+			LoopPlayers(i) {
+				if(max(gPlayerData[i][E_ADMINLEVEL], gPlayerData[i][E_RCONLEVEL]) < max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL]) && strwild(target, ReturnPlayerName(i), true)) {
+					SendWrappedMessageToPlayer(i, COLOUR_WARNING, kickstring);
+					format(msg, sizeof(msg), "%s(%i) has been kicked from the server by %s (%s)", ReturnPlayerName(i), i, ReturnPlayerName(playerid), reason);
+					LogAction(msg);
+					AddLogString(msg);
+					if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+						format(msg, sizeof(msg), "%s(%i) has been kicked from the server (%s)", ReturnPlayerName(i), i, reason);
+					}
+					AddJoinString(i, COLOUR_KICK, msg);
+					Kick(i);
+					count++;
+				}
+			}
+			if(count == 0) {
+				format(msg, sizeof(msg), "No players found with the name %s", target);
+				SendClientMessage(playerid, COLOUR_WARNING, msg);
+			}
+			return 1;
+		}
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
+
 	if(pid == playerid) {
 		SendClientMessage(playerid, COLOUR_WARNING, "You cannot kick yourself");
 		return 1;
 	}
 
-	new msg[MAX_INPUT];
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+	new msg[MAX_INPUT * 2];
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot kick level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		format(msg, sizeof(msg), "You have been kicked from the server (%s)", reason);
+		if(reason[0]) {
+			format(msg, sizeof(msg), "You have been kicked from the server (%s)", reason);
+		} else {
+			msg = "You have been kicked from the server";
+		}
 	} else {
-		format(msg, sizeof(msg), "You have been kicked from the server by %s (%s)", ReturnPlayerName(playerid), reason);
+		if(reason[0]) {
+			format(msg, sizeof(msg), "You have been kicked from the server by %s (%s)", ReturnPlayerName(playerid), reason);
+		} else {
+			format(msg, sizeof(msg), "You have been kicked from the server by %s", ReturnPlayerName(playerid));
+		}
 	}
-	SendClientMessage(pid, COLOUR_WARNING, msg);
+	SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+
+	strtruncate(reason, reason, MAX_REASON);
 	format(msg, sizeof(msg), "%s(%i) has been kicked from the server by %s (%s)", ReturnPlayerName(pid), pid, ReturnPlayerName(playerid), reason);
 	LogAction(msg);
 	AddLogString(msg);
+
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
 		format(msg, sizeof(msg), "%s(%i) has been kicked from the server (%s)", ReturnPlayerName(pid), pid, reason);
 	}
@@ -7026,12 +7192,39 @@ dcmd_akick(const playerid, params[])
 	return 1;
 }
 
+acmd:alistmodes(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_CHANGEMODE_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /alistmodes");
+		SendClientMessage(playerid, COLOUR_HELP, "Displays a list of modes which can be used with achangemode");
+		return 1;
+	}
+
+	new string[512] = "Gamemodes: ";
+	if(Gamemodes_List(gAlarDB, string)) {
+		SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+	} else {
+		SendClientMessage(playerid, COLOUR_WARNING, "No gamemodes are listed in the database");
+	}
+	return 1;
+}
+
 #if LOG_LINES > 0 && LOG_PAGES > 0
-	dcmd_alog(const playerid, params[])
+	acmd:alog(const playerid, const params[], const bool:help)
 	{
+		if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 		if(LevelCheck(playerid, E_LOG_LEVEL)) return 1;
 
-		if(params[0] == '\0') {
+		if(help) {
+			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /alog (page)");
+			SendClientMessage(playerid, COLOUR_HELP, "Changes the admin log page, or toggles the log keys if no pages is specified");
+			return 1;
+		}
+
+		if(isnull(params)) {
 			if(gPlayerData[playerid][E_LOGKEYS]) {
 				SendClientMessage(playerid, COLOUR_ADMIN, "Admin log keys have been disabled");
 			} else {
@@ -7058,6 +7251,7 @@ dcmd_akick(const playerid, params[])
 				TextDrawHideForPlayer(playerid, gAdminLog[i + offset][E_TEXTBOX_TEXT]);
 			}
 		}
+
 		if(page != 0) {
 			new offset = (page - 1) * LOG_LINES;
 			for(new i; i < LOG_LINES; i++) {
@@ -7072,27 +7266,37 @@ dcmd_akick(const playerid, params[])
 	}
 #endif
 
-dcmd_alogin(const playerid, params[])
+acmd:alogin(const playerid, const params[], const bool:help)
 {
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /alogin [password]");
+		if(IsPlayerAdmin(playerid)) {
+			SendClientMessage(playerid, COLOUR_HELP, "Logs you into your account, or creates an account if none exists");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "Logs you into your account");
+		}
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /alogin [password]");
 		return 1;
 	}
+
 	if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
 		SendClientMessage(playerid, COLOUR_WARNING, "You are already logged in");
 		return 1;
 	}
+
 	new pname[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, pname, sizeof(pname));
 
-	if(gPlayerData[playerid][E_NAME][0] == '\0') {
-		strcpy(gPlayerData[playerid][E_NAME], pname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
-	}
+	strcpy(gPlayerData[playerid][E_NAME], pname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
 
 	new logininfo[E_LOGINDATA];
-	if(GetPlayerData(gPlayerData[playerid][E_NAME], logininfo)) {
+	if(Admin_GetData(gAlarDB, gPlayerData[playerid][E_NAME], logininfo)) {
 		new msg[MAX_INPUT];
-		if(strcmp(logininfo[E_LOGIN_PW], MD5_Hash(params), true) == 0) {
+		if(Hash_Compare(params, logininfo[E_LOGIN_HASH])) {
 			Bit_Set(g_bitAdmins, playerid, 1);
 			gPlayerData[playerid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL];
 
@@ -7104,28 +7308,40 @@ dcmd_alogin(const playerid, params[])
 			AllowPlayerTeleport(playerid, cmdchk(playerid, E_TELE_LEVEL));
 
 			#if LOG_LINES > 0 && LOG_PAGES > 0
+				new page;
 				if(logininfo[E_LOGIN_PAGE] < 0) {
 					gPlayerData[playerid][E_LOGKEYS] = false;
-					gPlayerData[playerid][E_LOG_PAGE] = -(logininfo[E_LOGIN_PAGE] + 1);
+					page = -(logininfo[E_LOGIN_PAGE] + 1);
 				} else {
-					gPlayerData[playerid][E_LOG_PAGE] = logininfo[E_LOGIN_PAGE];
 					gPlayerData[playerid][E_LOGKEYS] = true;
+					page = logininfo[E_LOGIN_PAGE];
 				}
-				if(gPlayerData[playerid][E_LOG_PAGE] > 0 && gPlayerData[playerid][E_LOG_PAGE] <= LOG_PAGES && cmdchk(playerid, E_LOG_LEVEL)) {
-					new offset = (gPlayerData[playerid][E_LOG_PAGE] - 1) * LOG_LINES;
-					for(new i; i < LOG_LINES; i++) {
-						TextDrawShowForPlayer(playerid, gAdminLog[i + offset][E_TEXTBOX_TEXT]);
+				if(gPlayerData[playerid][E_LOG_PAGE] != page) {
+					if(gPlayerData[playerid][E_LOG_PAGE] != 0) {
+						#if LOG_PAGES > 1
+							TextDrawHideForPlayer(playerid, gLogPage[gPlayerData[playerid][E_LOG_PAGE]-1]);
+						#endif
+						for(new i, offset = (gPlayerData[playerid][E_LOG_PAGE] - 1) * LOG_LINES; i < LOG_LINES; i++) {
+							TextDrawHideForPlayer(playerid, gAdminLog[i + offset][E_TEXTBOX_TEXT]);
+						}
 					}
-					#if LOG_PAGES > 1
-						TextDrawShowForPlayer(playerid, gLogPage[gPlayerData[playerid][E_LOG_PAGE]-1]);
-					#endif
-				} else {
-					gPlayerData[playerid][E_LOG_PAGE] = 0;
+					if((gPlayerData[playerid][E_LOG_PAGE] = page)) {
+						if(gPlayerData[playerid][E_LOG_PAGE] > 0 && gPlayerData[playerid][E_LOG_PAGE] <= LOG_PAGES && cmdchk(playerid, E_LOG_LEVEL)) {
+							new offset = (gPlayerData[playerid][E_LOG_PAGE] - 1) * LOG_LINES;
+							for(new i; i < LOG_LINES; i++) {
+								TextDrawShowForPlayer(playerid, gAdminLog[i + offset][E_TEXTBOX_TEXT]);
+							}
+							#if LOG_PAGES > 1
+								TextDrawShowForPlayer(playerid, gLogPage[gPlayerData[playerid][E_LOG_PAGE]-1]);
+							#endif
+						} else {
+							gPlayerData[playerid][E_LOG_PAGE] = 0;
+						}
+					}
 				}
 			#endif
 
-			GetPlayerIp(playerid, logininfo[E_LOGIN_IP], sizeof(SIZE_E_LOGINDATA[E_LOGIN_IP]));
-			SetPlayerData(gPlayerData[playerid][E_NAME], logininfo);
+			Admin_Update(gAlarDB, gPlayerData[playerid][E_NAME], ReturnPlayerIP(playerid), logininfo[E_LOGIN_HIDDEN], logininfo[E_LOGIN_PAGE], logininfo[E_LOGIN_HUD]);
 
 			if(strcmp(pname, gPlayerData[playerid][E_NAME], true)) {
 				format(msg, sizeof(msg), "You have successfully logged in as %s (Level %i)", gPlayerData[playerid][E_NAME], gPlayerData[playerid][E_ADMINLEVEL]);
@@ -7146,7 +7362,7 @@ dcmd_alogin(const playerid, params[])
 				AddLogString(msg);
 			} else {
 				LoopPlayers(i) {
-					if(gPlayerData[i][E_ADMINLEVEL] > 0 && i != playerid) {
+					if((gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0) && i != playerid) {
 						SendClientMessage(i, COLOUR_ADMIN, msg);
 					}
 				}
@@ -7164,7 +7380,7 @@ dcmd_alogin(const playerid, params[])
 		LogAction(msg);
 		Kick(playerid);
 		return 1;
-	} else if(IsPlayerAdmin(playerid) && gServerData[E_RCON_LEVEL] > 0) {	// Using rcon
+	} else if(IsPlayerAdmin(playerid) && gServerData[E_RCON_LOGIN_LEVEL] > 0) {	// Using RCON
 			new msg[MAX_INPUT];
 			if(strlen(params) < gServerData[E_MIN_PW_LENGTH]) {
 				format(msg, sizeof(msg), "Your password must be at least %i characters long", gServerData[E_MIN_PW_LENGTH]);
@@ -7175,21 +7391,22 @@ dcmd_alogin(const playerid, params[])
 			strcpy(gPlayerData[playerid][E_NAME], pname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
 
 			new newinfo[E_LOGINDATA];
-			newinfo[E_LOGIN_LEVEL] = gServerData[E_RCON_LEVEL];
+			newinfo[E_LOGIN_LEVEL] = gServerData[E_RCON_LOGIN_LEVEL];
 			GetPlayerIp(playerid, newinfo[E_LOGIN_IP], sizeof(SIZE_E_LOGINDATA[E_LOGIN_IP]));
-			strcpy(newinfo[E_LOGIN_PW], MD5_Hash(params), sizeof(SIZE_E_LOGINDATA[E_LOGIN_PW]));
-			SetPlayerData(pname, newinfo);
+			strcpy(newinfo[E_LOGIN_HASH], Hash_String(params), sizeof(SIZE_E_LOGINDATA[E_LOGIN_HASH]));
+			Admin_SetAdmin(gAlarDB, pname, newinfo);
 
-			format(msg, sizeof(msg), "You have made a level %i admin. Type /ahelp for more info", gServerData[E_RCON_LEVEL]);
+
+			format(msg, sizeof(msg), "You have made a level %i admin. Type /ahelp for more info", gServerData[E_RCON_LOGIN_LEVEL]);
 			SendClientMessage(playerid, COLOUR_ADMIN, msg);
 			format(msg, sizeof(msg), "Your password has been set to \"%s\"", params);
 			SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-			gPlayerData[playerid][E_ADMINLEVEL] = gServerData[E_RCON_LEVEL];
+			gPlayerData[playerid][E_ADMINLEVEL] = gServerData[E_RCON_LOGIN_LEVEL];
 
 			AllowPlayerTeleport(playerid, cmdchk(playerid, E_TELE_LEVEL));
 
-			format(msg, sizeof(msg), "%s has been made an admin (level %i)", ReturnPlayerName(playerid), gServerData[E_RCON_LEVEL]);
+			format(msg, sizeof(msg), "%s has been made an admin (level %i)", ReturnPlayerName(playerid), gServerData[E_RCON_LOGIN_LEVEL]);
 			LogAction(msg);
 			AddLogString(msg);
 			return 1;
@@ -7198,9 +7415,17 @@ dcmd_alogin(const playerid, params[])
 	return 1;
 }
 
-dcmd_aloginas(const playerid, params[])
+acmd:aloginas(const playerid, const params[], const bool:help)
 {
-	if(params[0] == '\0') {
+	if(!gServerData[E_ALIAS_ADMINS]) return 0;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aloginas [name] [password]");
+		SendClientMessage(playerid, COLOUR_HELP, "Logs you into your account while using a different name, and automatically hides you from non-admins");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aloginas [name] [password]");
 		return 1;
 	}
@@ -7220,77 +7445,61 @@ dcmd_aloginas(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid password");
 		return 1;
 	}
-
 	if(gPlayerData[playerid][E_KICK] != 0 && strcmp(pname, gPlayerData[playerid][E_NAME], true) != 0) {
 		SendClientMessage(playerid, COLOUR_WARNING, "You must login to your own account");
 		return 1;
 	}
 
-	{
-		new BanData[E_ALAR_BAN];
-		if(GetBanInfo(pname, "", BanData)) {
-			SendClientMessage(playerid, COLOUR_WARNING, "Login failure");
+	new BanData[E_ALAR_BAN];
+	if(Bans_GetBanInfo(gAlarDB, pname, "", BanData)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "Login failure");
 
-			new string[MAX_INPUT];
-			format(string, sizeof(string), "%s(%i) attepted to login to a banned name (%s)", ReturnPlayerName(playerid), playerid, pname);
+		new string[MAX_INPUT];
+		format(string, sizeof(string), "%s(%i) attepted to login to a banned name (%s)", ReturnPlayerName(playerid), playerid, pname);
 
-			#if LOG_LINES > 0 && LOG_PAGES > 0
-				alar_AddAdminLogLine(COLOUR_WARNING, string);
-			#else
-				LoopPlayers(i) {
-					if(gPlayerData[i][E_ADMINLEVEL] >0) {
-						SendClientMessage(i, COLOUR_WARNING, string);
-					}
+		#if LOG_LINES > 0 && LOG_PAGES > 0
+			alar_AddAdminLogLine(COLOUR_WARNING, string);
+		#else
+			LoopPlayers(i) {
+				if(gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0) {
+					SendClientMessage(i, COLOUR_WARNING, string);
 				}
-			#endif
+			}
+		#endif
 
-			LogAction(string);
-			return 1;
-		}
+		LogAction(string);
+		return 1;
 	}
 
-	{
-		new SuspendData[E_ALAR_SUSPENSION];
-		if(GetSuspendInfo(pname, "", SuspendData)) {
-			SendClientMessage(playerid, COLOUR_WARNING, "Login failure");
+	new SuspendData[E_ALAR_SUSPENSION];
+	if(Suspensions_GetSuspendInfo(gAlarDB, pname, "", SuspendData)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "Login failure");
 
-			new string[MAX_INPUT];
-			format(string, sizeof(string), "%s(%i) attepted to login to a suspended name (%s)", ReturnPlayerName(playerid), playerid, pname);
+		new string[MAX_INPUT];
+		format(string, sizeof(string), "%s(%i) attepted to login to a suspended name (%s)", ReturnPlayerName(playerid), playerid, pname);
 
-			#if LOG_LINES > 0 && LOG_PAGES > 0
-				alar_AddAdminLogLine(COLOUR_WARNING, string);
-			#else
-				LoopPlayers(i) {
-					if(gPlayerData[i][E_ADMINLEVEL] >0) {
-						SendClientMessage(i, COLOUR_WARNING, string);
-					}
+		#if LOG_LINES > 0 && LOG_PAGES > 0
+			alar_AddAdminLogLine(COLOUR_WARNING, string);
+		#else
+			LoopPlayers(i) {
+				if(gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0) {
+					SendClientMessage(i, COLOUR_WARNING, string);
 				}
-			#endif
+			}
+		#endif
 
-			LogAction(string);
-			return 1;
-		}
+		LogAction(string);
+		return 1;
 	}
 
 	new logininfo[E_LOGINDATA];
-	if(GetPlayerData(pname, logininfo)) {
+	if(Admin_GetData(gAlarDB, pname, logininfo)) {
 		new msg[MAX_INPUT];
-		if(strcmp(logininfo[E_LOGIN_PW], MD5_Hash(password), true) == 0) {
+		if(Hash_Compare(password, logininfo[E_LOGIN_HASH])) {
 			LoopPlayers(i) {
-				if(gPlayerData[i][E_NAME][0] != '\0' && strcmp(pname, gPlayerData[i][E_NAME], true) == 0) {
+				if((gPlayerData[i][E_NAME][0] != '\0' && strcmp(pname, gPlayerData[i][E_NAME], true) == 0) || strcmp(pname, ReturnPlayerName(i), true) == 0) {
 					format(msg, sizeof(msg), "%s's account is already in use by %s(%i)", pname, ReturnPlayerName(i), i);
 					SendClientMessage(playerid, COLOUR_WARNING, msg);
-					return 1;
-				}
-			}
-			LoopPlayers(i) {
-				if(strcmp(pname, ReturnPlayerName(i), true) == 0) {
-					format(msg, sizeof(msg), "%s(%i) has been kicked from the server (Admin impersonation)", ReturnPlayerName(playerid), playerid);
-					SendClientMessage(playerid, COLOUR_WARNING, "You have been kicked from the server (Admin impersonation)");
-					AddJoinString(playerid, COLOUR_KICK, msg);
-					AddLogString(msg);
-					LogAction(msg);
-					Kick(playerid);
 					return 1;
 				}
 			}
@@ -7301,32 +7510,44 @@ dcmd_aloginas(const playerid, params[])
 			gPlayerData[playerid][E_SHOWHUD] = logininfo[E_LOGIN_HUD];
 			strcpy(gPlayerData[playerid][E_NAME], pname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
 
-			logininfo[E_LOGIN_HIDDEN] = true;
-			GetPlayerIp(playerid, logininfo[E_LOGIN_IP], sizeof(SIZE_E_LOGINDATA[E_LOGIN_IP]));
-			SetPlayerData(pname, logininfo);
+			Admin_Update(gAlarDB, pname, ReturnPlayerIP(playerid), true, logininfo[E_LOGIN_PAGE], logininfo[E_LOGIN_HUD]);
 
 			format(msg, sizeof(msg), "You have successfully logged in as %s (Level %i)", pname, gPlayerData[playerid][E_ADMINLEVEL]);
 			SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
 			AllowPlayerTeleport(playerid, cmdchk(playerid, E_TELE_LEVEL));
+
 			#if LOG_LINES > 0 && LOG_PAGES > 0
+				new page;
 				if(logininfo[E_LOGIN_PAGE] < 0) {
 					gPlayerData[playerid][E_LOGKEYS] = false;
-					gPlayerData[playerid][E_LOG_PAGE] = -(logininfo[E_LOGIN_PAGE] + 1);
+					page = -(logininfo[E_LOGIN_PAGE] + 1);
 				} else {
-					gPlayerData[playerid][E_LOG_PAGE] = logininfo[E_LOGIN_PAGE];
 					gPlayerData[playerid][E_LOGKEYS] = true;
+					page = logininfo[E_LOGIN_PAGE];
 				}
-				if(gPlayerData[playerid][E_LOG_PAGE] > 0 && gPlayerData[playerid][E_LOG_PAGE] <= LOG_PAGES && cmdchk(playerid, E_LOG_LEVEL)) {
-					new offset = (gPlayerData[playerid][E_LOG_PAGE] - 1) * LOG_LINES;
-					for(new i; i < LOG_LINES; i++) {
-						TextDrawShowForPlayer(playerid, gAdminLog[i + offset][E_TEXTBOX_TEXT]);
+				if(gPlayerData[playerid][E_LOG_PAGE] != page) {
+					if(gPlayerData[playerid][E_LOG_PAGE] != 0) {
+						#if LOG_PAGES > 1
+							TextDrawHideForPlayer(playerid, gLogPage[gPlayerData[playerid][E_LOG_PAGE]-1]);
+						#endif
+						for(new i, offset = (gPlayerData[playerid][E_LOG_PAGE] - 1) * LOG_LINES; i < LOG_LINES; i++) {
+							TextDrawHideForPlayer(playerid, gAdminLog[i + offset][E_TEXTBOX_TEXT]);
+						}
 					}
-					#if LOG_PAGES > 1
-						TextDrawShowForPlayer(playerid, gLogPage[gPlayerData[playerid][E_LOG_PAGE]-1]);
-					#endif
-				} else {
-					gPlayerData[playerid][E_LOG_PAGE] = 0;
+					if((gPlayerData[playerid][E_LOG_PAGE] = page)) {
+						if(gPlayerData[playerid][E_LOG_PAGE] > 0 && gPlayerData[playerid][E_LOG_PAGE] <= LOG_PAGES && cmdchk(playerid, E_LOG_LEVEL)) {
+							new offset = (gPlayerData[playerid][E_LOG_PAGE] - 1) * LOG_LINES;
+							for(new i; i < LOG_LINES; i++) {
+								TextDrawShowForPlayer(playerid, gAdminLog[i + offset][E_TEXTBOX_TEXT]);
+							}
+							#if LOG_PAGES > 1
+								TextDrawShowForPlayer(playerid, gLogPage[gPlayerData[playerid][E_LOG_PAGE]-1]);
+							#endif
+						} else {
+							gPlayerData[playerid][E_LOG_PAGE] = 0;
+						}
+					}
 				}
 			#endif
 
@@ -7341,7 +7562,7 @@ dcmd_aloginas(const playerid, params[])
 				AddLogString(msg);
 			} else {
 				LoopPlayers(i) {
-					if(gPlayerData[i][E_ADMINLEVEL] > 0 && i != playerid) {
+					if((gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0) && i != playerid) {
 						SendClientMessage(i, COLOUR_ADMIN, msg);
 					}
 				}
@@ -7364,11 +7585,77 @@ dcmd_aloginas(const playerid, params[])
 	return 1;
 }
 
-dcmd_amsg(const playerid, params[])
+acmd:alogout(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) return 0;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /alogout");
+		if(gServerData[E_AUTO_LOGIN]) {
+			SendClientMessage(playerid, COLOUR_HELP, "Logs you out of your account, disabling autologin the next time you connect");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "Logs you out of your account");
+		}
+		return 1;
+	}
+
+	Admin_Update(gAlarDB, gPlayerData[playerid][E_NAME], "NULL", gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN != 0, gPlayerData[playerid][E_LOGKEYS] ? gPlayerData[playerid][E_LOG_PAGE] : -gPlayerData[playerid][E_LOG_PAGE] - 1, gPlayerData[playerid][E_SHOWHUD]);
+
+	SendClientMessage(playerid, COLOUR_PLAYER, "You have been logged out");
+
+	if(gPlayerData[playerid][E_RCONLEVEL] <= 0) {
+		Bit_Set(g_bitAdmins, playerid, 0);
+	}
+	gPlayerData[playerid][E_ADMINLEVEL] = 0;
+	gPlayerData[playerid][E_NAME][0] = '\0';
+	gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_HIDDEN;
+
+	#if LOG_LINES > 0 && LOG_PAGES > 0
+		if(gPlayerData[playerid][E_LOG_PAGE]) {
+			#if LOG_PAGES > 1
+				TextDrawHideForPlayer(playerid, gLogPage[gPlayerData[playerid][E_LOG_PAGE]-1]);
+			#endif
+			for(new i, offset = (gPlayerData[playerid][E_LOG_PAGE] - 1) * LOG_LINES; i < LOG_LINES; i++) {
+				TextDrawHideForPlayer(playerid, gAdminLog[i + offset][E_TEXTBOX_TEXT]);
+			}
+			gPlayerData[playerid][E_LOG_PAGE] = 0;
+		}
+	#endif
+	if(gPlayerData[playerid][E_SPECTATING]) {
+		SpawnUsingData(playerid);
+	}
+	AllowPlayerTeleport(playerid, false);
+
+	new msg[MAX_PLAYER_NAME + 20];
+	format(msg, sizeof(msg), "%s has logged out", ReturnPlayerName(playerid));
+
+	if(gServerData[E_LOG_LOGINS]) {
+		AddLogString(msg);
+	} else {
+		LoopPlayers(i) {
+			if(i != playerid && (gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0)) {
+				SendClientMessage(i, COLOUR_ADMIN, msg);
+			}
+		}
+	}
+	LogAction(msg);
+
+	CallRemoteFunction("OnAdminLogout", "i", playerid);
+	return 1;
+}
+
+acmd:amsg(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_MSG_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /amsg [message]");
+		SendClientMessage(playerid, COLOUR_HELP, "Sends a chatbox message to all players in the server");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /amsg [message]");
 		return 1;
 	}
@@ -7385,16 +7672,23 @@ dcmd_amsg(const playerid, params[])
 	return 1;
 }
 
-dcmd_amute(const playerid, params[])
+acmd:amute(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_MUTE_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /amute [player] (seconds) (reason)");
+		SendClientMessage(playerid, COLOUR_HELP, "Mutes a player, permanently if no time is specified");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /amute [player] (seconds) (reason)");
 		return 1;
 	}
 
-	new timestr[20], pid, reason[MAX_REASON];
+	new timestr[20], pid, reason[MAX_INPUT];
 	strscan(params, "pzz", pid, timestr, sizeof(timestr), reason, sizeof(reason));
 
 	if(pid == INVALID_PLAYER_ID) {
@@ -7405,18 +7699,20 @@ dcmd_amute(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "You cannot mute yourself");
 		return 1;
 	}
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot mute NPCs");
+		return 1;
+	}
 
-	new msg[MAX_INPUT];
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+	new msg[MAX_INPUT * 2];
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot mute level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
 	new mutetime = strval(timestr);
-	if(0 < mutetime < MIN_ACTION_TIME) {
-		mutetime = MIN_ACTION_TIME;
-	}
+	if(0 < mutetime < MIN_ACTION_TIME) mutetime = MIN_ACTION_TIME;
 
 	if(gPlayerData[pid][E_STATE] & ADMIN_STATE_MUTED) {
 		if(gPlayerData[pid][E_MUTE_TIME] == 0) {
@@ -7425,7 +7721,9 @@ dcmd_amute(const playerid, params[])
 				SendClientMessage(playerid, COLOUR_WARNING, msg);
 				return 1;
 			}
-			UnwriteAdminState(pid, ADMIN_STATE_MUTED);
+			if(!IsPlayerNPC(pid)) {
+				Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED, mutetime);
+			}
 			gPlayerData[pid][E_UNMUTE] = SetTimerEx("alar_unmute", mutetime * 1000, 0, "i", pid);
 			gPlayerData[pid][E_MUTE_TIME] = gettime() + mutetime;
 
@@ -7434,7 +7732,9 @@ dcmd_amute(const playerid, params[])
 			format(msg, sizeof(msg), "%s has set %s's mute time to %i seconds", ReturnPlayerName(playerid), ReturnPlayerName(pid), mutetime);
 		} else {
 			if(mutetime <= 0) {
-				WriteAdminState(pid, ADMIN_STATE_MUTED);
+				if(!IsPlayerNPC(pid)) {
+					Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED);
+				}
 				if(gPlayerData[pid][E_UNMUTE]) KillTimer(gPlayerData[pid][E_UNMUTE]);
 				gPlayerData[pid][E_MUTE_TIME] = 0;
 
@@ -7444,6 +7744,9 @@ dcmd_amute(const playerid, params[])
 			} else {
 				new timediff = gettime() + mutetime - gPlayerData[pid][E_MUTE_TIME];
 
+				if(!IsPlayerNPC(pid)) {
+					Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED, mutetime);
+				}
 				if(gPlayerData[pid][E_UNMUTE]) KillTimer(gPlayerData[pid][E_UNMUTE]);
 				gPlayerData[pid][E_UNMUTE] = SetTimerEx("alar_unmute", mutetime * 1000, 0, "i", pid);
 				gPlayerData[pid][E_MUTE_TIME] += timediff;
@@ -7460,41 +7763,110 @@ dcmd_amute(const playerid, params[])
 
 	if(mutetime != 0) {
 		if(reason[0] == '\0') {
-			reason = "No reason";
+			reason = DEFAULT_REASON;
 		}
-	}
-	else if(reason[0] != '\0') {
+	} else if(reason[0] != '\0') {
 		format(reason, sizeof(reason), "%s %s", timestr, reason);
-	}
-	else if(timestr[0] != '\0') {
+	} else if(timestr[0] != '\0') {
 		strcpy(reason, timestr);
-	}
-	else {
-		reason = "No reason";
+	} else {
+		reason = DEFAULT_REASON;
 	}
 
 	gPlayerData[pid][E_STATE] |= ADMIN_STATE_MUTED;
 
+	new shortreason[MAX_REASON];
+	if(reason[0]) {
+		strtruncate(shortreason, reason);
+	}
+
 	if(mutetime > 0) {
-		format(msg, sizeof(msg), "%s has been muted by %s for %i seconds (%s)", ReturnPlayerName(pid), ReturnPlayerName(playerid), mutetime, reason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s has been muted by %s for %i seconds (%s)", ReturnPlayerName(pid), ReturnPlayerName(playerid), mutetime, shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s has been muted by %s for %i seconds", ReturnPlayerName(pid), ReturnPlayerName(playerid), mutetime);
+		}
 		LogAction(msg);
 		AddLogString(msg);
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			format(msg, sizeof(msg), "%s has been muted for %i seconds (%s)", ReturnPlayerName(pid), mutetime, reason);
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s has been muted for %i seconds (%s)", ReturnPlayerName(pid), mutetime, shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s has been muted for %i seconds", ReturnPlayerName(pid), mutetime);
+			}
 		}
-		SendClientMessageToAll(COLOUR_WARNING, msg);
+		LoopPlayers(i) {
+			if(i != playerid && i != pid) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+			}
+		}
+		if(reason[0]) {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been muted for %i seconds (%s)", mutetime, reason);
+			} else {
+				format(msg, sizeof(msg), "You have been muted for %i seconds by %s (%s)", mutetime, ReturnPlayerName(playerid), reason);
+			}
+			SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have muted %s for %i seconds (%s)", ReturnPlayerName(pid), mutetime, reason);
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		} else {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been muted for %i seconds", mutetime);
+			} else {
+				format(msg, sizeof(msg), "You have been muted for %i seconds by %s", mutetime, ReturnPlayerName(playerid));
+			}
+			SendClientMessage(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have muted %s for %i seconds", ReturnPlayerName(pid), mutetime);
+			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		}
+		if(!IsPlayerNPC(pid)) {
+			Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED, mutetime);
+		}
 		if(gPlayerData[pid][E_UNMUTE]) KillTimer(gPlayerData[pid][E_UNMUTE]);
 		gPlayerData[pid][E_UNMUTE] = SetTimerEx("alar_unmute", mutetime * 1000, 0, "i", pid);
 		gPlayerData[pid][E_MUTE_TIME] = gettime() + mutetime;
 	} else {
-		format(msg, sizeof(msg), "%s has been muted by %s (%s)" , ReturnPlayerName(pid), ReturnPlayerName(playerid), reason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s has been muted by %s (%s)" , ReturnPlayerName(pid), ReturnPlayerName(playerid), shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s has been muted by %s" , ReturnPlayerName(pid), ReturnPlayerName(playerid));
+		}
 		LogAction(msg);
 		AddLogString(msg);
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			format(msg, sizeof(msg), "%s has been muted (%s)", ReturnPlayerName(pid), reason);
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s has been muted (%s)", ReturnPlayerName(pid), shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s has been muted", ReturnPlayerName(pid));
+			}
 		}
-		SendClientMessageToAll(COLOUR_WARNING, msg);
-		WriteAdminState(pid, ADMIN_STATE_MUTED);
+		LoopPlayers(i) {
+			if(i != playerid && i != pid) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+			}
+		}
+		if(reason[0]) {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been muted (%s)", reason);
+			} else {
+				format(msg, sizeof(msg), "You have been muted by %s (%s)", ReturnPlayerName(playerid), reason);
+			}
+			SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have muted %s (%s)", ReturnPlayerName(pid), reason);
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		} else {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				msg = "You have been muted";
+			} else {
+				format(msg, sizeof(msg), "You have been muted by %s", ReturnPlayerName(playerid));
+			}
+			SendClientMessage(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have muted %s", ReturnPlayerName(pid));
+			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		}
+		if(!IsPlayerNPC(pid)) {
+			Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED);
+		}
 	}
 	LoopPlayers(i) {
 		if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == pid) {
@@ -7505,12 +7877,108 @@ dcmd_amute(const playerid, params[])
 	return 1;
 }
 
-dcmd_apm(const playerid, params[])
+acmd:amuted(const playerid, const params[], const bool:help)
 {
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /amuted");
+		SendClientMessage(playerid, COLOUR_HELP, "Displays a list of all currently muted players");
+		return 1;
+	}
+
+	new msg[512] = "Muted players:";
+	LoopPlayers(i) {
+		if(gPlayerData[i][E_STATE] & ADMIN_STATE_MUTED) {
+			new time = gPlayerData[i][E_MUTE_TIME] - gettime();
+			if(time > 3600) {
+				new hours = time / 3600,
+					minutes = (time - hours * 3600) / 60;
+				format(msg, sizeof(msg), "%s %s(%i:%02i:%02i)", msg, ReturnPlayerName(i), hours, minutes, time - hours * 3600 - minutes * 60);
+			} else if(time > 60) {
+				new minutes = time / 60;
+				format(msg, sizeof(msg), "%s %s(%i:%02i)", msg, ReturnPlayerName(i), minutes, time - minutes * 60);
+			} else if(time > 0) {
+				format(msg, sizeof(msg), "%s %s(%i)", msg, ReturnPlayerName(i), time);
+			} else {
+				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(i));
+			}
+		}
+	}
+	if(playerid == INVALID_PLAYER_ID) {
+		print(msg);
+	} else {
+		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
+	}
+	return 1;
+}
+
+acmd:apaused(const playerid, const params[], const bool:help)
+{
+	if(playerid != INVALID_PLAYER_ID && (gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0)) return 0;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /apaused");
+		SendClientMessage(playerid, COLOUR_HELP, "Displays a list of all currently paused players");
+		return 1;
+	}
+
+	new idlestring[512] = "Idle players:",
+		pausedstring[512] = "Paused players:",
+		tick = GetTickCount();
+	LoopPlayers(i) {
+		if(!IsSpawned(i) || IsPlayerNPC(i)) continue;		// Goddamn it sa-mp...
+		new time = (tick - gPlayerData[i][E_LAST_UPDATE]) / 1000;
+		if(time > 3600) {
+			new hours = time / 3600,
+				minutes = (time - hours * 3600) / 60;
+			format(pausedstring, sizeof(pausedstring), "%s %s(%i:%02i:%02i)", pausedstring, ReturnPlayerName(i), hours, minutes, time - hours * 3600 - minutes * 60);
+		} else if(time > 60) {
+			new minutes = time / 60;
+			format(pausedstring, sizeof(pausedstring), "%s %s(%i:%02i)", pausedstring, ReturnPlayerName(i), minutes, time - minutes * 60);
+		} else if(time > 1){
+			format(pausedstring, sizeof(pausedstring), "%s %s(%i)", pausedstring, ReturnPlayerName(i), time);
+		} else if((time = (tick - gPlayerData[i][E_LAST_ACTIVE]) / 1000) > 3600) {
+			new hours = time / 3600,
+				minutes = (time - hours * 3600) / 60;
+			format(idlestring, sizeof(idlestring), "%s %s(%i:%02i:%02i)", idlestring, ReturnPlayerName(i), hours, minutes, time - hours * 3600 - minutes * 60);
+		} else if(time > 60) {
+			new minutes = time / 60;
+			format(idlestring, sizeof(idlestring), "%s %s(%i:%02i)", idlestring, ReturnPlayerName(i), minutes, time - minutes * 60);
+		} else if(time > 10){
+			format(idlestring, sizeof(idlestring), "%s %s(%i)", idlestring, ReturnPlayerName(i), time);
+		}
+	}
+	if(playerid == INVALID_PLAYER_ID) {
+		if(idlestring[13]) print(idlestring);
+		if(pausedstring[16]) print(pausedstring);
+		if(!idlestring[13] && !pausedstring[16])  print("No players are currently paused");
+	} else {
+		if(idlestring[13]) SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, idlestring);
+		if(pausedstring[16]) SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, pausedstring);
+		if(!idlestring[13] && !pausedstring[16]) SendClientMessage(playerid, COLOUR_ADMIN, "No players are currently paused");
+	}
+	return 1;
+}
+
+acmd:apm(const playerid, const params[], const bool:help)
+{
+	if(help) {
 		if(playerid == INVALID_PLAYER_ID) {
 			print("USAGE: /apm [player] [message]");
-		} else if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
+			print("Sends a message to a player which all admins an see");
+		} else if(gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0) {
+			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /apm [player] [message]");
+			SendClientMessage(playerid, COLOUR_HELP, "Sends a message to a player which all admins an see");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /apm [message]");
+			SendClientMessage(playerid, COLOUR_HELP, "Sends a message to all admins");
+		}
+		return 1;
+	}
+
+	if(isnull(params)) {
+		if(playerid == INVALID_PLAYER_ID) {
+			print("USAGE: /apm [player] [message]");
+		} else if(gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0) {
 			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /apm [player] [message]");
 		} else {
 			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /apm [message]");
@@ -7518,7 +7986,7 @@ dcmd_apm(const playerid, params[])
 		return 1;
 	}
 
-	if(playerid == INVALID_PLAYER_ID || gPlayerData[playerid][E_ADMINLEVEL] > 0) {
+	if(playerid == INVALID_PLAYER_ID || gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0) {
 		new pid, msg[MAX_INPUT];
 		strscan(params, "ps", pid, msg, sizeof(msg));
 		if(pid == INVALID_PLAYER_ID) {
@@ -7548,11 +8016,14 @@ dcmd_apm(const playerid, params[])
 		if(playerid != INVALID_PLAYER_ID) {
 			GetPlayerName(playerid, pname, sizeof(pname));
 		} else {
-			pname = "Console";
+			pname = "The console";
 		}
-		if(gPlayerData[pid][E_ADMINLEVEL] > 0) {
+		if(gPlayerData[pid][E_ADMINLEVEL] > 0 || gPlayerData[pid][E_RCONLEVEL] > 0) {
 			format(string, sizeof(string), "<Adminchat> %s: %s", pname, msg);
 			SendWrappedMessageToClients(g_bitAdmins, COLOUR_MSG, string);
+			#if CHATHISTORY_SIZE > 0
+				alar_AddLineToHistory(COLOUR_MSG, msg, HISTORY_ADMIN_ONLY | HISTORY_WRAPPED);
+			#endif
 			LogAction(string);
 			return 1;
 		}
@@ -7572,12 +8043,18 @@ dcmd_apm(const playerid, params[])
 		bitPlayers = g_bitAdmins;
 		Bit_Vet(bitPlayers, playerid);
 		SendWrappedMessageToClients(bitPlayers, COLOUR_MSG, string);
+		#if CHATHISTORY_SIZE > 0
+			alar_AddLineToHistory(COLOUR_MSG, string, HISTORY_ADMIN_ONLY | HISTORY_WRAPPED);
+		#endif
 		LogAction(string);
 	} else {
 		new msg[MAX_INPUT + MAX_PLAYER_NAME + 20], pname[MAX_PLAYER_NAME];
 		GetPlayerName(playerid, pname, sizeof(pname));
 		format(msg, sizeof(msg), "PM from %s(%i): %s", pname, playerid, params);
 		SendWrappedMessageToClients(g_bitAdmins, COLOUR_MSG, msg);
+		#if CHATHISTORY_SIZE > 0
+			alar_AddLineToHistory(COLOUR_MSG, msg, HISTORY_ADMIN_ONLY | HISTORY_WRAPPED);
+		#endif
 		format(msg, sizeof(msg), "%s sent a pm to admins \"%s\"", pname, params);
 		LogAction(msg);
 		format(msg, sizeof(msg), "PM sent to admins: %s", params);
@@ -7586,11 +8063,18 @@ dcmd_apm(const playerid, params[])
 	return 1;
 }
 
-dcmd_apunch(const playerid, params[])
+acmd:apunch(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_PUNCH_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /apunch [player] (amount)");
+		SendClientMessage(playerid, COLOUR_HELP, "Removes armour and health from a player");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /apunch [player] (amount)");
 		return 1;
 	}
@@ -7604,7 +8088,7 @@ dcmd_apunch(const playerid, params[])
 	}
 
 	new msg[MAX_INPUT];
-	if((gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) && (pid != playerid)) {
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL]) && pid != playerid) {
 		format(msg, sizeof(msg), "You cannot punch level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
@@ -7621,10 +8105,15 @@ dcmd_apunch(const playerid, params[])
 	}
 
 	if(GetPlayerState(pid) == PLAYER_STATE_ONFOOT) ApplyAnimation(pid, "FIGHT_B", "HitB_3", 4.1, 0, 1, 1, 0, 1200);
+	if(amount < 0 || amount > 200) amount = gServerData[E_PUNCH_DECREMENT];
 
-	if(amount < 0 || amount > 200) {
-		amount = gServerData[E_PUNCH_DECREMENT];
-	}
+	#if SOUND_VOLUME > 0
+		new Float:px, Float:py, Float:pz;
+		GetPlayerPos(pid, px, py, pz);
+		for(new i; i < SOUND_VOLUME; i++) {
+			PlayerPlaySound(pid, 1130, px, py, pz);
+		}
+	#endif
 
 	if(amount > 0) {
 		new Float:phealth, Float:parmour;
@@ -7679,21 +8168,28 @@ dcmd_apunch(const playerid, params[])
 	return 1;
 }
 
-dcmd_ar(const playerid, params[])
+acmd:ar(const playerid, const params[], const bool:help)
 {
-	return dcmd_arepair(playerid, params);
+	return acmd_arepair(playerid, params, help);
 }
 
-dcmd_arape(const playerid, params[])
+acmd:arape(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_RAPE_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /arape [player] (seconds) (reason)");
+		SendClientMessage(playerid, COLOUR_HELP, "Freezes/jails and mutes a player, permanently if no time is specified");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /arape [player] (seconds) (reason)");
 		return 1;
 	}
 
-	new timestr[20], pid, reason[MAX_REASON];
+	new timestr[20], pid, reason[MAX_INPUT];
 	strscan(params, "pzz", pid, timestr, sizeof(timestr), reason, sizeof(reason));
 
 	if(pid == INVALID_PLAYER_ID) {
@@ -7704,9 +8200,13 @@ dcmd_arape(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "You cannot rape yourself");
 		return 1;
 	}
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot rape NPCs");
+		return 1;
+	}
 
-	new msg[MAX_INPUT];
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+	new msg[MAX_INPUT * 2];
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot rape level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
@@ -7724,7 +8224,9 @@ dcmd_arape(const playerid, params[])
 				SendClientMessage(playerid, COLOUR_WARNING, msg);
 				return 1;
 			}
-			UnwriteAdminState(pid, ADMIN_STATE_MUTED | ADMIN_STATE_FROZEN | ADMIN_STATE_JAILED);
+			if(!IsPlayerNPC(pid)) {
+				Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED | ADMIN_STATE_FROZEN | ADMIN_STATE_JAILED, rapetime);
+			}
 
 			if(gPlayerData[pid][E_UNMUTE]) KillTimer(gPlayerData[pid][E_UNMUTE]);
 			if(gPlayerData[pid][E_UNJAIL]) KillTimer(gPlayerData[pid][E_UNJAIL]);
@@ -7743,7 +8245,9 @@ dcmd_arape(const playerid, params[])
 			format(msg, sizeof(msg), "%s has set %s's rape time to %i seconds", ReturnPlayerName(playerid), ReturnPlayerName(pid), rapetime);
 		} else {
 			if(rapetime <= 0) {
-				WriteAdminState(pid, ADMIN_STATE_MUTED | ADMIN_STATE_FROZEN | ADMIN_STATE_JAILED);
+				if(!IsPlayerNPC(pid)) {
+					Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED | ADMIN_STATE_FROZEN | ADMIN_STATE_JAILED);
+				}
 
 				if(gPlayerData[pid][E_UNMUTE]) KillTimer(gPlayerData[pid][E_UNMUTE]);
 				if(gPlayerData[pid][E_UNJAIL]) KillTimer(gPlayerData[pid][E_UNJAIL]);
@@ -7757,7 +8261,9 @@ dcmd_arape(const playerid, params[])
 				SendClientMessage(playerid, COLOUR_ADMIN, msg);
 				format(msg, sizeof(msg), "%s has made %s's rape permanent", ReturnPlayerName(playerid), ReturnPlayerName(pid));
 			} else {
-				UnwriteAdminState(pid, ADMIN_STATE_MUTED | ADMIN_STATE_FROZEN | ADMIN_STATE_JAILED);
+				if(!IsPlayerNPC(pid)) {
+					Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED | ADMIN_STATE_FROZEN | ADMIN_STATE_JAILED, rapetime);
+				}
 
 				if(gPlayerData[pid][E_UNMUTE]) KillTimer(gPlayerData[pid][E_UNMUTE]);
 				if(gPlayerData[pid][E_UNJAIL]) KillTimer(gPlayerData[pid][E_UNJAIL]);
@@ -7783,17 +8289,14 @@ dcmd_arape(const playerid, params[])
 
 	if(rapetime != 0) {
 		if(reason[0] == '\0') {
-			reason = "No reason";
+			reason = DEFAULT_REASON;
 		}
-	}
-	else if(reason[0] != '\0') {
+	} else if(reason[0] != '\0') {
 		format(reason, sizeof(reason), "%s %s", timestr, reason);
-	}
-	else if(timestr[0] != '\0') {
+	} else if(timestr[0] != '\0') {
 		strcpy(reason, timestr);
-	}
-	else {
-		reason = "No reason";
+	} else {
+		reason = DEFAULT_REASON;
 	}
 
 	if(gPlayerData[pid][E_UNJAIL]) {
@@ -7809,9 +8312,7 @@ dcmd_arape(const playerid, params[])
 		gPlayerData[pid][E_UNFREEZE] = 0;
 	}
 
-	#if USECALLBACKS
-		new oldstatus = gPlayerData[pid][E_STATE];
-	#endif
+	new oldstatus = gPlayerData[pid][E_STATE];
 	if(IsSpawned(pid)) {
 		if(~gPlayerData[pid][E_STATE] & ADMIN_STATE_JAILED) {
 			SetPlayerVirtualWorld(pid, pid + 1);
@@ -7828,32 +8329,108 @@ dcmd_arape(const playerid, params[])
 
 	gPlayerData[pid][E_STATE] |= ADMIN_STATE_MUTED | ADMIN_STATE_FROZEN | ADMIN_STATE_JAILED;
 
+	new shortreason[MAX_REASON];
+	if(reason[0]) {
+		strtruncate(shortreason, reason);
+	}
+
 	if(rapetime > 0) {
-		format(msg, sizeof(msg), "%s has been raped by %s for %i seconds (%s)", ReturnPlayerName(pid), ReturnPlayerName(playerid), rapetime, reason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s has been raped by %s for %i seconds (%s)", ReturnPlayerName(pid), ReturnPlayerName(playerid), rapetime, shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s has been raped by %s for %i seconds", ReturnPlayerName(pid), ReturnPlayerName(playerid), rapetime);
+		}
 		LogAction(msg);
 		AddLogString(msg);
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			format(msg, sizeof(msg), "%s has been raped for %i seconds (%s)", ReturnPlayerName(pid), rapetime, reason);
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s has been raped for %i seconds (%s)", ReturnPlayerName(pid), rapetime, shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s has been raped for %i seconds", ReturnPlayerName(pid), rapetime);
+			}
 		}
-		SendClientMessageToAll(COLOUR_WARNING, msg);
+		LoopPlayers(i) {
+			if(i != playerid && i != pid) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+			}
+		}
+		if(reason[0]) {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been raped for %i seconds (%s)", rapetime, reason);
+			} else {
+				format(msg, sizeof(msg), "You have been raped for %i seconds by %s (%s)", rapetime, ReturnPlayerName(playerid), reason);
+			}
+			SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have raped %s for %i seconds (%s)", ReturnPlayerName(pid), rapetime, reason);
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		} else {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been raped for %i seconds", rapetime);
+			} else {
+				format(msg, sizeof(msg), "You have been raped for %i seconds by %s", rapetime, ReturnPlayerName(playerid));
+			}
+			SendClientMessage(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have raped %s for %i seconds", ReturnPlayerName(pid), rapetime);
+			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		}
+		if(!IsPlayerNPC(pid)) {
+			Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED | ADMIN_STATE_FROZEN | ADMIN_STATE_JAILED, rapetime);
+		}
 
 		if(gPlayerData[pid][E_UNJAIL]) KillTimer(gPlayerData[pid][E_UNJAIL]);
 		if(gPlayerData[pid][E_UNMUTE]) KillTimer(gPlayerData[pid][E_UNMUTE]);
 		if(gPlayerData[pid][E_UNFREEZE]) KillTimer(gPlayerData[pid][E_UNFREEZE]);
+
 		gPlayerData[pid][E_UNJAIL] = SetTimerEx("alar_unjail", rapetime * 1000, 0, "i", pid);
 		gPlayerData[pid][E_UNMUTE] = SetTimerEx("alar_unmute", rapetime * 1000, 0, "i", pid);
 		gPlayerData[pid][E_UNFREEZE] = SetTimerEx("alar_unfreeze", rapetime * 1000, 0, "i", pid);
+
 		gPlayerData[pid][E_MUTE_TIME] = gPlayerData[pid][E_JAIL_TIME] = gPlayerData[pid][E_FREEZE_TIME] = gettime() + rapetime;
 	} else {
-		format(msg, sizeof(msg), "%s has been raped by %s (%s)" , ReturnPlayerName(pid), ReturnPlayerName(playerid), reason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s has been raped by %s (%s)" , ReturnPlayerName(pid), ReturnPlayerName(playerid), shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s has been raped by %s" , ReturnPlayerName(pid), ReturnPlayerName(playerid));
+		}
 		LogAction(msg);
 		AddLogString(msg);
-		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			format(msg, sizeof(msg), "%s has been raped (%s)", ReturnPlayerName(pid), reason);
-		}
-		SendClientMessageToAll(COLOUR_WARNING, msg);
 
-		WriteAdminState(pid, ADMIN_STATE_MUTED | ADMIN_STATE_JAILED | ADMIN_STATE_FROZEN);
+		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s has been raped (%s)", ReturnPlayerName(pid), shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s has been raped", ReturnPlayerName(pid));
+			}
+		}
+		LoopPlayers(i) {
+			if(i != playerid && i != pid) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+			}
+		}
+
+		if(reason[0]) {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				format(msg, sizeof(msg), "You have been raped (%s)", reason);
+			} else {
+				format(msg, sizeof(msg), "You have been raped by %s (%s)", ReturnPlayerName(playerid), reason);
+			}
+			SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have raped %s (%s)", ReturnPlayerName(pid), reason);
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		} else {
+			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+				msg = "You have been raped";
+			} else {
+				format(msg, sizeof(msg), "You have been raped by %s", ReturnPlayerName(playerid));
+			}
+			SendClientMessage(pid, COLOUR_WARNING, msg);
+			format(msg, sizeof(msg), "You have raped %s", ReturnPlayerName(pid));
+			SendClientMessage(playerid, COLOUR_ADMIN, msg);
+		}
+
+		if(!IsPlayerNPC(pid)) {
+			Player_SetStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED | ADMIN_STATE_FROZEN | ADMIN_STATE_JAILED);
+		}
 	}
 
 	LoopPlayers(i) {
@@ -7866,11 +8443,116 @@ dcmd_arape(const playerid, params[])
 	return 1;
 }
 
-dcmd_aremcash(const playerid, params[])
+acmd:areloaddata(const playerid, const params[], const bool:help)
 {
+	if(playerid != INVALID_PLAYER_ID && (gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0)) return 0;
+	if(LevelCheck(playerid, E_RELOADDATA_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /areloaddata");
+		SendClientMessage(playerid, COLOUR_HELP, "Reloads server settings");
+		return 1;
+	}
+
+	new msg[MAX_INPUT] = "Server data reloaded by the console";
+	if(playerid != INVALID_PLAYER_ID) {
+		format(msg, sizeof(msg), "%s has reloaded the server data", ReturnPlayerName(playerid));
+	}
+
+	db_free_result(db_query(gAlarDB, "BEGIN TRANSACTION"));
+	LoadData();
+	db_free_result(db_query(gAlarDB, "END TRANSACTION"));
+
+	LoopPlayers(i) {
+		if(IsPlayerAdmin(i)) {
+			gPlayerData[i][E_RCONLEVEL] = gServerData[E_RCON_LEVEL];
+		}
+
+		AllowPlayerTeleport(i, cmdchk(i, E_TELE_LEVEL));
+
+		if(gPlayerData[i][E_SPECTATING]) {
+			if(!cmdchk(i, E_SPEC_LEVEL)) {
+				SpawnUsingData(i);
+			} else if(!gServerData[E_EXTRA_SPEC_VIEWS] && (gPlayerData[i][E_SPECMODE] == 1 || gPlayerData[i][E_SPECMODE] == 2)) {
+				gPlayerData[i][E_SPECMODE] = 0;
+				if(IsPlayerInAnyVehicle(gPlayerData[i][E_SPECID])) {
+					PlayerSpectateVehicle(i, GetPlayerVehicleID(gPlayerData[i][E_SPECID]));
+				}
+			}
+		}
+
+		#if LOG_LINES > 0 && LOG_PAGES > 0
+			if(gPlayerData[i][E_LOG_PAGE] && !cmdchk(i, E_LOG_LEVEL)) {
+				#if LOG_PAGES > 1
+					TextDrawHideForPlayer(playerid, gLogPage[gPlayerData[playerid][E_LOG_PAGE]-1]);
+				#endif
+				for(new j, offset = (gPlayerData[i][E_LOG_PAGE] - 1) * LOG_LINES; j < LOG_LINES; j++) {
+					TextDrawHideForPlayer(i, gAdminLog[j + offset][E_TEXTBOX_TEXT]);
+				}
+				gPlayerData[i][E_LOG_PAGE] = 0;
+			}
+		#endif
+
+		#if JOINMSG_LINES > 0
+			if(!gPlayerData[i][E_JOINTEXT]) {
+				if(gServerData[E_JOIN_MSGS]) {
+					for(new j; j < sizeof(gJoinMessage); j++) {
+						TextDrawHideForPlayer(i, gJoinMessage[j][E_TEXTBOX_TEXT]);
+					}
+				} else {
+					for(new j; j < sizeof(gJoinMessage); j++) {
+						TextDrawShowForPlayer(i, gJoinMessage[j][E_TEXTBOX_TEXT]);
+					}
+				}
+			}
+		#endif
+
+		if(gPlayerData[i][E_SPECHUD] != INVALID_TEXT_DRAW && !gServerData[E_SPEC_HUD]) {
+			SpecHUDHide(i);
+		}
+	}
+	LogAction(msg);
+	AddLogString(msg);
+	return 1;
+}
+
+acmd:aremallcash(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_REMALLCASH_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aremallcash");
+		SendClientMessage(playerid, COLOUR_HELP, "Resets the money of all players");
+		return 1;
+	}
+
+	LoopPlayers(i) ResetPlayerMoney(i);
+
+	new msg[MAX_INPUT];
+	format(msg, sizeof(msg), "%s has bankrupted everyone", ReturnPlayerName(playerid));
+	LogAction(msg);
+	AddLogString(msg);
+	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+		SendClientMessageToAll(COLOUR_PLAYER, "Everyone has been bankrupted");
+	} else {
+		SendClientMessageToAll(COLOUR_PLAYER, msg);
+	}
+	return 1;
+}
+
+acmd:aremcash(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_REMCASH_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aremcash [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Resets a player's money");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aremcash [player]");
 		return 1;
 	}
@@ -7915,12 +8597,44 @@ dcmd_aremcash(const playerid, params[])
 	return 1;
 }
 
-dcmd_aremweapons(const playerid, params[])
+acmd:aremallweapons(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_REMALLWEAPONS_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aremallweapons");
+		SendClientMessage(playerid, COLOUR_HELP, "Resets the weapons of all players");
+		return 1;
+	}
+
+	LoopPlayers(i) ResetPlayerWeapons(i);
+
+	new msg[MAX_INPUT];
+	format(msg, sizeof(msg), "%s has disarmed everyone", ReturnPlayerName(playerid));
+	LogAction(msg);
+	AddLogString(msg);
+	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+		SendClientMessageToAll(COLOUR_PLAYER, "Everyone has been disarmed");
+	} else {
+		SendClientMessageToAll(COLOUR_PLAYER, msg);
+	}
+	return 1;
+}
+
+acmd:aremweapons(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_REMWEAPONS_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
-		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aremguns [player]");
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aremweapons [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Resets a player's weapons");
+		return 1;
+	}
+
+	if(isnull(params)) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aremweapons [player]");
 		return 1;
 	}
 
@@ -7929,7 +8643,6 @@ dcmd_aremweapons(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
-
 	if(!IsSpawned(pid)) {
 		if(playerid != pid) {
 			format(msg, sizeof(msg), "%s is not spawned", ReturnPlayerName(pid));
@@ -7963,18 +8676,37 @@ dcmd_aremweapons(const playerid, params[])
 	return 1;
 }
 
-dcmd_arepair(const playerid, params[])
+acmd:arepair(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_REPAIR_LEVEL)) return 1;
 
-	new pname[MAX_PLAYER_NAME], amount, pid = INVALID_PLAYER_ID;
-	strscan(params, "si", pname, sizeof(pname), amount);
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /arepair (player) (amount)");
+		SendClientMessage(playerid, COLOUR_HELP, "Repairs a player's vehicle or sets their vehicle health, if no player is specified your own vehicle is repaired");
+		return 1;
+	}
+
+	new pname[MAX_PLAYER_NAME], amount, pid = INVALID_PLAYER_ID, bool:fullhealth;
+	if(strscan(params, "si", pname, sizeof(pname), amount)) fullhealth = true;
 	if(pname[0] == '\0') {
 		if(gPlayerData[playerid][E_SPECID] != INVALID_PLAYER_ID) {
 			pid = gPlayerData[playerid][E_SPECID];
 		} else if(IsPlayerInAnyVehicle(playerid)) {
 			pid = playerid;
-		} else {
+		} else if((amount = GetPlayerSurfingVehicleID(playerid)) != INVALID_VEHICLE_ID) {
+			LoopPlayers(i) {
+				if(IsPlayerInAnyVehicle(i) && GetPlayerVehicleID(i) == amount) {
+					if(GetPlayerState(i) == PLAYER_STATE_DRIVER) {
+						pid = i;
+						break;
+					} else {
+						pid = i;
+					}
+				}
+			}
+		}
+		if(pid == INVALID_PLAYER_ID) {
 			SendClientMessage(playerid, COLOUR_WARNING, "You are not in a vehicle");
 			return 1;
 		}
@@ -7993,10 +8725,12 @@ dcmd_arepair(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
+	if(!(0 <= amount < 1000)) amount = 1000;
 
-	if(amount <= 0 || amount >= 1000) {
-		new Float:current;
-		GetVehicleHealth(GetPlayerVehicleID(pid), current);
+	if(fullhealth) {
+		new Float:current,
+			vid = GetPlayerVehicleID(pid);
+		GetVehicleHealth(vid, current);
 		if(current >= 1000.0) {
 			if(playerid == pid) {
 				format(msg, sizeof(msg), "Your %s already has full health", ReturnPlayerVehicleName(pid));
@@ -8007,22 +8741,23 @@ dcmd_arepair(const playerid, params[])
 			return 1;
 		}
 
-		SetVehicleHealth(GetPlayerVehicleID(pid), 1000.0);
+		new mid = GetVehicleModel(vid);
+		RepairVehicle(vid);
 		if(playerid == pid) {
-			format(msg, sizeof(msg), "You have repaired your %s", ReturnPlayerVehicleName(pid));
+			format(msg, sizeof(msg), "You have repaired your %s", ReturnVehicleName(mid));
 			SendClientMessage(pid, COLOUR_ADMIN, msg);
-			format(msg, sizeof(msg), "%s has repaired their %s", pname, ReturnPlayerVehicleName(pid));
+			format(msg, sizeof(msg), "%s has repaired their %s", pname, ReturnVehicleName(mid));
 		} else {
 			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-				format(msg, sizeof(msg), "Your %s has been repaired", ReturnPlayerVehicleName(pid));
+				format(msg, sizeof(msg), "Your %s has been repaired", ReturnVehicleName(mid));
 			} else {
-				format(msg, sizeof(msg), "%s has repaired your %s", ReturnPlayerName(playerid), ReturnPlayerVehicleName(pid));
+				format(msg, sizeof(msg), "%s has repaired your %s", ReturnPlayerName(playerid), ReturnVehicleName(mid));
 			}
 			SendClientMessage(pid, COLOUR_PLAYER, msg);
 
-			format(msg, sizeof(msg), "You have repaired %s's %s", pname, ReturnPlayerVehicleName(pid));
+			format(msg, sizeof(msg), "You have repaired %s's %s", pname, ReturnVehicleName(mid));
 			SendClientMessage(playerid, COLOUR_ADMIN, msg);
-			format(msg, sizeof(msg), "%s has repaired %s's %s", ReturnPlayerName(playerid), pname, ReturnPlayerVehicleName(pid));
+			format(msg, sizeof(msg), "%s has repaired %s's %s", ReturnPlayerName(playerid), pname, ReturnVehicleName(mid));
 		}
 	} else {
 		new Float:current;
@@ -8056,17 +8791,23 @@ dcmd_arepair(const playerid, params[])
 		}
 	}
 
-
 	LogAction(msg);
 	AddLogString(msg);
 	return 1;
 }
 
-dcmd_arespawn(const playerid, params[])
+acmd:arespawn(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_RESPAWN_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /arespawn [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Respawns a player");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /arespawn [player]");
 		return 1;
 	}
@@ -8076,13 +8817,11 @@ dcmd_arespawn(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
-
-	if((gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) && (pid != playerid)) {
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL]) && (pid != playerid)) {
 		format(msg, sizeof(msg), "You cannot respawn level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
-
 	if(!IsSpawned(pid)) {
 		if(playerid != pid) {
 			format(msg, sizeof(msg), "%s is not spawned", ReturnPlayerName(pid));
@@ -8117,11 +8856,18 @@ dcmd_arespawn(const playerid, params[])
 	return 1;
 }
 
-dcmd_asay(const playerid, params[])
+acmd:asay(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SAY_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asay [player] [message]");
+		SendClientMessage(playerid, COLOUR_HELP, "Displays a message on a player's screen");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asay [player] [message]");
 		return 1;
 	}
@@ -8133,7 +8879,6 @@ dcmd_asay(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
-
 	if(!isValidGameText(msg) || strlen(msg) > 80) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid message");
 		return 1;
@@ -8156,11 +8901,18 @@ dcmd_asay(const playerid, params[])
 	return 1;
 }
 
-dcmd_aselect(const playerid, params[])
+acmd:aselect(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SELECT_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aselect [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Returns a player to spawn selection");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aselect [player]");
 		return 1;
 	}
@@ -8170,8 +8922,7 @@ dcmd_aselect(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
-
-	if((gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) && (pid != playerid)) {
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL]) && pid != playerid) {
 		format(msg, sizeof(msg), "You cannot put level %i admins into class selection", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
@@ -8212,11 +8963,18 @@ dcmd_aselect(const playerid, params[])
 	return 1;
 }
 
-dcmd_aservername(const playerid, params[])
+acmd:aservername(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SERVERNAME_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aservername [name]");
+		SendClientMessage(playerid, COLOUR_HELP, "Changes the name of the server in the sa-mp browser");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aservername [name]");
 		return 1;
 	}
@@ -8224,7 +8982,6 @@ dcmd_aservername(const playerid, params[])
 	new string[MAX_INPUT];
 	format(string, sizeof(string), "hostname %s", params);
 	SendRconCommand(string);
-
 	format(string, sizeof(string), "The server name has been changed to %s", params);
 	SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
 
@@ -8233,18 +8990,23 @@ dcmd_aservername(const playerid, params[])
 	}
 
 	format(string, sizeof(string), "%s changed the server name to %s", ReturnPlayerName(playerid), params);
-
 	LogAction(string);
 	AddLogString(string);
-
 	return 1;
 }
 
-dcmd_asetadmin(const playerid, params[])
+acmd:asetadmin(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SETADMIN_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asetadmin [player] [level]");
+		SendClientMessage(playerid, COLOUR_HELP, "Grants admin rights to a player");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asetadmin [player] [level]");
 		return 1;
 	}
@@ -8254,7 +9016,6 @@ dcmd_asetadmin(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "You must specify a level");
 		return 1;
 	}
-
 	if(pid == INVALID_PLAYER_ID) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
@@ -8266,13 +9027,11 @@ dcmd_asetadmin(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
-
 	if(pid == playerid) {
 		SendClientMessage(playerid, COLOUR_WARNING, "You cannot modify your own account");
 		return 1;
 	}
-
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot modify level %i admin accounts", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
@@ -8281,7 +9040,7 @@ dcmd_asetadmin(const playerid, params[])
 	new pname[MAX_PLAYER_NAME];
 	GetPlayerName(pid, pname, sizeof(pname));
 	if(plvl == 0) {
-		if(gPlayerData[pid][E_ADMINLEVEL] == 0) {
+		if(gPlayerData[pid][E_ADMINLEVEL] <= 0) {
 			format(msg, sizeof(msg), "%s is not an admin", pname);
 			SendClientMessage(playerid, COLOUR_WARNING, msg);
 			return 1;
@@ -8305,14 +9064,16 @@ dcmd_asetadmin(const playerid, params[])
 			}
 		#endif
 
-		dini_Unset(USERFILE, gPlayerData[pid][E_NAME]);
+		Admin_RemoveAdmin(gAlarDB, gPlayerData[pid][E_NAME]);
 		format(msg, sizeof(msg), "%s has been removed as an admin", pname);
 		SendClientMessage(playerid, COLOUR_ADMIN, msg);
 		LogAction(msg);
 		AddLogString(msg);
 		SendClientMessage(pid, COLOUR_WARNING, "You have been removed as an admin");
 
-		Bit_Set(g_bitAdmins, pid, 0);
+		if(gPlayerData[pid][E_RCONLEVEL] <= 0) {
+			Bit_Set(g_bitAdmins, pid, 0);
+		}
 		gPlayerData[pid][E_ADMINLEVEL] = 0;
 		gPlayerData[pid][E_NAME][0] = '\0';
 
@@ -8322,7 +9083,7 @@ dcmd_asetadmin(const playerid, params[])
 
 	new logininfo[E_LOGINDATA];
 	if(gPlayerData[pid][E_ADMINLEVEL] > 0) {
-		GetPlayerData(gPlayerData[pid][E_NAME], logininfo);
+		Admin_GetData(gAlarDB, gPlayerData[pid][E_NAME], logininfo);
 
 		#if LOG_LINES > 0 && LOG_PAGES > 0
 			if(!cmdchk(pid, E_LOG_LEVEL)) {
@@ -8351,8 +9112,8 @@ dcmd_asetadmin(const playerid, params[])
 	}
 	logininfo[E_LOGIN_LEVEL] = plvl;
 	GetPlayerIp(pid, logininfo[E_LOGIN_IP], sizeof(SIZE_E_LOGINDATA[E_LOGIN_IP]));
-	strcpy(logininfo[E_LOGIN_PW], MD5_Hash(gServerData[E_DEFAULT_PW]), sizeof(SIZE_E_LOGINDATA[E_LOGIN_PW]));
-	SetPlayerData(gPlayerData[pid][E_NAME], logininfo);
+	strcpy(logininfo[E_LOGIN_HASH], Hash_String(gServerData[E_DEFAULT_PW]), sizeof(SIZE_E_LOGINDATA[E_LOGIN_HASH]));
+	Admin_SetAdmin(gAlarDB, gPlayerData[pid][E_NAME], logininfo);
 
 	gPlayerData[pid][E_ADMINLEVEL] = plvl;
 
@@ -8371,11 +9132,18 @@ dcmd_asetadmin(const playerid, params[])
 	return 1;
 }
 
-dcmd_asetname(const playerid, params[])
+acmd:asetname(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SETNAME_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asetname [player] [name]");
+		SendClientMessage(playerid, COLOUR_HELP, "Changes a player's name");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asetname [player] [name]");
 		return 1;
 	}
@@ -8387,7 +9155,6 @@ dcmd_asetname(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
-
 	if(!isValidName(newname)) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 		return 1;
@@ -8399,19 +9166,26 @@ dcmd_asetname(const playerid, params[])
 		}
 	}
 
-	{
-		new string[MAX_STRING],
+	if(!IsPlayerNPC(pid)) {
+		new string[MAX_INPUT * 2],
 			BanData[E_ALAR_BAN];
-		if(GetBanInfo(newname, "", BanData)) {
-			format(string, sizeof(string), "The name %s is banned [%s %s %s] (%s)", BanData[E_BAN_NAME], BanData[E_BAN_DATE], BanData[E_BAN_TIME], BanData[E_BAN_ADMIN], BanData[E_BAN_REASON]);
+		if(Bans_GetBanInfo(gAlarDB, newname, "", BanData)) {
+			if(BanData[E_BAN_REASON][0]) {
+				format(string, sizeof(string), "The name %s is banned [%s %s] (%s)", BanData[E_BAN_NAME], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN], BanData[E_BAN_REASON]);
+			} else {
+				format(string, sizeof(string), "The name %s is banned [%s %s]", BanData[E_BAN_NAME], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN]);
+			}
 			SendWrappedMessageToPlayer(playerid, COLOUR_WARNING, string);
 			return 1;
 		}
 
 		new SuspendData[E_ALAR_SUSPENSION];
-		if(GetSuspendInfo(newname, "", SuspendData)) {
-			new minute = floatround((SuspendData[E_SUSPEND_HOUR] - floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor)) * 60);
-			format(string, sizeof(string), "The name %s is suspended until %02i/%02i/%i %02i:%02i [%s %s %s] (%s)", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_DAY], SuspendData[E_SUSPEND_MONTH], SuspendData[E_SUSPEND_YEAR], floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor), minute, SuspendData[E_SUSPEND_DATE], SuspendData[E_SUSPEND_TIME], SuspendData[E_SUSPEND_ADMIN], SuspendData[E_SUSPEND_REASON]);
+		if(Suspensions_GetSuspendInfo(gAlarDB, newname, "", SuspendData)) {
+			if(SuspendData[E_SUSPEND_REASON][0]) {
+				format(string, sizeof(string), "The name %s is suspended until %s [%s %s] (%s)", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN], SuspendData[E_SUSPEND_REASON]);
+			} else {
+				format(string, sizeof(string), "The name %s is suspended until %s [%s %s]", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN]);
+			}
 			SendWrappedMessageToPlayer(playerid, COLOUR_WARNING, string);
 			return 1;
 		}
@@ -8420,7 +9194,7 @@ dcmd_asetname(const playerid, params[])
 	new string[MAX_INPUT];
 	if(gPlayerData[pid][E_ADMINLEVEL] > 0) {
 		if(strcmp(newname, gPlayerData[pid][E_NAME], true)) {
-			new plvl = dini_Int(USERFILE, newname);
+			new plvl = Admin_GetHighestLevel(gAlarDB, newname);
 			if(plvl >= gPlayerData[pid][E_ADMINLEVEL]) {
 				if(pid == playerid) {
 					format(string, sizeof(string), "You cannnot use a level %i admin's name", plvl);
@@ -8462,6 +9236,10 @@ dcmd_asetname(const playerid, params[])
 	LogAction(string);
 	AddLogString(string);
 
+	Alias_Update(gAlarDB, oldname, ReturnPlayerIP(playerid), gettime() - gPlayerData[playerid][E_JOIN_TIME]);
+	gPlayerData[playerid][E_JOIN_TIME] =  gettime();
+	Alias_Add(gAlarDB, newname, ReturnPlayerIP(playerid));
+
 	CallRemoteFunction("OnAdminNameChange", "iss", pid, newname, oldname);
 
 	if(IsSpawned(pid)) {
@@ -8472,9 +9250,9 @@ dcmd_asetname(const playerid, params[])
 		}
 	}
 
-	if(gPlayerData[pid][E_ADMINLEVEL] == 0) {
+	if(gPlayerData[pid][E_ADMINLEVEL] <= 0) {
 		new logininfo[E_LOGINDATA];
-		if(GetPlayerData(newname, logininfo)) {
+		if(Admin_GetData(gAlarDB, newname, logininfo)) {
 			strcpy(gPlayerData[pid][E_NAME], newname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
 			new msg[MAX_INPUT];
 			if(!logininfo[E_LOGIN_MANUAL] && gServerData[E_AUTO_LOGIN] && IPcompare(logininfo[E_LOGIN_IP], ReturnPlayerIP(pid))) {
@@ -8493,7 +9271,7 @@ dcmd_asetname(const playerid, params[])
 					AddLogString(msg);
 				} else {
 					LoopPlayers(i) {
-						if(gPlayerData[i][E_ADMINLEVEL] > 0 && i != pid) {
+						if((gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0) && i != pid) {
 							SendClientMessage(i, COLOUR_ADMIN, msg);
 						}
 					}
@@ -8534,9 +9312,16 @@ dcmd_asetname(const playerid, params[])
 	return 1;
 }
 
-dcmd_asetping(const playerid, params[])
+acmd:asetping(const playerid, const params[], const bool:help)
 {
+	if(playerid != INVALID_PLAYER_ID && gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SETPING_LEVEL)) return 1;
+
+	if(help) {
+		SendMessage(playerid, COLOUR_HELP, "USAGE: /asetping [amount]");
+		SendClientMessage(playerid, COLOUR_HELP, "Sets the maximium average ping before a player is kicked, 0 or less to disable the ping kicker");
+		return 1;
+	}
 
 	new newping = strval(params);
 	if(!isNumeric(params)) {
@@ -8554,45 +9339,52 @@ dcmd_asetping(const playerid, params[])
 		return 1;
 	}
 
-	if(dini_IntSet(SETTINGSFILE, "MaxPing", newping)) {
-		new msg[MAX_INPUT];
-		if(newping <= 0) {
-			if(playerid != INVALID_PLAYER_ID) {
-				format(msg, sizeof(msg), "%s has disabled the ping kicker", ReturnPlayerName(playerid), newping);
-			} else {
-				msg = "The ping kicker has been disabled";
-			}
+	Setting_SetInt(gAlarDB, "MaxPing", newping);
+
+	new msg[MAX_INPUT];
+	if(newping <= 0) {
+		if(playerid != INVALID_PLAYER_ID) {
+			format(msg, sizeof(msg), "%s has disabled the ping kicker", ReturnPlayerName(playerid), newping);
 		} else {
-			if(playerid != INVALID_PLAYER_ID) {
-				format(msg, sizeof(msg), "%s has set the max ping to %i", ReturnPlayerName(playerid), newping);
-			} else {
-				format(msg, sizeof(msg), "The max ping has been set to %i", newping);
-			}
+			msg = "The ping kicker has been disabled";
 		}
-		LogAction(msg);
-		AddLogString(msg);
-		if(playerid != INVALID_PLAYER_ID && gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			if(newping > 0) {
-				format(msg, sizeof(msg), "The max ping has been set to %i", newping);
-			} else {
-				msg = "The ping kicker has been disabled";
-			}
+	} else {
+		if(playerid != INVALID_PLAYER_ID) {
+			format(msg, sizeof(msg), "%s has set the max ping to %i", ReturnPlayerName(playerid), newping);
+		} else {
+			format(msg, sizeof(msg), "The max ping has been set to %i", newping);
 		}
-		SendClientMessageToAll(COLOUR_PLAYER, msg);
-		gServerData[E_MAX_PING] = newping;
 	}
+	LogAction(msg);
+	AddLogString(msg);
+
+	if(playerid != INVALID_PLAYER_ID && gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+		if(newping > 0) {
+			format(msg, sizeof(msg), "The max ping has been set to %i", newping);
+		} else {
+			msg = "The ping kicker has been disabled";
+		}
+	}
+	SendClientMessageToAll(COLOUR_PLAYER, msg);
+	gServerData[E_MAX_PING] = newping;
 	return 1;
 }
 
-dcmd_ashout(const playerid, params[])
+acmd:ashout(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SHOUT_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ashout [message]");
+		SendClientMessage(playerid, COLOUR_HELP, "Displays a message on the screens of all players");
 		return 1;
 	}
 
+	if(isnull(params)) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ashout [message]");
+		return 1;
+	}
 	if(!isValidGameText(params) || strlen(params) > 80) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid message");
 		return 1;
@@ -8607,11 +9399,74 @@ dcmd_ashout(const playerid, params[])
 	return 1;
 }
 
-dcmd_aslap(const playerid, params[])
+acmd:asinfo(const playerid, const params[], const bool:help)
 {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asinfo");
+		SendClientMessage(playerid, COLOUR_HELP, "Displays information about the server");
+		return 1;
+	}
+
+	new msg[MAX_INPUT],
+		numplayers,
+		numbots,
+		numadmins,
+		numdesynced,
+		numfrozen,
+		numjailed,
+		nummuted;
+
+	LoopPlayers(i) {
+		if(IsPlayerNPC(i)) numbots++;
+		else numplayers++;
+		if(gPlayerData[i][E_STATE] & ADMIN_STATE_MUTED) nummuted++;
+		if(gPlayerData[i][E_STATE] & ADMIN_STATE_FROZEN) numfrozen++;
+		if(gPlayerData[i][E_STATE] & ADMIN_STATE_JAILED) numjailed++;
+		if(gPlayerData[i][E_STATE] & ADMIN_STATE_DESYNCED) numdesynced++;
+		if(gPlayerData[i][E_ADMINLEVEL] > 0 && (~gPlayerData[i][E_STATE] & ADMIN_STATE_HIDDEN || playerid == INVALID_PLAYER_ID || gPlayerData[playerid][E_ADMINLEVEL] > 0)) numadmins++;
+	}
+
+	new message_colour = gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER;
+	format(msg, sizeof(msg), "Server: %s  Website: %s  Gamemode: %s", ReturnServerVar("hostname"), ReturnServerVar("weburl"), ReturnServerVar("gamemodetext"));
+	SendMessage(playerid, message_colour, msg);
+	format(msg, sizeof(msg), "Players: %i/%i  Bots: %i  Admins: %i  Desynced: %i  Frozen: %i  Jailed: %i  Muted: %i", numplayers, gMaxPlayers, numbots, numadmins, numdesynced, numfrozen, numjailed, nummuted);
+	SendMessage(playerid, message_colour, msg);
+
+	if(playerid == INVALID_PLAYER_ID || gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0) {
+		new numpaused,
+			numimmune,
+			numwhitelisted,
+			numspectating,
+			tick = GetTickCount();
+
+		LoopPlayers(i) {
+			if(IsSpawned(i) && tick - gPlayerData[i][E_LAST_UPDATE] > 1000) numpaused++;
+			if(gPlayerData[i][E_SPECTATING]) numspectating++;
+			if(gPlayerData[i][E_WHITELISTED]) numwhitelisted++;
+			if(gPlayerData[i][E_IMMUNE]) numimmune++;
+		}
+		format(msg, sizeof(msg), "Alar Version: " #ALAR_VERSION "  Admin Vehicles: %i  Paused: %i  Immune: %i  Whitelisted: %i  Admins Spectating: %i", Bit_GetCount(gCreatedVehicles), numpaused, numimmune, numwhitelisted, numspectating);
+		SendMessage(playerid, COLOUR_ADMIN, msg);
+	}
+
+	format(msg, sizeof(msg), "Time: %s  Gravity: %s  Weather: %i", ReturnServerVar("worldtime"), ReturnServerVar("gravity"), ReturnServerVar("weather"));
+	if(gServerData[E_MAX_PING] > 0)  format(msg, sizeof(msg), "%s  Max Ping: %i", msg, gServerData[E_MAX_PING]);
+	SendMessage(playerid, message_colour, msg);
+	return 1;
+}
+
+acmd:aslap(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SLAP_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aslap [player] (amount)");
+		SendClientMessage(playerid, COLOUR_HELP, "Removes health from a player");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aslap [player] (amount)");
 		return 1;
 	}
@@ -8626,13 +9481,11 @@ dcmd_aslap(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
-
-	if((gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) && (pid != playerid)) {
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL]) && (pid != playerid)) {
 		format(msg, sizeof(msg), "You cannot slap level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
-
 	if(!IsSpawned(pid)) {
 		if(playerid != pid) {
 			format(msg, sizeof(msg), "%s is not spawned", ReturnPlayerName(pid));
@@ -8644,10 +9497,16 @@ dcmd_aslap(const playerid, params[])
 	}
 
 	if(GetPlayerState(pid) == PLAYER_STATE_ONFOOT) ApplyAnimation(pid, "FIGHT_B", "HitB_3", 4.1, 0, 1, 1, 0, 1200);
+	if(amount < 0 || amount > 100)  amount = gServerData[E_SLAP_DECREMENT];
 
-	if(amount < 0 || amount > 100) {
-		amount = gServerData[E_SLAP_DECREMENT];
-	}
+	SetPlayerDrunkLevel(pid, 0);
+	#if SOUND_VOLUME > 0
+		new Float:px, Float:py, Float:pz;
+		GetPlayerPos(pid, px, py, pz);
+		for(new i; i < SOUND_VOLUME; i++) {
+			PlayerPlaySound(pid, 1190, px, py, pz);
+		}
+	#endif
 
 	if(amount > 0) {
 		new Float:phealth;
@@ -8695,11 +9554,18 @@ dcmd_aslap(const playerid, params[])
 	return 1;
 }
 
-dcmd_aslay(const playerid, params[])
+acmd:aslay(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SLAY_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aslay [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Kills a player");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aslay [player]");
 		return 1;
 	}
@@ -8710,12 +9576,11 @@ dcmd_aslay(const playerid, params[])
 		return 1;
 	}
 
-	if((gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) && (pid != playerid)) {
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL]) && (pid != playerid)) {
 		format(msg, sizeof(msg), "You cannot slay level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
-
 	if(!IsSpawned(pid)) {
 		if(playerid != pid) {
 			format(msg, sizeof(msg), "%s is not spawned", ReturnPlayerName(pid));
@@ -8752,11 +9617,17 @@ dcmd_aslay(const playerid, params[])
 	return 1;
 }
 
-dcmd_aspawn(const playerid, params[])
+acmd:aspawn(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SPAWN_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aspawn [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Spawns a player in class selection or spectating");
+		return 1;
+	}
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aspawn [player]");
 		return 1;
 	}
@@ -8767,7 +9638,7 @@ dcmd_aspawn(const playerid, params[])
 		return 1;
 	}
 
-	if((gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) && (pid != playerid)) {
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL]) && (pid != playerid)) {
 		format(msg, sizeof(msg), "You cannot spawn level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
@@ -8790,7 +9661,6 @@ dcmd_aspawn(const playerid, params[])
 	} else {
 		SpawnPlayer(pid);
 	}
-
 	if(playerid != pid) {
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
 			SendClientMessage(pid, COLOUR_PLAYER, "You have been spawned");
@@ -8815,9 +9685,16 @@ dcmd_aspawn(const playerid, params[])
 	return 1;
 }
 
-dcmd_aspec(const playerid, params[])
+acmd:aspec(const playerid, const params[], const bool:help)
 {
+	if((gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) || IsPlayerNPC(playerid)) return 0;
 	if(LevelCheck(playerid, E_SPEC_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aspec (player)");
+		SendClientMessage(playerid, COLOUR_HELP, "Enter or exit spectate mode");
+		return 1;
+	}
 
 	if(!IsSpawned(playerid) && !gPlayerData[playerid][E_SPECTATING]) {
 		SendClientMessage(playerid, COLOUR_WARNING, "You need to be spawned to spectate");
@@ -8825,12 +9702,11 @@ dcmd_aspec(const playerid, params[])
 	}
 
 	new pid = INVALID_PLAYER_ID, msg[MAX_INPUT];
-	if(params[0] == '\0') {
+	if(isnull(params)) {
 		if(gPlayerData[playerid][E_SPECTATING]) {	// already spectating and wants out
 			SpawnUsingData(playerid);
 			return 1;
 		}
-
 		format(msg, sizeof(msg), "%s has entered spectate mode", ReturnPlayerName(playerid));
 		LogAction(msg);
 		AddLogString(msg);
@@ -8846,7 +9722,6 @@ dcmd_aspec(const playerid, params[])
 		TogglePlayerSpectating(playerid, true);
 
 		PutPlayerIntoFreeSpec(playerid);
-
 		#if SPEC_TXT_TIME > 0
 			ShowSpecTxt(playerid);
 		#endif
@@ -8869,7 +9744,6 @@ dcmd_aspec(const playerid, params[])
 
 		gPlayerData[playerid][E_LAST_SPECID] = pid;
 	}
-
 	if(!gPlayerData[playerid][E_SPECTATING]) {
 		format(msg, sizeof(msg), "%s has entered spectate mode", ReturnPlayerName(playerid));
 		LogAction(msg);
@@ -8901,20 +9775,150 @@ dcmd_aspec(const playerid, params[])
 
 		ObserverSwitchPlayer(playerid, pid);
 	}
-
 	return 1;
 }
 
-dcmd_asuspend(const playerid, params[])
+acmd:aspectating(const playerid, const params[], const bool:help)
 {
+	if(playerid != INVALID_PLAYER_ID && (gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0)) return 0;
+
+	if(help) {
+		if(playerid == INVALID_PLAYER_ID) {
+			print("USAGE: /aspectating\nDisplay a list of all spectating players");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aspectating");
+			SendClientMessage(playerid, COLOUR_HELP, "Display a list of all spectating players");
+		}
+		return 1;
+	}
+
+	new msg[512] = "Spectating admins:",
+		admins,
+		players,
+		adminheads[MAX_PLAYERS] = {INVALID_PLAYER_ID, ...},
+		playerheads[MAX_PLAYERS] = {INVALID_PLAYER_ID, ...},
+		adminfreehead = INVALID_PLAYER_ID,
+		playerfreehead = INVALID_PLAYER_ID,
+		speclist[MAX_PLAYERS] = {INVALID_PLAYER_ID, ...};
+
+	LoopPlayers(i) {
+		if(gPlayerData[i][E_SPECTATING]) {
+			if(gPlayerData[i][E_SPECID] != INVALID_PLAYER_ID) {
+				if(adminheads[gPlayerData[i][E_SPECID]] == INVALID_PLAYER_ID) {
+					adminheads[gPlayerData[i][E_SPECID]] = i;
+				} else {
+					new id = adminheads[gPlayerData[i][E_SPECID]];
+					while(speclist[id] != INVALID_PLAYER_ID) id = speclist[id];
+					speclist[id] = i;
+				}
+			} else {
+				if(adminfreehead == INVALID_PLAYER_ID) {
+					adminfreehead = i;
+				} else {
+					new id = adminfreehead;
+					while(speclist[id] != INVALID_PLAYER_ID) id = speclist[id];
+					speclist[id] = i;
+				}
+			}
+			admins++;
+		} else if(GetPlayerState(i) == PLAYER_STATE_SPECTATING) {
+			if(gPlayerData[i][E_SPECID] != INVALID_PLAYER_ID) {
+				if(playerheads[gPlayerData[i][E_SPECID]] == INVALID_PLAYER_ID) {
+					playerheads[gPlayerData[i][E_SPECID]] = i;
+				} else {
+					new id = playerheads[gPlayerData[i][E_SPECID]];
+					while(speclist[id] != INVALID_PLAYER_ID) id = speclist[id];
+					speclist[id] = i;
+				}
+			} else {
+				if(playerfreehead == INVALID_PLAYER_ID) {
+					playerfreehead = i;
+				} else {
+					new id = playerfreehead;
+					while(speclist[id] != INVALID_PLAYER_ID) id = speclist[id];
+					speclist[id] = i;
+				}
+			}
+			players++;
+		}
+	}
+
+	if(admins) {
+		for(new i; i < sizeof(adminheads); i++) {
+			if(adminheads[i] != INVALID_PLAYER_ID) {
+				if(speclist[adminheads[i]] == INVALID_PLAYER_ID) {
+					format(msg, sizeof(msg), "%s %s(%s)", msg, ReturnPlayerName(adminheads[i]), ReturnPlayerName(i));
+				} else {
+					format(msg, sizeof(msg), "%s <%s", msg, ReturnPlayerName(adminheads[i]));
+					for(new j = adminheads[i]; speclist[j] != INVALID_PLAYER_ID; j = speclist[j]) {
+						format(msg, sizeof(msg), "%s, %s", msg, ReturnPlayerName(speclist[j]));
+					}
+					format(msg, sizeof(msg), "%s>(%s)", msg, ReturnPlayerName(i));
+				}
+			}
+		}
+		if(adminfreehead != INVALID_PLAYER_ID) {
+			format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(adminfreehead));
+			for(new j = adminfreehead; speclist[j] != INVALID_PLAYER_ID; j = speclist[j]) {
+				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(speclist[j]));
+			}
+		}
+		if(playerid == INVALID_PLAYER_ID) {
+			print(msg);
+		} else {
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		}
+	}
+
+	if(players) {
+		msg = "Spectating players:";
+		for(new i; i < sizeof(playerheads); i++) {
+			if(playerheads[i] != INVALID_PLAYER_ID) {
+				if(speclist[playerheads[i]] == INVALID_PLAYER_ID) {
+					format(msg, sizeof(msg), "%s %s(%s)", msg, ReturnPlayerName(playerheads[i]), ReturnPlayerName(i));
+				} else {
+					format(msg, sizeof(msg), "%s <%s", msg, ReturnPlayerName(playerheads[i]));
+					for(new j = playerheads[i]; speclist[j] != INVALID_PLAYER_ID; j = speclist[j]) {
+						format(msg, sizeof(msg), "%s, %s", msg, ReturnPlayerName(speclist[j]));
+					}
+					format(msg, sizeof(msg), "%s>(%s)", msg, ReturnPlayerName(i));
+				}
+			}
+		}
+		if(playerfreehead != INVALID_PLAYER_ID) {
+			format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(playerfreehead));
+			for(new j = playerfreehead; speclist[j] != INVALID_PLAYER_ID; j = speclist[j]) {
+				format(msg, sizeof(msg), "%s %s", msg, ReturnPlayerName(speclist[j]));
+			}
+		}
+		if(playerid == INVALID_PLAYER_ID) {
+			print(msg);
+		} else {
+			SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+		}
+	} else if(admins == 0) {
+		SendMessage(playerid, COLOUR_ADMIN, "No players are currently spectating");
+	}
+	return 1;
+}
+
+acmd:asuspend(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SUSPEND_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asuspend [player] [hours] (reason)");
+		SendClientMessage(playerid, COLOUR_HELP, "Temporarily bans a player from the server");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asuspend [player] [hours] (reason)");
 		return 1;
 	}
 
-	new stime[20], pid, sreason[MAX_REASON] = "No reason";
+	new stime[20], pid, sreason[MAX_INPUT] = DEFAULT_REASON;
 	strscan(params, "psz", pid, stime, sizeof(stime), sreason, sizeof(sreason));
 
 	if(pid == INVALID_PLAYER_ID) {
@@ -8925,6 +9929,10 @@ dcmd_asuspend(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, "You cannot suspend yourself");
 		return 1;
 	}
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot suspend NPCs");
+		return 1;
+	}
 
 	new Float:suspendtime = floatstr(stime);
 	if(!isFloat(stime) || suspendtime <= 0.0 || suspendtime > 10000000.0) {	// a thousand years should be plenty
@@ -8932,88 +9940,106 @@ dcmd_asuspend(const playerid, params[])
 		return 1;
 	}
 
-	new msg[MAX_INPUT];
-
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+	new msg[MAX_INPUT * 2];
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL]) && (pid != playerid)) {
 		format(msg, sizeof(msg), "You cannot suspend level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
-	new sIP[MAX_IP];
+	new sIP[MAX_IP],
+		pname[MAX_PLAYER_NAME];
+	GetPlayerName(pid, pname, sizeof(pname));
 	GetPlayerIp(pid, sIP, sizeof(sIP));
 
-	new File:handle = fopen(USERFILE, io_read);
-	if(handle) {
-		new pLEVEL, pIP[MAX_IP], line[MAX_STRING];
-		while(fread(handle, line)) {
-			if(line[0] == '#') continue;
-			strstripnewline(line);
-			strscan(dini_ExtractValue(line), "is ", pLEVEL, pIP, sizeof(pIP));
-			if((pLEVEL >= gPlayerData[playerid][E_ADMINLEVEL]) && IPcompare(pIP, sIP)) {
-				format(msg, sizeof(msg), "You cannot suspend level %i admins", pLEVEL);
-				fclose(handle);
-				SendClientMessage(playerid, COLOUR_WARNING, msg);
-				return 1;
-			}
-		}
-		fclose(handle);
+	new bool:IPonly = gServerData[E_LOGGEDIN_FUNC][0] == '\0' || !CallRemoteFunction(gServerData[E_LOGGEDIN_FUNC], "i", pid),
+		level;
+	if(IPonly) {
+		level = Admin_GetHighestLevel(gAlarDB, "", sIP);
+	} else {
+		level = Admin_GetHighestLevel(gAlarDB, pname, sIP);
+	}
+	if(level >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
+		format(msg, sizeof(msg), "You cannot suspend level %i admins", level);
+		SendClientMessage(playerid, COLOUR_WARNING, msg);
+		return 1;
 	}
 
-	new pname[MAX_PLAYER_NAME];
-	GetPlayerName(pid, pname, sizeof(pname));
-
-	SuspendPlayer(pname, sIP, suspendtime, sreason, gPlayerData[playerid][E_NAME]);
-
-	format(msg, sizeof(msg), "Name: \"%s\" successfully suspended", pname);
-	SendClientMessage(playerid, COLOUR_ADMIN, msg);
+	if(IPonly) {
+		format(msg, sizeof(msg), "Name: \"%s\" successfully suspended", pname);
+		SendClientMessage(playerid, COLOUR_ADMIN, msg);
+	}
 	format(msg, sizeof(msg), "IP: \"%s\" successfully suspended", sIP);
 	SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-	format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours (%s)", suspendtime, sreason);
-	SendClientMessage(pid, COLOUR_WARNING, msg);
+	new shortreason[MAX_INPUT];
 
-	new year,
-		month,
-		day,
-		hour,
-		minute,
-		date[15],
-		time[10];
-	getdate(year, month, day);
-	gettime(hour, minute);
-	format(date, sizeof(date), "%02i/%02i/%i", day, month, year);
-	format(time, sizeof(time), "%02i:%02i", hour, minute);
+	if(sreason[0]) {
+		strtruncate(shortreason, sreason);
+		format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours (%s)", suspendtime, sreason);
+	} else {
+		format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours", suspendtime);
+	}
+	SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+
+	new datetime[MAX_TIMESTAMP];
+	datetime = ReturnTimeStamp();
 
 	if(gServerData[E_SUSPEND_MSG][0] != '\0') {
-		SendBanMsg(pid, gServerData[E_SUSPEND_MSG], date, time, gPlayerData[playerid][E_NAME]);
+		if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+			SendBanMsg(pid, gServerData[E_SUSPEND_MSG], datetime, "");
+		} else {
+			SendBanMsg(pid, gServerData[E_SUSPEND_MSG], datetime, gPlayerData[playerid][E_NAME]);
+		}
 	}
-	format(msg, sizeof(msg), "%s(%i) has been suspended from the server by %s for %0.2f hours (%s)", pname, pid, ReturnPlayerName(playerid), suspendtime, sreason);
+	if(shortreason[0]) {
+		format(msg, sizeof(msg), "%s(%i) has been suspended from the server by %s for %0.2f hours (%s)", pname, pid, ReturnPlayerName(playerid), suspendtime, shortreason);
+	} else {
+		format(msg, sizeof(msg), "%s(%i) has been suspended from the server by %s for %0.2f hours", pname, pid, ReturnPlayerName(playerid), suspendtime);
+	}
 
 	LogAction(msg);
 	AddLogString(msg);
 
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		format(msg, sizeof(msg), "%s(%i) has been suspended from the server for %0.2f hours (%s)", pname, pid, suspendtime, sreason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "%s(%i) has been suspended from the server for %0.2f hours (%s)", pname, pid, suspendtime, shortreason);
+		} else {
+			format(msg, sizeof(msg), "%s(%i) has been suspended from the server for %0.2f hours", pname, pid, suspendtime);
+		}
 	}
 
 	AddJoinString(pid, COLOUR_SUSPEND, msg);
 	Kick(pid);
 
+	new hits = 1;
 	if(gServerData[E_KICK_ALL_IPS]) {
 		LoopPlayers(i) {
-			if(i != pid && IPcompare(sIP, ReturnPlayerIP(i))) {
-				format(msg, sizeof(msg), "You are suspended from the server for %0.2f hours (%s)", suspendtime, sreason);
-				SendClientMessage(i, COLOUR_WARNING, msg);
-				if(gServerData[E_SUSPEND_MSG][0] != '\0') {
-					SendBanMsg(i, gServerData[E_SUSPEND_MSG], date, time, gPlayerData[playerid][E_NAME]);
+			if(i != pid && !IsPlayerNPC(i) && IPcompare(sIP, ReturnPlayerIP(i))) {
+				if(sreason[0]) {
+					format(msg, sizeof(msg), "You are suspended from the server for %0.2f hours (%s)", suspendtime, sreason);
+				} else {
+					format(msg, sizeof(msg), "You are suspended from the server for %0.2f hours", suspendtime);
 				}
-				format(msg, sizeof(msg), "%s(%i) is suspended from the server (%s)", ReturnPlayerName(i), i, sreason);
+				SendWrappedMessageToPlayer(i, COLOUR_WARNING, msg);
+				if(gServerData[E_SUSPEND_MSG][0] != '\0') {
+					if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+						SendBanMsg(i, gServerData[E_SUSPEND_MSG], datetime, "");
+					} else {
+						SendBanMsg(i, gServerData[E_SUSPEND_MSG], datetime, gPlayerData[playerid][E_NAME]);
+					}
+				}
+				if(shortreason[0]) {
+					format(msg, sizeof(msg), "%s(%i) is suspended from the server (%s)", ReturnPlayerName(i), i, shortreason);
+				} else {
+					format(msg, sizeof(msg), "%s(%i) is suspended from the server", ReturnPlayerName(i), i);
+				}
 
 				LogAction(msg);
 				AddLogString(msg);
 				AddJoinString(i, COLOUR_SUSPEND, msg);
 				Kick(i);
+				hits++;
 			}
 		}
 	} else {
@@ -9027,19 +10053,44 @@ dcmd_asuspend(const playerid, params[])
 			SendWrappedMessageToPlayer(playerid, COLOUR_WARNING, msg);
 		}
 	}
+
+	if(IPonly) {
+		if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+			Suspensions_SuspendIP(gAlarDB, sIP, suspendtime, sreason, "", ReturnPlayerIP(playerid), hits);
+		} else {
+			Suspensions_SuspendIP(gAlarDB, sIP, suspendtime, sreason, gPlayerData[playerid][E_NAME], ReturnPlayerIP(playerid), hits);
+		}
+	} else {
+		if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+			Suspensions_SuspendPlayer(gAlarDB, pname, sIP, suspendtime, sreason, "", ReturnPlayerIP(playerid), hits);
+		} else {
+			Suspensions_SuspendPlayer(gAlarDB, pname, sIP, suspendtime, sreason, gPlayerData[playerid][E_NAME], ReturnPlayerIP(playerid), hits);
+		}
+	}
 	return 1;
 }
 
-dcmd_asuspendip(const playerid, params[])
+acmd:asuspendip(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_SUSPEND_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
-		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asuspendip [IP] [hours] (reason)");
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asuspendip [IP] or [player] [hours] (reason)");
+		if(cmdchk(playerid, E_RANGESUSPEND_LEVEL)) {
+			SendClientMessage(playerid, COLOUR_HELP, "Temporarily bans an IP or a player by their IP, an IP range such as 127.0.*.* may also be used");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "Temporarily bans an IP or a player by their IP");
+		}
 		return 1;
 	}
 
-	new sIP[MAX_IP], stime[20], sreason[MAX_REASON] = "No reason";
+	if(isnull(params)) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asuspendip [IP] or [player] [hours] (reason)");
+		return 1;
+	}
+
+	new sIP[MAX_IP], stime[20], sreason[MAX_INPUT] = DEFAULT_REASON;
 	strscan(params, "ssz", sIP, sizeof(sIP), stime, sizeof(stime), sreason, sizeof(sreason));
 
 	if(!IPisvalid(sIP, cmdchk(playerid, E_RANGESUSPEND_LEVEL))) {
@@ -9058,80 +10109,133 @@ dcmd_asuspendip(const playerid, params[])
 		return 1;
 	}
 
-	new msg[MAX_INPUT];
-	if(!IsIPNotSuspended(sIP)) {
+	new msg[MAX_INPUT * 2];
+	if(!Suspensions_IsIPNotSuspended(gAlarDB, sIP)) {
 		format(msg, sizeof(msg), "IP: \"%s\" is already suspended", sIP);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
-	SuspendIP(sIP, suspendtime, sreason, gPlayerData[playerid][E_NAME]);
+	new level = Admin_GetHighestLevel(gAlarDB, "", sIP);
+	if(level >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
+		format(msg, sizeof(msg), "You cannot suspend level %i admins", level);
+		SendClientMessage(playerid, COLOUR_WARNING, msg);
+		return 1;
+	}
 
 	format(msg, sizeof(msg), "IP: %s successfully suspended", sIP);
 	SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-	format(msg, sizeof(msg), "%s has suspended the ip %s for %0.2f hours (%s)", ReturnPlayerName(playerid), sIP, suspendtime, sreason);
+	new shortreason[MAX_REASON];
+	if(sreason[0]) {
+		strtruncate(shortreason, sreason);
+		format(msg, sizeof(msg), "%s has suspended the ip %s for %0.2f hours (%s)", ReturnPlayerName(playerid), sIP, suspendtime, shortreason);
+	} else {
+		format(msg, sizeof(msg), "%s has suspended the ip %s for %0.2f hours", ReturnPlayerName(playerid), sIP, suspendtime);
+	}
 
 	LogAction(msg);
 	AddLogString(msg);
 
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		format(msg, sizeof(msg), "The ip %s has been suspended for %0.2f hours (%s)", sIP, suspendtime, sreason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "The ip %s has been suspended for %0.2f hours (%s)", sIP, suspendtime, shortreason);
+		} else {
+			format(msg, sizeof(msg), "The ip %s has been suspended for %0.2f hours", sIP, suspendtime);
+		}
 	}
 	SendClientMessageToAll(COLOUR_PLAYER, msg);
 
+	new datetime[MAX_TIMESTAMP];
+	datetime = ReturnTimeStamp();
 
-	new year,
-		month,
-		day,
-		hour,
-		minute,
-		date[15],
-		time[10];
-
-	getdate(year, month, day);
-	gettime(hour, minute);
-	format(date, sizeof(date), "%02i/%02i/%i", day, month, year);
-	format(time, sizeof(time), "%02i:%02i", hour, minute);
-
+	new hits;
 	LoopPlayers(i) {
-		if(IPcompare(sIP, ReturnPlayerIP(i))) {
-			format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours (%s)", suspendtime, sreason);
-			SendClientMessage(i, COLOUR_WARNING, msg);
-			if(gServerData[E_RANGESUSPEND_MSG][0] != '\0' && strfind(sIP, "*") != -1) {
-				SendBanMsg(i, gServerData[E_RANGESUSPEND_MSG], date, time, gPlayerData[playerid][E_NAME]);
-			} else if(gServerData[E_SUSPEND_MSG][0] != '\0') {
-				SendBanMsg(i, gServerData[E_SUSPEND_MSG], date, time, gPlayerData[playerid][E_NAME]);
+		if(!IsPlayerNPC(i) && IPcompare(sIP, ReturnPlayerIP(i))) {
+			if(sreason[0]) {
+				format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours (%s)", suspendtime, sreason);
+			} else {
+				format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours", suspendtime);
 			}
-			format(msg, sizeof(msg), "%s(%i) has been suspended from the server by %s (%s)", ReturnPlayerName(i), i, ReturnPlayerName(playerid), sreason);
+			SendWrappedMessageToPlayer(i, COLOUR_WARNING, msg);
+			if(gServerData[E_RANGESUSPEND_MSG][0] != '\0' && strfind(sIP, "*") != -1) {
+				if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+					SendBanMsg(i, gServerData[E_RANGESUSPEND_MSG], datetime, "");
+				} else {
+					SendBanMsg(i, gServerData[E_RANGESUSPEND_MSG], datetime, gPlayerData[playerid][E_NAME]);
+				}
+			} else if(gServerData[E_SUSPEND_MSG][0] != '\0') {
+				if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+					SendBanMsg(i, gServerData[E_SUSPEND_MSG], datetime, "");
+				} else {
+					SendBanMsg(i, gServerData[E_SUSPEND_MSG], datetime, gPlayerData[playerid][E_NAME]);
+				}
+			}
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s(%i) has been suspended from the server by %s (%s)", ReturnPlayerName(i), i, ReturnPlayerName(playerid), shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s(%i) has been suspended from the server by %s", ReturnPlayerName(i), i, ReturnPlayerName(playerid));
+			}
 
 			LogAction(msg);
 			AddLogString(msg);
 
 			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-				format(msg, sizeof(msg), "%s(%i) has been suspended from the server (%s)", ReturnPlayerName(i), i, sreason);
+				if(shortreason[0]) {
+					format(msg, sizeof(msg), "%s(%i) has been suspended from the server (%s)", ReturnPlayerName(i), i, shortreason);
+				} else {
+					format(msg, sizeof(msg), "%s(%i) has been suspended from the server", ReturnPlayerName(i), i);
+				}
 			}
 
 			AddJoinString(i, COLOUR_SUSPEND, msg);
 			Kick(i);
+			hits++;
 		}
+	}
+
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+		Suspensions_SuspendIP(gAlarDB, sIP, suspendtime, sreason, "", ReturnPlayerIP(playerid), hits);
+	} else {
+		Suspensions_SuspendIP(gAlarDB, sIP, suspendtime, sreason, gPlayerData[playerid][E_NAME], ReturnPlayerIP(playerid), hits);
 	}
 	return 1;
 }
 
-dcmd_asuspendname(const playerid, params[])
+acmd:asuspendname(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_BAN_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asuspendname [player name] [hours] (reason)");
+		if(cmdchk(playerid, E_WILDSUSPEND_LEVEL)) {
+			SendClientMessage(playerid, COLOUR_HELP, "Temporarily bans a name from the server, the wildcards * and ? may be used");
+		} else {
+			SendClientMessage(playerid, COLOUR_HELP, "Temporarily bans a name from the server");
+		}
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /asuspendname [player name] [hours] (reason)");
 		return 1;
 	}
 
-	new sreason[MAX_REASON] = "No reason", stime[20], sname[MAX_PLAYER_NAME];
+	new sreason[MAX_INPUT] = DEFAULT_REASON, stime[20], sname[MAX_PLAYER_NAME];
 	strscan(params, "ssz", sname, sizeof(sname), stime, sizeof(stime), sreason, sizeof(sreason));
 
-	if(!isValidName(sname, cmdchk(playerid, E_WILDBAN_LEVEL))) {
+	if(sreason[0] == '"') {
+		new len = strlen(sreason);
+		if(len > 2 && sreason[len-1] == '"') {
+			strmid(sreason, sreason, 1, len-1);
+		} else {
+			SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
+			return 1;
+		}
+	}
+
+	if(!isValidName(sname, cmdchk(playerid, E_WILDSUSPEND_LEVEL))) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 		return 1;
 	}
@@ -9142,84 +10246,105 @@ dcmd_asuspendname(const playerid, params[])
 		return 1;
 	}
 
-	new msg[MAX_INPUT];
-	if(!IsNameNotSuspended(sname)) {
+	new msg[MAX_INPUT * 2];
+	if(!Suspensions_IsNameNotSuspended(gAlarDB, sname)) {
 		format(msg, sizeof(msg), "Name: \"%s\" is already suspended", sname);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
-	new File:handle=fopen(USERFILE, io_read);
-	if(handle) {
-		new pLEVEL, line[MAX_STRING];
-		while(fread(handle, line)) {
-			pLEVEL = strval(dini_ExtractValue(line));
-			if((pLEVEL >= gPlayerData[playerid][E_ADMINLEVEL]) && strwild(sname, dini_ExtractKey(line), true)) {
-				format(msg, sizeof(msg), "You cannot suspend level %i admins", pLEVEL);
-				fclose(handle);
-				SendClientMessage(playerid, COLOUR_WARNING, msg);
-				return 1;
-			}
-		}
-		fclose(handle);
+	new level = Admin_GetHighestLevel(gAlarDB, sname);
+	if(level >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
+		format(msg, sizeof(msg), "You cannot suspend level %i admins", level);
+		SendClientMessage(playerid, COLOUR_WARNING, msg);
+		return 1;
 	}
-
-	SuspendName(sname, suspendtime, sreason, gPlayerData[playerid][E_NAME]);
 
 	format(msg, sizeof(msg), "Name: \"%s\" successfully suspended", sname);
 	SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-	format(msg, sizeof(msg), "%s has suspended the name %s for %0.2f hours (%s)", ReturnPlayerName(playerid), sname, suspendtime, sreason);
+	new shortreason[MAX_REASON];
+	if(sreason[0]) {
+		strtruncate(shortreason, sreason);
+		format(msg, sizeof(msg), "%s has suspended the name %s for %0.2f hours (%s)", ReturnPlayerName(playerid), sname, suspendtime, shortreason);
+	} else {
+		format(msg, sizeof(msg), "%s has suspended the name %s for %0.2f hours", ReturnPlayerName(playerid), sname, suspendtime);
+	}
 
 	LogAction(msg);
 	AddLogString(msg);
 
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		format(msg, sizeof(msg), "The name %s has been suspended for %0.2f hours (%s)", sname, suspendtime, sreason);
+		if(shortreason[0]) {
+			format(msg, sizeof(msg), "The name %s has been suspended for %0.2f hours (%s)", sname, suspendtime, shortreason);
+		} else {
+			format(msg, sizeof(msg), "The name %s has been suspended for %0.2f hours", sname, suspendtime);
+		}
 	}
 	SendClientMessageToAll(COLOUR_PLAYER, msg);
 
-	new year,
-		month,
-		day,
-		hour,
-		minute,
-		date[15],
-		time[10];
+	new datetime[MAX_TIMESTAMP];
+	datetime = ReturnTimeStamp();
 
-	getdate(year, month, day);
-	gettime(hour, minute);
-	format(date, sizeof(date), "%02i/%02i/%i", day, month, year);
-	format(time, sizeof(time), "%02i:%02i", hour, minute);
-
+	new hits;
 	LoopPlayers(i) {
-		if(strwild(sname, ReturnPlayerName(i), true)) {
-			format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours (%s)", suspendtime, sreason);
-			SendClientMessage(i, COLOUR_WARNING, msg);
-			if(gServerData[E_SUSPEND_MSG][0] != '\0') {
-				SendBanMsg(i, gServerData[E_SUSPEND_MSG], date, time, gPlayerData[playerid][E_NAME]);
+		if(!IsPlayerNPC(i) && strwild(sname, ReturnPlayerName(i), true)) {
+			if(sreason[0]) {
+				format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours (%s)", suspendtime, sreason);
+			} else {
+				format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours", suspendtime);
 			}
-			format(msg, sizeof(msg), "%s(%i) has been suspended from the server by %s (%s)", ReturnPlayerName(i), i, ReturnPlayerName(playerid), sreason);
+			SendWrappedMessageToPlayer(i, COLOUR_WARNING, msg);
+			if(gServerData[E_SUSPEND_MSG][0] != '\0') {
+				if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+					SendBanMsg(i, gServerData[E_SUSPEND_MSG], datetime, "");
+				} else {
+					SendBanMsg(i, gServerData[E_SUSPEND_MSG], datetime, gPlayerData[playerid][E_NAME]);
+				}
+			}
+			if(shortreason[0]) {
+				format(msg, sizeof(msg), "%s(%i) has been suspended from the server by %s (%s)", ReturnPlayerName(i), i, ReturnPlayerName(playerid), shortreason);
+			} else {
+				format(msg, sizeof(msg), "%s(%i) has been suspended from the server by %s", ReturnPlayerName(i), i, ReturnPlayerName(playerid));
+			}
 
 			LogAction(msg);
 			AddLogString(msg);
 
 			if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-				format(msg, sizeof(msg), "%s(%i) has been suspended from the server (%s)", ReturnPlayerName(i), i, sreason);
+				if(shortreason[0]) {
+					format(msg, sizeof(msg), "%s(%i) has been suspended from the server (%s)", ReturnPlayerName(i), i, shortreason);
+				} else {
+					format(msg, sizeof(msg), "%s(%i) has been suspended from the server", ReturnPlayerName(i), i);
+				}
 			}
 
 			AddJoinString(i, COLOUR_SUSPEND, msg);
 			Kick(i);
+			hits++;
 		}
+	}
+
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+		Suspensions_SuspendName(gAlarDB, sname, suspendtime, sreason, "", ReturnPlayerIP(playerid), hits);
+	} else {
+		Suspensions_SuspendName(gAlarDB, sname, suspendtime, sreason, gPlayerData[playerid][E_NAME], ReturnPlayerIP(playerid), hits);
 	}
 	return 1;
 }
 
-dcmd_atime(const playerid, params[])
+acmd:atime(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_TIME_LEVEL)) return 1;
 
-	if(params[0] == '\0' || !isNumeric(params)) {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /atime [hour]");
+		SendClientMessage(playerid, COLOUR_HELP, "Changes the server time");
+		return 1;
+	}
+
+	if(isnull(params) || !isNumeric(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /atime [hour]");
 		return 1;
 	}
@@ -9243,27 +10368,54 @@ dcmd_atime(const playerid, params[])
 	return 1;
 }
 
-dcmd_aunban(const playerid, params[])
+acmd:aunban(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_UNBAN_LEVEL)) return 1;
 
-	new bool:isanip = IPisvalid(params, false);
-	if(params[0] == '\0' || (!isanip && !isValidName(params))) {
+	if(help) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunban [player name] or [IP]");
+		SendClientMessage(playerid, COLOUR_HELP, "Unbans a player from either their name or IP");
 		return 1;
+	}
+
+	new bool:isanip,
+		check[MAX_IP + MAX_PLAYER_NAME];
+	if(params[0] == '"') {
+		new len = strlen(params);
+		if(len > 2 && params[len-1] == '"') {
+			new pname[MAX_PLAYER_NAME];
+			strmid(pname, params, 1, len-1);
+			if(isValidName(pname)) {
+				strcpy(check, pname);
+			} else {
+				SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+				return 1;
+			}
+		} else {
+			SendMessage(playerid, COLOUR_HELP, "USAGE: /aunban [player name] or [IP]");
+			return 1;
+		}
+	} else {
+		isanip = IPisvalid(params, false);
+		if(isnull(params) || (!isanip && !isValidName(params))) {
+			SendMessage(playerid, COLOUR_HELP, "USAGE: /aunban [player name] or [IP]");
+			return 1;
+		}
+		strcpy(check, params);
 	}
 
 	new msg[MAX_INPUT],
 		BanData[E_ALAR_BAN];
 
 	if(isanip) {
-		if(!UnbanIP(params, BanData)) {
-			format(msg, sizeof(msg), "%s is not banned", params);
+		if(!Bans_UnbanIP(gAlarDB, check, BanData)) {
+			format(msg, sizeof(msg), "%s is not banned", check);
 			SendClientMessage(playerid, COLOUR_WARNING, msg);
 			return 1;
 		}
 
-		format(msg, sizeof(msg), "IP: %s successfully unbanned", params);
+		format(msg, sizeof(msg), "IP: %s successfully unbanned", check);
 		SendClientMessage(playerid, COLOUR_ADMIN, msg);
 		format(msg, sizeof(msg), "IP: %s has been unbanned from the server by %s", BanData[E_BAN_IP], ReturnPlayerName(playerid));
 
@@ -9274,13 +10426,12 @@ dcmd_aunban(const playerid, params[])
 		}
 		SendClientMessageToAll(COLOUR_PLAYER, msg);
 	} else {
-		if(!UnbanName(params, BanData)) {
-			format(msg, sizeof(msg), "%s is not banned", params);
+		if(!Bans_UnbanName(gAlarDB, check, BanData)) {
+			format(msg, sizeof(msg), "%s is not banned", check);
 			SendClientMessage(playerid, COLOUR_WARNING, msg);
 			return 1;
 		}
-
-		format(msg, sizeof(msg), "Name: %s successfully unbanned", params);
+		format(msg, sizeof(msg), "Name: %s successfully unbanned", check);
 		SendClientMessage(playerid, COLOUR_ADMIN, msg);
 		format(msg, sizeof(msg), "Name: %s has been unbanned from the server by %s", BanData[E_BAN_NAME], ReturnPlayerName(playerid));
 
@@ -9294,11 +10445,18 @@ dcmd_aunban(const playerid, params[])
 	return 1;
 }
 
-dcmd_aundesync(const playerid, params[])
+acmd:aundesync(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_UNDESYNC_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /audesync [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Undesyncs a player");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /audesync [player]");
 		return 1;
 	}
@@ -9319,7 +10477,6 @@ dcmd_aundesync(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
-
 	if(gPlayerData[pid][E_UNDESYNC] != 0) {
 		KillTimer(gPlayerData[pid][E_UNDESYNC]);
 		gPlayerData[pid][E_UNDESYNC] = 0;
@@ -9346,11 +10503,18 @@ dcmd_aundesync(const playerid, params[])
 	return 1;
 }
 
-dcmd_aunfreeze(const playerid, params[])
+acmd:aunfreeze(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_UNFREEZE_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunfreeze [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Unfreezes a player");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunfreeze [player]");
 		return 1;
 	}
@@ -9371,7 +10535,6 @@ dcmd_aunfreeze(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
-
 	if(gPlayerData[pid][E_UNFREEZE] != 0) {
 		KillTimer(gPlayerData[pid][E_UNFREEZE]);
 		gPlayerData[pid][E_UNFREEZE] = 0;
@@ -9379,10 +10542,14 @@ dcmd_aunfreeze(const playerid, params[])
 	gPlayerData[pid][E_FREEZE_TIME] = 0;
 	TogglePlayerControllable(pid, true);
 	gPlayerData[pid][E_STATE] &= ~ADMIN_STATE_FROZEN;
-	UnwriteAdminState(pid, ADMIN_STATE_FROZEN);
+
+	if(!IsPlayerNPC(pid)) {
+		Player_ClearStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_FROZEN);
+	}
 	format(msg, sizeof(msg), "%s has been unfrozen by %s", ReturnPlayerName(pid), ReturnPlayerName(playerid));
 	LogAction(msg);
 	AddLogString(msg);
+
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
 		format(msg, sizeof(msg), "%s has been unfrozen", ReturnPlayerName(pid));
 	}
@@ -9398,11 +10565,43 @@ dcmd_aunfreeze(const playerid, params[])
 	return 1;
 }
 
-dcmd_aunjail(const playerid, params[])
+acmd:aunhide(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunhide");
+		SendClientMessage(playerid, COLOUR_HELP, "Shows your admin status to non-admin players");
+		return 1;
+	}
+
+	if(~gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You are not hidden from the admin list");
+		return 1;
+	}
+
+	if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
+		Admin_Hidden(gAlarDB, gPlayerData[playerid][E_NAME], false);
+	}
+
+	gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_HIDDEN;
+	SendClientMessage(playerid, COLOUR_ADMIN, "You have been unhidden from the admin list");
+	CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] | ADMIN_STATE_HIDDEN);
+	return 1;
+}
+
+acmd:aunjail(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_UNJAIL_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunjail [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Unjails a player");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunjail [player]");
 		return 1;
 	}
@@ -9423,18 +10622,16 @@ dcmd_aunjail(const playerid, params[])
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot unjail level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
-
 	if(gPlayerData[pid][E_UNJAIL] != 0) {
 		KillTimer(gPlayerData[pid][E_UNJAIL]);
 		gPlayerData[pid][E_UNJAIL] = 0;
 	}
 	gPlayerData[pid][E_JAIL_TIME] = 0;
-
 	gPlayerData[pid][E_STATE] &= ~ADMIN_STATE_JAILED;
 
 	if(gPlayerData[pid][E_HEALTH]) {
@@ -9443,7 +10640,7 @@ dcmd_aunjail(const playerid, params[])
 				if(gSpawnSaves & INFOTYPE_POSITION) {
 					SetSpawnInfo(pid, GetPlayerTeam(pid), GetPlayerSkin(pid), gPlayerData[pid][E_POSX], gPlayerData[pid][E_POSY], gPlayerData[pid][E_POSZ], gPlayerData[pid][E_ROT], 0, 0, 0, 0, 0, 0);
 				}
-				gPlayerData[pid][E_SETINFO] = (INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+				gPlayerData[pid][E_SETINFO] = (INFOTYPE_VEHICLE | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
 				SpawnPlayer(pid);
 			}
 			case SPAWN_ALAR_TIMER: {
@@ -9451,7 +10648,7 @@ dcmd_aunjail(const playerid, params[])
 				SetTimerEx("alar_setspawndata", 500, 0, "i", pid);	// stops stupid gamemode spawn stuff
 			}
 			default: {
-				gPlayerData[pid][E_SETINFO] = (INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+				gPlayerData[pid][E_SETINFO] = (INFOTYPE_VEHICLE | INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
 				SpawnPlayer(pid);
 			}
 		}
@@ -9461,11 +10658,13 @@ dcmd_aunjail(const playerid, params[])
 		SetPlayerInterior(pid, 0);
 		SpawnPlayer(pid);
 	}
-
-	UnwriteAdminState(pid, ADMIN_STATE_JAILED);
+	if(!IsPlayerNPC(pid)) {
+		Player_ClearStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_JAILED);
+	}
 	format(msg, sizeof(msg), "%s has been unjailed by %s", ReturnPlayerName(pid), ReturnPlayerName(playerid));
 	LogAction(msg);
 	AddLogString(msg);
+
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
 		format(msg, sizeof(msg), "%s has been unjailed", ReturnPlayerName(pid));
 	}
@@ -9481,11 +10680,18 @@ dcmd_aunjail(const playerid, params[])
 	return 1;
 }
 
-dcmd_aunmute(const playerid, params[])
+acmd:aunmute(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_UNMUTE_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunmute [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Unmutes a player");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunmute [player]");
 		return 1;
 	}
@@ -9517,7 +10723,9 @@ dcmd_aunmute(const playerid, params[])
 
 	gPlayerData[pid][E_STATE] &= ~ADMIN_STATE_MUTED;
 
-	UnwriteAdminState(pid, ADMIN_STATE_MUTED);
+	if(!IsPlayerNPC(pid)) {
+		Player_ClearStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED);
+	}
 
 	format(msg, sizeof(msg), "%s has been unmuted by %s", ReturnPlayerName(pid), ReturnPlayerName(playerid));
 	LogAction(msg);
@@ -9537,11 +10745,18 @@ dcmd_aunmute(const playerid, params[])
 	return 1;
 }
 
-dcmd_aunrape(const playerid, params[])
+acmd:aunrape(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_UNRAPE_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunrape [player]");
+		SendClientMessage(playerid, COLOUR_HELP, "Unfreezes/unjails and unmutes a player");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunrape [player]");
 		return 1;
 	}
@@ -9563,7 +10778,7 @@ dcmd_aunrape(const playerid, params[])
 		return 1;
 	}
 
-	if(gPlayerData[pid][E_ADMINLEVEL] >= gPlayerData[playerid][E_ADMINLEVEL]) {
+	if(max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]) >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
 		format(msg, sizeof(msg), "You cannot unrape level %i admins", gPlayerData[pid][E_ADMINLEVEL]);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
@@ -9604,7 +10819,7 @@ dcmd_aunrape(const playerid, params[])
 					if(gSpawnSaves & INFOTYPE_POSITION) {
 						SetSpawnInfo(pid, GetPlayerTeam(pid), GetPlayerSkin(pid), gPlayerData[pid][E_POSX], gPlayerData[pid][E_POSY], gPlayerData[pid][E_POSZ], gPlayerData[pid][E_ROT], 0, 0, 0, 0, 0, 0);
 					}
-					gPlayerData[pid][E_SETINFO] = (INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+					gPlayerData[pid][E_SETINFO] = (INFOTYPE_VEHICLE | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
 					SpawnPlayer(pid);
 				}
 				case SPAWN_ALAR_TIMER: {
@@ -9612,7 +10827,7 @@ dcmd_aunrape(const playerid, params[])
 					SetTimerEx("alar_setspawndata", 500, 0, "i", pid);	// stops stupid gamemode spawn stuff
 				}
 				default: {
-					gPlayerData[pid][E_SETINFO] = (INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+					gPlayerData[pid][E_SETINFO] = (INFOTYPE_VEHICLE |INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
 					SpawnPlayer(pid);
 				}
 			}
@@ -9624,7 +10839,9 @@ dcmd_aunrape(const playerid, params[])
 		}
 	}
 
-	UnwriteAdminState(pid, ADMIN_STATE_MUTED | ADMIN_STATE_JAILED | ADMIN_STATE_FROZEN);
+	if(!IsPlayerNPC(pid)) {
+		Player_ClearStatus(gAlarDB, ReturnPlayerIP(pid), ADMIN_STATE_MUTED | ADMIN_STATE_FROZEN | ADMIN_STATE_JAILED);
+	}
 
 	CallRemoteFunction("OnAdminStateChange", "iii", pid, gPlayerData[pid][E_STATE], oldstatus);
 
@@ -9644,27 +10861,54 @@ dcmd_aunrape(const playerid, params[])
 	return 1;
 }
 
-dcmd_aunsuspend(const playerid, params[])
+acmd:aunsuspend(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_UNSUSPEND_LEVEL)) return 1;
 
-	new bool:isanip = IPisvalid(params, false);
-	if(params[0] == '\0' || (!isanip && !isValidName(params))) {
+	if(help) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunsuspend [player name] or [IP]");
+		SendClientMessage(playerid, COLOUR_HELP, "Unsuspends a player from either their name or IP");
 		return 1;
+	}
+
+	new bool:isanip,
+		check[MAX_IP + MAX_PLAYER_NAME];
+	if(params[0] == '"') {
+		new len = strlen(params);
+		if(len > 2 && params[len-1] == '"') {
+			new pname[MAX_PLAYER_NAME];
+			strmid(pname, params, 1, len-1);
+			if(isValidName(pname)) {
+				strcpy(check, pname);
+			} else {
+				SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+				return 1;
+			}
+		} else {
+			SendMessage(playerid, COLOUR_HELP, "USAGE: /aunsuspend [player name] or [IP]");
+			return 1;
+		}
+	} else {
+		isanip = IPisvalid(params, false);
+		if(isnull(params) || (!isanip && !isValidName(params))) {
+			SendMessage(playerid, COLOUR_HELP, "USAGE: /aunsuspend [player name] or [IP]");
+			return 1;
+		}
+		strcpy(check, params);
 	}
 
 	new msg[MAX_INPUT],
 		SuspendData[E_ALAR_SUSPENSION];
 
 	if(isanip) {
-		if(!UnsuspendIP(params, SuspendData)) {
-			format(msg, sizeof(msg), "%s is not suspended", params);
+		if(!Suspensions_UnsuspendIP(gAlarDB, check, SuspendData)) {
+			format(msg, sizeof(msg), "%s is not suspended", check);
 			SendClientMessage(playerid, COLOUR_WARNING, msg);
 			return 1;
 		}
 
-		format(msg, sizeof(msg), "IP: %s successfully unsuspended", params);
+		format(msg, sizeof(msg), "IP: %s successfully unsuspended", check);
 		SendClientMessage(playerid, COLOUR_ADMIN, msg);
 		format(msg, sizeof(msg), "IP: %s has been unsuspended from the server by %s", SuspendData[E_SUSPEND_IP], ReturnPlayerName(playerid));
 
@@ -9675,13 +10919,13 @@ dcmd_aunsuspend(const playerid, params[])
 		}
 		SendClientMessageToAll(COLOUR_PLAYER, msg);
 	} else {
-		if(!UnsuspendName(params, SuspendData)) {
-			format(msg, sizeof(msg), "%s is not suspended", params);
+		if(!Suspensions_UnsuspendName(gAlarDB, check, SuspendData)) {
+			format(msg, sizeof(msg), "%s is not suspended", check);
 			SendClientMessage(playerid, COLOUR_WARNING, msg);
 			return 1;
 		}
 
-		format(msg, sizeof(msg), "Name: %s successfully unsuspended", params);
+		format(msg, sizeof(msg), "Name: %s successfully unsuspended", check);
 		SendClientMessage(playerid, COLOUR_ADMIN, msg);
 		format(msg, sizeof(msg), "Name: %s has been unsuspended from the server by %s", SuspendData[E_SUSPEND_NAME], ReturnPlayerName(playerid));
 
@@ -9696,56 +10940,171 @@ dcmd_aunsuspend(const playerid, params[])
 
 }
 
-dcmd_aunwhitelist(const playerid, params[])
+acmd:aunwarn(const playerid, const params[], const bool:help)
 {
-	if(LevelCheck(playerid, E_UNWHITELIST_LEVEL)) return 1;
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_UNWARN_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
-		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunwhitelist [playername]");
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunwarn [player] or [player name]");
+		SendClientMessage(playerid, COLOUR_HELP, "Removes a player's warnings");
 		return 1;
 	}
 
-	if(!isValidName(params)) {
+	if(isnull(params)) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunwarn [player name]");
+		return 1;
+	}
+
+	new pid = INVALID_PLAYER_ID,
+		pname[MAX_PLAYER_NAME];
+	if(params[0] == '"') {
+		new len = strlen(params);
+		if(len > 2 && params[len-1] == '"') {
+			strmid(pname, params, 1, len-1);
+		}
+		if(!isValidName(pname)) {
+			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+			return 1;
+		}
+	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID) {
+		if(IsPlayerNPC(pid)) {
+			SendMessage(playerid, COLOUR_WARNING, "NPCs cannot be warned");
+			return 1;
+		}
+		GetPlayerName(pid, pname, sizeof(pname));
+	} else {
+		if(!isValidName(params)) {
+			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+			return 1;
+		}
+		strcpy(pname, params);
+	}
+
+	new string[MAX_INPUT];
+	if(pid == INVALID_PLAYER_ID) {
+		new level = Admin_GetHighestLevel(gAlarDB, pname);
+		if(level >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
+			format(string, sizeof(string), "You cannot unwarn level %i admins", level);
+			SendClientMessage(playerid, COLOUR_WARNING, string);
+			return 1;
+		}
+	} else if(playerid == pid || (gPlayerData[playerid][E_NAME][0] != '\0' && strcmp(gPlayerData[playerid][E_NAME], pname, true) == 0)) {
+			SendClientMessage(playerid, COLOUR_WARNING, "You cannot unwarn yourself");
+			return 1;
+	} else {
+		new level = max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]);
+		if(level >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
+			format(string, sizeof(string), "You cannot unwarn level %i admins", level);
+			SendClientMessage(playerid, COLOUR_WARNING, string);
+			return 1;
+		}
+	}
+
+	new warnings = Warnings_GetWarningCount(gAlarDB, pname, gServerData[E_WARN_TIMEOUT]);
+	if(warnings) {
+		Warnings_SetInactive(gAlarDB, pname, gServerData[E_WARN_TIMEOUT]);
+		format(string, sizeof(string), "You have removed %i warnings from %s", warnings, pname);
+		SendClientMessage(playerid, COLOUR_ADMIN, string);
+
+		format(string, sizeof(string), "%s has removed %i warnings from %s", ReturnPlayerName(playerid), warnings, pname);
+		LogAction(string);
+		AddLogString(string);
+	} else {
+		format(string, sizeof(string), "%s has no warnings", pname);
+		SendClientMessage(playerid, COLOUR_WARNING, string);
+	}
+
+	return 1;
+}
+
+acmd:aunwhitelist(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_UNWHITELIST_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunwhitelist [player name]");
+		SendClientMessage(playerid, COLOUR_HELP, "Removes a player name's protection from range bans/suspensions");
+		return 1;
+	}
+
+	if(isnull(params)) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunwhitelist [player name]");
+		return 1;
+	}
+
+	new wname[MAX_PLAYER_NAME];
+	if(params[0] == '"') {
+		new len = strlen(params);
+		if(len > 2 && params[len-1] == '"') {
+			strmid(wname, params, 1, len-1);
+		} else {
+			SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
+			return 1;
+		}
+	} else {
+		strcpy(wname, params);
+	}
+
+	if(!isValidName(wname)) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 		return 1;
 	}
 
 	new msg[MAX_INPUT];
-	if(!IsNameWhitelisted(params)) {
-		format(msg, sizeof(msg), "The name %s is not whitelisted", params);
+	if(!Whitelist_IsNameWhitelisted(gAlarDB, wname)) {
+		format(msg, sizeof(msg), "The name %s is not whitelisted", wname);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
-	UnwhitelistName(params);
+	Whitelist_UnwhitelistName(gAlarDB, wname);
+
+	format(msg, sizeof(msg), "The name %s has been unwhitelisted", wname);
+	SendClientMessage(playerid, COLOUR_ADMIN, msg);
+
+	format(msg, sizeof(msg), "%s has unwhitelisted the name %s", ReturnPlayerName(playerid), wname);
+	LogAction(msg);
+	AddLogString(msg);
 
 	new pname[MAX_PLAYER_NAME];
 	LoopPlayers(i) {
 		GetPlayerName(i, pname, sizeof(pname));
-		if(strcmp(pname, params, true) == 0) {
+		if(strcmp(pname, wname, true) == 0) {
 			gPlayerData[i][E_WHITELISTED] = false;
 
 			new BanData[E_ALAR_BAN],
 				pIP[MAX_IP];
 			GetPlayerIp(i, pIP, sizeof(pIP));
-			if(GetBanInfo(pname, pIP, BanData)) {
-				format(msg, sizeof(msg), "You are banned from this server (%s)", BanData[E_BAN_REASON]);
+			if(Bans_GetBanInfo(gAlarDB, pname, pIP, BanData, false, false, true)) {
+				if(BanData[E_BAN_REASON][0]) {
+					format(msg, sizeof(msg), "You are banned from this server (%s)", BanData[E_BAN_REASON]);
+				} else {
+					msg = "You are banned from this server";
+				}
 				SendClientMessage(i, COLOUR_WARNING, msg);
 				if(gServerData[E_RANGEBAN_MSG][0] != '\0' && strfind(BanData[E_BAN_IP], "*") != -1) {
-					SendBanMsg(i, gServerData[E_RANGEBAN_MSG], BanData[E_BAN_DATE], BanData[E_BAN_TIME], BanData[E_BAN_ADMIN]);
+					SendBanMsg(i, gServerData[E_RANGEBAN_MSG], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN]);
 				} else if(gServerData[E_BAN_MSG][0] != '\0') {
-					SendBanMsg(i, gServerData[E_BAN_MSG], BanData[E_BAN_DATE], BanData[E_BAN_TIME], BanData[E_BAN_ADMIN]);
+					SendBanMsg(i, gServerData[E_BAN_MSG], BanData[E_BAN_DATETIME], BanData[E_BAN_ADMIN]);
 				}
-
-				format(msg, sizeof(msg), "%s(%i) is banned from this server (%s)", pname, i, BanData[E_BAN_REASON]);
+				if(BanData[E_BAN_REASON][0]) {
+					format(msg, sizeof(msg), "%s(%i) is banned from this server (%s)", pname, i, BanData[E_BAN_REASON]);
+				} else {
+					format(msg, sizeof(msg), "%s(%i) is banned from this server", pname, i);
+				}
 				if(gServerData[E_HIDE_BANS]) {
 					gPlayerData[i][E_HIDEEXIT] = 3;
 				} else {
 					gPlayerData[i][E_HIDEEXIT] = 1;
 					AddJoinString(i, COLOUR_BAN, msg);
 				}
-
-				format(msg, sizeof(msg), "%s(%i) [%s:%s] is banned from this server (%s)", pname, i, BanData[E_BAN_NAME], BanData[E_BAN_IP], BanData[E_BAN_REASON]);
+				if(BanData[E_BAN_REASON][0]) {
+					format(msg, sizeof(msg), "%s(%i) [%s:%s] is banned from this server (%s)", pname, i, BanData[E_BAN_NAME], BanData[E_BAN_IP], BanData[E_BAN_REASON]);
+				} else {
+					format(msg, sizeof(msg), "%s(%i) [%s:%s] is banned from this server", pname, i, BanData[E_BAN_NAME], BanData[E_BAN_IP]);
+				}
 				AddLogString(msg);
 				LogAction(msg);
 				Kick(i);
@@ -9754,39 +11113,45 @@ dcmd_aunwhitelist(const playerid, params[])
 
 			new SuspendData[E_ALAR_SUSPENSION],
 				bool:unsuspended = false;
-			while(GetSuspendInfo(pname, pIP, SuspendData, gPlayerData[i][E_WHITELISTED])) {
-				new curyear,
-					curmonth,
-					curday,
-					curhour,
-					curmin,
-					cursec;
-				getdate(curyear, curmonth, curday);
-				gettime(curhour, curmin, cursec);
-				if(SuspendData[E_SUSPEND_YEAR] < curyear || (SuspendData[E_SUSPEND_YEAR] == curyear && (SuspendData[E_SUSPEND_MONTH] < curmonth || (SuspendData[E_SUSPEND_MONTH] == curmonth && (SuspendData[E_SUSPEND_DAY] < curday || (SuspendData[E_SUSPEND_DAY] == curday && SuspendData[E_SUSPEND_HOUR] < (curhour + floatdiv(curmin, 60) + floatdiv(cursec, 3600)))))))) {
-					UnsuspendPlayer(pname, pIP, SuspendData);
-					format(msg, sizeof(msg), "%s(%i) [%s:%s] has been unsuspended (%s)", pname, i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
+			while(Suspensions_GetSuspendInfo(gAlarDB, pname, pIP, SuspendData, gPlayerData[i][E_WHITELISTED], false, true)) {
+				if(SuspendData[E_SUSPEND_EXPIRED]) {
+					Suspensions_UnsuspendPlayer(gAlarDB, pname, pIP, SuspendData);
+					if(SuspendData[E_SUSPEND_REASON][0]) {
+						format(msg, sizeof(msg), "%s(%i) [%s:%s] has been unsuspended (%s)", pname, i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
+					} else {
+						format(msg, sizeof(msg), "%s(%i) [%s:%s] has been unsuspended", pname, i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP]);
+					}
 					LogAction(msg);
 					AddLogString(msg);
 					unsuspended = true;
 				} else {
-					new minute = floatround((SuspendData[E_SUSPEND_HOUR] - floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor)) * 60);
-					format(msg, sizeof(msg), "You are suspended from this server until %02i/%02i/%i %02i:%02i (%s)", SuspendData[E_SUSPEND_DAY], SuspendData[E_SUSPEND_MONTH], SuspendData[E_SUSPEND_YEAR], floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor), minute, SuspendData[E_SUSPEND_REASON]);
+					if(SuspendData[E_SUSPEND_REASON][0]) {
+						format(msg, sizeof(msg), "You are suspended from this server until %s (%s)", SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_REASON]);
+					} else {
+						format(msg, sizeof(msg), "You are suspended from this server until %s", SuspendData[E_SUSPEND_EXPIRES]);
+					}
 					SendClientMessage(i, COLOUR_WARNING, msg);
 					if(gServerData[E_RANGESUSPEND_MSG][0] != '\0' && strfind(SuspendData[E_SUSPEND_IP], "*") != -1) {
-						SendBanMsg(i, gServerData[E_RANGESUSPEND_MSG], SuspendData[E_SUSPEND_DATE], SuspendData[E_SUSPEND_TIME], SuspendData[E_SUSPEND_ADMIN]);
+						SendBanMsg(i, gServerData[E_RANGESUSPEND_MSG], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN]);
 					} else if(gServerData[E_SUSPEND_MSG][0] != '\0') {
-						SendBanMsg(i, gServerData[E_SUSPEND_MSG], SuspendData[E_SUSPEND_DATE], SuspendData[E_SUSPEND_TIME], SuspendData[E_SUSPEND_ADMIN]);
+						SendBanMsg(i, gServerData[E_SUSPEND_MSG], SuspendData[E_SUSPEND_DATETIME], SuspendData[E_SUSPEND_ADMIN]);
 					}
-					format(msg, sizeof(msg), "%s(%i) is suspended from this server until %02i/%02i/%i %02i:%02i (%s)", pname, i, SuspendData[E_SUSPEND_DAY], SuspendData[E_SUSPEND_MONTH], SuspendData[E_SUSPEND_YEAR], floatround(SuspendData[E_SUSPEND_HOUR], floatround_floor), minute, SuspendData[E_SUSPEND_REASON]);
+					if(SuspendData[E_SUSPEND_REASON][0]) {
+						format(msg, sizeof(msg), "%s(%i) is suspended from this server until %s (%s)", pname, i, SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_REASON]);
+					} else {
+						format(msg, sizeof(msg), "%s(%i) is suspended from this server until %s", pname, i, SuspendData[E_SUSPEND_EXPIRES]);
+					}
 					if(gServerData[E_HIDE_BANS]) {
 						gPlayerData[i][E_HIDEEXIT] = 3;
 					} else {
 						gPlayerData[i][E_HIDEEXIT] = 1;
 						AddJoinString(i, COLOUR_SUSPEND, msg);
 					}
-
-					format(msg, sizeof(msg), "%s(%i) [%s:%s] is suspended from this server (%s)", pname, i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
+					if(SuspendData[E_SUSPEND_REASON][0]) {
+						format(msg, sizeof(msg), "%s(%i) [%s:%s] is suspended from this server (%s)", pname, i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_REASON]);
+					} else {
+						format(msg, sizeof(msg), "%s(%i) [%s:%s] is suspended from this server", pname, i, SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP]);
+					}
 					AddLogString(msg);
 					LogAction(msg);
 
@@ -9799,7 +11164,7 @@ dcmd_aunwhitelist(const playerid, params[])
 				format(msg, sizeof(msg), "%s(%i) has been unsuspended", pname, i);
 
 				LoopPlayers(j) {
-					if(gPlayerData[j][E_ADMINLEVEL] > 0) {
+					if(gPlayerData[j][E_ADMINLEVEL] > 0 || gPlayerData[j][E_RCONLEVEL] > 0) {
 						SendClientMessage(j, COLOUR_ADMIN, msg);
 					}
 				}
@@ -9807,19 +11172,279 @@ dcmd_aunwhitelist(const playerid, params[])
 			break;
 		}
 	}
-
-	format(msg, sizeof(msg), "The name %s has been unwhitelisted", params);
-	SendClientMessage(playerid, COLOUR_ADMIN, msg);
-
-	format(msg, sizeof(msg), "%s has unwhitelisted the name %s", ReturnPlayerName(playerid), params);
-	LogAction(msg);
-	AddLogString(msg);
 	return 1;
 }
 
-dcmd_aweather(const playerid, params[])
+acmd:awarn(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
+	if(LevelCheck(playerid, E_WARN_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /awarn [player] [reason]");
+		SendClientMessage(playerid, COLOUR_HELP, "Warns a player");
+		return 1;
+	}
+
+	if(isnull(params)) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /awarn [player] [reason]");
+		return 1;
+	}
+
+	new pid, string[MAX_INPUT];
+	strscan(params, "ps", pid, string, sizeof(string));
+
+	if(pid == INVALID_PLAYER_ID) {
+		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
+		return 1;
+	}
+	if(pid == playerid) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot warn yourself");
+		return 1;
+	}
+	if(IsPlayerNPC(pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You cannot warn NPCs");
+		return 1;
+	}
+
+	if(string[0] == '\0') {
+		SendClientMessage(playerid, COLOUR_WARNING, "Invalid reason");
+		return 1;
+	}
+
+	if(gServerData[E_WARN_PROTECTION] > 0 && GetTickCount() - gPlayerData[pid][E_LAST_WARNING] < gServerData[E_WARN_PROTECTION] * 1000) {
+		format(string, sizeof(string), "%s has already been warned", ReturnPlayerName(pid));
+		SendClientMessage(playerid, COLOUR_WARNING, string);
+		return 1;
+	}
+
+	if(gServerData[E_LOGGEDIN_FUNC][0] == '\0' || !CallRemoteFunction(gServerData[E_LOGGEDIN_FUNC], "i", pid)) {
+		SendClientMessage(playerid, COLOUR_WARNING, "You can only warn players who are logged in");
+		return 1;
+	}
+
+	new level = max(gPlayerData[pid][E_ADMINLEVEL], gPlayerData[pid][E_RCONLEVEL]);
+	if(level >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
+		format(string, sizeof(string), "You cannot warn level %i admins", level);
+		SendClientMessage(playerid, COLOUR_WARNING, string);
+		return 1;
+	}
+
+	if(gAlarDB) {
+		new pname[MAX_PLAYER_NAME];
+		GetPlayerName(pid, pname, sizeof(pname));
+
+		level = Admin_GetHighestLevel(gAlarDB, pname);
+		if(level >= max(gPlayerData[playerid][E_ADMINLEVEL], gPlayerData[playerid][E_RCONLEVEL])) {
+			format(string, sizeof(string), "You cannot warn level %i admins", level);
+			SendClientMessage(playerid, COLOUR_WARNING, string);
+			return 1;
+		}
+
+		#if SOUND_VOLUME > 0
+			new Float:px, Float:py, Float:pz;
+			GetPlayerPos(pid, px, py, pz);
+			for(new i; i < SOUND_VOLUME; i++) {
+				PlayerPlaySound(pid, 1132, px, py, pz);
+			}
+		#endif
+
+		new msg[MAX_INPUT * 2];
+		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
+			format(msg, sizeof(msg), "You have been warned (%s)", string);
+		} else {
+			format(msg, sizeof(msg), "You have been warned by %s (%s)", ReturnPlayerName(playerid), string);
+		}
+		SendWrappedMessageToPlayer(pid, COLOUR_WARNING, msg);
+
+		format(msg, sizeof(msg), "%s has been warned (%s)", pname, string);
+		SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, msg);
+
+		format(msg, sizeof(msg), "%s has been warned by %s (%s)", pname, ReturnPlayerName(playerid), string);
+		LogAction(msg);
+
+		strtruncate(msg, string, MAX_REASON);
+		format(msg, sizeof(msg), "%s has been warned by %s (%s)", pname, ReturnPlayerName(playerid), msg);
+		AddLogString(msg);
+
+		db_free_result(db_query(gAlarDB, "BEGIN TRANSACTION"));
+
+		if(gPlayerData[playerid][E_ADMINLEVEL] <= 0) {
+			Warnings_WarnPlayer(gAlarDB, pname, string, "", ReturnPlayerIP(playerid));
+		} else {
+			Warnings_WarnPlayer(gAlarDB, pname, string, gPlayerData[playerid][E_NAME], ReturnPlayerIP(playerid));
+		}
+		gPlayerData[pid][E_LAST_WARNING] = GetTickCount();
+
+		if(gServerData[E_WARN_LIMIT] > 0 && Warnings_GetWarningCount(gAlarDB, pname, gServerData[E_WARN_TIMEOUT]) >= gServerData[E_WARN_LIMIT]) {
+			if(gServerData[E_WARN_SUSPEND_TIME] > 0) {
+				format(msg, sizeof(msg), "You have been suspended from the server for %i hours (Too many warnings)", gServerData[E_WARN_SUSPEND_TIME]);
+				SendClientMessage(pid, COLOUR_WARNING, msg);
+
+				Suspensions_SuspendPlayer(gAlarDB, pname, ReturnPlayerIP(pid), gServerData[E_WARN_SUSPEND_TIME], "Too many warnings", "", "", 1);
+
+				if(gServerData[E_SUSPEND_MSG][0] != '\0') {
+					SendBanMsg(pid, gServerData[E_SUSPEND_MSG], ReturnTimeStamp(), "");
+				}
+
+				format(msg, sizeof(msg), "%s(%i) has been suspended from the server for %i hours (Too many warnings)", pname, pid, gServerData[E_WARN_SUSPEND_TIME]);
+				AddJoinString(pid, COLOUR_SUSPEND, msg);
+			} else {
+				SendClientMessage(pid, COLOUR_WARNING, "You have been kicked server (Too many warnings)");
+
+				format(msg, sizeof(msg), "%s(%i) has been kicked from the server (Too many warnings)", pname, pid);
+				AddJoinString(pid, COLOUR_KICK, msg);
+			}
+			LogAction(msg);
+			AddLogString(msg);
+
+			Warnings_SetInactive(gAlarDB, pname, gServerData[E_WARN_TIMEOUT]);
+
+			Kick(pid);
+		}
+		db_free_result(db_query(gAlarDB, "END TRANSACTION"));
+	}
+	return 1;
+}
+
+acmd:awarnings(const playerid, const params[], const bool:help)
+{
+	if(playerid != INVALID_PLAYER_ID && (gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0)) return 0;
+
+	if(help) {
+		SendMessage(playerid, COLOUR_HELP, "USAGE: /awarnings (player) or (player name)");
+		SendMessage(playerid, COLOUR_HELP, "Displays a list of all currently warned player, or a player's warnings");
+		return 1;
+	}
+
+	if(isnull(params)) {
+		if(gAlarDB) {
+			new string[512] = "Warned players:",
+				warnings;
+			db_free_result(db_query(gAlarDB, "BEGIN TRANSACTION"));
+			LoopPlayers(i) {
+				if(!IsPlayerNPC(i)) {
+					if((warnings = Warnings_GetWarningCount(gAlarDB, ReturnPlayerName(i), gServerData[E_WARN_TIMEOUT]))) {
+						format(string, sizeof(string), "%s %s<%i>", string, ReturnPlayerName(i), warnings);
+					}
+				}
+			}
+			db_free_result(db_query(gAlarDB, "END TRANSACTION"));
+			if(string[15]) {
+				if(playerid == INVALID_PLAYER_ID) {
+					print(string);
+				} else {
+					SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
+				}
+				return 1;
+			}
+		}
+		SendMessage(playerid, COLOUR_ADMIN, "None of the connected players have any warnings");
+		return 1;
+	}
+
+	new pid = INVALID_PLAYER_ID,
+		pname[MAX_PLAYER_NAME];
+	if(params[0] == '"') {
+		new len = strlen(params);
+		if(len > 2 && params[len-1] == '"') {
+			strmid(pname, params, 1, len-1);
+		}
+		if(!isValidName(pname)) {
+			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+			return 1;
+		}
+	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID) {
+		if(IsPlayerNPC(pid)) {
+			SendMessage(playerid, COLOUR_WARNING, "NPCs cannot be warned");
+			return 1;
+		}
+		GetPlayerName(pid, pname, sizeof(pname));
+	} else {
+		if(!isValidName(params)) {
+			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
+			return 1;
+		}
+		strcpy(pname, params);
+	}
+
+	if(gAlarDB) {
+		db_free_result(db_query(gAlarDB, "BEGIN TRANSACTION"));
+		new warnings = Warnings_GetWarningCount(gAlarDB, pname, gServerData[E_WARN_TIMEOUT]),
+			string[MAX_INPUT * 2];
+
+		if(warnings) {
+			if(playerid == INVALID_PLAYER_ID) {
+				if(pid != INVALID_PLAYER_ID) {
+					printf("%s(%i) has %i warnings:", pname, pid, warnings);
+				} else {
+					printf("%s has %i warnings:", pname, warnings);
+				}
+			} else if(pid == playerid || (gPlayerData[playerid][E_NAME][0] != '\0' && strcmp(gPlayerData[playerid][E_NAME], pname, true) == 0)) {
+				if(warnings == 1) {
+					string = "You have 1 warning:";
+				} else {
+					format(string, sizeof(string), "You have %i warnings:", warnings);
+				}
+				SendClientMessage(playerid, COLOUR_ADMIN, string);
+			} else if(pid != INVALID_PLAYER_ID) {
+				if(warnings == 1) {
+					format(string, sizeof(string), "%s(%i) has 1 warning:", pname, pid);
+				} else {
+					format(string, sizeof(string), "%s(%i) has %i warnings:", pname, pid, warnings);
+				}
+				SendClientMessage(playerid, COLOUR_ADMIN, string);
+			} else {
+				if(warnings == 1) {
+					format(string, sizeof(string), "%s has 1 warning:", pname);
+				} else {
+					format(string, sizeof(string), "%s has %i warnings:", pname, warnings);
+				}
+				SendClientMessage(playerid, COLOUR_ADMIN, string);
+			}
+
+			new WarnInfo[E_ALAR_WARNING];
+			for(new i; i < warnings; i++) {
+				Warnings_GetWarningInfo(gAlarDB, pname, i, WarnInfo);
+				if(isnull(WarnInfo[E_WARN_ADMIN])) {
+					if(isnull(WarnInfo[E_WARN_REASON])) {
+						format(string, sizeof(string), "%4i. Date: %s  Reason: %s", i + 1, WarnInfo[E_WARN_DATETIME], WarnInfo[E_WARN_REASON]);
+					} else {
+						format(string, sizeof(string), "%4i. Date: %s", i + 1, WarnInfo[E_WARN_DATETIME]);
+					}
+				} else {
+					if(isnull(WarnInfo[E_WARN_REASON])) {
+						format(string, sizeof(string), "%4i. Date: %s  Admin: %s", i + 1, WarnInfo[E_WARN_DATETIME], WarnInfo[E_WARN_ADMIN]);
+					} else {
+						format(string, sizeof(string), "%4i. Date: %s  Admin: %s  Reason: %s", i + 1, WarnInfo[E_WARN_DATETIME], WarnInfo[E_WARN_ADMIN], WarnInfo[E_WARN_REASON]);
+					}
+
+				}
+				if(playerid == INVALID_PLAYER_ID) {
+					print(string);
+				} else {
+					SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string, .prefix="        ");
+				}
+			}
+		} else {
+			format(string, sizeof(string), "%s has no warnings", pname);
+			SendMessage(playerid, COLOUR_ADMIN, string);
+		}
+		db_free_result(db_query(gAlarDB, "END TRANSACTION"));
+	}
+	return 1;
+}
+
+acmd:aweather(const playerid, const params[], const bool:help)
+{
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_WEATHER_LEVEL)) return 1;
+
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aweather [weather ID]");
+		SendClientMessage(playerid, COLOUR_HELP, "Changes the server weather");
+		return 1;
+	}
 
 	if(!isInteger(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aweather [weather ID]");
@@ -9841,12 +11466,19 @@ dcmd_aweather(const playerid, params[])
 	return 1;
 }
 
-dcmd_awhitelist(const playerid, params[])
+acmd:awhitelist(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_WHITELIST_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
-		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /awhitelist [playername]");
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aunwhitelist [player name]");
+		SendClientMessage(playerid, COLOUR_HELP, "Protects a player name from range bans/suspensions");
+		return 1;
+	}
+
+	if(isnull(params)) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /awhitelist [player name]");
 
 		new msg[512] = "Whitelisted players:";
 		LoopPlayers(i) {
@@ -9860,40 +11492,60 @@ dcmd_awhitelist(const playerid, params[])
 		return 1;
 	}
 
-	if(!isValidName(params)) {
+	new wname[MAX_PLAYER_NAME];
+	if(params[0] == '"') {
+		new len = strlen(params);
+		if(len > 2 && params[len-1] == '"') {
+			strmid(wname, params, 1, len-1);
+		} else {
+			SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
+			return 1;
+		}
+	} else {
+		strcpy(wname, params);
+	}
+
+	if(!isValidName(wname)) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 		return 1;
 	}
 
 	new msg[MAX_INPUT];
-	if(IsNameWhitelisted(params)) {
-		format(msg, sizeof(msg), "The name %s is already whitelisted", params);
+	if(Whitelist_IsNameWhitelisted(gAlarDB, wname)) {
+		format(msg, sizeof(msg), "The name %s is already whitelisted", wname);
 		SendClientMessage(playerid, COLOUR_WARNING, msg);
 		return 1;
 	}
 
-	WhitelistName(params);
+	Whitelist_WhitelistName(gAlarDB, wname);
 	LoopPlayers(i) {
-		if(strcmp(ReturnPlayerName(i), params, true) == 0) {
+		if(strcmp(ReturnPlayerName(i), wname, true) == 0) {
 			gPlayerData[i][E_WHITELISTED] = true;
 			break;
 		}
 	}
 
-	format(msg, sizeof(msg), "The name %s has been whitelisted", params);
+	format(msg, sizeof(msg), "The name %s has been whitelisted", wname);
 	SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-	format(msg, sizeof(msg), "%s has whitelisted the name %s", ReturnPlayerName(playerid), params);
+	format(msg, sizeof(msg), "%s has whitelisted the name %s", ReturnPlayerName(playerid), wname);
 	LogAction(msg);
 	AddLogString(msg);
 	return 1;
 }
 
-dcmd_aworld(const playerid, params[])
+acmd:aworld(const playerid, const params[], const bool:help)
 {
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
 	if(LevelCheck(playerid, E_WORLD_LEVEL)) return 1;
 
-	if(params[0] == '\0') {
+	if(help) {
+		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aworld [player] [world]");
+		SendClientMessage(playerid, COLOUR_HELP, "Sets a player's virtual world");
+		return 1;
+	}
+
+	if(isnull(params)) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /aworld [player] [world]");
 		return 1;
 	}
@@ -9916,19 +11568,19 @@ dcmd_aworld(const playerid, params[])
 		return 1;
 	}
 
-	if(world < 0 || world > 255) {
-		SendClientMessage(playerid, COLOUR_WARNING, "The world must be between 0 and 255");
+	if(world < 0) {
+		SendClientMessage(playerid, COLOUR_WARNING, "The world must be between positive");
 		return 1;
 	}
 
 	SetPlayerVirtualWorld(pid, world);
 	alar_OnPlayerWorldChange(pid, world);
 
-	new vid = GetPlayerVehicleID(pid);
-	if(vid) {
+	if(IsPlayerInAnyVehicle(pid)) {
+		new vid = GetPlayerVehicleID(pid);
 		SetVehicleVirtualWorld(vid, world);
 		LoopPlayers(i) {
-			if(GetPlayerVehicleID(i) == vid) {
+			if(IsPlayerInAnyVehicle(i) && GetPlayerVehicleID(i) == vid) {
 				SetPlayerVirtualWorld(i, world);
 				alar_OnPlayerWorldChange(i, world);
 			}
@@ -9953,7 +11605,6 @@ dcmd_aworld(const playerid, params[])
 
 		format(msg, sizeof(msg), "%s has set %s's world to %i", ReturnPlayerName(playerid), ReturnPlayerName(pid), world);
 	}
-
 	LogAction(msg);
 	AddLogString(msg);
 	return 1;
@@ -9966,7 +11617,7 @@ dcmd_aworld(const playerid, params[])
 //-------------------
 public alar_autokick(playerid)
 {
-	if(IsPlayerConnected(playerid) && gPlayerData[playerid][E_ADMINLEVEL] == 0 && gPlayerData[playerid][E_KICK]) {
+	if(IsPlayerConnected(playerid) && gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_KICK]) {
 		new msg[MAX_INPUT];
 		format(msg, sizeof(msg), "%s(%i) has been kicked from the server (Failed to log in)", ReturnPlayerName(playerid), playerid);
 		SendClientMessage(playerid, COLOUR_WARNING, "You have been kicked from the server (Failure to log in)");
@@ -9988,12 +11639,102 @@ stock ShowSpecTxt(playerid)
 	gPlayerData[playerid][E_SPECTIMER] = SetTimerEx("alar_hidespectxt", SPEC_TXT_TIME * 1000, 0, "i", playerid);
 }
 
+stock ShowVehicleTags(playerid)
+{
+	if(gPlayerData[playerid][E_TIMER_VEHICLETAGS]) {
+		KillTimer(gPlayerData[playerid][E_TIMER_VEHICLETAGS]);
+		gPlayerData[playerid][E_TIMER_VEHICLETAGS] = 0;
+	}
+	for(new i; i < sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS]); i++) {
+		if(gPlayerData[playerid][E_VEHICLETAGS][i] != INVALID_PLAYER3DTEXT_ID) {
+			DeletePlayer3DTextLabel(playerid, gPlayerData[playerid][E_VEHICLETAGS][i]);
+			gPlayerData[playerid][E_VEHICLETAGS][i] = INVALID_PLAYER3DTEXT_ID;
+		}
+	}
+
+	new Float:px, Float:py, Float:pz,
+		Float:vx, Float:vy, Float:vz,
+		Float:dist,
+		CloseVehicleID[sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS])] = {INVALID_VEHICLE_ID, ...},
+		Float:CloseVehicleDistance[sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS])] = {FLOAT_INF, ...};
+
+	if(IsPlayerInAnyVehicle(playerid)) {
+		GetVehiclePos(GetPlayerVehicleID(playerid), px, py, pz);
+	} else if(gPlayerData[playerid][E_SPECTATING]) {
+		if(gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID) {
+			px = gPlayerData[playerid][E_CAM_POS_X];
+			py = gPlayerData[playerid][E_CAM_POS_Y];
+			pz = gPlayerData[playerid][E_CAM_POS_Z];
+		} else {
+			if(IsPlayerInAnyVehicle(gPlayerData[playerid][E_SPECID])) {
+				GetVehiclePos(GetPlayerVehicleID(gPlayerData[playerid][E_SPECID]), px, py, pz);
+			} else {
+				GetPlayerPos(gPlayerData[playerid][E_SPECID], px, py, pz);
+			}
+		}
+	} else {
+		GetPlayerPos(playerid, px, py, pz);
+	}
+
+	// Find the X few vehicles
+	new vid, idx;
+	for(; vid < MAX_VEHICLES && idx < sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS]); vid++) {
+		if(Bit_Get(gCreatedVehicles, vid) && IsVehicleStreamedIn(vid, playerid)) {
+			GetVehiclePos(vid, vx, vy, vz);
+			CloseVehicleID[idx] = vid;
+			CloseVehicleDistance[idx] = ((vx - px) * (vx - px)) + ((vy - py) * (vy - py)) + ((vz - pz) * (vz - pz));
+			idx++;
+		}
+	}
+
+	if(idx) {
+		// Find the closest vehicles
+		for(; vid < MAX_VEHICLES; vid++) {
+			if(Bit_Get(gCreatedVehicles, vid) && IsVehicleStreamedIn(vid, playerid)) {
+				GetVehiclePos(vid, vx, vy, vz);
+				dist = ((vx - px) * (vx - px)) + ((vy - py) * (vy - py)) + ((vz - pz) * (vz - pz));
+				for(new j; j < sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS]); j++) {
+					if(dist < CloseVehicleDistance[j]) {
+						CloseVehicleID[j] = vid;
+						CloseVehicleDistance[j] = dist;
+						break;
+					}
+				}
+			}
+		}
+
+		// Show the tags
+		new string[20];
+		for(new i; i < sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS]); i++) {
+			if(CloseVehicleID[i] == INVALID_VEHICLE_ID) break;
+			format(string, sizeof(string), "Vehicle ID: %i", CloseVehicleID[i]);
+			gPlayerData[playerid][E_VEHICLETAGS][i] = CreatePlayer3DTextLabel(playerid, string, COLOUR_VEHICLE, 0.0, 0.0, 0.4, VEHICLE_TAGS_DISTANCE, INVALID_PLAYER_ID, CloseVehicleID[i], 1);
+		}
+		gPlayerData[playerid][E_TIMER_VEHICLETAGS] = SetTimerEx("alar_hidevehicletags", (VEHICLE_TAGS_TIME) * 1000, 0, "i", playerid);
+	}
+}
+
+#if VEHICLE_TAGS_TIME > 0 && VEHICLE_TAGS_NUMBER > 0
+	public alar_hidevehicletags(playerid)
+	{
+		if(gPlayerData[playerid][E_TIMER_VEHICLETAGS]) {
+			KillTimer(gPlayerData[playerid][E_TIMER_VEHICLETAGS]);
+			gPlayerData[playerid][E_TIMER_VEHICLETAGS] = 0;
+		}
+		for(new i; i < sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS]); i++) {
+			if(gPlayerData[playerid][E_VEHICLETAGS][i] != INVALID_PLAYER3DTEXT_ID) {
+				DeletePlayer3DTextLabel(playerid, gPlayerData[playerid][E_VEHICLETAGS][i]);
+				gPlayerData[playerid][E_VEHICLETAGS][i] = INVALID_PLAYER3DTEXT_ID;
+			}
+		}
+	}
+#endif
+
 #if SPEC_TXT_TIME > 0
 	public alar_hidespectxt(playerid)
 	{
 		if(!IsPlayerConnected(playerid)) return;
 		gPlayerData[playerid][E_SPECTIMER] = 0;
-
 		TextDrawHideForPlayer(playerid, gPlayerData[playerid][E_SPECTXT]);
 		gPlayerData[playerid][E_SPECTXT] = INVALID_TEXT_DRAW;
 	}
@@ -10062,9 +11803,8 @@ public alar_pingkick()
 	LoopPlayers(i) {
 		for(new j = 1; j < sizeof(SIZE_E_PLAYERDATA[E_PING]); j++) gPlayerData[i][E_PING][j - 1] = gPlayerData[i][E_PING][j];
 		gPlayerData[i][E_PING][sizeof(SIZE_E_PLAYERDATA[E_PING]) - 1] = GetPlayerPing(i);
-
 		if(gServerData[E_MAX_PING] > 0) {
-			if((gPlayerData[i][E_ADMINLEVEL] > 0 && gServerData[E_PING_IMMUNITY]) || gPlayerData[i][E_IMMUNE]) continue;
+			if(((gPlayerData[i][E_ADMINLEVEL] > 0 || gPlayerData[i][E_RCONLEVEL] > 0) && gServerData[E_PING_IMMUNITY]) || gPlayerData[i][E_IMMUNE]) continue;
 			new aveping = GetAvePing(i);
 			if(aveping > gServerData[E_MAX_PING]) {
 				new msg[MAX_INPUT];
@@ -10088,7 +11828,7 @@ public alar_unfreeze(playerid)
 		LogAction(msg);
 		AddLogString(msg);
 		TogglePlayerControllable(playerid, true);
-
+		Player_ClearStatus(gAlarDB, ReturnPlayerIP(playerid), ADMIN_STATE_FROZEN);
 		gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_FROZEN;
 		gPlayerData[playerid][E_FREEZE_TIME] = 0;
 
@@ -10097,7 +11837,6 @@ public alar_unfreeze(playerid)
 				SpecHUDUpdate(i);
 			}
 		}
-
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] | ADMIN_STATE_FROZEN);
 	}
 	gPlayerData[playerid][E_UNFREEZE] = 0;
@@ -10111,17 +11850,16 @@ public alar_unjail(playerid)
 		SendClientMessageToAll(COLOUR_PLAYER, msg);
 		LogAction(msg);
 		AddLogString(msg);
-
+		Player_ClearStatus(gAlarDB, ReturnPlayerIP(playerid), ADMIN_STATE_JAILED);
 		gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_JAILED;
 		gPlayerData[playerid][E_JAIL_TIME] = 0;
-
 		if(gPlayerData[playerid][E_HEALTH]) {
 			switch(gSpawnMethod) {
 				case SPAWN_ALAR_SPAWN: {
 					if(gSpawnSaves & INFOTYPE_POSITION) {
 						SetSpawnInfo(playerid, GetPlayerTeam(playerid), GetPlayerSkin(playerid), gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ], gPlayerData[playerid][E_ROT], 0, 0, 0, 0, 0, 0);
 					}
-					gPlayerData[playerid][E_SETINFO] = (INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+					gPlayerData[playerid][E_SETINFO] = (INFOTYPE_VEHICLE | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
 					SpawnPlayer(playerid);
 				}
 				case SPAWN_ALAR_TIMER: {
@@ -10129,7 +11867,7 @@ public alar_unjail(playerid)
 					SetTimerEx("alar_setspawndata", 500, 0, "i", playerid);	// stops stupid gamemode spawn stuff
 				}
 				default: {
-					gPlayerData[playerid][E_SETINFO] = (INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+					gPlayerData[playerid][E_SETINFO] = (INFOTYPE_VEHICLE | INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
 					SpawnPlayer(playerid);
 				}
 			}
@@ -10139,13 +11877,11 @@ public alar_unjail(playerid)
 			SetPlayerInterior(playerid, 0);
 			SpawnPlayer(playerid);
 		}
-
 		LoopPlayers(i) {
 			if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == playerid) {
 				SpecHUDUpdate(i);
 			}
 		}
-
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] | ADMIN_STATE_JAILED);
 	}
 	gPlayerData[playerid][E_UNJAIL] = 0;
@@ -10159,12 +11895,11 @@ public alar_unmute(playerid)
 		SendClientMessageToAll(COLOUR_PLAYER, msg);
 		LogAction(msg);
 		AddLogString(msg);
-
+		Player_ClearStatus(gAlarDB, ReturnPlayerIP(playerid), ADMIN_STATE_MUTED);
 		gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_MUTED;
 		gPlayerData[playerid][E_MUTE_TIME] = 0;
 		gPlayerData[playerid][E_LASTMSG][0] = '\0';
 		gPlayerData[playerid][E_REPEATEDMSGS] = 0;
-
 		LoopPlayers(i) {
 			if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == playerid) {
 				SpecHUDUpdate(i);
@@ -10184,16 +11919,13 @@ public alar_undesync(playerid)
 		SendClientMessageToAll(COLOUR_PLAYER, msg);
 		LogAction(msg);
 		AddLogString(msg);
-
 		gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_DESYNCED;
 		gPlayerData[playerid][E_DESYNC_TIME] = 0;
-
 		LoopPlayers(i) {
 			if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == playerid) {
 				SpecHUDUpdate(i);
 			}
 		}
-
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] | ADMIN_STATE_DESYNCED);
 	}
 	gPlayerData[playerid][E_UNDESYNC] = 0;
@@ -10204,7 +11936,7 @@ public alar_pausecheck()
 	LoopPlayers(i) {
 		if(IsSpawned(i)) {
 			if(gPlayerData[i][E_PAUSED]) {
-				if(GetTickCount() - gPlayerData[i][E_LAST_ACTIVE] < 1000) {
+				if(GetTickCount() - gPlayerData[i][E_LAST_UPDATE] < 2200) {
 					gPlayerData[i][E_PAUSED] = false;
 					LoopPlayers(j) {
 						if(gPlayerData[j][E_SPECTATING] && gPlayerData[j][E_SPECID] == i) {
@@ -10212,7 +11944,7 @@ public alar_pausecheck()
 						}
 					}
 				}
-			} else if(GetTickCount() - gPlayerData[i][E_LAST_ACTIVE] > 1000) {
+			} else if(GetTickCount() - gPlayerData[i][E_LAST_UPDATE] > 2200) {
 				gPlayerData[i][E_PAUSED] = true;
 				LoopPlayers(j) {
 					if(gPlayerData[j][E_SPECTATING] && gPlayerData[j][E_SPECID] == i) {
@@ -10226,40 +11958,49 @@ public alar_pausecheck()
 	}
 }
 
+public alar_rconupdate(Unsigned:IPCode)
+{
+	new IP[MAX_IP], string[MAX_INPUT];
+	IP = Code2IP(IPCode);
+	LoopPlayers(i) {
+		if(strcmp(IP, ReturnPlayerIP(i)) == 0 && IsPlayerAdmin(i) && gServerData[E_RCON_LEVEL] != gPlayerData[i][E_RCONLEVEL]) {
+			gPlayerData[i][E_RCONLEVEL] = gServerData[E_RCON_LEVEL];
+			if(gServerData[E_RCON_LEVEL] > 0) {
+				Bit_Set(g_bitAdmins, i, 1);
+				AllowPlayerTeleport(i, cmdchk(i, E_TELE_LEVEL));
+			}
+			format(string, sizeof(string), "%s logged in as an RCON admin", ReturnPlayerName(i));
+			AddLogString(string);
+			return;
+		}
+	}
+	format(string, sizeof(string), "The IP %s logged in as an RCON admin", IP);
+	AddLogString(string);
+}
+
 stock ReturnNumPlateTxt(vehicleid)
 {
 	new string[9] = "        ";
 	if(gServerData[E_DEFAULT_NUM_PLATE][0] == '\0') return string;
-
 	strcpy(string, gServerData[E_DEFAULT_NUM_PLATE]);
-
 	new value[12];
 	valstr(value, vehicleid);
 	strreplace(string, "!", value);
-
 	for (new i; i < 8; i++) {
 	    switch(string[i]){
-	        case 'a'..'z':
-	            string[i] += 'A' - 'a';
-			case 'A'..'Z', '0'..'9':
-	            continue;
-			case '#':
-				string[i] = random(10) + '0';
-			case '$':
-				string[i] = random(26) + 'A';
-			case '\0':
-				break;
-			default:
-			    string[i] = ' ';
+	        case 'a'..'z': string[i] += 'A' - 'a';
+			case 'A'..'Z', '0'..'9': continue;
+			case '#': string[i] = random(10) + '0';
+			case '$': string[i] = random(26) + 'A';
+			case '\0': break;
+			default: string[i] = ' ';
 	    }
 	}
-
 	switch(strlen(string)) {
 		case 1, 2: strins(string, "   ", 0);
 		case 3, 4: strins(string, "  ", 0);
 		case 5, 6: strins(string, " ", 0);
 	}
-
 	return string;
 }
 
@@ -10276,24 +12017,27 @@ GetAvePing(const playerid)
 	return aveping / sizeof(SIZE_E_PLAYERDATA[E_PING]);
 }
 
-stock FloodCheck(const playerid)
+stock JoinFloodCheck(const playerid)
 {
-	new Unsigned:playerip = IP2Code(ReturnPlayerIP(playerid)),
+	new playerip[MAX_IP],
+		Unsigned:ipcode,
 		playertime = GetTickCount(),
 		playerjoins = 1;
 
+	GetPlayerIp(playerid, playerip, sizeof(playerip));
+	ipcode = IP2Code(playerip);
+
 	for(new i; i < sizeof(gJoinList); i++) {
-		if(playerip == gJoinList[i][E_LASTIP] && (playertime - gJoinList[i][E_LASTJOIN]) <= (JOINTIME * 1000)) {
+		if(ipcode == gJoinList[i][E_LASTIP] && (playertime - gJoinList[i][E_LASTTIME]) <= (JOINTIME * 1000)) {
 			playerjoins++;
 		}
 	}
 
 	for(new i; i < sizeof(gJoinList)-1; i++) {
-		gJoinList[i][E_LASTIP] = gJoinList[i+1][E_LASTIP];
-		gJoinList[i][E_LASTJOIN] = gJoinList[i+1][E_LASTJOIN];
+		gJoinList[i] = gJoinList[i+1];
 	}
-	gJoinList[sizeof(gJoinList)-1][E_LASTIP] = playerip;
-	gJoinList[sizeof(gJoinList)-1][E_LASTJOIN] = playertime;
+	gJoinList[sizeof(gJoinList)-1][E_LASTIP] = ipcode;
+	gJoinList[sizeof(gJoinList)-1][E_LASTTIME] = playertime;
 
 	if(playerjoins >= JOINCOUNT) {
 		new pname[MAX_PLAYER_NAME];
@@ -10301,25 +12045,12 @@ stock FloodCheck(const playerid)
 		new string[MAX_INPUT];
 		if(gServerData[E_JOIN_BAN_TIME] > 0) {
 			format(string, sizeof(string), "You have been kicked from the server (Join flood, try again in %i seconds)", gServerData[E_JOIN_BAN_TIME]);
-			SetTimerEx("alar_floodunban", gServerData[E_JOIN_BAN_TIME] * 1000, 0, "i", _:playerip);
+			SetTimerEx("alar_floodunban", gServerData[E_JOIN_BAN_TIME] * 1000, 0, "i", _:ipcode);
 			SendClientMessage(playerid, COLOUR_WARNING, string);
 		} else {
 			SendClientMessage(playerid, COLOUR_WARNING, "You have been banned from the server (Join flood");
 			if(gServerData[E_BAN_MSG][0] != '\0') {
-				new year,
-					month,
-					day,
-					hour,
-					minute,
-					date[15],
-					time[10];
-
-				getdate(year, month, day);
-				gettime(hour, minute);
-				format(date, sizeof(date), "%02i/%02i/%i", day, month, year);
-				format(time, sizeof(time), "%02i:%02i", hour, minute);
-
-				SendBanMsg(playerid, gServerData[E_BAN_MSG], date, time, "Console");
+				SendBanMsg(playerid, gServerData[E_BAN_MSG], ReturnTimeStamp(), "");
 			}
 		}
 		format(string, sizeof(string), "%s has been banned from the server (Join flood)", pname);
@@ -10331,7 +12062,50 @@ stock FloodCheck(const playerid)
 		}
 		AddLogString(string);
 		LogAction(string);
+		TempBan_Add(gAlarDB, playerip, "Join flood");
 		BanEx(playerid, "Join flood");
+		return 1;
+	}
+	return 0;
+}
+
+stock RconFloodCheck(const playerip[])
+{
+	new Unsigned:ipcode = IP2Code(playerip),
+		playertime = GetTickCount(),
+		playerattempts = 1;
+
+	for(new i; i < sizeof(gRconList); i++) {
+		if(ipcode == gRconList[i][E_LASTIP] && (playertime - gRconList[i][E_LASTTIME]) <= (RCONTIME * 1000)) {
+			playerattempts++;
+		}
+	}
+
+	for(new i; i < sizeof(gRconList)-1; i++) {
+		gRconList[i] = gRconList[i+1];
+	}
+	gRconList[sizeof(gRconList)-1][E_LASTIP] = ipcode;
+	gRconList[sizeof(gRconList)-1][E_LASTTIME] = playertime;
+
+	if(playerattempts >= RCONCOUNT) {
+		new string[MAX_INPUT];
+		LoopPlayers(i) {
+			if(strcmp(playerip, ReturnPlayerIP(i)) == 0 && !IsPlayerNPC(i)) {
+				SendClientMessage(i, COLOUR_WARNING, "You have been banned from the server (Too many RCON attempts)");
+				format(string, sizeof(string), "%s has been banned from the server (Too many RCON attempts)", ReturnPlayerName(i));
+				AddJoinString(i, COLOUR_BAN, string);
+				Kick(i);
+			}
+		}
+		if(gServerData[E_RCON_BAN_TIME] > 0) {
+			SetTimerEx("alar_floodunban", gServerData[E_RCON_BAN_TIME] * 1000, 0, "i", _:ipcode);
+		}
+		format(string, sizeof(string), "The IP %s has been banned from the server (Too many RCON attempts)", playerip);
+		AddLogString(string);
+		LogAction(string);
+		TempBan_Add(gAlarDB, playerip, "Too many RCON attempts");
+		format(string, sizeof(string), "banip %s", playerip);
+		SendRconCommand(string);
 		return 1;
 	}
 	return 0;
@@ -10340,18 +12114,18 @@ stock FloodCheck(const playerid)
 public alar_floodunban(Unsigned:IPcode)
 {
 	new string[MAX_IP+10];
-	format(string, sizeof(string), "unbanip %s", Code2IP(IPcode));
+	string = Code2IP(IPcode);
+	TempBan_Remove(gAlarDB, string);
+	format(string, sizeof(string), "unbanip %s", string);
 	SendRconCommand(string);
 }
 
-stock SpamCheck(const playerid, const text[], bool:pm=false)
+stock SpamCheck(const playerid, const text[])
 {
 	new time = GetTickCount(),
 		len = strlen(text);
 
-	do {
-		 len--;
-	} while(text[len] <= ' ' && len > 0);
+	do { len--; } while(text[len] <= ' ' && len > 0);
 	len++;
 
 	if(gPlayerData[playerid][E_MSGTIMES][sizeof(SIZE_E_PLAYERDATA[E_MSGTIMES])-1] != 0 && time - gPlayerData[playerid][E_MSGTIMES][sizeof(SIZE_E_PLAYERDATA[E_MSGTIMES])-1] <= MSGRTIME && strcmp(text, gPlayerData[playerid][E_LASTMSG], true, len) == 0 && gPlayerData[playerid][E_LASTMSG][len] == '\0') {
@@ -10373,15 +12147,11 @@ stock SpamCheck(const playerid, const text[], bool:pm=false)
 				strcpy(cmd, text);
 			}
 		}
-
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_MUTED) {
 			if(text[0] == '/') {
 				format(msg, sizeof(msg), "You have been kicked from the server (%s spam)", cmd);
 				SendClientMessage(playerid, COLOUR_WARNING, msg);
 				format(msg, sizeof(msg), "%s(%i) has been kicked from the server (%s spam)", ReturnPlayerName(playerid), playerid, cmd);
-			} else if(pm) {
-				SendClientMessage(playerid, COLOUR_WARNING, "You have been kicked from the server (/pm spam)");
-				format(msg, sizeof(msg), "%s(%i) has been kicked from the server (/pm spam)", ReturnPlayerName(playerid), playerid);
 			} else {
 				SendClientMessage(playerid, COLOUR_WARNING, "You have been kicked from the server (chat spam)");
 				format(msg, sizeof(msg), "%s(%i) has been kicked from the server (chat spam)", ReturnPlayerName(playerid), playerid);
@@ -10403,8 +12173,6 @@ stock SpamCheck(const playerid, const text[], bool:pm=false)
 		if(gServerData[E_AUTOMUTE_TIME] > 0) {
 			if(text[0] == '/') {
 				format(msg, sizeof(msg), "%s has been muted for %i seconds (%s spam)", ReturnPlayerName(playerid), gServerData[E_AUTOMUTE_TIME], cmd);
-			} else if(pm) {
-				format(msg, sizeof(msg), "%s has been muted for %i seconds (/pm spam)", ReturnPlayerName(playerid), gServerData[E_AUTOMUTE_TIME]);
 			} else {
 				format(msg, sizeof(msg), "%s has been muted for %i seconds (chat spam)", ReturnPlayerName(playerid), gServerData[E_AUTOMUTE_TIME]);
 			}
@@ -10412,45 +12180,41 @@ stock SpamCheck(const playerid, const text[], bool:pm=false)
 		} else {
 			if(text[0] == '/') {
 				format(msg, sizeof(msg), "%s has been muted (%s spam)", ReturnPlayerName(playerid), cmd);
-			} else if(pm) {
-				format(msg, sizeof(msg), "%s has been muted (/pm spam)", ReturnPlayerName(playerid));
 			} else {
 				format(msg, sizeof(msg), "%s has been muted (chat spam)", ReturnPlayerName(playerid));
 			}
 		}
-
 		LoopPlayers(i) {
 			if(i != playerid) {
 				SendClientMessage(i, COLOUR_WARNING, msg);
 			}
 		}
-
 		LogAction(msg);
 		AddLogString(msg);
-
 		if(gServerData[E_AUTOMUTE_TIME] > 0) {
 			if(text[0] == '/') {
 				format(msg, sizeof(msg), "You have been muted for %i seconds (%s spam)", gServerData[E_AUTOMUTE_TIME], cmd);
-			} else if(pm) {
-				format(msg, sizeof(msg), "You have been muted for %i seconds (/pm spam)", gServerData[E_AUTOMUTE_TIME]);
 			} else {
 				format(msg, sizeof(msg), "You have been muted for %i seconds (chat spam)", gServerData[E_AUTOMUTE_TIME]);
 			}
 			SendClientMessage(playerid, COLOUR_WARNING, msg);
 
+			if(!IsPlayerNPC(playerid)) {
+				Player_SetStatus(gAlarDB, ReturnPlayerIP(playerid), ADMIN_STATE_MUTED, gServerData[E_AUTOMUTE_TIME]);
+			}
 			if(gPlayerData[playerid][E_UNMUTE]) KillTimer(gPlayerData[playerid][E_UNMUTE]);
 			gPlayerData[playerid][E_UNMUTE] = SetTimerEx("alar_unmute", gServerData[E_AUTOMUTE_TIME] * 1000, 0, "i", playerid);
 		} else {
 			if(text[0] == '/') {
 				format(msg, sizeof(msg), "You have been muted (%s spam)", cmd);
 				SendClientMessage(playerid, COLOUR_WARNING, msg);
-			} else if(pm) {
-				SendClientMessage(playerid, COLOUR_WARNING, "You have been muted (/pm spam)");
 			} else {
 				SendClientMessage(playerid, COLOUR_WARNING, "You have been muted (chat spam)");
 			}
 
-			WriteAdminState(playerid, ADMIN_STATE_MUTED);
+			if(!IsPlayerNPC(playerid)) {
+				Player_SetStatus(gAlarDB, ReturnPlayerIP(playerid), ADMIN_STATE_MUTED);
+			}
 		}
 
 
@@ -10492,11 +12256,11 @@ LevelCheck(const playerid, E_SERVERDATA:command)
 
 	if(playerid == INVALID_PLAYER_ID) {
 		if(gServerData[E_RCON_LEVEL] < gServerData[command]) {
-			print("This command has been disabled from Rcon");
+			print("This command has been disabled from RCON");
 			return 1;
 		}
 	} else {
-		if(gPlayerData[playerid][E_ADMINLEVEL] < gServerData[command]) {
+		if(gPlayerData[playerid][E_ADMINLEVEL] < gServerData[command] && gPlayerData[playerid][E_RCONLEVEL] < gServerData[command]) {
 			new msg[MAX_INPUT];
 			format(msg, sizeof(msg), "You need to be level %i to use this command", gServerData[command]);
 			SendClientMessage(playerid, COLOUR_WARNING, msg);
@@ -10506,136 +12270,44 @@ LevelCheck(const playerid, E_SERVERDATA:command)
 	return 0;
 }
 
-WriteAlias(playerid)
-{
-	new pIP[MAX_IP],
-		pname[MAX_PLAYER_NAME],
-		file[MAX_STRING],
-		string[MAX_STRING];
-	GetPlayerIp(playerid, pIP, sizeof(pIP));
-	GetPlayerName(playerid, pname, sizeof(pname));
-
-	if(pname[0] == '\0' || pIP[0] == '\0') return;
-
-	format(file, sizeof(file), ALIASFOLDER "name_%c.ini", toupper(pname[0]));
-	if(!fexist(file)) {
-		new File:handle = fopen(file, io_write);
-		if(handle) {
-			format(string, sizeof(string), "# This file contains a list of ip addresses associated with names starting with %c\r\n%s=%s\r\n", toupper(pname[0]), pname, pIP);
-			fwrite(handle, string);
-			fclose(handle);
-		}
-	} else {
-		if(dini_Get(file, pname, string)) {
-			new pos = strfindword(string, pIP);
-			if(pos == 0) {
-				strdel(string, 0, strlen(pIP) + 1);
-				if(string[0] != '\0') {
-					format(string, sizeof(string), "%s %s", string, pIP);
-					dini_Set(file, pname, string);
-				}
-			} else {
-				if(pos == -1) {
-					strmakeroom(string, strlen(pname) + strlen(pIP) + 3);	// name, =, space, \r\n
-				} else {
-					strdel(string, pos - 1, pos + strlen(pIP));
-				}
-				format(string, sizeof(string), "%s %s", string, pIP);
-				dini_Set(file, pname, string);
-			}
-		} else {
-			dini_Set(file, pname, pIP);
-		}
-	}
-
-	format(file, sizeof(file), ALIASFOLDER "ip_%i.ini", strval(pIP));
-	if(!fexist(file)) {
-		new File:handle = fopen(file, io_write);
-		if(handle) {
-			format(string, sizeof(string), "# This file contains a list of names associated with ip addresses starting with %i\r\n%s=%s\r\n", strval(pIP), pIP, pname);
-			fwrite(handle, string);
-			fclose(handle);
-		}
-	} else {
-		if(dini_Get(file, pIP, string)) {
-			new pos = strfindword(string, pname, true);
-			if(pos == 0) {
-				strdel(string, 0, strlen(pname) + 1);
-				if(string[0] != '\0') {
-					format(string, sizeof(string), "%s %s", string, pname);
-					dini_Set(file, pIP, string);
-				}
-			} else {
-				if(pos == -1) {
-					strmakeroom(string, strlen(pname) + strlen(pIP) + 4);	// ip, =, space, \r\n
-				} else {
-					strdel(string, pos - 1, pos + strlen(pname));
-				}
-				format(string, sizeof(string), "%s %s", string, pname);
-				dini_Set(file, pIP, string);
-			}
-		} else {
-			dini_Set(file, pIP, pname);
-		}
-	}
-}
-
-WriteAdminState(playerid, newstate)
-{
-	new string[4];
-	dini_Get(STATUSFILE, ReturnPlayerIP(playerid), string);
-
-	if(newstate & ADMIN_STATE_MUTED) string[0]='1';
-	else if(string[0] == '\0') string[0] = '0';
-
-	if(newstate & ADMIN_STATE_FROZEN) string[1]='1';
-	else if(string[1] == '\0') string[1] = '0';
-
-	if(newstate & ADMIN_STATE_JAILED) string[2]='1';
-	else if(string[2] == '\0') string[2] = '0';
-
-	if(string[0] == '0' && string[1] == '0' && string[2] == '0') dini_Unset(STATUSFILE, ReturnPlayerIP(playerid));
-	else dini_Set(STATUSFILE, ReturnPlayerIP(playerid), string);
-}
-
-UnwriteAdminState(playerid, newstate)
-{
-	new string[4];
-	dini_Get(STATUSFILE, ReturnPlayerIP(playerid), string);
-
-	if(newstate & ADMIN_STATE_MUTED) string[0]='0';
-	else if(string[0] == '\0') string[0] = '0';
-
-	if(newstate & ADMIN_STATE_FROZEN) string[1]='0';
-	else if(string[1] == '\0') string[1] = '0';
-
-	if(newstate & ADMIN_STATE_JAILED) string[2]='0';
-	else if(string[2] == '\0') string[2] = '0';
-
-	if(string[0] == '0' && string[1] == '0' && string[2] == '0') dini_Unset(STATUSFILE, ReturnPlayerIP(playerid));
-	else dini_Set(STATUSFILE, ReturnPlayerIP(playerid), string);
-}
-
 LoadPlayerData(playerid)
 {
-	new filename[MAX_STRING];
-	format(filename, sizeof(filename), PLAYERFOLDER "settings_%s.ini", ReturnPlayerName(playerid));
+	new SaveData[E_SAVEDATA];
+	if(Player_GetData(gAlarDB, ReturnPlayerName(playerid), ReturnPlayerIP(playerid), SaveData)) {
+		#if JOINMSG_LINES > 0
+			if(SaveData[E_SAVE_JOINTEXT] < 0) {
+				gPlayerData[playerid][E_JOINTEXT] = gServerData[E_JOIN_DEFAULT];
+			} else {
+				gPlayerData[playerid][E_JOINTEXT] = SaveData[E_SAVE_JOINTEXT] != 0;
+			}
+		#endif
+		gPlayerData[playerid][E_IMMUNE] = SaveData[E_SAVE_IMMUNE];
 
-	#if JOINMSG_LINES > 0
-		if(dini_Isset(filename, "Jointext")) {
-			gPlayerData[playerid][E_JOINTEXT] = dini_Bool(filename, "JoinText");
-		} else {
-			gPlayerData[playerid][E_JOINTEXT] = gServerData[E_JOIN_DEFAULT];
+		if(SaveData[E_SAVE_MUTED]) {
+			gPlayerData[playerid][E_STATE] |= ADMIN_STATE_MUTED;
+			if(SaveData[E_SAVE_MUTETIME] > 0) {
+				if(SaveData[E_SAVE_MUTETIME] < MIN_ACTION_TIME) SaveData[E_SAVE_MUTETIME] = MIN_ACTION_TIME;
+				gPlayerData[playerid][E_UNMUTE] = SetTimerEx("alar_unmute", SaveData[E_SAVE_MUTETIME] * 1000, 0, "i", playerid);
+				gPlayerData[playerid][E_MUTE_TIME] = gettime() + SaveData[E_SAVE_MUTETIME];
+			}
 		}
-	#endif
-
-	gPlayerData[playerid][E_IMMUNE] = dini_Bool(filename, "PingImmunity");
-
-	new string[4];
-	if(!dini_Get(STATUSFILE, ReturnPlayerIP(playerid), string)) return;
-	if(string[0] == '1') gPlayerData[playerid][E_STATE] |= ADMIN_STATE_MUTED;
-	if(string[1] == '1') gPlayerData[playerid][E_STATE] |= ADMIN_STATE_FROZEN;
-	if(string[2] == '1') gPlayerData[playerid][E_STATE] |= ADMIN_STATE_JAILED;
+		if(SaveData[E_SAVE_FROZEN]) {
+			gPlayerData[playerid][E_STATE] |= ADMIN_STATE_FROZEN;
+			if(SaveData[E_SAVE_FREEZETIME] > 0) {
+				if(SaveData[E_SAVE_FREEZETIME] < MIN_ACTION_TIME) SaveData[E_SAVE_FREEZETIME] = MIN_ACTION_TIME;
+				gPlayerData[playerid][E_UNFREEZE] = SetTimerEx("alar_unfreeze", SaveData[E_SAVE_FREEZETIME] * 1000, 0, "i", playerid);
+				gPlayerData[playerid][E_FREEZE_TIME] = gettime() + SaveData[E_SAVE_FREEZETIME];
+			}
+		}
+		if(SaveData[E_SAVE_JAILED]) {
+			gPlayerData[playerid][E_STATE] |= ADMIN_STATE_JAILED;
+			if(SaveData[E_SAVE_JAILTIME] > 0) {
+				if(SaveData[E_SAVE_JAILTIME] < MIN_ACTION_TIME) SaveData[E_SAVE_JAILTIME] = MIN_ACTION_TIME;
+				gPlayerData[playerid][E_UNJAIL] = SetTimerEx("alar_unjail", SaveData[E_SAVE_JAILTIME] * 1000, 0, "i", playerid);
+				gPlayerData[playerid][E_JAIL_TIME] = gettime() + SaveData[E_SAVE_JAILTIME];
+			}
+		}
+	}
 }
 
 
@@ -10644,10 +12316,35 @@ LoadPlayerData(playerid)
 //----------------
 LoadData()
 {
-	CreateData();
+	if(gAlarDB) {
+		// Check database version
+		new DBResult:result = db_query(gAlarDB, "PRAGMA user_version");
+		if(db_num_rows(result)) {
+			new string[30];
+			db_get_field(result, 0, string, sizeof(string));
+			new version = strval(string);
+			if(version > 1) {
+				LogAction("WARNING: Alar database may be incompatible");
+			} else if(version == 0) {
+				db_free_result(db_query(gAlarDB, "PRAGMA user_version = 1"));
+			}
+		}
+		db_free_result(result);
+
+		// Initialise database
+		Admin_Init(gAlarDB);
+		Alias_Init(gAlarDB);
+		Bans_Init(gAlarDB);
+		Gamemodes_Init(gAlarDB);
+		Player_Init(gAlarDB);
+		Setting_Init(gAlarDB);
+		Suspensions_Init(gAlarDB);
+		Warnings_Init(gAlarDB);
+		Whitelist_Init(gAlarDB);
+	}
 
 	new string[128];
-	dini_Get(SETTINGSFILE, "ChatPrefix", string);
+	Setting_LoadString(gAlarDB, "ChatPrefix", CHATPREFIX, string);
 	for(new i, j, k;;) {
 		switch(string[i]) {
 			case '|': {
@@ -10664,7 +12361,7 @@ LoadData()
 						gChatPrefix[j][E_CHAT_STRING][k++] = string[i];
 					}
 				} else {
-					print("ERROR: Invalid admin prefix syntax (Trailing escape character)");
+					LogAction("ERROR: Invalid admin prefix syntax (Trailing escape character)");
 				}
 			}
 			case '\0': {
@@ -10685,9 +12382,8 @@ LoadData()
 		i++;
 	}
 
-	dini_Get(SETTINGSFILE, "BanMsg", gServerData[E_BAN_MSG], sizeof(SIZE_E_SERVERDATA[E_BAN_MSG]));		// needs sizeof thingy because the compiler is stupid
 	#if CHATHISTORY_SIZE > 0
-		dini_Get(SETTINGSFILE, "ChatHistory", string);
+		Setting_LoadString(gAlarDB, "ChatHistory", CHATHISTORY, string);
 		if(string[0] == '\0') {
 			gServerData[E_CHAT_HISTORY] = 0;
 		} else if(strcmp(string, "Admins", true) == 0) {
@@ -10697,365 +12393,171 @@ LoadData()
 		} else {
 			gServerData[E_CHAT_HISTORY] = 0;
 		}
-		gServerData[E_CHAT_JOINS] = dini_Bool(SETTINGSFILE, "ChatJoins");
+		Setting_LoadBool(gAlarDB, "ChatJoins", CHATJOINS, gServerData[E_CHAT_JOINS]);
 	#endif
-	dini_Get(SETTINGSFILE, "DefaultNumPlate", gServerData[E_DEFAULT_NUM_PLATE], sizeof(SIZE_E_SERVERDATA[E_DEFAULT_NUM_PLATE]));
-	dini_Get(SETTINGSFILE, "DefaultPW", gServerData[E_DEFAULT_PW], sizeof(SIZE_E_SERVERDATA[E_DEFAULT_PW]));
-	dini_Get(SETTINGSFILE, "SuspendMsg", gServerData[E_SUSPEND_MSG], sizeof(SIZE_E_SERVERDATA[E_SUSPEND_MSG]));
-	dini_Get(SETTINGSFILE, "RangeSuspendMsg", gServerData[E_RANGESUSPEND_MSG], sizeof(SIZE_E_SERVERDATA[E_RANGESUSPEND_MSG]));
-	dini_Get(SETTINGSFILE, "RangeBanMsg", gServerData[E_RANGEBAN_MSG], sizeof(SIZE_E_SERVERDATA[E_RANGEBAN_MSG]));
 
-	gServerData[E_ADMIN_PMS] = dini_Bool(SETTINGSFILE, "AdminPMs");
-	gServerData[E_ALIAS_ADMINS] = dini_Bool(SETTINGSFILE, "AliasAdmins");
-	gServerData[E_AUTO_LOGIN] = dini_Bool(SETTINGSFILE, "AutoLogin");
-	gServerData[E_CONSOLE_MSGS] = dini_Bool(SETTINGSFILE, "ConsoleMsgs");
-	gServerData[E_EXTRA_SPEC_VIEWS] = dini_Bool(SETTINGSFILE, "ExtraSpecViews");
-	gServerData[E_FIX_RUNNING] = dini_Bool(SETTINGSFILE, "FixRunning");
-	gServerData[E_HIDE_BANS] = dini_Bool(SETTINGSFILE, "HideBans");
-	gServerData[E_JOIN_COUNTRIES] = dini_Bool(SETTINGSFILE, "JoinCountries");
-	gServerData[E_JOIN_DEFAULT] = dini_Bool(SETTINGSFILE, "JoinDefault");
-	gServerData[E_JOIN_MSGS] = dini_Bool(SETTINGSFILE, "JoinMsgs");
-	gServerData[E_KICK_ALL_IPS] = dini_Bool(SETTINGSFILE, "KickAllIPs");
-	gServerData[E_LOG_ACTIONS] = dini_Bool(SETTINGSFILE, "LogActions");
-	gServerData[E_LOG_LOGINS] = dini_Bool(SETTINGSFILE, "LogLogins");
-	gServerData[E_PING_IMMUNITY] = dini_Bool(SETTINGSFILE, "PingImmunity");
-	gServerData[E_RESPAWN_VEHICLES] = dini_Bool(SETTINGSFILE, "RespawnVehicles");
-	gServerData[E_SHOW_PMS] = dini_Bool(SETTINGSFILE, "ShowPMs");
-	gServerData[E_SPEC_HUD] = dini_Bool(SETTINGSFILE, "SpecHUD");
+	Setting_LoadString(gAlarDB, "BanMsg", BANMSG, gServerData[E_BAN_MSG], sizeof(SIZE_E_SERVERDATA[E_BAN_MSG]));
+	Setting_LoadString(gAlarDB, "DefaultNumPlate", DEFAULTNUMPLATE, gServerData[E_DEFAULT_NUM_PLATE], sizeof(SIZE_E_SERVERDATA[E_DEFAULT_NUM_PLATE]));
+	Setting_LoadString(gAlarDB, "DefaultPW", DEFAULTPW, gServerData[E_DEFAULT_PW], sizeof(SIZE_E_SERVERDATA[E_DEFAULT_PW]));
+	Setting_LoadString(gAlarDB, "RangeBanMsg", RANGEBANMSG, gServerData[E_RANGEBAN_MSG], sizeof(SIZE_E_SERVERDATA[E_RANGEBAN_MSG]));
+	Setting_LoadString(gAlarDB, "RangeSuspendMsg", RANGESUSPENDMSG, gServerData[E_RANGESUSPEND_MSG], sizeof(SIZE_E_SERVERDATA[E_RANGESUSPEND_MSG]));
+	Setting_LoadString(gAlarDB, "SuspendMsg", SUSPENDMSG, gServerData[E_SUSPEND_MSG], sizeof(SIZE_E_SERVERDATA[E_SUSPEND_MSG]));
 
-	gServerData[E_AUTOMUTE_TIME] = dini_Int(SETTINGSFILE, "AutoMuteTime");
-	gServerData[E_DROP_HEIGHT] = dini_Int(SETTINGSFILE, "DropHeight");
-	gServerData[E_GIVEWEAPON_AMMO] = dini_Int(SETTINGSFILE, "GiveWeaponAmmo");
-	gServerData[E_JOIN_BAN_TIME] = dini_Int(SETTINGSFILE, "JoinBanTime");
-	gServerData[E_MAX_PING] = dini_Int(SETTINGSFILE, "MaxPing");
-	gServerData[E_PUNCH_DECREMENT] = dini_Int(SETTINGSFILE, "PunchDecrement");
-	gServerData[E_RAGE_TIME] = dini_Int(SETTINGSFILE, "RageTime");
-	gServerData[E_SIGNIN_TIME] = dini_Int(SETTINGSFILE, "SignInTime");
-	gServerData[E_SLAP_DECREMENT] = dini_Int(SETTINGSFILE, "SlapDecrement");
+	Setting_LoadBool(gAlarDB, "AdminPMs", ADMINPMS, gServerData[E_ADMIN_PMS]);
+	Setting_LoadBool(gAlarDB, "AliasAdmins", ALIASADMINS, gServerData[E_ALIAS_ADMINS]);
+	Setting_LoadBool(gAlarDB, "AutoLogin", AUTOLOGIN, gServerData[E_AUTO_LOGIN]);
+	Setting_LoadBool(gAlarDB, "CheckMods", CHECKMODS, gServerData[E_CHECK_MODS]);
+	Setting_LoadBool(gAlarDB, "ConsoleMsgs", CONSOLEMSGS, gServerData[E_CONSOLE_MSGS]);
+	Setting_LoadBool(gAlarDB, "ExtraSpecViews", EXTRASPECVIEWS, gServerData[E_EXTRA_SPEC_VIEWS]);
+	Setting_LoadBool(gAlarDB, "FixRunning", FIXRUNNING, gServerData[E_FIX_RUNNING]);
+	Setting_LoadBool(gAlarDB, "HideBans", HIDEBANS, gServerData[E_HIDE_BANS]);
+	Setting_LoadBool(gAlarDB, "JoinCountries", JOINCOUNTRIES, gServerData[E_JOIN_COUNTRIES]);
+	Setting_LoadBool(gAlarDB, "JoinDefault", JOINDEFAULT, gServerData[E_JOIN_DEFAULT]);
+	Setting_LoadBool(gAlarDB, "JoinMsgs", JOINMSGS, gServerData[E_JOIN_MSGS]);
+	Setting_LoadBool(gAlarDB, "KickAllIPs", KICKALLIPS, gServerData[E_KICK_ALL_IPS]);
+	Setting_LoadBool(gAlarDB, "LogActions", LOGACTIONS, gServerData[E_LOG_ACTIONS]);
+	Setting_LoadBool(gAlarDB, "LogLogins", LOGLOGINS, gServerData[E_LOG_LOGINS]);
+	Setting_LoadBool(gAlarDB, "PingImmunity", PINGIMMUNITY, gServerData[E_PING_IMMUNITY]);
+	Setting_LoadBool(gAlarDB, "RespawnVehicles", RESPAWNVEHICLES, gServerData[E_RESPAWN_VEHICLES]);
+	Setting_LoadBool(gAlarDB, "SpecHUD", SPECHUD, gServerData[E_SPEC_HUD]);
+	Setting_LoadBool(gAlarDB, "StoreAliases", STOREALIASES, gServerData[E_STORE_ALIASES]);
 
-	gServerData[E_ALIAS_LEVEL] = dini_Int(SETTINGSFILE, "AliasLevel");
-	gServerData[E_ALIAS2_LEVEL] = dini_Int(SETTINGSFILE, "Alias2Level");
-	gServerData[E_ALIAS3_LEVEL] = dini_Int(SETTINGSFILE, "Alias3Level");
-	gServerData[E_ARMOURALL_LEVEL] = dini_Int(SETTINGSFILE, "ArmourAllLevel");
-	gServerData[E_ARMOUR_LEVEL] = dini_Int(SETTINGSFILE, "ArmourLevel");
-	gServerData[E_BANCHECK_LEVEL] = dini_Int(SETTINGSFILE, "BanCheckLevel");
-	gServerData[E_BAN_LEVEL] = dini_Int(SETTINGSFILE, "BanLevel");
-	gServerData[E_BRING_LEVEL] = dini_Int(SETTINGSFILE, "BringLevel");
-	gServerData[E_CARCOLOUR_LEVEL] = dini_Int(SETTINGSFILE, "CarColourLevel");
-	gServerData[E_CHANGEMODE_LEVEL] = dini_Int(SETTINGSFILE, "ChangeModeLevel");
-	gServerData[E_CHANGEPW_LEVEL] = dini_Int(SETTINGSFILE, "ChangePWLevel");
-	gServerData[E_CLEARBANS_LEVEL] = dini_Int(SETTINGSFILE, "ClearBansLevel");
-	gServerData[E_CLEARSTATUS_LEVEL] = dini_Int(SETTINGSFILE, "ClearStatusLevel");
-	gServerData[E_CLR_LEVEL] = dini_Int(SETTINGSFILE, "ClrLevel");
-	gServerData[E_CREATE_LEVEL] = dini_Int(SETTINGSFILE, "CreateLevel");
-	gServerData[E_DESTROY_LEVEL] = dini_Int(SETTINGSFILE, "DestroyLevel");
-	gServerData[E_DESYNC_LEVEL] = dini_Int(SETTINGSFILE, "DesyncLevel");
-	gServerData[E_DROP_LEVEL] = dini_Int(SETTINGSFILE, "DropLevel");
-	gServerData[E_EJECTALL_LEVEL] = dini_Int(SETTINGSFILE, "EjectAllLevel");
-	gServerData[E_EJECT_LEVEL] = dini_Int(SETTINGSFILE, "EjectLevel");
-	gServerData[E_EXPLODE_LEVEL] = dini_Int(SETTINGSFILE, "ExplodeLevel");
-	gServerData[E_FLIP_LEVEL] = dini_Int(SETTINGSFILE, "FlipLevel");
-	gServerData[E_FREEZE_LEVEL] = dini_Int(SETTINGSFILE, "FreezeLevel");
-	gServerData[E_GIVEALLCASH_LEVEL] = dini_Int(SETTINGSFILE, "GiveAllCashLevel");
-	gServerData[E_GIVEALLWEAPON_LEVEL] = dini_Int(SETTINGSFILE, "GiveAllWeaponLevel");
-	gServerData[E_GIVECASH_LEVEL] = dini_Int(SETTINGSFILE, "GiveCashLevel");
-	gServerData[E_GIVEWEAPON_LEVEL] = dini_Int(SETTINGSFILE, "GiveWeaponLevel");
-	gServerData[E_GOTO_LEVEL] = dini_Int(SETTINGSFILE, "GotoLevel");
-	gServerData[E_GRAVITY_LEVEL] = dini_Int(SETTINGSFILE, "GravityLevel");
-	gServerData[E_HEALALL_LEVEL] = dini_Int(SETTINGSFILE, "HealAllLevel");
-	gServerData[E_HEAL_LEVEL] = dini_Int(SETTINGSFILE, "HealLevel");
-	gServerData[E_IMITATE_LEVEL] = dini_Int(SETTINGSFILE, "ImitateLevel");
-	gServerData[E_IMMUNE_LEVEL] = dini_Int(SETTINGSFILE, "ImmuneLevel");
-	gServerData[E_INFO_LEVEL] = dini_Int(SETTINGSFILE, "InfoLevel");
-	gServerData[E_INTERIOR_LEVEL] = dini_Int(SETTINGSFILE, "InteriorLevel");
-	gServerData[E_IP_LEVEL] = dini_Int(SETTINGSFILE, "IPLevel");
-	gServerData[E_IPUPDATE_LEVEL] = dini_Int(SETTINGSFILE, "IPUpdateLevel");
-	gServerData[E_JAIL_LEVEL] = dini_Int(SETTINGSFILE, "JailLevel");
-	gServerData[E_KICK_LEVEL] = dini_Int(SETTINGSFILE, "KickLevel");
+	Setting_LoadInt(gAlarDB, "AutoMuteTime", AUTOMUTETIME, gServerData[E_AUTOMUTE_TIME]);
+	Setting_LoadInt(gAlarDB, "DropHeight", DROPHEIGHT, gServerData[E_DROP_HEIGHT]);
+	Setting_LoadInt(gAlarDB, "GiveWeaponAmmo", GIVEWEAPONAMMO, gServerData[E_GIVEWEAPON_AMMO]);
+	Setting_LoadInt(gAlarDB, "JoinBanTime", JOINBANTIME, gServerData[E_JOIN_BAN_TIME]);
+	Setting_LoadInt(gAlarDB, "MaxPing", MAXPING, gServerData[E_MAX_PING]);
+	Setting_LoadInt(gAlarDB, "MinPWLength", MINPWLENGTH, gServerData[E_MIN_PW_LENGTH]);
+	Setting_LoadInt(gAlarDB, "PunchDecrement", PUNCHDECREMENT, gServerData[E_PUNCH_DECREMENT]);
+	Setting_LoadInt(gAlarDB, "RageTime", RAGETIME, gServerData[E_RAGE_TIME]);
+	Setting_LoadInt(gAlarDB, "RCONBanTime", RCONBANTIME, gServerData[E_RCON_BAN_TIME]);
+
+	Setting_LoadInt(gAlarDB, "RCONLevel", RCONLEVEL, gServerData[E_RCON_LEVEL]);
+	if(gServerData[E_RCON_LEVEL] <= 0) gServerData[E_RCON_LEVEL] = -1;
+
+	Setting_LoadInt(gAlarDB, "RCONLoginLevel", RCONLOGINLEVEL, gServerData[E_RCON_LOGIN_LEVEL]);
+	Setting_LoadInt(gAlarDB, "SignInTime", SIGNINTIME, gServerData[E_SIGNIN_TIME]);
+	Setting_LoadInt(gAlarDB, "SlapDecrement", SLAPDECREMENT, gServerData[E_SLAP_DECREMENT]);
+	Setting_LoadInt(gAlarDB, "WarnLimit", WARNLIMIT, gServerData[E_WARN_LIMIT]);
+	Setting_LoadInt(gAlarDB, "WarnProtection", WARNPROTECTION, gServerData[E_WARN_PROTECTION]);
+	Setting_LoadInt(gAlarDB, "WarnSuspendTime", WARNSUSPENDTIME, gServerData[E_WARN_SUSPEND_TIME]);
+	Setting_LoadInt(gAlarDB, "WarnTimeout", WARNTIMEOUT, gServerData[E_WARN_TIMEOUT]);
+
+	Setting_LoadInt(gAlarDB, "Alias2Level", ALIAS2LEVEL, gServerData[E_ALIAS2_LEVEL]);
+	Setting_LoadInt(gAlarDB, "Alias3Level", ALIAS3LEVEL, gServerData[E_ALIAS3_LEVEL]);
+	Setting_LoadInt(gAlarDB, "AliasLevel", ALIASLEVEL, gServerData[E_ALIAS_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ArmourAllLevel", ARMOURALLLEVEL, gServerData[E_ARMOURALL_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ArmourLevel", ARMOURLEVEL, gServerData[E_ARMOUR_LEVEL]);
+	Setting_LoadInt(gAlarDB, "BanCheckLevel", BANCHECKLEVEL, gServerData[E_BANCHECK_LEVEL]);
+	Setting_LoadInt(gAlarDB, "BanLevel", BANLEVEL, gServerData[E_BAN_LEVEL]);
+	Setting_LoadInt(gAlarDB, "BringLevel", BRINGLEVEL, gServerData[E_BRING_LEVEL]);
+	Setting_LoadInt(gAlarDB, "CarColourLevel", CARCOLOURLEVEL, gServerData[E_CARCOLOUR_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ChangeModeLevel", CHANGEMODELEVEL, gServerData[E_CHANGEMODE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ChangePWLevel", CHANGEPWLEVEL, gServerData[E_CHANGEPW_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ClearBansLevel", CLEARBANSLEVEL, gServerData[E_CLEARBANS_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ClearStatusLevel", CLEARSTATUSLEVEL, gServerData[E_CLEARSTATUS_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ClrLevel", CLRLEVEL, gServerData[E_CLR_LEVEL]);
+	Setting_LoadInt(gAlarDB, "CreateLevel", CREATELEVEL, gServerData[E_CREATE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "DestroyLevel", DESTROYLEVEL, gServerData[E_DESTROY_LEVEL]);
+	Setting_LoadInt(gAlarDB, "DesyncLevel", DESYNCLEVEL, gServerData[E_DESYNC_LEVEL]);
+	Setting_LoadInt(gAlarDB, "DropLevel", DROPLEVEL, gServerData[E_DROP_LEVEL]);
+	Setting_LoadInt(gAlarDB, "EjectAllLevel", EJECTALLLEVEL, gServerData[E_EJECTALL_LEVEL]);
+	Setting_LoadInt(gAlarDB, "EjectLevel", EJECTLEVEL, gServerData[E_EJECT_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ExplodeLevel", EXPLODELEVEL, gServerData[E_EXPLODE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "FlipLevel", FLIPLEVEL, gServerData[E_FLIP_LEVEL]);
+	Setting_LoadInt(gAlarDB, "FreezeLevel", FREEZELEVEL, gServerData[E_FREEZE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "GiveAllCashLevel", GIVEALLCASHLEVEL, gServerData[E_GIVEALLCASH_LEVEL]);
+	Setting_LoadInt(gAlarDB, "GiveAllWeaponLevel", GIVEALLWEAPONLEVEL, gServerData[E_GIVEALLWEAPON_LEVEL]);
+	Setting_LoadInt(gAlarDB, "GiveCashLevel", GIVECASHLEVEL, gServerData[E_GIVECASH_LEVEL]);
+	Setting_LoadInt(gAlarDB, "GiveWeaponLevel", GIVEWEAPONLEVEL, gServerData[E_GIVEWEAPON_LEVEL]);
+	Setting_LoadInt(gAlarDB, "GotoLevel", GOTOLEVEL, gServerData[E_GOTO_LEVEL]);
+	Setting_LoadInt(gAlarDB, "GravityLevel", GRAVITYLEVEL, gServerData[E_GRAVITY_LEVEL]);
+	Setting_LoadInt(gAlarDB, "HealAllLevel", HEALALLLEVEL, gServerData[E_HEALALL_LEVEL]);
+	Setting_LoadInt(gAlarDB, "HealLevel", HEALLEVEL, gServerData[E_HEAL_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ImitateLevel", IMITATELEVEL, gServerData[E_IMITATE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ImmuneLevel", IMMUNELEVEL, gServerData[E_IMMUNE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "InfoLevel", INFOLEVEL, gServerData[E_INFO_LEVEL]);
+	Setting_LoadInt(gAlarDB, "InteriorLevel", INTERIORLEVEL, gServerData[E_INTERIOR_LEVEL]);
+	Setting_LoadInt(gAlarDB, "IPLevel", IPLEVEL, gServerData[E_IP_LEVEL]);
+	Setting_LoadInt(gAlarDB, "IPUpdateLevel", IPUPDATELEVEL, gServerData[E_IPUPDATE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "JailLevel", JAILLEVEL, gServerData[E_JAIL_LEVEL]);
+	Setting_LoadInt(gAlarDB, "KickLevel", KICKLEVEL, gServerData[E_KICK_LEVEL]);
 	#if LOG_LINES > 0 && LOG_PAGES > 0
-		gServerData[E_LOG_LEVEL] = dini_Int(SETTINGSFILE, "LogLevel");
+		Setting_LoadInt(gAlarDB, "LogLevel", LOGLEVEL, gServerData[E_LOG_LEVEL]);
 	#endif
-	gServerData[E_MIN_PW_LENGTH] = dini_Int(SETTINGSFILE, "MinPWLength");
-	gServerData[E_MSG_LEVEL] = dini_Int(SETTINGSFILE, "MsgLevel");
-	gServerData[E_MUTE_LEVEL] = dini_Int(SETTINGSFILE, "MuteLevel");
-	gServerData[E_PUNCH_LEVEL] = dini_Int(SETTINGSFILE, "PunchLevel");
-	gServerData[E_RANGEBAN_LEVEL] = dini_Int(SETTINGSFILE, "RangeBanLevel");
-	gServerData[E_RANGESUSPEND_LEVEL] = dini_Int(SETTINGSFILE, "RangeSuspendLevel");
-	gServerData[E_RAPE_LEVEL] = dini_Int(SETTINGSFILE, "RapeLevel");
-	gServerData[E_RCON_LEVEL] = dini_Int(SETTINGSFILE, "RCONLevel");
-	gServerData[E_RELOADDATA_LEVEL] = dini_Int(SETTINGSFILE, "ReloadDataLevel");
-	gServerData[E_REMALLCASH_LEVEL] = dini_Int(SETTINGSFILE, "RemAllCashLevel");
-	gServerData[E_REMALLWEAPONS_LEVEL] = dini_Int(SETTINGSFILE, "RemAllWeaponsLevel");
-	gServerData[E_REMCASH_LEVEL] = dini_Int(SETTINGSFILE, "RemCashLevel");
-	gServerData[E_REMWEAPONS_LEVEL] = dini_Int(SETTINGSFILE, "RemWeaponsLevel");
-	gServerData[E_REPAIR_LEVEL] = dini_Int(SETTINGSFILE, "RepairLevel");
-	gServerData[E_RESPAWN_LEVEL] = dini_Int(SETTINGSFILE, "RespawnLevel");
-	gServerData[E_SAY_LEVEL] = dini_Int(SETTINGSFILE, "SayLevel");
-	gServerData[E_SELECT_LEVEL] = dini_Int(SETTINGSFILE, "SelectLevel");
-	gServerData[E_SERVERNAME_LEVEL] = dini_Int(SETTINGSFILE, "ServerNameLevel");
-	gServerData[E_SETADMIN_LEVEL] = dini_Int(SETTINGSFILE, "SetAdminLevel");
-	gServerData[E_SETNAME_LEVEL] = dini_Int(SETTINGSFILE, "SetNameLevel");
-	gServerData[E_SETPING_LEVEL] = dini_Int(SETTINGSFILE, "SetPingLevel");
-	gServerData[E_SHOUT_LEVEL] = dini_Int(SETTINGSFILE, "ShoutLevel");
-	gServerData[E_SLAP_LEVEL] = dini_Int(SETTINGSFILE, "SlapLevel");
-	gServerData[E_SLAY_LEVEL] = dini_Int(SETTINGSFILE, "SlayLevel");
-	gServerData[E_SPAWN_LEVEL] = dini_Int(SETTINGSFILE, "SpawnLevel");
-	gServerData[E_SPEC_LEVEL] = dini_Int(SETTINGSFILE, "SpecLevel");
-	gServerData[E_SUSPEND_LEVEL] = dini_Int(SETTINGSFILE, "SuspendLevel");
-	gServerData[E_TELE_LEVEL] = dini_Int(SETTINGSFILE, "TeleLevel");
-	gServerData[E_TIME_LEVEL] = dini_Int(SETTINGSFILE, "TimeLevel");
-	gServerData[E_UNBAN_LEVEL] = dini_Int(SETTINGSFILE, "UnbanLevel");
-	gServerData[E_UNDESYNC_LEVEL] = dini_Int(SETTINGSFILE, "UndesyncLevel");
-	gServerData[E_UNFREEZE_LEVEL] = dini_Int(SETTINGSFILE, "UnfreezeLevel");
-	gServerData[E_UNJAIL_LEVEL] = dini_Int(SETTINGSFILE, "UnjailLevel");
-	gServerData[E_UNMUTE_LEVEL] = dini_Int(SETTINGSFILE, "UnmuteLevel");
-	gServerData[E_UNRAPE_LEVEL] = dini_Int(SETTINGSFILE, "UnrapeLevel");
-	gServerData[E_UNSUSPEND_LEVEL] = dini_Int(SETTINGSFILE, "UnsuspendLevel");
-	gServerData[E_UNWHITELIST_LEVEL] = dini_Int(SETTINGSFILE, "UnWhiteListLevel");
-	gServerData[E_WEATHER_LEVEL] = dini_Int(SETTINGSFILE, "WeatherLevel");
-	gServerData[E_WHITELIST_LEVEL] = dini_Int(SETTINGSFILE, "WhiteListLevel");
-	gServerData[E_WILDBAN_LEVEL] = dini_Int(SETTINGSFILE, "WildBanLevel");
-	gServerData[E_WORLD_LEVEL] = dini_Int(SETTINGSFILE, "WorldLevel");
+	Setting_LoadInt(gAlarDB, "MsgLevel", MSGLEVEL, gServerData[E_MSG_LEVEL]);
+	Setting_LoadInt(gAlarDB, "MuteLevel", MUTELEVEL, gServerData[E_MUTE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "PunchLevel", PUNCHLEVEL, gServerData[E_PUNCH_LEVEL]);
+	Setting_LoadInt(gAlarDB, "RangeBanLevel", RANGEBANLEVEL, gServerData[E_RANGEBAN_LEVEL]);
+	Setting_LoadInt(gAlarDB, "RangeKickLevel", RANGEKICKLEVEL, gServerData[E_RANGEKICK_LEVEL]);
+	Setting_LoadInt(gAlarDB, "RangeSuspendLevel", RANGESUSPENDLEVEL, gServerData[E_RANGESUSPEND_LEVEL]);
+	Setting_LoadInt(gAlarDB, "RapeLevel", RAPELEVEL, gServerData[E_RAPE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ReloadDataLevel", RELOADDATALEVEL, gServerData[E_RELOADDATA_LEVEL]);
+	Setting_LoadInt(gAlarDB, "RemAllCashLevel", REMALLCASHLEVEL, gServerData[E_REMALLCASH_LEVEL]);
+	Setting_LoadInt(gAlarDB, "RemAllWeaponsLevel", REMALLWEAPONSLEVEL, gServerData[E_REMALLWEAPONS_LEVEL]);
+	Setting_LoadInt(gAlarDB, "RemCashLevel", REMCASHLEVEL, gServerData[E_REMCASH_LEVEL]);
+	Setting_LoadInt(gAlarDB, "RemWeaponsLevel", REMWEAPONSLEVEL, gServerData[E_REMWEAPONS_LEVEL]);
+	Setting_LoadInt(gAlarDB, "RepairLevel", REPAIRLEVEL, gServerData[E_REPAIR_LEVEL]);
+	Setting_LoadInt(gAlarDB, "RespawnLevel", RESPAWNLEVEL, gServerData[E_RESPAWN_LEVEL]);
+	Setting_LoadInt(gAlarDB, "SayLevel", SAYLEVEL, gServerData[E_SAY_LEVEL]);
+	Setting_LoadInt(gAlarDB, "SelectLevel", SELECTLEVEL, gServerData[E_SELECT_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ServerNameLevel", SERVERNAMELEVEL, gServerData[E_SERVERNAME_LEVEL]);
+	Setting_LoadInt(gAlarDB, "SetAdminLevel", SETADMINLEVEL, gServerData[E_SETADMIN_LEVEL]);
+	Setting_LoadInt(gAlarDB, "SetNameLevel", SETNAMELEVEL, gServerData[E_SETNAME_LEVEL]);
+	Setting_LoadInt(gAlarDB, "SetPingLevel", SETPINGLEVEL, gServerData[E_SETPING_LEVEL]);
+	Setting_LoadInt(gAlarDB, "ShoutLevel", SHOUTLEVEL, gServerData[E_SHOUT_LEVEL]);
+	Setting_LoadInt(gAlarDB, "SlapLevel", SLAPLEVEL, gServerData[E_SLAP_LEVEL]);
+	Setting_LoadInt(gAlarDB, "SlayLevel", SLAYLEVEL, gServerData[E_SLAY_LEVEL]);
+	Setting_LoadInt(gAlarDB, "SpawnLevel", SPAWNLEVEL, gServerData[E_SPAWN_LEVEL]);
+	Setting_LoadInt(gAlarDB, "SpecLevel", SPECLEVEL, gServerData[E_SPEC_LEVEL]);
+	Setting_LoadInt(gAlarDB, "SuspendLevel", SUSPENDLEVEL, gServerData[E_SUSPEND_LEVEL]);
+	Setting_LoadInt(gAlarDB, "TeleLevel", TELELEVEL, gServerData[E_TELE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "TimeLevel", TIMELEVEL, gServerData[E_TIME_LEVEL]);
+	Setting_LoadInt(gAlarDB, "UnbanLevel", UNBANLEVEL, gServerData[E_UNBAN_LEVEL]);
+	Setting_LoadInt(gAlarDB, "UndesyncLevel", UNDESYNCLEVEL, gServerData[E_UNDESYNC_LEVEL]);
+	Setting_LoadInt(gAlarDB, "UnfreezeLevel", UNFREEZELEVEL, gServerData[E_UNFREEZE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "UnjailLevel", UNJAILLEVEL, gServerData[E_UNJAIL_LEVEL]);
+	Setting_LoadInt(gAlarDB, "UnmuteLevel", UNMUTELEVEL, gServerData[E_UNMUTE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "UnrapeLevel", UNRAPELEVEL, gServerData[E_UNRAPE_LEVEL]);
+	Setting_LoadInt(gAlarDB, "UnsuspendLevel", UNSUSPENDLEVEL, gServerData[E_UNSUSPEND_LEVEL]);
+	Setting_LoadInt(gAlarDB, "UnwarnLevel", WARNLEVEL, gServerData[E_UNWARN_LEVEL]);
+	Setting_LoadInt(gAlarDB, "UnwhitelistLevel", UNWHITELISTLEVEL, gServerData[E_UNWHITELIST_LEVEL]);
+	Setting_LoadInt(gAlarDB, "WarnLevel", WARNLEVEL, gServerData[E_WARN_LEVEL]);
+	Setting_LoadInt(gAlarDB, "WeatherLevel", WEATHERLEVEL, gServerData[E_WEATHER_LEVEL]);
+	Setting_LoadInt(gAlarDB, "WhitelistLevel", WHITELISTLEVEL, gServerData[E_WHITELIST_LEVEL]);
+	Setting_LoadInt(gAlarDB, "WildBanLevel", WILDBANLEVEL, gServerData[E_WILDBAN_LEVEL]);
+	Setting_LoadInt(gAlarDB, "WildKickLevel", WILDKICKLEVEL, gServerData[E_WILDKICK_LEVEL]);
+	Setting_LoadInt(gAlarDB, "WildSuspendLevel", WILDSUSPENDLEVEL, gServerData[E_WILDSUSPEND_LEVEL]);
+	Setting_LoadInt(gAlarDB, "WorldLevel", WORLDLEVEL, gServerData[E_WORLD_LEVEL]);
 }
 
-CreateData()
+stock SendBanMsg(playerid, const message[], const datetime[], const adminname[])
 {
-	if(!fexist(SETTINGSFILE)) {
-		new File:handle = fopen(SETTINGSFILE, io_write);
-		if(handle) {
-			fwrite(handle,
-				"# This file contains the level settings, maximium ping and default password (for /asetadmin)\r\n" \
-				"# To restore a value to its default setting just delete the line\r\n"
-			);
-			fclose(handle);
-		}
-	}
-	if(!dini_Isset(SETTINGSFILE, "ChatPrefix")) dini_Set(SETTINGSFILE, "ChatPrefix", CHATPREFIX);
-	if(!dini_Isset(SETTINGSFILE, "BanMsg")) dini_Set(SETTINGSFILE, "BanMsg", BANMSG);
-	#if CHATHISTORY_SIZE > 0
-		if(!dini_Isset(SETTINGSFILE,"ChatHistory")) dini_Set(SETTINGSFILE, "ChatHistory", CHATHISTORY);
-	#endif
-	if(!dini_Isset(SETTINGSFILE, "DefaultNumPlate")) dini_Set(SETTINGSFILE, "DefaultNumPlate", DEFAULTNUMPLATE);
-	if(!dini_Isset(SETTINGSFILE, "DefaultPW")) dini_Set(SETTINGSFILE, "DefaultPW", DEFAULTPW);
-	if(!dini_Isset(SETTINGSFILE, "RangeBanMsg")) dini_Set(SETTINGSFILE, "RangeBanMsg", RANGEBANMSG);
-	if(!dini_Isset(SETTINGSFILE, "RangeSuspendMsg")) dini_Set(SETTINGSFILE, "RangeSuspendMsg", RANGESUSPENDMSG);
-	if(!dini_Isset(SETTINGSFILE, "SuspendMsg")) dini_Set(SETTINGSFILE, "SuspendMsg", SUSPENDMSG);
+	if(isnull(message)) return;
 
-	if(!fexist(BANFILE)) {
-		new File:handle = fopen(BANFILE, io_write);
-		if(handle) {
-			fwrite(handle,
-				"# Here all the bans are stored in the format \"name ip DD/MM/YYYY HH:MM admin reason\", to remove a ban delete the line\r\n" \
-				"# This file must end in an empty line\r\n"
-			);
-			fclose(handle);
-		}
-	}
-
-	if(!fexist(SUSPENDFILE)) {
-		new File:handle = fopen(SUSPENDFILE, io_write);
-		if(handle) {
-			fwrite(handle,
-				"# Here all the suspensions are stored in the format \"name ip year month day hour DD/MM/YYYY HH:MM admin reason\", to remove a suspension delete the line\r\n" \
-				"# This file must end in an empty line\r\n"
-			);
-			fclose(handle);
-		}
-	}
-
-	if(!fexist(WHITELISTFILE)) {
-		new File:handle = fopen(WHITELISTFILE, io_write);
-		if(handle) {
-			fwrite(handle, "# This file lists whitelisted names, each on its own line\r\n");
-			fclose(handle);
-		}
-	}
-
-	if(!fexist(USERFILE)) {
-		new File:handle = fopen(USERFILE, io_write);
-		if(handle) {
-			new hash[33], string[MAX_STRING];
-			dini_Get(SETTINGSFILE, "DefaultPW", string);
-			strcpy(hash, MD5_Hash(string));
-			format(string, sizeof(string),
-				"# This file contains the data for admins in the format \"username=level ip passwordhash hidden manuallogin logpage spechud\"\r\n" \
-				"# To manually create an admin just use any ip and the passwordhash \"%s\", for the password \"%s\"\r\n" \
-				"# eg) [DRuG]Dabombber=10 127.0.0.1 %s\r\n",
-				hash, string, hash
-			);
-			fwrite(handle, string);
-			fclose(handle);
-		}
-	}
-
-	if(!fexist(MODESFILE)) {
-		new File:handle = fopen(MODESFILE, io_write);
-		if(handle) {
-			fwrite(handle, "# This file should list each gamemode on a new line (without the .amx extension)\r\n");
-			fclose(handle);
-		}
-	}
-
-	if(!fexist(STATUSFILE)) {
-		new File:handle = fopen(STATUSFILE, io_write);
-		if(handle) {
-			fwrite(handle,
-				"# This file contains mute, freeze and jail information. To clear a status delete the line, instead of setting all the values to 0\r\n" \
-				"# It is in the format IP=MutedFrozenJailed eg) 127.0.0.1=010\r\n"
-			);
-			fclose(handle);
-		}
-	}
-
-	setchk("AutoMuteTime", AUTOMUTETIME);
-	setchk("DropHeight", DROPHEIGHT);
-	setchk("GiveWeaponAmmo", GIVEWEAPONAMMO);
-	setchk("MaxPing", MAXPING);
-	setchk("MinPWLength", MINPWLENGTH);
-	setchk("PunchDecrement", PUNCHDECREMENT);
-	setchk("RageTime", RAGETIME);
-	setchk("SignInTime", SIGNINTIME);
-	setchk("SlapDecrement", SLAPDECREMENT);
-
-	if(!dini_Isset(SETTINGSFILE, "AdminPMs")) dini_BoolSet(SETTINGSFILE, "AdminPMs", ADMINPMS);
-	if(!dini_Isset(SETTINGSFILE, "AliasAdmins")) dini_BoolSet(SETTINGSFILE, "AliasAdmins", ALIASADMINS);
-	if(!dini_Isset(SETTINGSFILE, "AutoLogin")) dini_BoolSet(SETTINGSFILE, "AutoLogin", AUTOLOGIN);
-	#if CHATHISTORY_SIZE > 0
-		if(!dini_Isset(SETTINGSFILE, "ChatJoins")) dini_BoolSet(SETTINGSFILE, "ChatJoins", CHATJOINS);
-	#endif
-	if(!dini_Isset(SETTINGSFILE, "ConsoleMsgs")) dini_BoolSet(SETTINGSFILE, "ConsoleMsgs", CONSOLEMSGS);
-	if(!dini_Isset(SETTINGSFILE, "ExtraSpecViews")) dini_BoolSet(SETTINGSFILE, "ExtraSpecViews", EXTRASPECVIEWS);
-	if(!dini_Isset(SETTINGSFILE, "FixRunning")) dini_BoolSet(SETTINGSFILE, "FixRunning", FIXRUNNING);
-	if(!dini_Isset(SETTINGSFILE, "HideBans")) dini_BoolSet(SETTINGSFILE, "HideBans", HIDEBANS);
-	if(!dini_Isset(SETTINGSFILE, "JoinCountries")) dini_BoolSet(SETTINGSFILE, "JoinCountries", JOINCOUNTRIES);
-	if(!dini_Isset(SETTINGSFILE, "JoinDefault")) dini_BoolSet(SETTINGSFILE, "JoinDefault", JOINDEFAULT);
-	if(!dini_Isset(SETTINGSFILE, "JoinMsgs")) dini_BoolSet(SETTINGSFILE, "JoinMsgs", JOINMSGS);
-	if(!dini_Isset(SETTINGSFILE, "KickAllIPs")) dini_BoolSet(SETTINGSFILE, "KickAllIPs", KICKALLIPS);
-	if(!dini_Isset(SETTINGSFILE, "LogActions")) dini_BoolSet(SETTINGSFILE, "LogActions", LOGACTIONS);
-	if(!dini_Isset(SETTINGSFILE, "LogLogins")) dini_BoolSet(SETTINGSFILE, "LogLogins", LOGLOGINS);
-	if(!dini_Isset(SETTINGSFILE, "PingImmunity")) dini_BoolSet(SETTINGSFILE, "PingImmunity", PINGIMMUNITY);
-	if(!dini_Isset(SETTINGSFILE, "RespawnVehicles")) dini_BoolSet(SETTINGSFILE, "RespawnVehicles", RESPAWNVEHICLES);
-	if(!dini_Isset(SETTINGSFILE, "ShowPMs")) dini_BoolSet(SETTINGSFILE, "ShowPMs", SHOWPMS);
-	if(!dini_Isset(SETTINGSFILE, "SpecHUD")) dini_BoolSet(SETTINGSFILE, "SpecHUD", SPECHUD);
-
-	setchk("AliasLevel", ALIASLEVEL);
-	setchk("Alias2Level", ALIAS2LEVEL);
-	setchk("Alias3Level", ALIAS3LEVEL);
-	setchk("ArmourAllLevel", ARMOURALLLEVEL);
-	setchk("ArmourLevel", ARMOURLEVEL);
-	setchk("BanLevel", BANLEVEL);
-	setchk("BanCheckLevel", BANCHECKLEVEL);
-	setchk("BringLevel", BRINGLEVEL);
-	setchk("CarColourLevel", CARCOLOURLEVEL);
-	setchk("ChangeModeLevel", CHANGEMODELEVEL);
-	setchk("ChangePWLevel", CHANGEPWLEVEL);
-	setchk("ClearBansLevel", CLEARBANSLEVEL);
-	setchk("ClearStatusLevel", CLEARSTATUSLEVEL);
-	setchk("ClrLevel", CLRLEVEL);
-	setchk("CreateLevel", CREATELEVEL);
-	setchk("DestroyLevel", DESTROYLEVEL);
-	setchk("DesyncLevel", DESYNCLEVEL);
-	setchk("DropLevel", DROPLEVEL);
-	setchk("EjectAllLevel", EJECTALLLEVEL);
-	setchk("EjectLevel", EJECTLEVEL);
-	setchk("ExplodeLevel", EXPLODELEVEL);
-	setchk("FlipLevel", FLIPLEVEL);
-	setchk("FreezeLevel", FREEZELEVEL);
-	setchk("GiveAllCashLevel", GIVEALLCASHLEVEL);
-	setchk("GiveAllWeaponLevel", GIVEALLWEAPONLEVEL);
-	setchk("GiveCashLevel", GIVECASHLEVEL);
-	setchk("GiveWeaponLevel", GIVEWEAPONLEVEL);
-	setchk("GotoLevel", GOTOLEVEL);
-	setchk("GravityLevel", GRAVITYLEVEL);
-	setchk("HealAllLevel", HEALALLLEVEL);
-	setchk("HealLevel", HEALLEVEL);
-	setchk("ImitateLevel", IMITATELEVEL);
-	setchk("ImmuneLevel", IMMUNELEVEL);
-	setchk("InfoLevel", INFOLEVEL);
-	setchk("InteriorLevel", INTERIORLEVEL);
-	setchk("IPLevel", IPLEVEL);
-	setchk("IPUpdateLevel", IPUPDATELEVEL);
-	setchk("JailLevel", JAILLEVEL);
-	setchk("JoinBanTime", JOINBANTIME);
-	setchk("KickLevel", KICKLEVEL);
-	#if LOG_LINES > 0 && LOG_PAGES > 0
-		setchk("LogLevel", LOGLEVEL);
-	#endif
-	setchk("MsgLevel", MSGLEVEL);
-	setchk("MuteLevel", MUTELEVEL);
-	setchk("PunchLevel", PUNCHLEVEL);
-	setchk("RangeBanLevel", RANGEBANLEVEL);
-	setchk("RangeSuspendLevel", RANGESUSPENDLEVEL);
-	setchk("RapeLevel", RAPELEVEL);
-	setchk("RCONLevel", RCONLEVEL);
-	setchk("ReloadDataLevel", RELOADDATALEVEL);
-	setchk("RemAllCashLevel", REMALLCASHLEVEL);
-	setchk("RemAllWeaponsLevel", REMALLWEAPONSLEVEL);
-	setchk("RemCashLevel", REMCASHLEVEL);
-	setchk("RemWeaponsLevel", REMWEAPONSLEVEL);
-	setchk("RepairLevel", REPAIRLEVEL);
-	setchk("RespawnLevel", RESPAWNLEVEL);
-	setchk("SayLevel", SAYLEVEL);
-	setchk("SelectLevel", SELECTLEVEL);
-	setchk("ServerNameLevel", SERVERNAMELEVEL);
-	setchk("SetAdminLevel", SETADMINLEVEL);
-	setchk("SetNameLevel", SETNAMELEVEL);
-	setchk("SetPingLevel", SETPINGLEVEL);
-	setchk("ShoutLevel", SHOUTLEVEL);
-	setchk("SlapLevel", SLAPLEVEL);
-	setchk("SlayLevel", SLAYLEVEL);
-	setchk("SpawnLevel", SPAWNLEVEL);
-	setchk("SpecLevel", SPECLEVEL);
-	setchk("SuspendLevel", SUSPENDLEVEL);
-	setchk("TeleLevel", TELELEVEL);
-	setchk("TimeLevel", TIMELEVEL);
-	setchk("UnbanLevel", UNBANLEVEL);
-	setchk("UndesyncLevel", UNDESYNCLEVEL);
-	setchk("UnfreezeLevel", UNFREEZELEVEL);
-	setchk("UnjailLevel", UNJAILLEVEL);
-	setchk("UnmuteLevel", UNMUTELEVEL);
-	setchk("UnrapeLevel", UNRAPELEVEL);
-	setchk("UnsuspendLevel", UNSUSPENDLEVEL);
-	setchk("UnWhiteListLevel", UNWHITELISTLEVEL);
-	setchk("WeatherLevel", WEATHERLEVEL);
-	setchk("WildBanLevel", WILDBANLEVEL);
-	setchk("WhiteListLevel", WHITELISTLEVEL);
-	setchk("WorldLevel", WORLDLEVEL);
-}
-
-GetPlayerData(const pname[], logininfo[E_LOGINDATA])
-{
-	#if LOG_LINES > 0 && LOG_PAGES > 0
-		strscan(dini_Return(USERFILE, pname), "issiiii", logininfo[E_LOGIN_LEVEL], logininfo[E_LOGIN_IP], sizeof(SIZE_E_LOGINDATA[E_LOGIN_IP]), logininfo[E_LOGIN_PW], sizeof(SIZE_E_LOGINDATA[E_LOGIN_PW]), logininfo[E_LOGIN_HIDDEN], logininfo[E_LOGIN_MANUAL], logininfo[E_LOGIN_PAGE], logininfo[E_LOGIN_HUD]);
-	#else
-		strscan(dini_Return(USERFILE, pname), "issii_i", logininfo[E_LOGIN_LEVEL], logininfo[E_LOGIN_IP], sizeof(SIZE_E_LOGINDATA[E_LOGIN_IP]), logininfo[E_LOGIN_PW], sizeof(SIZE_E_LOGINDATA[E_LOGIN_PW]), logininfo[E_LOGIN_HIDDEN], logininfo[E_LOGIN_MANUAL], logininfo[E_LOGIN_HUD]);
-	#endif
-	return (logininfo[E_LOGIN_LEVEL] > 0 && logininfo[E_LOGIN_IP][0] && logininfo[E_LOGIN_PW][0]);
-}
-
-SetPlayerData(const pname[], const logininfo[E_LOGINDATA])
-{
-	new pdata[MAX_STRING];
-	#if LOG_LINES > 0 && LOG_PAGES > 0
-		format(pdata, sizeof(pdata), "%i %s %s %i %i %i %i", logininfo[E_LOGIN_LEVEL], logininfo[E_LOGIN_IP], logininfo[E_LOGIN_PW], logininfo[E_LOGIN_HIDDEN], logininfo[E_LOGIN_MANUAL], logininfo[E_LOGIN_PAGE], logininfo[E_LOGIN_HUD]);
-	#else
-		format(pdata, sizeof(pdata), "%i %s %s %i %i 0 %i", logininfo[E_LOGIN_LEVEL], logininfo[E_LOGIN_IP], logininfo[E_LOGIN_PW], logininfo[E_LOGIN_HIDDEN], logininfo[E_LOGIN_MANUAL], logininfo[E_LOGIN_HUD]);
-	#endif
-	return dini_Set(USERFILE, pname, pdata);
-}
-
-
-stock SendBanMsg(playerid, const message[], const date[], const time[], const adminname[])
-{
 	new msg[512];
 	strcpy(msg, message);
 
 	strreplace(msg, "$(WEBSITE)", ReturnServerVar("weburl"));
 	strreplace(msg, "$(NAME)", ReturnPlayerName(playerid));
 	strreplace(msg, "$(IP)", ReturnPlayerIP(playerid));
-	strreplace(msg, "$(DATE)", date);
-	strreplace(msg, "$(TIME)", time);
-	strreplace(msg, "$(ADMIN)", adminname);
+	if(isnull(datetime)) {
+		strreplace(msg, "$(DATE)", "??-??-??");
+		strreplace(msg, "$(TIME)", "??:??:??");
+		strreplace(msg, "$(DATETIME)", "??-??-?? ??:??:??");
+	} else {
+		new time[MAX_TIMESTAMP],
+			date[MAX_TIMESTAMP];
+		strscan(message, "ss ", date, sizeof(date), time, sizeof(time));
+		strreplace(msg, "$(DATE)", date);
+		strreplace(msg, "$(TIME)", time);
+		strreplace(msg, "$(DATETIME)", datetime);
+	}
+	if(isnull(adminname)) {
+		strreplace(msg, "$(ADMIN)", DEFAULT_NAME);
+	} else {
+		strreplace(msg, "$(ADMIN)", adminname);
+	}
 
 	new start, end;
 	while((end = strfindchar(msg, '|', false, start)) != -1) {
@@ -11081,7 +12583,6 @@ public alar_specupdate()
 	LoopPlayers(playerid) {
 		if(gPlayerData[playerid][E_SPECTATING] && gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID) {
 			GetPlayerKeys(playerid, keys, updown, leftright);
-
 			if(keys & KEY_JUMP) {
 				if(gPlayerData[playerid][E_CAM_ROT_Z] < 89.0) {
 					gPlayerData[playerid][E_CAM_ROT_Z] += 1.0;
@@ -11091,12 +12592,10 @@ public alar_specupdate()
 					gPlayerData[playerid][E_CAM_ROT_Z] -= 1.0;
 				}
 			}
-
 			new Float:speed = 1.0;
 			if(keys & KEY_SPRINT) {
 				speed = 2.0;
 			}
-
 			if(leftright == KEY_LEFT) {
 				if(gPlayerData[playerid][E_CAM_ROT_XY] >= 360.0 - speed * 1.5) {
 					gPlayerData[playerid][E_CAM_ROT_XY] -= 360.0 - speed * 1.5;
@@ -11110,11 +12609,9 @@ public alar_specupdate()
 					gPlayerData[playerid][E_CAM_ROT_XY] -= speed * 1.5;
 				}
 			}
-
 			if(keys & KEY_SPRINT) {
 				speed = 5.0;
 			}
-
 			if(keys & (KEY_FIRE | KEY_HANDBRAKE) == (KEY_FIRE | KEY_HANDBRAKE)) {
 				gPlayerData[playerid][E_CAM_ROT_Z] = 0;
 			} else if(keys & KEY_FIRE) {
@@ -11130,11 +12627,9 @@ public alar_specupdate()
 				gPlayerData[playerid][E_CAM_POS_X] += speed * 2.0 * x_off;
 				gPlayerData[playerid][E_CAM_POS_Y] -= speed * 2.0 * y_off;
 			}
-
 			x_off = floatcos(gPlayerData[playerid][E_CAM_ROT_Z], degrees) * floatcos(gPlayerData[playerid][E_CAM_ROT_XY], degrees);
 			y_off = floatcos(gPlayerData[playerid][E_CAM_ROT_Z], degrees) * floatsin(gPlayerData[playerid][E_CAM_ROT_XY], degrees);
 			z_off = floatsin(gPlayerData[playerid][E_CAM_ROT_Z], degrees);
-
 			if(updown == KEY_UP) {
 				gPlayerData[playerid][E_CAM_POS_X] += speed * 2.0 * x_off;
 				gPlayerData[playerid][E_CAM_POS_Y] += speed * 2.0 * y_off;
@@ -11144,7 +12639,6 @@ public alar_specupdate()
 				gPlayerData[playerid][E_CAM_POS_Y] -= speed * 2.0 * y_off;
 				gPlayerData[playerid][E_CAM_POS_Z] -= speed * 2.0 * z_off;
 			}
-
 			SetPlayerCameraPos(playerid, gPlayerData[playerid][E_CAM_POS_X], gPlayerData[playerid][E_CAM_POS_Y], gPlayerData[playerid][E_CAM_POS_Z]);
 			SetPlayerCameraLookAt(playerid, gPlayerData[playerid][E_CAM_POS_X] + x_off, gPlayerData[playerid][E_CAM_POS_Y] + y_off, gPlayerData[playerid][E_CAM_POS_Z] + z_off);
 		}
@@ -11153,6 +12647,15 @@ public alar_specupdate()
 
 StoreSpawnData(playerid)
 {
+	if(gSpawnSaves & INFOTYPE_VEHICLE) {
+		if(IsPlayerInAnyVehicle(playerid)) {
+			gPlayerData[playerid][E_VEHICLEID] = GetPlayerVehicleID(playerid);
+			gPlayerData[playerid][E_SEATID] = GetPlayerVehicleSeat(playerid);
+		} else {
+			gPlayerData[playerid][E_VEHICLEID] = INVALID_VEHICLE_ID;
+			gPlayerData[playerid][E_SEATID] = INVALID_SEAT_ID;
+		}
+	}
 	if(gSpawnSaves & INFOTYPE_POSITION) {
 		GetPlayerPos(playerid, gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ]);
 		GetPlayerFacingAngle(playerid, gPlayerData[playerid][E_ROT]);
@@ -11179,18 +12682,33 @@ StoreSpawnData(playerid)
 		for(new i; i < 13; i++) {
 			GetPlayerWeaponData(playerid, i, gPlayerData[playerid][E_WEAPON][i], gPlayerData[playerid][E_AMMO][i]);
 		}
+		gPlayerData[playerid][E_ARMED] = GetPlayerWeapon(playerid);
 	}
 }
 
 public alar_setspawnposition(playerid)
 {
 	if(!IsPlayerConnected(playerid)) return;
-	SetPlayerPos(playerid, gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ]);
-	SetPlayerFacingAngle(playerid, gPlayerData[playerid][E_ROT]);
+	new bool:isinvehicle = false;
+	if(GetVehicleModel(gPlayerData[playerid][E_VEHICLEID]) != INVALID_MODEL_ID) {
+		if(IsVehicleSeatFree(gPlayerData[playerid][E_VEHICLEID], gPlayerData[playerid][E_SEATID])) {
+			if((gPlayerData[playerid][E_WORLD] = GetVehicleVirtualWorld(gPlayerData[playerid][E_VEHICLEID])) != GetPlayerVirtualWorld(playerid)) {
+				SetPlayerVirtualWorld(playerid, gPlayerData[playerid][E_WORLD]);
+				alar_OnPlayerWorldChange(playerid, gPlayerData[playerid][E_WORLD]);
+			}
+			isinvehicle = true;
+			PutPlayerInVehicle(playerid, gPlayerData[playerid][E_VEHICLEID], gPlayerData[playerid][E_SEATID]);
+		}
+	}
+	if(!isinvehicle) {
+		SetPlayerPos(playerid, gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ]);
+		SetPlayerFacingAngle(playerid, gPlayerData[playerid][E_ROT]);
+	}
 	SetCameraBehindPlayer(playerid);
-	if(gSpawnSaves & INFOTYPE_WORLD) {
-		SetPlayerInterior(playerid, gPlayerData[playerid][E_INTERIOR]);
+	SetPlayerInterior(playerid, gPlayerData[playerid][E_INTERIOR]);
+	if(!isinvehicle && GetPlayerVirtualWorld(playerid) != gPlayerData[playerid][E_WORLD]) {
 		SetPlayerVirtualWorld(playerid, gPlayerData[playerid][E_WORLD]);
+		alar_OnPlayerWorldChange(playerid, gPlayerData[playerid][E_WORLD]);
 	}
 	ClearSpawnData(playerid);
 }
@@ -11198,77 +12716,123 @@ public alar_setspawnposition(playerid)
 public alar_setspawndata(playerid)
 {
 	if(!IsPlayerConnected(playerid)) return;
-	if(gSpawnSaves & INFOTYPE_POSITION) {
+
+	new bool:isinvehicle = false;
+	if(gSpawnSaves & INFOTYPE_VEHICLE) {
+		if(GetVehicleModel(gPlayerData[playerid][E_VEHICLEID]) != INVALID_MODEL_ID) {
+			if(IsVehicleSeatFree(gPlayerData[playerid][E_VEHICLEID], gPlayerData[playerid][E_SEATID])) {
+				if((gPlayerData[playerid][E_WORLD] = GetVehicleVirtualWorld(gPlayerData[playerid][E_VEHICLEID])) != GetPlayerVirtualWorld(playerid)) {
+					SetPlayerVirtualWorld(playerid, gPlayerData[playerid][E_WORLD]);
+					alar_OnPlayerWorldChange(playerid, gPlayerData[playerid][E_WORLD]);
+				}
+				isinvehicle = true;
+				PutPlayerInVehicle(playerid, gPlayerData[playerid][E_VEHICLEID], gPlayerData[playerid][E_SEATID]);
+				SetCameraBehindPlayer(playerid);
+			}
+		}
+	}
+
+	if(!isinvehicle && gSpawnSaves & INFOTYPE_POSITION) {
 		SetPlayerPos(playerid, gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ]);
 		SetPlayerFacingAngle(playerid, gPlayerData[playerid][E_ROT]);
 		SetCameraBehindPlayer(playerid);
 	}
+
 	if(gSpawnSaves & INFOTYPE_WORLD) {
 		SetPlayerInterior(playerid, gPlayerData[playerid][E_INTERIOR]);
-		if(GetPlayerVirtualWorld(playerid) != gPlayerData[playerid][E_WORLD]) {
+		if(!isinvehicle && GetPlayerVirtualWorld(playerid) != gPlayerData[playerid][E_WORLD]) {
 			SetPlayerVirtualWorld(playerid, gPlayerData[playerid][E_WORLD]);
 			alar_OnPlayerWorldChange(playerid, gPlayerData[playerid][E_WORLD]);
 		}
 	}
+
 	if(gSpawnSaves & INFOTYPE_WEAPONS) {
 		ResetPlayerWeapons(playerid);
 		for(new i; i < 13; i++) {
 			if(gPlayerData[playerid][E_WEAPON][i] != 0) {
 				GivePlayerWeapon(playerid, gPlayerData[playerid][E_WEAPON][i], gPlayerData[playerid][E_AMMO][i]);
-				gPlayerData[playerid][E_WEAPON][i] = 0;
 			}
 		}
+		SetPlayerArmedWeapon(playerid, gPlayerData[playerid][E_ARMED]);
 	}
+
 	if(gSpawnSaves & INFOTYPE_HEALTH) {
 		SetPlayerHealth(playerid, gPlayerData[playerid][E_HEALTH]);
 	}
+
 	if(gSpawnSaves & INFOTYPE_ARMOUR) {
 		SetPlayerArmour(playerid, gPlayerData[playerid][E_ARMOUR]);
 	}
+
 	if(gSpawnSaves & INFOTYPE_CASH) {
 		ResetPlayerMoney(playerid);
 		GivePlayerMoney(playerid, gPlayerData[playerid][E_CASH]);
 	}
+
 	ClearSpawnData(playerid);
 }
 
 public alar_setspawnpositiondata(playerid)
 {
 	if(!IsPlayerConnected(playerid)) return;
-	SetPlayerPos(playerid, gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ]);
-	SetPlayerFacingAngle(playerid, gPlayerData[playerid][E_ROT]);
+
+	new bool:isinvehicle = false;
+	if(gSpawnSaves & INFOTYPE_VEHICLE) {
+		if(GetVehicleModel(gPlayerData[playerid][E_VEHICLEID]) != INVALID_MODEL_ID) {
+			if(IsVehicleSeatFree(gPlayerData[playerid][E_VEHICLEID], gPlayerData[playerid][E_SEATID])) {
+				if((gPlayerData[playerid][E_WORLD] = GetVehicleVirtualWorld(gPlayerData[playerid][E_VEHICLEID])) != GetPlayerVirtualWorld(playerid)) {
+					SetPlayerVirtualWorld(playerid, gPlayerData[playerid][E_WORLD]);
+					alar_OnPlayerWorldChange(playerid, gPlayerData[playerid][E_WORLD]);
+				}
+				isinvehicle = true;
+				PutPlayerInVehicle(playerid, gPlayerData[playerid][E_VEHICLEID], gPlayerData[playerid][E_SEATID]);
+			}
+		}
+	}
+
+	if(!isinvehicle) {
+		SetPlayerPos(playerid, gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ]);
+		SetPlayerFacingAngle(playerid, gPlayerData[playerid][E_ROT]);
+	}
+
 	SetCameraBehindPlayer(playerid);
 	if(gSpawnSaves & INFOTYPE_WORLD) {
 		SetPlayerInterior(playerid, gPlayerData[playerid][E_INTERIOR]);
-		if(GetPlayerVirtualWorld(playerid) != gPlayerData[playerid][E_WORLD]) {
+		if(!isinvehicle && GetPlayerVirtualWorld(playerid) != gPlayerData[playerid][E_WORLD]) {
 			SetPlayerVirtualWorld(playerid, gPlayerData[playerid][E_WORLD]);
 			alar_OnPlayerWorldChange(playerid, gPlayerData[playerid][E_WORLD]);
 		}
 	}
+
 	if(gSpawnSaves & INFOTYPE_WEAPONS) {
 		ResetPlayerWeapons(playerid);
 		for(new i; i < 13; i++) {
 			if(gPlayerData[playerid][E_WEAPON][i] != 0) {
 				GivePlayerWeapon(playerid, gPlayerData[playerid][E_WEAPON][i], gPlayerData[playerid][E_AMMO][i]);
-				gPlayerData[playerid][E_WEAPON][i] = 0;
 			}
 		}
+		SetPlayerArmedWeapon(playerid, gPlayerData[playerid][E_ARMED]);
 	}
+
 	if(gSpawnSaves & INFOTYPE_HEALTH) {
 		SetPlayerHealth(playerid, gPlayerData[playerid][E_HEALTH]);
 	}
+
 	if(gSpawnSaves & INFOTYPE_ARMOUR) {
 		SetPlayerArmour(playerid, gPlayerData[playerid][E_ARMOUR]);
 	}
+
 	if(gSpawnSaves & INFOTYPE_CASH) {
 		ResetPlayerMoney(playerid);
 		GivePlayerMoney(playerid, gPlayerData[playerid][E_CASH]);
 	}
+
 	ClearSpawnData(playerid);
 }
 
 ClearSpawnData(playerid)
 {
+	gPlayerData[playerid][E_SETINFO] = E_INFOTYPE:0;
 	gPlayerData[playerid][E_POSX] = 0.0;
 	gPlayerData[playerid][E_POSY] = 0.0;
 	gPlayerData[playerid][E_POSZ] = 0.0;
@@ -11282,11 +12846,15 @@ ClearSpawnData(playerid)
 		gPlayerData[playerid][E_WEAPON][i] = 0;
 		gPlayerData[playerid][E_AMMO][i] = 0;
 	}
+	gPlayerData[playerid][E_ARMED] = 0;
+	gPlayerData[playerid][E_VEHICLEID] = INVALID_VEHICLE_ID;
+	gPlayerData[playerid][E_SEATID] = INVALID_SEAT_ID;
 }
 
 SpawnUsingData(playerid)
 {
 	if(!gPlayerData[playerid][E_SPECTATING] || GetPlayerState(playerid) != PLAYER_STATE_SPECTATING) return;
+
 	if(gPlayerData[playerid][E_HEALTH]) {
 		gPlayerData[playerid][E_CASH] += GetPlayerMoney(playerid);
 		switch(gSpawnMethod) {
@@ -11294,7 +12862,7 @@ SpawnUsingData(playerid)
 				if(gSpawnSaves & INFOTYPE_POSITION) {
 					SetSpawnInfo(playerid, GetPlayerTeam(playerid), GetPlayerSkin(playerid), gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ], gPlayerData[playerid][E_ROT], 0, 0, 0, 0, 0, 0);
 				}
-				gPlayerData[playerid][E_SETINFO] = (INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+				gPlayerData[playerid][E_SETINFO] = (INFOTYPE_VEHICLE | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
 				TogglePlayerSpectating(playerid, false);
 			}
 			case SPAWN_ALAR_TIMER: {
@@ -11302,7 +12870,7 @@ SpawnUsingData(playerid)
 				SetTimerEx("alar_setspawndata", 500, 0, "i", playerid);	// stops stupid gamemode spawn stuff
 			}
 			default: {
-				gPlayerData[playerid][E_SETINFO] = (INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+				gPlayerData[playerid][E_SETINFO] = (INFOTYPE_VEHICLE |INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
 				TogglePlayerSpectating(playerid, false);
 			}
 		}
@@ -11319,12 +12887,13 @@ SpawnUsingData(playerid)
 SpawnUsingPosition(playerid)
 {
 	if(!gPlayerData[playerid][E_SPECTATING] || GetPlayerState(playerid) != PLAYER_STATE_SPECTATING) return;
+
 	if(gPlayerData[playerid][E_HEALTH]) {
 		gPlayerData[playerid][E_CASH] += GetPlayerMoney(playerid);
 		switch(gSpawnMethod) {
 			case SPAWN_ALAR_SPAWN: {
 				SetSpawnInfo(playerid, GetPlayerTeam(playerid), GetPlayerSkin(playerid), gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ], gPlayerData[playerid][E_ROT], 0, 0, 0, 0, 0, 0);
-				gPlayerData[playerid][E_SETINFO] = (INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+				gPlayerData[playerid][E_SETINFO] = INFOTYPE_VEHICLE | INFOTYPE_WORLD | ((INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves);
 				TogglePlayerSpectating(playerid, false);
 			}
 			case SPAWN_ALAR_TIMER: {
@@ -11332,7 +12901,7 @@ SpawnUsingPosition(playerid)
 				SetTimerEx("alar_setspawnpositiondata", 500, 0, "i", playerid);
 			}
 			default: {
-				gPlayerData[playerid][E_SETINFO] = INFOTYPE_POSITION | ((INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves);
+				gPlayerData[playerid][E_SETINFO] = INFOTYPE_POSITION | INFOTYPE_VEHICLE | INFOTYPE_WORLD | ((INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves);
 				TogglePlayerSpectating(playerid, false);
 			}
 		}
@@ -11340,7 +12909,7 @@ SpawnUsingPosition(playerid)
 		switch(gSpawnMethod) {
 			case SPAWN_GAMEMODE_SPAWN: {
 				SetSpawnInfo(playerid, GetPlayerTeam(playerid), GetPlayerSkin(playerid), gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ], gPlayerData[playerid][E_ROT], 0, 0, 0, 0, 0, 0);
-				gPlayerData[playerid][E_SETINFO] = INFOTYPE_WORLD & gSpawnSaves;
+				gPlayerData[playerid][E_SETINFO] = INFOTYPE_VEHICLE | INFOTYPE_WORLD;
 				TogglePlayerSpectating(playerid, false);
 			}
 			case SPAWN_GAMEMODE_TIMER: {
@@ -11348,7 +12917,7 @@ SpawnUsingPosition(playerid)
 				TogglePlayerSpectating(playerid, false);
 			}
 			default: {
-				gPlayerData[playerid][E_SETINFO] = INFOTYPE_POSITION | (INFOTYPE_WORLD & gSpawnSaves);
+				gPlayerData[playerid][E_SETINFO] = INFOTYPE_POSITION | INFOTYPE_VEHICLE | INFOTYPE_WORLD;
 				TogglePlayerSpectating(playerid, false);
 			}
 		}
@@ -11362,10 +12931,11 @@ SpawnUsingPosition(playerid)
 
 SetPlayerSpectating(playerid, targetid)
 {
-	if(IsPlayerInAnyVehicle(targetid) && gPlayerData[playerid][E_SPECMODE] != 1) PlayerSpectateVehicle(playerid, GetPlayerVehicleID(targetid), gPlayerData[playerid][E_SPECMODE] == 0 ? SPECTATE_MODE_NORMAL : SPECTATE_MODE_SIDE);
-	else PlayerSpectatePlayer(playerid, targetid);
 	SetPlayerInterior(playerid, GetPlayerInterior(targetid));
 	SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(targetid));
+
+	if(IsPlayerInAnyVehicle(targetid) && gPlayerData[playerid][E_SPECMODE] != 1) PlayerSpectateVehicle(playerid, GetPlayerVehicleID(targetid), gPlayerData[playerid][E_SPECMODE] == 0 ? SPECTATE_MODE_NORMAL : SPECTATE_MODE_SIDE);
+	else PlayerSpectatePlayer(playerid, targetid);
 
 	if(gPlayerData[playerid][E_SHOWHUD] && gServerData[E_SPEC_HUD]) {
 		SpecHUDShow(playerid);
@@ -11377,15 +12947,14 @@ SpecHUDShow(playerid)
 	if(!gPlayerData[playerid][E_SPECTATING] || gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID || gPlayerData[playerid][E_SPECHUD] != INVALID_TEXT_DRAW) return;
 
 	gPlayerData[playerid][E_SPECHUD] = TextDrawCreate(400.0, 10.0, " ");
+
 	if(gPlayerData[playerid][E_SPECHUD] != INVALID_TEXT_DRAW) {
 		TextDrawUseBox(gPlayerData[playerid][E_SPECHUD], 0);
 		TextDrawSetOutline(gPlayerData[playerid][E_SPECHUD], 0);
 		TextDrawAlignment(gPlayerData[playerid][E_SPECHUD], 2);
 		TextDrawSetShadow(gPlayerData[playerid][E_SPECHUD], 1);
 		TextDrawFont(gPlayerData[playerid][E_SPECHUD], 2);
-
 		SpecHUDUpdate(playerid);
-
 		TextDrawShowForPlayer(playerid, gPlayerData[playerid][E_SPECHUD]);
 	}
 }
@@ -11396,7 +12965,6 @@ SpecHUDHide(playerid)
 
 	TextDrawHideForPlayer(playerid, gPlayerData[playerid][E_SPECHUD]);
 	TextDrawDestroy(gPlayerData[playerid][E_SPECHUD]);
-
 	gPlayerData[playerid][E_SPECHUD] = INVALID_TEXT_DRAW;
 }
 
@@ -11405,10 +12973,14 @@ SpecHUDUpdate(playerid)
 	if(!gPlayerData[playerid][E_SPECTATING] || gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID || gPlayerData[playerid][E_SPECHUD] == INVALID_TEXT_DRAW) return;
 
 	new string[MAX_STRING];
-	if(gPlayerData[gPlayerData[playerid][E_SPECID]][E_COUNTRY][0] == '\0') {
-		format(string, sizeof(string), "~p~~h~ID: ~b~%i   ~p~~h~Name: ~b~%s~n~~p~~h~IP: ~b~%s", gPlayerData[playerid][E_SPECID], ReturnPlayerName(gPlayerData[playerid][E_SPECID]), ReturnPlayerIP(gPlayerData[playerid][E_SPECID]));
+	if(IsPlayerNPC(gPlayerData[playerid][E_SPECID])) {
+		format(string, sizeof(string), "~p~~h~ID: ~b~%i   ~p~~h~Name: ~b~%s ~r~(NPC)", gPlayerData[playerid][E_SPECID], ReturnPlayerName(gPlayerData[playerid][E_SPECID]));
 	} else {
-		format(string, sizeof(string), "~p~~h~ID: ~b~%i   ~p~~h~Name: ~b~%s~n~~p~~h~Location: ~b~%s   ~p~~h~IP: ~b~%s", gPlayerData[playerid][E_SPECID], ReturnPlayerName(gPlayerData[playerid][E_SPECID]), gPlayerData[gPlayerData[playerid][E_SPECID]][E_COUNTRY], ReturnPlayerIP(gPlayerData[playerid][E_SPECID]));
+		if(gPlayerData[gPlayerData[playerid][E_SPECID]][E_COUNTRY][0] == '\0') {
+			format(string, sizeof(string), "~p~~h~ID: ~b~%i   ~p~~h~Name: ~b~%s~n~~p~~h~IP: ~b~%s", gPlayerData[playerid][E_SPECID], ReturnPlayerName(gPlayerData[playerid][E_SPECID]), ReturnPlayerIP(gPlayerData[playerid][E_SPECID]));
+		} else {
+			format(string, sizeof(string), "~p~~h~ID: ~b~%i   ~p~~h~Name: ~b~%s~n~~p~~h~Location: ~b~%s   ~p~~h~IP: ~b~%s", gPlayerData[playerid][E_SPECID], ReturnPlayerName(gPlayerData[playerid][E_SPECID]), gPlayerData[gPlayerData[playerid][E_SPECID]][E_COUNTRY], ReturnPlayerIP(gPlayerData[playerid][E_SPECID]));
+		}
 	}
 
 	new status = gPlayerData[gPlayerData[playerid][E_SPECID]][E_STATE];
@@ -11449,7 +13021,6 @@ ObserverSwitchPlayer(playerid, idealplayer)
 		if(IsSpawned(gPlayerData[playerid][E_SPECID]) && gPlayerData[playerid][E_SPECID] != playerid) {
 			if(oldid != gPlayerData[playerid][E_SPECID]) {
 				SetPlayerSpectating(playerid, gPlayerData[playerid][E_SPECID]);
-
 				SpecHUDUpdate(playerid);
 				CallRemoteFunction("OnAdminSpectate", "iii", playerid, gPlayerData[playerid][E_SPECID], oldid);
 			}
@@ -11461,7 +13032,6 @@ ObserverSwitchPlayer(playerid, idealplayer)
 	PutPlayerIntoFreeSpec(playerid);
 	if(oldid != INVALID_PLAYER_ID) {
 		CallRemoteFunction("OnAdminSpectate", "iii", playerid, FREE_SPECTATE_ID, oldid);
-
 		#if SPEC_TXT_TIME > 0
 			gPlayerData[playerid][E_SPECMODE] = 3;
 			ShowSpecTxt(playerid);
@@ -11520,11 +13090,12 @@ PutPlayerIntoFreeSpec(playerid)
 
 stock AddHistoryLine(colour, const message[], playerid=INVALID_PLAYER_ID, flags=0)
 {
-	if(message[0] == '\0') return 0;
+	if(isnull(message)) return 0;
 
 	for(new i; i < sizeof(gChatHistory) - 1; i++) {
 		gChatHistory[i] = gChatHistory[i + 1];
 	}
+
 	gChatHistory[sizeof(gChatHistory)-1][E_HISTORY_NAME][0] = '\0';
 	strcpy(gChatHistory[sizeof(gChatHistory)-1][E_HISTORY_MESSAGE], message, sizeof(SIZE_E_HISTORY[E_HISTORY_MESSAGE]));
 	gChatHistory[sizeof(gChatHistory)-1][E_HISTORY_COLOUR] = colour;
@@ -11537,11 +13108,13 @@ stock AddJoinChatLine(playerid, colour, const string[])
 {
 	LoopPlayers(i) {
 		#if JOINMSG_LINES > 0
-			if((gPlayerData[playerid][E_HIDEEXIT] == 1 || gPlayerData[i][E_JOINTEXT]) && i != playerid) {
+			if(!IsPlayerNPC(i) && (gPlayerData[playerid][E_HIDEEXIT] == 1 || gPlayerData[i][E_JOINTEXT]) && i != playerid) {
 				SendClientMessage(i, colour, string);
 			}
 		#else
-			SendClientMessage(i, colour, string);
+			if(!IsPlayerNPC(i) && i != playerid) {
+				SendClientMessage(i, colour, string);
+			}
 		#endif
 	}
 }
@@ -11563,7 +13136,7 @@ stock AddJoinTextLine(colour, const string[])
 			TextDrawColor(gJoinMessage[i][E_TEXTBOX_TEXT], gJoinMessage[i][E_TEXTBOX_COLOUR]);
 			TextDrawBackgroundColor(gJoinMessage[i][E_TEXTBOX_TEXT], gJoinMessage[i][E_TEXTBOX_COLOUR] & 0x000000FF);
 			LoopPlayers(j) {
-				if(!gPlayerData[j][E_JOINTEXT]) {
+				if(!IsPlayerNPC(i) && !gPlayerData[j][E_JOINTEXT]) {
 					TextDrawShowForPlayer(j, gJoinMessage[i][E_TEXTBOX_TEXT]);
 				}
 			}
@@ -11581,7 +13154,7 @@ stock AddJoinTextLine(colour, const string[])
 		TextDrawBackgroundColor(gJoinMessage[0][E_TEXTBOX_TEXT], JOINMSG_ALPHA);
 		gJoinMessage[0][E_TEXTBOX_FADETIME] = 0;
 		LoopPlayers(i) {
-			if(!gPlayerData[i][E_JOINTEXT]) {
+			if(!IsPlayerNPC(i) && !gPlayerData[i][E_JOINTEXT]) {
 				TextDrawShowForPlayer(i, gJoinMessage[0][E_TEXTBOX_TEXT]);
 			}
 		}
@@ -11595,15 +13168,15 @@ stock AddJoinTextLine(colour, const string[])
 
 LogAction(const string[])
 {
-	if(string[0] == '\0') return;
+	if(isnull(string)) return;
 
 	if(gServerData[E_CONSOLE_MSGS]) printf("[ADMIN] %s", string);
+
 	if(gServerData[E_LOG_ACTIONS]) {
-		new File:handle = fopen(LOGFILE, io_append);
+		new File:handle = fopen(ALAR_LOG, io_append);
 		if(handle) {
-			new data[MAX_STRING], year, month, day, hours, minutes, seconds;
-			gettime(hours, minutes, seconds); getdate(year, month, day);
-			format(data, sizeof(data), "[%02i/%02i/%i %02i:%02i:%02i] %s\r\n", day, month, year, hours, minutes, seconds, string);
+			new data[MAX_STRING];
+			format(data, sizeof(data), "[%s] %s\r\n", ReturnTimeStamp(), string);
 			fwrite(handle, data);
 			fclose(handle);
 		}
@@ -11616,13 +13189,13 @@ LogAction(const string[])
 
 public alar_AddJoinLine(playerid, colour, const string[])
 {
-	if(string[0] < ' ' || playerid < 0 || playerid >= gMaxPlayers || gPlayerData[playerid][E_HIDEEXIT] > 2) return 0;
+	if(isnull(string) || playerid < 0 || playerid >= gMaxPlayers || gPlayerData[playerid][E_HIDEEXIT] > 2) return 0;
 
 	if(!gServerData[E_JOIN_MSGS]) {
 		new msg[MAX_INPUT] = "*** ";
 		strcat(msg, string);
 		LoopPlayers(i) {
-			if(i != playerid) {
+			if(!IsPlayerNPC(i) && i != playerid) {
 				SendClientMessage(i, colour, msg);
 			}
 		}
@@ -11654,7 +13227,7 @@ public alar_AddJoinLine(playerid, colour, const string[])
 #if LOG_LINES > 0 && LOG_PAGES > 0
 	public alar_AddAdminLogLine(colour, const string[])
 	{
-		if(string[0] < ' ') return 0;
+		if(isnull(string)) return 0;
 
 		if(!colour) colour = COLOUR_LOG;
 
@@ -11668,8 +13241,9 @@ public alar_AddJoinLine(playerid, colour, const string[])
 				gAdminLog[i][E_TEXTBOX_COLOUR] = gAdminLog[i - 1][E_TEXTBOX_COLOUR];
 				TextDrawColor(gAdminLog[i][E_TEXTBOX_TEXT], gAdminLog[i][E_TEXTBOX_COLOUR]);
 				TextDrawBackgroundColor(gAdminLog[i][E_TEXTBOX_TEXT], gAdminLog[i][E_TEXTBOX_COLOUR] & 0x000000FF);
-				for(new j, page = (i / LOG_LINES) + 1; j < gMaxPlayers; j++) {
-					if(IsPlayerConnected(j) && gPlayerData[j][E_LOG_PAGE] == page) {
+				new page = (i / LOG_LINES) + 1;
+				LoopPlayers(j) {
+					if(gPlayerData[j][E_LOG_PAGE] == page) {
 						TextDrawShowForPlayer(j, gAdminLog[i][E_TEXTBOX_TEXT]);
 					}
 				}
@@ -11699,7 +13273,7 @@ public alar_AddJoinLine(playerid, colour, const string[])
 #if CHATHISTORY_SIZE > 0
 	public alar_AddMessageToHistory(const playername[], colour, const message[], flags)
 	{
-		if(!isValidName(playername) || message[0] == '\0') return 0;
+		if(!isValidName(playername) || isnull(message)) return 0;
 
 		for(new i; i < sizeof(gChatHistory) - 1; i++) {
 			gChatHistory[i] = gChatHistory[i + 1];
@@ -11714,7 +13288,7 @@ public alar_AddJoinLine(playerid, colour, const string[])
 
 	public alar_AddLineToHistory(colour, const message[], flags)
 	{
-		if(message[0] == '\0') return 0;
+		if(isnull(message)) return 0;
 
 		for(new i; i < sizeof(gChatHistory) - 1; i++) {
 			gChatHistory[i] = gChatHistory[i + 1];
@@ -11740,6 +13314,39 @@ public alar_AddJoinLine(playerid, colour, const string[])
 	}
 #endif
 
+public alar_DestroyVehicle(vehicleid)
+{
+	if(vehicleid == INVALID_VEHICLE_ID) {
+		new count;
+		Bit_Loop(gCreatedVehicles, i) {
+			DestroyVehicle(i);
+			count++;
+		}
+		Bit_SetAll(gCreatedVehicles, 0, sizeof(gCreatedVehicles));
+		return count;
+	} else if(0 < vehicleid < MAX_VEHICLES && Bit_Get(gCreatedVehicles, vehicleid)) {
+		DestroyVehicle(vehicleid);
+		Bit_Vet(gCreatedVehicles, vehicleid);
+		return 1;
+	}
+	return 0;
+}
+
+public alar_GetPlayerCountryCode(playerid)
+{
+	if(!IsPlayerConnected(playerid)) return 0;
+	new string[3 char];
+	strpack(string, gPlayerData[playerid][E_COUNTRY]);
+	return string[0];
+}
+
+public alar_GetCountryCode(const IP[])
+{
+	if(isnull(IP)) return 0;
+	new string[3 char];
+	strpack(string, ReturnCuntCode(gAlarDB, IP));
+	return string[0];
+}
 
 public alar_GetAdminLevel(playerid)
 {
@@ -11767,7 +13374,7 @@ public alar_GetAdminSpectating(playerid)
 
 public alar_SetAdminSpectating(playerid, targetid, bool:saveplayer)
 {
-	if(!IsPlayerConnected(playerid) || !IsPlayerConnected(targetid) || targetid == playerid || gPlayerData[playerid][E_ADMINLEVEL] < 0) {
+	if(!IsPlayerConnected(playerid) || IsPlayerNPC(playerid) || !IsPlayerConnected(targetid) || targetid == playerid || !cmdchk(playerid, E_SPEC_LEVEL)) {
 		return 0;
 	}
 	if(IsSpawned(playerid)) {
@@ -11844,9 +13451,23 @@ public alar_ClearAdminSpawnData(playerid)
 	return 1;
 }
 
+public alar_LoginFunc(const func[])
+{
+	if(isnull(func)) {
+		gServerData[E_LOGGEDIN_FUNC][0] = '\0';
+	} else {
+		strcpy(gServerData[E_LOGGEDIN_FUNC], func, sizeof(SIZE_E_SERVERDATA[E_LOGGEDIN_FUNC]));
+	}
+	return 1;
+}
+
 public alar_SetSpawnType(E_SPAWNTYPE:spawntype, E_INFOTYPE:spawnsaves)
 {
-	gSpawnMethod = spawntype;
+	if(spawntype == SPAWN_DEFAULT) {
+		gSpawnMethod = DEFAULT_SPAWNTYPE;
+	} else {
+		gSpawnMethod = spawntype;
+	}
 	gSpawnSaves = spawnsaves;
 	return 1;
 }
@@ -11861,10 +13482,12 @@ public alar_OnPlayerSpectatePlayer(playerid, specid)
 public alar_OnPlayerSpectateVehicle(playerid, vehicleid)
 {
 	if(!IsPlayerConnected(playerid) || GetVehicleModel(vehicleid) == INVALID_MODEL_ID) return 0;
-	if(GetPlayerVehicleID(gPlayerData[playerid][E_SPECID]) == vehicleid) return 1;
-	new passengerid = INVALID_PLAYER_ID, pstate;
+	if(IsPlayerInAnyVehicle(gPlayerData[playerid][E_SPECID]) && GetPlayerVehicleID(gPlayerData[playerid][E_SPECID]) == vehicleid) return 1;
+
+	new passengerid = INVALID_PLAYER_ID,
+		pstate;
 	LoopPlayers(i) {
-		if(GetPlayerVehicleID(i) == vehicleid) {
+		if(IsPlayerInAnyVehicle(i) && GetPlayerVehicleID(i) == vehicleid) {
 			pstate = GetPlayerState(i);
 			if(pstate == PLAYER_STATE_DRIVER) {
 				gPlayerData[playerid][E_SPECID] = i;
@@ -11902,11 +13525,15 @@ public alar_OnPlayerWorldChange(playerid, newworldid)
 
 public alar_SetAdminState(playerid, newstate, seconds)
 {
-	if(!IsPlayerConnected(playerid)) return 0;
+	if(!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return 0;
 
 	new oldstate = gPlayerData[playerid][E_STATE];
 	if(0 < seconds < MIN_ACTION_TIME) {
 		seconds = MIN_ACTION_TIME;
+	}
+
+	if(!IsPlayerNPC(playerid)) {
+		Player_SetStatus(gAlarDB, ReturnPlayerIP(playerid), newstate, seconds);
 	}
 
 	if(newstate & ADMIN_STATE_MUTED) {
@@ -11914,10 +13541,8 @@ public alar_SetAdminState(playerid, newstate, seconds)
 		if(seconds > 0) {
 			gPlayerData[playerid][E_UNMUTE] = SetTimerEx("alar_unmute", seconds * 1000, 0, "i", playerid);
 			gPlayerData[playerid][E_MUTE_TIME] = gettime() + seconds;
-			UnwriteAdminState(playerid, ADMIN_STATE_MUTED);
 		} else {
-			WriteAdminState(playerid, ADMIN_STATE_MUTED);
-			gPlayerData[playerid][E_MUTE_TIME] = 0;
+			gPlayerData[playerid][E_UNMUTE] = 0;
 		}
 		gPlayerData[playerid][E_STATE] |= ADMIN_STATE_MUTED;
 	}
@@ -11927,10 +13552,8 @@ public alar_SetAdminState(playerid, newstate, seconds)
 		if(seconds > 0) {
 			gPlayerData[playerid][E_UNJAIL] = SetTimerEx("alar_unjail", seconds * 1000, 0, "i", playerid);
 			gPlayerData[playerid][E_JAIL_TIME] = gettime() + seconds;
-			UnwriteAdminState(playerid, ADMIN_STATE_JAILED);
 		} else {
-			WriteAdminState(playerid, ADMIN_STATE_JAILED);
-			gPlayerData[playerid][E_JAIL_TIME] = 0;
+			gPlayerData[playerid][E_UNJAIL] = 0;
 		}
 		gPlayerData[playerid][E_STATE] |= ADMIN_STATE_JAILED;
 	}
@@ -11940,10 +13563,8 @@ public alar_SetAdminState(playerid, newstate, seconds)
 		if(seconds > 0) {
 			gPlayerData[playerid][E_UNFREEZE] = SetTimerEx("alar_unfreeze", seconds * 1000, 0, "i", playerid);
 			gPlayerData[playerid][E_FREEZE_TIME] = gettime() + seconds;
-			UnwriteAdminState(playerid, ADMIN_STATE_FROZEN);
 		} else {
-			WriteAdminState(playerid, ADMIN_STATE_FROZEN);
-			gPlayerData[playerid][E_FREEZE_TIME] = 0;
+			gPlayerData[playerid][E_UNFREEZE] = 0;
 		}
 		gPlayerData[playerid][E_STATE] |= ADMIN_STATE_FROZEN;
 	}
@@ -11954,7 +13575,7 @@ public alar_SetAdminState(playerid, newstate, seconds)
 			gPlayerData[playerid][E_UNDESYNC] = SetTimerEx("alar_undesync", seconds * 1000, 0, "i", playerid);
 			gPlayerData[playerid][E_DESYNC_TIME] = gettime() + seconds;
 		} else {
-			gPlayerData[playerid][E_DESYNC_TIME] = 0;
+			gPlayerData[playerid][E_UNDESYNC] = 0;
 		}
 		gPlayerData[playerid][E_STATE] |= ADMIN_STATE_DESYNCED;
 	}
@@ -11965,7 +13586,6 @@ public alar_SetAdminState(playerid, newstate, seconds)
 				SpecHUDUpdate(i);
 			}
 		}
-
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], oldstate);
 	}
 	return 1;
@@ -11973,16 +13593,19 @@ public alar_SetAdminState(playerid, newstate, seconds)
 
 public alar_ClearAdminState(playerid, newstate)
 {
-	if(!IsPlayerConnected(playerid)) return 0;
+	if(!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return 0;
 
 	new oldstate = gPlayerData[playerid][E_STATE];
+
+	if(!IsPlayerNPC(playerid)) {
+		Player_ClearStatus(gAlarDB, ReturnPlayerIP(playerid), newstate);
+	}
 
 	if(newstate & ADMIN_STATE_MUTED & oldstate) {
 		if(gPlayerData[playerid][E_UNMUTE]) {
 			KillTimer(gPlayerData[playerid][E_UNMUTE]);
 			gPlayerData[playerid][E_UNMUTE] = 0;
 		}
-		UnwriteAdminState(playerid, ADMIN_STATE_MUTED);
 		gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_MUTED;
 		gPlayerData[playerid][E_MUTE_TIME] = 0;
 		gPlayerData[playerid][E_LASTMSG][0] = '\0';
@@ -11994,7 +13617,6 @@ public alar_ClearAdminState(playerid, newstate)
 			KillTimer(gPlayerData[playerid][E_UNJAIL]);
 			gPlayerData[playerid][E_UNJAIL] = 0;
 		}
-		UnwriteAdminState(playerid, ADMIN_STATE_JAILED);
 		gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_JAILED;
 		gPlayerData[playerid][E_JAIL_TIME] = 0;
 
@@ -12002,7 +13624,7 @@ public alar_ClearAdminState(playerid, newstate)
 			switch(gSpawnMethod) {
 				case SPAWN_ALAR_SPAWN: {
 					SetSpawnInfo(playerid, GetPlayerTeam(playerid), GetPlayerSkin(playerid), gPlayerData[playerid][E_POSX], gPlayerData[playerid][E_POSY], gPlayerData[playerid][E_POSZ], gPlayerData[playerid][E_ROT], 0, 0, 0, 0, 0, 0);
-					gPlayerData[playerid][E_SETINFO] = (INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+					gPlayerData[playerid][E_SETINFO] = (INFOTYPE_VEHICLE | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
 					SpawnPlayer(playerid);
 				}
 				case SPAWN_ALAR_TIMER: {
@@ -12010,7 +13632,7 @@ public alar_ClearAdminState(playerid, newstate)
 					SetTimerEx("alar_setspawndata", 500, 0, "i", playerid);	// stops stupid gamemode spawn stuff
 				}
 				default: {
-					gPlayerData[playerid][E_SETINFO] = (INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
+					gPlayerData[playerid][E_SETINFO] = (INFOTYPE_VEHICLE | INFOTYPE_POSITION | INFOTYPE_WORLD | INFOTYPE_WEAPONS | INFOTYPE_CASH | INFOTYPE_HEALTH | INFOTYPE_ARMOUR) & gSpawnSaves;
 					SpawnPlayer(playerid);
 				}
 			}
@@ -12027,7 +13649,6 @@ public alar_ClearAdminState(playerid, newstate)
 			KillTimer(gPlayerData[playerid][E_UNFREEZE]);
 			gPlayerData[playerid][E_UNFREEZE] = 0;
 		}
-		UnwriteAdminState(playerid, ADMIN_STATE_FROZEN);
 		gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_FROZEN;
 		gPlayerData[playerid][E_FREEZE_TIME] = 0;
 
@@ -12040,219 +13661,495 @@ public alar_ClearAdminState(playerid, newstate)
 				SpecHUDUpdate(i);
 			}
 		}
-
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], oldstate);
 	}
 	return 1;
 }
 
-public alar_Ban(const playername[], const playerip[], const reason[], const adminname[])
+public alar_Ban(const playername[], const playerip[], const reason[], const adminname[], const adminip[], bool:hidename)
 {
-	new tmp[MAX_REASON];
-	strcpy(tmp, reason);
-
-	if(playername[0] < ' ') {
+	if(isnull(playername)) {
 		if(!IPisvalid(playerip, true)) return 0;
-		BanIP(playerip, tmp, adminname[0] < ' ' ? ("Console") : adminname);
-	} else if(playerip[0] < ' ') {
+	} else if(isnull(playerip)) {
 		if(!isValidName(playername, true)) return 0;
-		BanName(playername, tmp, adminname[0] < ' ' ? ("Console") : adminname);
 	} else {
 		if(!IPisvalid(playerip, true) || !isValidName(playername, true)) return 0;
-		BanPlayer(playername, playerip, tmp, adminname[0] < ' ' ? ("Console") : adminname);
 	}
 
-	new year,
-		month,
-		day,
-		hour,
-		minute,
-		date[15],
-		time[10],
-		msg[MAX_INPUT];
+	new msg[50 + MAX_INPUT];
 
-	if(adminname[0] < ' ') {
-		format(msg, sizeof(msg), "You have been banned from the server (%s)", tmp);
+	if(isnull(reason)) {
+		msg = "You have been banned from the server";
 	} else {
-		format(msg, sizeof(msg), "You have been banned from the server by %s (%s)", adminname, tmp);
+		format(msg, sizeof(msg), "You have been banned from the server (%s)", reason);
 	}
 
-	getdate(year, month, day);
-	gettime(hour, minute);
-	format(date, sizeof(date), "%02i/%02i/%i", day, month, year);
-	format(time, sizeof(time), "%02i:%02i", hour, minute);
+	new datetime[MAX_TIMESTAMP],
+		shortreason[MAX_REASON];
+	datetime = ReturnTimeStamp();
 
+	if(!isnull(reason)) {
+		strtruncate(shortreason, reason);
+	}
+
+	new hits,
+		string[MAX_INPUT];
 	LoopPlayers(i) {
-		if((playerip[0] >= ' ' && IPcompare(playerip, ReturnPlayerIP(i))) || (playername[0] >= ' ' && strwild(playername, ReturnPlayerName(i)))) {
-			SendClientMessage(i, COLOUR_WARNING, msg);
+		if(!IsPlayerNPC(i) && ((!isnull(playerip) && IPcompare(playerip, ReturnPlayerIP(i))) || (!isnull(playername) && strwild(playername, ReturnPlayerName(i))))) {
+			SendWrappedMessageToPlayer(i, COLOUR_WARNING, msg);
 			if(gServerData[E_RANGEBAN_MSG][0] != '\0' && strfind(playerip, "*") != -1) {
-				SendBanMsg(i, gServerData[E_RANGEBAN_MSG], date, time, adminname[0] < ' ' ? ("Console") : adminname);
+				SendBanMsg(i, gServerData[E_RANGEBAN_MSG], datetime, adminname);
 			} else if(gServerData[E_BAN_MSG][0] != '\0') {
-				SendBanMsg(i, gServerData[E_BAN_MSG], date, time, adminname[0] < ' ' ? ("Console") : adminname);
+				SendBanMsg(i, gServerData[E_BAN_MSG], datetime, adminname);
 			}
-
-			new string[MAX_INPUT];
-			if(adminname[0] < ' ') {
-				format(string, sizeof(string), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(i), i, tmp);
+			if(isnull(adminname)) {
+				if(isnull(shortreason)) {
+					format(string, sizeof(string), "%s(%i) has been banned from the server", ReturnPlayerName(i), i);
+				} else {
+					format(string, sizeof(string), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(i), i, shortreason);
+				}
+				LogAction(string);
+				AddLogString(string);
+				AddJoinString(i, COLOUR_BAN, string);
 			} else {
-				format(string, sizeof(string), "%s(%i) has been banned from the server by %s (%s)", ReturnPlayerName(i), i, adminname, tmp);
+				if(isnull(shortreason)) {
+					format(string, sizeof(string), "%s(%i) has been banned from the server by %s", ReturnPlayerName(i), i, adminname);
+				} else {
+					format(string, sizeof(string), "%s(%i) has been banned from the server by %s (%s)", ReturnPlayerName(i), i, adminname, shortreason);
+				}
+				LogAction(string);
+				AddLogString(string);
+				if(hidename) {
+					if(isnull(shortreason)) {
+						format(string, sizeof(string), "%s(%i) has been banned from the server", ReturnPlayerName(i), i);
+					} else {
+						format(string, sizeof(string), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(i), i, shortreason);
+					}
+				}
+				AddJoinString(i, COLOUR_BAN, string);
 			}
-			LogAction(string);
-
-			AddJoinString(i, COLOUR_BAN, string);
 			Kick(i);
+			hits++;
+		}
+	}
+
+	Bans_BanPlayer(gAlarDB, playername, playerip, reason, adminname, adminip, hits);
+	return 1;
+}
+
+public alar_BanPlayer(playerid, const reason[], const adminname[], const adminip[], bool:hidename)
+{
+	if(!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return 0;
+
+	new shortreason[MAX_REASON],
+		msg[MAX_INPUT + 50],
+		string[MAX_INPUT],
+		datetime[MAX_TIMESTAMP],
+		bIP[MAX_IP];
+
+	if(!isnull(reason)) {
+		strtruncate(shortreason, reason);
+	}
+	if(isnull(reason)) {
+		msg = "You have been banned from the server";
+	} else {
+		format(msg, sizeof(msg), "You have been banned from the server (%s)", reason);
+	}
+
+	SendWrappedMessageToPlayer(playerid, COLOUR_WARNING, msg);
+
+	datetime = ReturnTimeStamp();
+	GetPlayerIp(playerid, bIP, sizeof(bIP));
+
+	if(gServerData[E_BAN_MSG][0] != '\0') {
+		SendBanMsg(playerid, gServerData[E_BAN_MSG], datetime, adminname);
+	}
+
+	if(isnull(adminname)) {
+		if(isnull(shortreason)) {
+			format(string, sizeof(string), "%s(%i) has been banned from the server", ReturnPlayerName(playerid), playerid);
+		} else {
+			format(string, sizeof(string), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(playerid), playerid, shortreason);
+		}
+		LogAction(string);
+		AddLogString(string);
+		AddJoinString(playerid, COLOUR_BAN, string);
+	} else {
+		if(isnull(shortreason)) {
+			format(string, sizeof(string), "%s(%i) has been banned from the server by %s", ReturnPlayerName(playerid), playerid, adminname);
+		} else {
+			format(string, sizeof(string), "%s(%i) has been banned from the server by %s (%s)", ReturnPlayerName(playerid), playerid, adminname, shortreason);
+		}
+		LogAction(string);
+		AddLogString(string);
+		if(hidename) {
+			if(isnull(shortreason)) {
+				format(string, sizeof(string), "%s(%i) has been banned from the server", ReturnPlayerName(playerid), playerid);
+			} else {
+				format(string, sizeof(string), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(playerid), playerid, shortreason);
+			}
+		}
+		AddJoinString(playerid, COLOUR_BAN, string);
+	}
+	Kick(playerid);
+
+	new hits = 1;
+	if(gServerData[E_KICK_ALL_IPS]) {
+		LoopPlayers(i) {
+			if(i != playerid && !IsPlayerNPC(i) && IPcompare(bIP, ReturnPlayerIP(i))) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+				if(gServerData[E_BAN_MSG][0] != '\0') {
+					SendBanMsg(i, gServerData[E_BAN_MSG], datetime, adminname);
+				}
+				if(isnull(adminname)) {
+					if(isnull(shortreason)) {
+						format(string, sizeof(string), "%s(%i) has been banned from the server", ReturnPlayerName(i), i);
+					} else {
+						format(string, sizeof(string), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(i), i, shortreason);
+					}
+					LogAction(string);
+					AddLogString(string);
+					AddJoinString(i, COLOUR_BAN, string);
+				} else {
+					if(isnull(shortreason)) {
+						format(string, sizeof(string), "%s(%i) has been banned from the server by %s", ReturnPlayerName(i), i, adminname);
+					} else {
+						format(string, sizeof(string), "%s(%i) has been banned from the server by %s (%s)", ReturnPlayerName(i), i, adminname, shortreason);
+					}
+					LogAction(string);
+					AddLogString(string);
+					if(hidename) {
+						if(isnull(shortreason)) {
+							format(string, sizeof(string), "%s(%i) has been banned from the server", ReturnPlayerName(i), i);
+						} else {
+							format(string, sizeof(string), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(i), i, shortreason);
+						}
+					}
+					AddJoinString(i, COLOUR_BAN, string);
+				}
+				Kick(i);
+				hits++;
+			}
+		}
+	}
+
+	if(gAlarDB) {
+		if(gServerData[E_LOGGEDIN_FUNC][0] == '\0' || !CallRemoteFunction(gServerData[E_LOGGEDIN_FUNC], "i", playerid)) {
+			Bans_BanIP(gAlarDB, bIP, reason, adminname, adminip, hits);
+		} else {
+			Bans_BanPlayer(gAlarDB, ReturnPlayerName(playerid), bIP, reason, adminname, adminip, hits);
 		}
 	}
 	return 1;
 }
 
-public alar_BanPlayer(playerid, const reason[], const adminname[])
+public alar_Suspend(const playername[], const playerip[], Float:hours, const reason[], const adminname[], const adminip[], bool:hidename)
 {
-	if(!IsPlayerConnected(playerid)) return 0;
-
-	new tmp[MAX_REASON];
-	strcpy(tmp, reason);
-
-	BanPlayer(ReturnPlayerName(playerid), ReturnPlayerIP(playerid), tmp, adminname[0] < ' ' ? ("Console") : adminname);
-
-	new msg[MAX_INPUT];
-	if(adminname[0] < ' ') {
-		format(msg, sizeof(msg), "You have been banned from the server (%s)", tmp);
-	} else {
-		format(msg, sizeof(msg), "You have been banned from the server by %s (%s)", adminname, tmp);
-	}
-	SendClientMessage(playerid, COLOUR_WARNING, msg);
-	if(gServerData[E_BAN_MSG][0] != '\0') {
-		new year,
-			month,
-			day,
-			hour,
-			minute,
-			date[15],
-			time[10];
-
-		getdate(year, month, day);
-		gettime(hour, minute);
-		format(date, sizeof(date), "%02i/%02i/%i", day, month, year);
-		format(time, sizeof(time), "%02i:%02i", hour, minute);
-
-		SendBanMsg(playerid, gServerData[E_BAN_MSG], date, time, adminname[0] < ' ' ? ("Console") : adminname);
-	}
-	if(adminname[0] < ' ') {
-		format(msg, sizeof(msg), "%s(%i) has been banned from the server (%s)", ReturnPlayerName(playerid), playerid, tmp);
-	} else {
-		format(msg, sizeof(msg), "%s(%i) has been banned from the server by %s (%s)", ReturnPlayerName(playerid), playerid, adminname, tmp);
-	}
-
-	LogAction(msg);
-
-	AddJoinString(playerid, COLOUR_BAN, msg);
-	Kick(playerid);
-	return 1;
-}
-
-public alar_Suspend(const playername[], const playerip[], Float:hours, const reason[], const adminname[])
-{
-	new tmp[MAX_REASON];
-	strcpy(tmp, reason);
-
-	if(playername[0] < ' ') {
+	if(isnull(playername)) {
 		if(!IPisvalid(playerip, true)) return 0;
-		SuspendIP(playerip, hours, tmp, adminname[0] < ' ' ? ("Console") : adminname);
-	} else if(playerip[0] < ' ') {
+	} else if(isnull(playerip)) {
 		if(!isValidName(playername, true)) return 0;
-		SuspendName(playername, hours, tmp, adminname[0] < ' ' ? ("Console") : adminname);
 	} else {
 		if(!IPisvalid(playerip, true) || !isValidName(playername, true)) return 0;
-		SuspendPlayer(playername, playerip, hours, tmp, adminname[0] < ' ' ? ("Console") : adminname);
 	}
 
-	new year,
-		month,
-		day,
-		hour,
-		minute,
-		date[15],
-		time[10],
-		msg[MAX_INPUT];
+	new shortreason[MAX_REASON],
+		msg[MAX_INPUT + 60],
+		datetime[MAX_TIMESTAMP];
 
-	if(adminname[0] < ' ') {
-		format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours (%s)", hours, tmp);
+	if(!isnull(reason)) {
+		strtruncate(shortreason, reason);
+	}
+	if(isnull(reason)) {
+		format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours", hours);
 	} else {
-		format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours by %s (%s)", hours, adminname, tmp);
+		format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours (%s)", hours, reason);
 	}
 
-	getdate(year, month, day);
-	gettime(hour, minute);
-	format(date, sizeof(date), "%02i/%02i/%i", day, month, year);
-	format(time, sizeof(time), "%02i:%02i", hour, minute);
-
+	new hits,
+		string[MAX_INPUT];
+	datetime = ReturnTimeStamp();
 	LoopPlayers(i) {
-		if((playerip[0] >= ' ' && IPcompare(playerip, ReturnPlayerIP(i))) || (playername[0] >= ' ' && strwild(playername, ReturnPlayerName(i)))) {
-			SendClientMessage(i, COLOUR_WARNING, msg);
+		if(!IsPlayerNPC(i) &&((!isnull(playerip) && IPcompare(playerip, ReturnPlayerIP(i))) || (!isnull(adminname) && strwild(playername, ReturnPlayerName(i))))) {
+			SendWrappedMessageToPlayer(i, COLOUR_WARNING, msg);
 			if(gServerData[E_RANGESUSPEND_MSG][0] != '\0' && strfind(playerip, "*") != -1) {
-				SendBanMsg(i, gServerData[E_RANGESUSPEND_MSG], date, time, adminname[0] < ' ' ? ("Console") : adminname);
+				SendBanMsg(i, gServerData[E_RANGESUSPEND_MSG], datetime, adminname);
 			} else if(gServerData[E_SUSPEND_MSG][0] != '\0') {
-				SendBanMsg(i, gServerData[E_SUSPEND_MSG], date, time, adminname[0] < ' ' ? ("Console") : adminname);
+				SendBanMsg(i, gServerData[E_SUSPEND_MSG], datetime, adminname);
 			}
-
-			new string[MAX_INPUT];
-			if(adminname[0] < ' ') {
-				format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours (%s)", ReturnPlayerName(i), i, hours, tmp);
+			if(isnull(adminname)) {
+				if(isnull(shortreason)) {
+					format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours", ReturnPlayerName(i), i, hours);
+				} else {
+					format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours (%s)", ReturnPlayerName(i), i, hours, shortreason);
+				}
+				LogAction(string);
+				AddLogString(string);
+				AddJoinString(i, COLOUR_SUSPEND, string);
 			} else {
-				format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours by %s (%s)", ReturnPlayerName(i), i, hours, adminname, tmp);
+				if(isnull(shortreason)) {
+					format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours by %s", ReturnPlayerName(i), i, hours, adminname);
+				} else {
+					format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours by %s (%s)", ReturnPlayerName(i), i, hours, adminname, shortreason);
+				}
+				LogAction(string);
+				AddLogString(string);
+				if(hidename) {
+					if(isnull(shortreason)) {
+						format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours", ReturnPlayerName(i), i, hours);
+					} else {
+						format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours (%s)", ReturnPlayerName(i), i, hours, shortreason);
+					}
+				}
+				AddJoinString(i, COLOUR_SUSPEND, string);
 			}
-			LogAction(string);
-
-			AddJoinString(i, COLOUR_SUSPEND, string);
 			Kick(i);
+			hits++;
 		}
 	}
+
+	Suspensions_SuspendPlayer(gAlarDB, playername, playerip, hours, reason, adminname, adminip, hits);
 	return 1;
 }
 
-public alar_SuspendPlayer(playerid, Float:hours, const reason[], const adminname[])
+public alar_SuspendPlayer(playerid, Float:hours, const reason[], const adminname[], const adminip[], bool:hidename)
 {
-	if(!IsPlayerConnected(playerid)) return 0;
+	if(!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return 0;
 
-	new tmp[MAX_REASON];
-	strcpy(tmp, reason);
+	new shortreason[MAX_REASON],
+		msg[MAX_INPUT + 60],
+		string[MAX_INPUT],
+		datetime[MAX_TIMESTAMP],
+		sIP[MAX_IP];
 
-	SuspendPlayer(ReturnPlayerName(playerid), ReturnPlayerIP(playerid), hours, tmp, adminname[0] < ' ' ? ("Console") : adminname);
-
-	new msg[MAX_INPUT];
-	if(adminname[0] < ' ') {
-		format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours (%s)", hours, tmp);
-	} else {
-		format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours by %s (%s)", hours, adminname, tmp);
+	if(!isnull(reason)) {
+		strtruncate(shortreason, reason);
 	}
-	SendClientMessage(playerid, COLOUR_WARNING, msg);
+
+	if(isnull(reason)) {
+		format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours", hours);
+	} else {
+		format(msg, sizeof(msg), "You have been suspended from the server for %0.2f hours (%s)", hours, reason);
+	}
+
+	SendWrappedMessageToPlayer(playerid, COLOUR_WARNING, msg);
+
+	datetime = ReturnTimeStamp();
+	GetPlayerIp(playerid, sIP, sizeof(sIP));
 
 	if(gServerData[E_SUSPEND_MSG][0] != '\0') {
-		new year,
-			month,
-			day,
-			hour,
-			minute,
-			date[15],
-			time[10];
-
-		getdate(year, month, day);
-		gettime(hour, minute);
-		format(date, sizeof(date), "%02i/%02i/%i", day, month, year);
-		format(time, sizeof(time), "%02i:%02i", hour, minute);
-
-		SendBanMsg(playerid, gServerData[E_SUSPEND_MSG], date, time, adminname[0] < ' ' ? ("Console") : adminname);
+		SendBanMsg(playerid, gServerData[E_SUSPEND_MSG], datetime, adminname);
 	}
-	if(adminname[0] < ' ') {
-		format(msg, sizeof(msg), "%s(%i) has been suspended from the server for %0.2f hours (%s)", ReturnPlayerName(playerid), playerid, hours, tmp);
+
+	if(isnull(adminname)) {
+		if(isnull(shortreason)) {
+			format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours", ReturnPlayerName(playerid), playerid, hours);
+		} else {
+			format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours (%s)", ReturnPlayerName(playerid), playerid, hours, shortreason);
+		}
+		LogAction(string);
+		AddLogString(string);
+		AddJoinString(playerid, COLOUR_SUSPEND, string);
 	} else {
-		format(msg, sizeof(msg), "%s(%i) has been suspended from the server for %0.2f hours by %s (%s)", ReturnPlayerName(playerid), playerid, hours, adminname, tmp);
+		if(isnull(shortreason)) {
+			format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours by %s", ReturnPlayerName(playerid), playerid, hours, adminname);
+		} else {
+			format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours by %s (%s)", ReturnPlayerName(playerid), playerid, hours, adminname, shortreason);
+		}
+		LogAction(string);
+		AddLogString(string);
+		if(hidename) {
+			if(isnull(shortreason)) {
+				format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours", ReturnPlayerName(playerid), playerid, hours);
+			} else {
+				format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours (%s)", ReturnPlayerName(playerid), playerid, hours, shortreason);
+			}
+		}
+		AddJoinString(playerid, COLOUR_SUSPEND, string);
+	}
+	Kick(playerid);
+
+	new hits = 1;
+	if(gServerData[E_KICK_ALL_IPS]) {
+		LoopPlayers(i) {
+			if(i != playerid && !IsPlayerNPC(i) && IPcompare(sIP, ReturnPlayerIP(i))) {
+				SendClientMessage(i, COLOUR_WARNING, msg);
+				if(gServerData[E_SUSPEND_MSG][0] != '\0') {
+					SendBanMsg(i, gServerData[E_SUSPEND_MSG], datetime, adminname);
+				}
+				if(isnull(adminname)) {
+					if(isnull(shortreason)) {
+						format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours by %s", ReturnPlayerName(i), i, hours, adminname);
+					} else {
+						format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours by %s (%s)", ReturnPlayerName(i), i, hours, adminname, shortreason);
+					}
+					LogAction(string);
+					AddLogString(string);
+					if(hidename) {
+						if(isnull(shortreason)) {
+							format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours", ReturnPlayerName(i), i, hours);
+						} else {
+							format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours (%s)", ReturnPlayerName(i), i, hours, shortreason);
+						}
+					}
+					AddJoinString(i, COLOUR_SUSPEND, string);
+				} else {
+					if(isnull(shortreason)) {
+						format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours", ReturnPlayerName(i), i, hours);
+					} else {
+						format(string, sizeof(string), "%s(%i) has been suspended from the server for %0.2f hours (%s)", ReturnPlayerName(i), i, hours, shortreason);
+					}
+					LogAction(string);
+					AddLogString(string);
+					AddJoinString(i, COLOUR_SUSPEND, string);
+				}
+				Kick(i);
+				hits++;
+			}
+		}
 	}
 
-	LogAction(msg);
+	if(gAlarDB) {
+		if(gServerData[E_LOGGEDIN_FUNC][0] == '\0' || !CallRemoteFunction(gServerData[E_LOGGEDIN_FUNC], "i", playerid)) {
+			Suspensions_SuspendIP(gAlarDB, sIP, hours, reason, adminname, adminip, hits);
+		} else {
+			Suspensions_SuspendPlayer(gAlarDB, ReturnPlayerName(playerid), sIP, hours, reason, adminname, adminip, hits);
+		}
+	}
+	return 1;
+}
 
-	AddJoinString(playerid, COLOUR_SUSPEND, msg);
-	Kick(playerid);
+public alar_Warn(const playername[], const reason[], const adminname[], const adminip[], bool:hidename)
+{
+	if(!isValidName(playername, false)) return 0;
+
+	LoopPlayers(i) {
+		if(!IsPlayerNPC(i) && strcmp(ReturnPlayerName(i), playername, true) == 0) {
+			return alar_WarnPlayer(i, reason, adminname, adminip, hidename);
+		}
+	}
+
+	if(gAlarDB) {
+		new msg[MAX_INPUT * 2];
+
+		if(isnull(adminname)) {
+			if(isnull(reason)) {
+				format(msg, sizeof(msg), "%s has been warned", playername);
+			} else {
+				strtruncate(msg, reason, MAX_REASON);
+				format(msg, sizeof(msg), "%s has been warned (%s)", playername, msg);
+			}
+		} else {
+			if(isnull(reason)) {
+				format(msg, sizeof(msg), "%s has been warned by %s", playername, adminname);
+			} else {
+				strtruncate(msg, reason, MAX_REASON);
+				format(msg, sizeof(msg), "%s has been warned by %s (%s)", playername, adminname, msg);
+			}
+		}
+		LogAction(msg);
+		AddLogString(msg);
+
+		if(!isnull(reason)) {
+			strcpy(msg, reason);
+			strreplace(msg, "'", "''");
+		} else {
+			msg[0] = '\0';
+		}
+		db_free_result(db_query(gAlarDB, "BEGIN TRANSACTION"));
+		Warnings_WarnPlayer(gAlarDB, playername, msg, adminname, adminip);
+		if(gServerData[E_WARN_LIMIT] > 0 && Warnings_GetWarningCount(gAlarDB, playername, gServerData[E_WARN_TIMEOUT]) >= gServerData[E_WARN_LIMIT]) {
+			if(gServerData[E_WARN_SUSPEND_TIME] > 0) {
+				Suspensions_SuspendName(gAlarDB, playername, gServerData[E_WARN_SUSPEND_TIME], "Too many warnings", "", "", 1);
+
+				format(msg, sizeof(msg), "%s has been suspended from the server for %i hours (Too many warnings)", playername, gServerData[E_WARN_SUSPEND_TIME]);
+				LogAction(msg);
+				AddLogString(msg);
+
+				Warnings_SetInactive(gAlarDB, playername, gServerData[E_WARN_TIMEOUT]);
+			}
+		}
+		db_free_result(db_query(gAlarDB, "END TRANSACTION"));
+	}
+	return 1;
+}
+
+
+public alar_WarnPlayer(playerid, const reason[], const adminname[], const adminip[], bool:hidename)
+{
+	if(!IsPlayerConnected(playerid) || IsPlayerNPC(playerid) || (gServerData[E_LOGGEDIN_FUNC][0] == '\0' || !CallRemoteFunction(gServerData[E_LOGGEDIN_FUNC], "i", playerid))) return 0;
+
+	if(gAlarDB) {
+		new pname[MAX_PLAYER_NAME];
+		GetPlayerName(playerid, pname, sizeof(pname));
+
+		#if SOUND_VOLUME > 0
+			new Float:px, Float:py, Float:pz;
+			GetPlayerPos(playerid, px, py, pz);
+			for(new i; i < SOUND_VOLUME; i++) {
+				PlayerPlaySound(playerid, 1132, px, py, pz);
+			}
+		#endif
+
+		new msg[MAX_INPUT * 2];
+		if(hidename || isnull(adminname)) {
+			if(isnull(reason)) {
+				msg = "You have been warned";
+			} else {
+				format(msg, sizeof(msg), "You have been warned (%s)", reason);
+			}
+		} else {
+			if(isnull(reason)) {
+				format(msg, sizeof(msg), "You have been warned by %s", adminname);
+			} else {
+				format(msg, sizeof(msg), "You have been warned by %s (%s)", adminname, reason);
+			}
+		}
+		SendWrappedMessageToPlayer(playerid, COLOUR_WARNING, msg);
+
+		strtruncate(msg, reason, MAX_REASON);
+		format(msg, sizeof(msg), "%s has been warned by %s (%s)", pname, adminname, msg);
+		LogAction(msg);
+		AddLogString(msg);
+
+		db_free_result(db_query(gAlarDB, "BEGIN TRANSACTION"));
+
+		if(isnull(reason)) {
+			strcpy(msg, reason);
+			strreplace(msg, "'", "''");
+		} else {
+			msg[0] = '\0';
+		}
+		Warnings_WarnPlayer(gAlarDB, pname, msg, adminname, adminip);
+		gPlayerData[playerid][E_LAST_WARNING] = GetTickCount();
+
+		if(gServerData[E_WARN_LIMIT] > 0 && Warnings_GetWarningCount(gAlarDB, pname, gServerData[E_WARN_TIMEOUT]) >= gServerData[E_WARN_LIMIT]) {
+			if(gServerData[E_WARN_SUSPEND_TIME] > 0) {
+				format(msg, sizeof(msg), "You have been suspended from the server for %i hours (Too many warnings)", gServerData[E_WARN_SUSPEND_TIME]);
+				SendClientMessage(playerid, COLOUR_WARNING, msg);
+
+				Suspensions_SuspendPlayer(gAlarDB, pname, ReturnPlayerIP(playerid), gServerData[E_WARN_SUSPEND_TIME], "Too many warnings", "", "", 1);
+
+				if(gServerData[E_SUSPEND_MSG][0] != '\0') {
+					SendBanMsg(playerid, gServerData[E_SUSPEND_MSG], ReturnTimeStamp(), "");
+				}
+
+				format(msg, sizeof(msg), "%s(%i) has been suspended from the server for %i hours (Too many warnings)", pname, playerid, gServerData[E_WARN_SUSPEND_TIME]);
+				AddJoinString(playerid, COLOUR_SUSPEND, msg);
+			} else {
+				SendClientMessage(playerid, COLOUR_WARNING, "You have been kicked server (Too many warnings)");
+
+				format(msg, sizeof(msg), "%s(%i) has been kicked from the server (Too many warnings)", pname, playerid);
+				AddJoinString(playerid, COLOUR_KICK, msg);
+			}
+			LogAction(msg);
+			AddLogString(msg);
+
+			Warnings_SetInactive(gAlarDB, pname, gServerData[E_WARN_TIMEOUT]);
+
+			Kick(playerid);
+		}
+		db_free_result(db_query(gAlarDB, "END TRANSACTION"));
+	}
 	return 1;
 }

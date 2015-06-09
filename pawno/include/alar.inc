@@ -28,12 +28,61 @@
 
 #include <a_samp>
 
+/*
+	native GetAlarVersion(version[]="", maxlength=sizeof(version));
+
+	native AddJoinLine(playerid, colour, const string[]);
+	native AddAdminLogLine(colour, const string[]);
+
+	native BanPlayer(const playername[]="\01", const playerip[]="\01", const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false);
+	native BanPlayerid(playerid, const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false);
+	native SuspendPlayer(const playername[]="\01", const playerip[]="\01", Float:hours, const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false);
+	native SuspendPlayerid(playerid, Float:hours, const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false);
+	native WarnPlayer(playerid, const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false);
+	native Warn(const playername[], const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false);
+
+	native IsPlayerScriptAdmin(playerid);
+	native GetAdminLevel(playerid);
+
+	native bool:GetCountryFromCode(const code[], dest[], maxlength=sizeof(dest));
+	native bool:GetIPCountryCode(const IP[], dest[], maxlength=sizeof(dest));
+	native bool:GetPlayerCountryCode(playerid, dest[], maxlength=sizeof(dest));
+
+	native GetAdminSpectating(playerid);
+	native SetAdminSpectating(playerid, targetid, bool:saveplayer);
+	native DisableAdminSpectating(playerid);
+	native ClearAdminSpawnData(playerid);
+	native SetSpawnType(E_SPAWNTYPE:spawntype, E_INFOTYPE:spawnsaves=INFOTYPE_POSITION|INFOTYPE_WORLD|INFOTYPE_WEAPONS|INFOTYPE_CASH|INFOTYPE_HEALTH|INFOTYPE_ARMOUR|INFOTYPE_VEHICLE);
+
+	native SetAlarLoginCheck(const func[]="\01");
+
+	native GetAdminState(playerid);
+	native SetAdminState(playerid, newstate, seconds);
+	native ClearAdminState(playerid, newstate);
+
+	native HistoryAddMessage(const playername[], colour, const message[], flags=0);
+	native HistoryAddLine(colour, const message[], flags=0);
+	native HistoryClear();
+
+	native DestroyAdminVehicle(Vehicleid)
+*/
+
+
 // --------------------------------------------------
 // Defines
 // --------------------------------------------------
 
 #define FREE_SPECTATE_ID	-1
 #define ALAR_PROPERTY_ID	41412
+
+#if !defined MAX_COUNTRY_CODE
+	#define MAX_COUNTRY_CODE 3
+#endif
+
+#if !defined MAX_COUNTRY_NAME
+	#define MAX_COUNTRY_NAME 64
+#endif
+
 
 enum (<<=1) {
 	ADMIN_STATE_MUTED = 1,
@@ -65,41 +114,283 @@ enum E_INFOTYPE (<<=1) {
 	INFOTYPE_WEAPONS,
 	INFOTYPE_CASH,
 	INFOTYPE_HEALTH,
-	INFOTYPE_ARMOUR
+	INFOTYPE_ARMOUR,
+	INFOTYPE_VEHICLE
 };
+
+enum E_COUNTRYCODES {
+	E_COUNTRY_CODE[MAX_COUNTRY_CODE char],
+	E_COUNTRY_NAME[MAX_COUNTRY_NAME char]
+}; stock SIZE_E_COUNTRYCODES[E_COUNTRYCODES];
+
+
+stock static const scCountryCodes[][E_COUNTRYCODES] = {
+	{!"A1", !"Anonymous Proxy"},
+	{!"A2", !"Satellite Provider"},
+	{!"AC", !"Ascension Island"},
+	{!"AD", !"Andorra"},
+	{!"AE", !"United Arab Emirates"},
+	{!"AF", !"Afghanistan"},
+	{!"AG", !"Antigua and Barbuda"},
+	{!"AI", !"Anguilla"},
+	{!"AL", !"Albania"},
+	{!"AM", !"Armenia"},
+	{!"AN", !"Netherlands Antilles"},
+	{!"AO", !"Angola"},
+	{!"AQ", !"Antarctica"},
+	{!"AR", !"Argentina"},
+	{!"AS", !"American Samoa"},
+	{!"AT", !"Austria"},
+	{!"AU", !"Australia"},
+	{!"AW", !"Aruba"},
+	{!"AX", !"Aland Islands"},
+	{!"AZ", !"Azerbaijan"},
+	{!"BA", !"Bosnia and Herzegovina"},
+	{!"BB", !"Barbados"},
+	{!"BD", !"Bangladesh"},
+	{!"BE", !"Belgium"},
+	{!"BF", !"Burkina Faso"},
+	{!"BG", !"Bulgaria"},
+	{!"BH", !"Bahrain"},
+	{!"BI", !"Burundi"},
+	{!"BJ", !"Benin"},
+	{!"BL", !"Saint Barthélemy"},
+	{!"BM", !"Bermuda"},
+	{!"BN", !"Brunei Darussalam"},
+	{!"BO", !"Bolivia, Plurinational State of"},
+	{!"BR", !"Brazil"},
+	{!"BS", !"Bahamas"},
+	{!"BT", !"Bhutan"},
+	{!"BV", !"Bouvet Island"},
+	{!"BW", !"Botswana"},
+	{!"BY", !"Belarus"},
+	{!"BZ", !"Belize"},
+	{!"CA", !"Canada"},
+	{!"CC", !"Cocos (Keeling) Islands"},
+	{!"CD", !"Congo, the Democratic Republic of the"},
+	{!"CF", !"Central African Republic"},
+	{!"CG", !"Congo"},
+	{!"CH", !"Switzerland"},
+	{!"CI", !"Cote d'Ivoire"},
+	{!"CK", !"Cook Islands"},
+	{!"CL", !"Chile"},
+	{!"CM", !"Cameroon"},
+	{!"CN", !"China"},
+	{!"CO", !"Colombia"},
+	{!"CP", !"Clipperton Island"},
+	{!"CR", !"Costa Rica"},
+	{!"CU", !"Cuba"},
+	{!"CV", !"Cape Verde"},
+	{!"CX", !"Christmas Island"},
+	{!"CY", !"Cyprus"},
+	{!"CZ", !"Czech Republic"},
+	{!"DE", !"Germany"},
+	{!"DG", !"Diego Garcia"},
+	{!"DJ", !"Djibouti"},
+	{!"DK", !"Denmark"},
+	{!"DM", !"Dominica"},
+	{!"DO", !"Dominican Republic"},
+	{!"DZ", !"Algeria"},
+	{!"EC", !"Ecuador"},
+	{!"EE", !"Estonia"},
+	{!"EG", !"Egypt"},
+	{!"EH", !"Western Sahara"},
+	{!"ER", !"Eritrea"},
+	{!"ES", !"Spain"},
+	{!"ET", !"Ethiopia"},
+	{!"EU", !"European Union"},
+	{!"FI", !"Finland"},
+	{!"FJ", !"Fiji"},
+	{!"FK", !"Falkland Islands (Malvinas)"},
+	{!"FM", !"Micronesia, Federated States of"},
+	{!"FO", !"Faroe Islands"},
+	{!"FR", !"France"},
+	{!"FX", !"France, Metropolitan"},
+	{!"GA", !"Gabon"},
+	{!"GB", !"United Kingdom"},
+	{!"GD", !"Grenada"},
+	{!"GE", !"Georgia"},
+	{!"GF", !"French Guiana"},
+	{!"GG", !"Guernsey"},
+	{!"GH", !"Ghana"},
+	{!"GI", !"Gibraltar"},
+	{!"GL", !"Greenland"},
+	{!"GM", !"Gambia"},
+	{!"GN", !"Guinea"},
+	{!"GP", !"Guadeloupe"},
+	{!"GQ", !"Equatorial Guinea"},
+	{!"GR", !"Greece"},
+	{!"GS", !"South Georgia and the South Sandwich Islands"},
+	{!"GT", !"Guatemala"},
+	{!"GU", !"Guam"},
+	{!"GW", !"Guinea-Bissau"},
+	{!"GY", !"Guyana"},
+	{!"HK", !"Hong Kong"},
+	{!"HM", !"Heard Island and McDonald Islands"},
+	{!"HN", !"Honduras"},
+	{!"HR", !"Croatia"},
+	{!"HT", !"Haiti"},
+	{!"HU", !"Hungary"},
+	{!"IC", !"Canary Islands"},
+	{!"ID", !"Indonesia"},
+	{!"IE", !"Ireland"},
+	{!"IL", !"Israel"},
+	{!"IM", !"Isle of Man"},
+	{!"IN", !"India"},
+	{!"IO", !"British Indian Ocean Territory"},
+	{!"IQ", !"Iraq"},
+	{!"IR", !"Iran, Islamic Republic of"},
+	{!"IS", !"Iceland"},
+	{!"IT", !"Italy"},
+	{!"JE", !"Jersey"},
+	{!"JM", !"Jamaica"},
+	{!"JO", !"Jordan"},
+	{!"JP", !"Japan"},
+	{!"KE", !"Kenya"},
+	{!"KG", !"Kyrgyzstan"},
+	{!"KH", !"Cambodia"},
+	{!"KI", !"Kiribati"},
+	{!"KM", !"Comoros"},
+	{!"KN", !"Saint Kitts and Nevis"},
+	{!"KP", !"Korea, Democratic People's Republic of"},
+	{!"KR", !"Korea, Republic of"},
+	{!"KW", !"Kuwait"},
+	{!"KY", !"Cayman Islands"},
+	{!"KZ", !"Kazakhstan"},
+	{!"LA", !"Lao People's Democratic Republic"},
+	{!"LB", !"Lebanon"},
+	{!"LC", !"Saint Lucia"},
+	{!"LI", !"Liechtenstein"},
+	{!"LK", !"Sri Lanka"},
+	{!"LR", !"Liberia"},
+	{!"LS", !"Lesotho"},
+	{!"LT", !"Lithuania"},
+	{!"LU", !"Luxembourg"},
+	{!"LV", !"Latvia"},
+	{!"LY", !"Libyan Arab Jamahiriya"},
+	{!"MA", !"Morocco"},
+	{!"MC", !"Monaco"},
+	{!"MD", !"Moldova, Republic of"},
+	{!"ME", !"Montenegro"},
+	{!"MF", !"Saint Martin (French part)"},
+	{!"MG", !"Madagascar"},
+	{!"MH", !"Marshall Islands"},
+	{!"MK", !"Macedonia, the former Yugoslav Republic of"},
+	{!"ML", !"Mali"},
+	{!"MM", !"Myanmar"},
+	{!"MN", !"Mongolia"},
+	{!"MO", !"Macao"},
+	{!"MP", !"Northern Mariana Islands"},
+	{!"MQ", !"Martinique"},
+	{!"MR", !"Mauritania"},
+	{!"MS", !"Montserrat"},
+	{!"MT", !"Malta"},
+	{!"MU", !"Mauritius"},
+	{!"MV", !"Maldives"},
+	{!"MW", !"Malawi"},
+	{!"MX", !"Mexico"},
+	{!"MY", !"Malaysia"},
+	{!"MZ", !"Mozambique"},
+	{!"NA", !"Namibia"},
+	{!"NC", !"New Caledonia"},
+	{!"NE", !"Niger"},
+	{!"NF", !"Norfolk Island"},
+	{!"NG", !"Nigeria"},
+	{!"NI", !"Nicaragua"},
+	{!"NL", !"Netherlands"},
+	{!"NO", !"Norway"},
+	{!"NP", !"Nepal"},
+	{!"NR", !"Nauru"},
+	{!"NU", !"Niue"},
+	{!"NZ", !"New Zealand"},
+	{!"O1", !"Other"},
+	{!"OM", !"Oman"},
+	{!"PA", !"Panama"},
+	{!"PE", !"Peru"},
+	{!"PF", !"French Polynesia"},
+	{!"PG", !"Papua New Guinea"},
+	{!"PH", !"Philippines"},
+	{!"PK", !"Pakistan"},
+	{!"PL", !"Poland"},
+	{!"PM", !"Saint Pierre and Miquelon"},
+	{!"PN", !"Pitcairn"},
+	{!"PR", !"Puerto Rico"},
+	{!"PS", !"Palestinian Territory, Occupied"},
+	{!"PT", !"Portugal"},
+	{!"PW", !"Palau"},
+	{!"PY", !"Paraguay"},
+	{!"QA", !"Qatar"},
+	{!"RE", !"Reunion"},
+	{!"RO", !"Romania"},
+	{!"RS", !"Serbia"},
+	{!"RU", !"Russian Federation"},
+	{!"RW", !"Rwanda"},
+	{!"SA", !"Saudi Arabia"},
+	{!"SB", !"Solomon Islands"},
+	{!"SC", !"Seychelles"},
+	{!"SD", !"Sudan"},
+	{!"SE", !"Sweden"},
+	{!"SG", !"Singapore"},
+	{!"SH", !"Saint Helena"},
+	{!"SI", !"Slovenia"},
+	{!"SJ", !"Svalbard and Jan Mayen"},
+	{!"SK", !"Slovakia"},
+	{!"SL", !"Sierra Leone"},
+	{!"SM", !"San Marino"},
+	{!"SN", !"Senegal"},
+	{!"SO", !"Somalia"},
+	{!"SR", !"Suriname"},
+	{!"ST", !"Sao Tome and Principe"},
+	{!"SU", !"USSR"},
+	{!"SV", !"El Salvador"},
+	{!"SY", !"Syrian Arab Republic"},
+	{!"SZ", !"Swaziland"},
+	{!"TA", !"Tristan da Cunha"},
+	{!"TC", !"Turks and Caicos Islands"},
+	{!"TD", !"Chad"},
+	{!"TF", !"French Southern Territories"},
+	{!"TG", !"Togo"},
+	{!"TH", !"Thailand"},
+	{!"TJ", !"Tajikistan"},
+	{!"TK", !"Tokelau"},
+	{!"TL", !"Timor-Leste"},
+	{!"TM", !"Turkmenistan"},
+	{!"TN", !"Tunisia"},
+	{!"TO", !"Tonga"},
+	{!"TR", !"Turkey"},
+	{!"TT", !"Trinidad and Tobago"},
+	{!"TV", !"Tuvalu"},
+	{!"TW", !"Taiwan"},
+	{!"TZ", !"Tanzania, United Republic of"},
+	{!"UA", !"Ukraine"},
+	{!"UG", !"Uganda"},
+	{!"UK", !"United Kingdom"},
+	{!"UM", !"United States Minor Outlying Islands"},
+	{!"US", !"United States"},
+	{!"UY", !"Uruguay"},
+	{!"UZ", !"Uzbekistan"},
+	{!"VA", !"Holy See (Vatican City State)"},
+	{!"VC", !"Saint Vincent and the Grenadines"},
+	{!"VE", !"Venezuela"},
+	{!"VG", !"Virgin Islands, British"},
+	{!"VI", !"Virgin Islands, U.S."},
+	{!"VN", !"Vietnam"},
+	{!"VU", !"Vanuatu"},
+	{!"WF", !"Wallis and Futuna"},
+	{!"WS", !"Samoa"},
+	{!"XL", !"Localhost"},
+	{!"XN", !"LAN"},
+	{!"YE", !"Yemen"},
+	{!"YT", !"Mayotte"},
+	{!"ZA", !"South Africa"},
+	{!"ZM", !"Zambia"},
+	{!"ZW", !"Zimbabwe"}
+ };
+
 
 // --------------------------------------------------
 // Functions
 // --------------------------------------------------
-
-/*
-	native GetAlarVersion(version[]="", maxlength=sizeof(version));
-
-	native AddJoinLine(playerid, colour, const string[]);
-	native AddAdminLogLine(colour, const string[]);
-
-	native BanPlayer(const playername[]="\01", const playerip[]="\01", const reason[]="No reason", const adminname[]="\01");
-	native BanPlayerid(playerid, const reason[]="No reason", const adminname[]="\01");
-	native SuspendPlayer(const playername[]="\01", const playerip[]="\01", Float:hours, const reason[]="No reason", const adminname[]="\01");
-	native SuspendPlayerid(playerid, Float:hours, const reason[]="No reason", const adminname[]="\01");
-
-	native IsPlayerScriptAdmin(playerid);
-	native GetAdminLevel(playerid);
-
-	native GetAdminSpectating(playerid);
-	native SetAdminSpectating(playerid, targetid, bool:saveplayer);
-	native DisableAdminSpectating(playerid);
-	native ClearAdminSpawnData(playerid);
-	native SetSpawnType(spawntype, E_INFOTYPE:spawnsaves);
-
-	native GetAdminState(playerid);
-	native SetAdminState(playerid, newstate, seconds);
-	native ClearAdminState(playerid, newstate);
-
-	native HistoryAddMessage(const playername[], colour, const message[], flags=0);
-	native HistoryAddLine(colour, const message[], flags=0);
-	native HistoryClear();
-*/
 
 /**
  *  Send a custom join message just before kicking a player
@@ -168,12 +459,19 @@ enum E_INFOTYPE (<<=1) {
 #define HistoryClear(%1)			(CallRemoteFunction("alar_ClearHistory", ""))
 
 /**
+ *  Destroy an admin created vehicle
+ *  @param	vehicleid	The vehicle to destroy, or INVALID_VEHICLE_ID to destroy all admin vehicles
+ *  @return	The number of vehicles destroyed
+ */
+#define DestroyAdminVehicle(%1)		(CallRemoteFunction("alar_DestroyVehicle", "%i", %1))
+
+/**
  *  Get the version number of alar
  *  @param	version		A string to store the version number in
  *  @param	maxlength	The size of the version string
  *  @return	true if alar is loaded, otherwise false
  */
-stock GetAlarVersion(version[]="", maxlength=sizeof(version))
+stock bool:GetAlarVersion(version[]="", maxlength=sizeof(version))
 {
 	if(existproperty(.value = ALAR_PROPERTY_ID)) {
 		if(maxlength > 1) {
@@ -183,6 +481,65 @@ stock GetAlarVersion(version[]="", maxlength=sizeof(version))
 		}
 		return true;
 	}
+	return false;
+}
+
+/**
+ *  Gets a country name from an ISO 3166-1 alpha-2 country code
+ *  @param	code		The ISO 3166-1 alpha-2 country code
+ *  @param	dest		The destination string
+ *  @param	maxlength	The size of the destination string
+ *  @return	true if the player's country was found, false if it is unknown
+ */
+stock bool:GetCountryFromCode(const code[], dest[], maxlength=sizeof(dest))
+{
+	if(code[0] != '\0') {
+		for(new i; i < sizeof(scCountryCodes); i++) {
+			if(strcmp(code, scCountryCodes[i][E_COUNTRY_CODE], true) == 0) {
+				strunpack(dest, scCountryCodes[i][E_COUNTRY_NAME], maxlength);
+				return true;
+			}
+		}
+	}
+	strmid(dest, "Unknown", 0, cellmax, maxlength);
+	return false;
+}
+
+/**
+ *  Get an IP's ISO 3166-1 alpha-2 country code
+ *  @param	IP			The IP
+ *  @param	dest		The destination string
+ *  @param	maxlength	The size of the destination string
+ *  @return	true if the player's country was found, false if it is unknown
+ */
+stock bool:GetIPCountryCode(const IP[], dest[], maxlength=sizeof(dest))
+{
+	if(IP[0] != '\0') {
+		new string[MAX_COUNTRY_CODE char];
+		if((string[0] = CallRemoteFunction("alar_GetCountryCode", "s", IP))) {
+			strunpack(dest, string, maxlength);
+			return true;
+		}
+	}
+	dest[0] = '\0';
+	return false;
+}
+
+/**
+ *  Get the player's ISO 3166-1 alpha-2 country code
+ *  @param	playerid	The playerid of the player
+ *  @param	dest		The destination string
+ *  @param	maxlength	The size of the destination string
+ *  @return	true if the player's country was found, false if it is unknown
+ */
+stock bool:GetPlayerCountryCode(playerid, dest[], maxlength=sizeof(dest))
+{
+	new string[MAX_COUNTRY_CODE char];
+	if((string[0] = CallRemoteFunction("alar_GetPlayerCountryCode", "i", playerid))) {
+		strunpack(dest, string, maxlength);
+		return true;
+	}
+	dest[0] = '\0';
 	return false;
 }
 
@@ -220,16 +577,26 @@ stock SetAdminSpectating(playerid, targetid=INVALID_PLAYER_ID, bool:saveplayer=f
  *  @param	spawnsaves	A mask of which data should be stored (INFOTYPE_POSITION/INFOTYPE_WORLD etc)
  *  @return	1 if alar is loaded, otherwise 0
  */
-stock SetSpawnType(E_SPAWNTYPE:spawnytype, E_INFOTYPE:spawnsaves=INFOTYPE_POSITION|INFOTYPE_WORLD|INFOTYPE_WEAPONS|INFOTYPE_CASH|INFOTYPE_HEALTH|INFOTYPE_ARMOUR)
+stock SetSpawnType(E_SPAWNTYPE:spawntype, E_INFOTYPE:spawnsaves=INFOTYPE_POSITION|INFOTYPE_WORLD|INFOTYPE_WEAPONS|INFOTYPE_CASH|INFOTYPE_HEALTH|INFOTYPE_ARMOUR|INFOTYPE_VEHICLE)
 {
-	return CallRemoteFunction("alar_SetSpawnType", "ii", _:spawnytype, _:spawnsaves);
+	return CallRemoteFunction("alar_SetSpawnType", "ii", _:spawntype, _:spawnsaves);
+}
+
+/**
+ *  Set which public function should be called to check if a player is logged in (for banning/suspending names)
+ *  @param	func	The public function
+ *  @return	1 if alar is loaded, otherwise 0
+ */
+stock SetAlarLoginCheck(const func[]="\01")
+{
+	return CallRemoteFunction("alar_LoginFunc", "s", func);
 }
 
 /**
  *  Set the state of a player (muted/jailed etc)
  *  @param	newstate	A mask of the states to be set (ADMIN_STATE_MUTED/ADMIN_STATE_JAILED etc)
  *  @param	seconds		The number of seconds to set the state for (0 or less for it to be permanent)
- *  @return	1 if the player is connected, otherwise false
+ *  @return	1 if the player is connected, otherwise 0
  */
 stock SetAdminState(playerid, newstate, seconds=0)
 {
@@ -242,11 +609,13 @@ stock SetAdminState(playerid, newstate, seconds=0)
  *  @param	playerip	The IP to be banned
  *  @param	reason		The reason for the ban
  *  @param	adminname	The name of the admin responsible the ban
+ *  @param	adminip		The IP of the admin responsible the ban
+ *  @param	hidename	Hide the name of the admin responsible
  *  @return	1 if alar is loaded
  */
-stock BanPlayer(const playername[]="\01", const playerip[]="\01", const reason[]="No reason", const adminname[]="\01")
+stock BanPlayer(const playername[]="\01", const playerip[]="\01", const reason[]="\01", const adminname[]="\01", const adminip[]="\01", bool:hidename=false)
 {
-	return CallRemoteFunction("alar_Ban", "ssss", playername, playerip, reason, adminname);
+	return CallRemoteFunction("alar_Ban", "sssssi", playername, playerip, reason, adminname, adminip, hidename);
 }
 
 /**
@@ -254,11 +623,13 @@ stock BanPlayer(const playername[]="\01", const playerip[]="\01", const reason[]
  *  @param	playerid	The playerid of the player to be banned
  *  @param	reason		The reason for the ban
  *  @param	adminname	The name of the admin responsible the ban
+ *  @param	adminip		The IP of the admin responsible the ban
+ *  @param	hidename	Hide the name of the admin responsible
  *  @return	1 if alar is loaded
  */
-stock BanPlayerid(playerid, const reason[]="No reason", const adminname[]="\01")
+stock BanPlayerid(playerid, const reason[]="\01", const adminname[]="\01", const adminip[]="\01", bool:hidename=false)
 {
-	return CallRemoteFunction("alar_BanPlayer", "iss", playerid, reason, adminname);
+	return CallRemoteFunction("alar_BanPlayer", "isssi", playerid, reason, adminname, adminip, hidename);
 }
 
 /**
@@ -268,11 +639,13 @@ stock BanPlayerid(playerid, const reason[]="No reason", const adminname[]="\01")
  *  @param	hours		The number of hours to suspend for
  *  @param	reason		The reason for the suspension
  *  @param	adminname	The name of the admin responsible the suspension
+ *  @param	adminip		The IP of the admin responsible the suspension
+ *  @param	hidename	Hide the name of the admin responsible
  *  @return	1 if alar is loaded
  */
-stock SuspendPlayer(const playername[]="\01", const playerip[]="\01", Float:hours, const reason[]="No reason", const adminname[]="\01")
+stock SuspendPlayer(const playername[]="\01", const playerip[]="\01", Float:hours, const reason[]="\01", const adminname[]="\01", const adminip[]="\01", bool:hidename=false)
 {
-	return CallRemoteFunction("alar_Suspend", "ssfss", playername, playerip, hours, reason, adminname);
+	return CallRemoteFunction("alar_Suspend", "ssfsssi", playername, playerip, hours, reason, adminname, adminip, hidename);
 }
 
 /**
@@ -281,11 +654,41 @@ stock SuspendPlayer(const playername[]="\01", const playerip[]="\01", Float:hour
  *  @param	hours		The number of hours to suspend for
  *  @param	reason		The reason for the suspension
  *  @param	adminname	The name of the admin responsible the suspension
+ *  @param	adminip		The IP of the admin responsible the suspension
+ *  @param	hidename	Hide the name of the admin responsible
  *  @return	1 if alar is loaded
  */
-stock SuspendPlayerid(playerid, Float:hours, const reason[]="No reason", const adminname[]="\01")
+stock SuspendPlayerid(playerid, Float:hours, const reason[]="\01", const adminname[]="\01", const adminip[]="\01", bool:hidename=false)
 {
-	return CallRemoteFunction("alar_SuspendPlayer", "ifss", playerid, hours, reason, adminname);
+	return CallRemoteFunction("alar_SuspendPlayer", "ifsssi", playerid, hours, reason, adminname, adminip, hidename);
+}
+
+/**
+ *  Warn a player
+ *  @param	playername	The name to be warned
+ *  @param	reason		The reason for the warning
+ *  @param	adminname	The name of the admin responsible the warning
+ *  @param	adminip		The IP of the admin responsible the warning
+ *  @param	hidename	Hide the name of the admin responsible
+ *  @return	1 if alar is loaded
+ */
+stock WarnPlayer(const playername[], const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false)
+{
+	return CallRemoteFunction("alar_Warn", "ssssi", playername, reason, adminname, adminip, hidename);
+}
+
+/**
+ *  Warn a player
+ *  @param	playerid	The playerid for the player to be warned
+ *  @param	reason		The reason for the warning
+ *  @param	adminname	The name of the admin responsible the warning
+ *  @param	adminip		The IP of the admin responsible the warning
+ *  @param	hidename	Hide the name of the admin responsible
+ *  @return	1 if alar is loaded
+ */
+stock WarnPlayerid(playerid, const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false)
+{
+	return CallRemoteFunction("alar_WarnPlayer", "isssi", playerid, reason, adminname, adminip, hidename);
 }
 
 /**
@@ -325,18 +728,31 @@ stock alarSetPlayerVirtualWorld(playerid, worldid)
 	}
 	return 0;
 }
-#define SetPlayerVirtualWorld(%1)	alarSetPlayerVirtualWorld(%1)
+#if defined _ALS_SetPlayerVirtualWorld
+    #undef SetPlayerVirtualWorld
+#else
+    #define _ALS_SetPlayerVirtualWorld
+#endif
+#define SetPlayerVirtualWorld	alarSetPlayerVirtualWorld
 
 stock alarPutPlayerInVehicle(playerid, vehicleid, seatid)
 {
-	new vid = GetPlayerVehicleID(playerid),
-		ret = PutPlayerInVehicle(playerid, vehicleid, seatid);
-	if(vid && ret && vid != vehicleid) {
-		CallRemoteFunction("alar_OnPlayerVehicleChange", "ii", playerid, vehicleid);
+	if(IsPlayerInAnyVehicle(playerid)) {
+		new vid = GetPlayerVehicleID(playerid),
+			ret = PutPlayerInVehicle(playerid, vehicleid, seatid);
+		if(vid && ret && vid != vehicleid) {
+			CallRemoteFunction("alar_OnPlayerVehicleChange", "ii", playerid, vehicleid);
+		}
+		return ret;
 	}
-	return ret;
+	return PutPlayerInVehicle(playerid, vehicleid, seatid);
 }
-#define PutPlayerInVehicle(%1)		alarPutPlayerInVehicle(%1)
+#if defined _ALS_PutPlayerInVehicle
+    #undef PutPlayerInVehicle
+#else
+    #define _ALS_PutPlayerInVehicle
+#endif
+#define PutPlayerInVehicle		alarPutPlayerInVehicle
 
 stock alarPlayerSpectatePlayer(playerid, targetplayerid, mode = SPECTATE_MODE_NORMAL)
 {
@@ -346,7 +762,12 @@ stock alarPlayerSpectatePlayer(playerid, targetplayerid, mode = SPECTATE_MODE_NO
 	}
 	return 0;
 }
-#define PlayerSpectatePlayer(%1)	alarPlayerSpectatePlayer(%1)
+#if defined _ALS_PlayerSpectatePlayer
+    #undef PlayerSpectatePlayer
+#else
+    #define _ALS_PlayerSpectatePlayer
+#endif
+#define PlayerSpectatePlayer	alarPlayerSpectatePlayer
 
 stock alarPlayerSpectateVehicle(playerid, targetvehicleid, mode = SPECTATE_MODE_NORMAL)
 {
@@ -356,7 +777,12 @@ stock alarPlayerSpectateVehicle(playerid, targetvehicleid, mode = SPECTATE_MODE_
 	}
 	return 0;
 }
-#define PlayerSpectateVehicle(%1)	alarPlayerSpectateVehicle(%1)
+#if defined _ALS_PlayerSpectateVehicle
+    #undef PlayerSpectateVehicle
+#else
+    #define _ALS_PlayerSpectateVehicle
+#endif
+#define PlayerSpectateVehicle	alarPlayerSpectateVehicle
 
 // --------------------------------------------------
 // Forwards (Callback declarations)
@@ -371,3 +797,6 @@ forward OnAdminLogout(playerid);
 forward OnAdminStateChange(playerid, newstate, oldstate);
 forward OnAdminNameChange(playerid, newname[], oldname[]);
 forward OnAdminSpectate(playerid, newid, oldid);
+
+forward IsPlayerLoggedIn(playerid);
+

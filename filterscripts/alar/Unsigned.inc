@@ -33,7 +33,6 @@
 
 #define _alar_unsigned_included
 
-#include <a_samp>
 
 /*
 	native Unsigned:umul(Unsigned:oper1, Unsigned:oper2);
@@ -45,6 +44,8 @@
 	native ustr(Unsigned:number);
 	native Unsigned:stru(const string[]);
 */
+
+#include <a_samp>
 
 
 forward Unsigned:umul(Unsigned:oper1, Unsigned:oper2);
@@ -528,6 +529,6 @@ stock ustr(Unsigned:number)
  */
 stock Unsigned:stru(const string[])
 {
-	if(string[0] == '-') return Unsigned:0;
+	if(ispacked(string) ? string{0} == '-' : string[0] == '-') return Unsigned:0;
 	return Unsigned:strval(string);
 }

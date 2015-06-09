@@ -47,42 +47,79 @@
 	native isValidGameText(const string[]);
 	native ReturnGameText(const text[]);
 	native DatePlusHours(Float:addhours, &year, &month, &day, &Float:hour);
+	native ReturnTimeStamp();
 */
 
-#include <alar/YSI_bit>
-#include <alar/String>
+#include <a_samp>
+
+#tryinclude "alar/YSI_bit"
+#if !defined _YSI_bit_included
+	#include <alar/YSI_bit>
+#endif
+
+#tryinclude "alar/YSI_foreach"
+#if !defined _foreach_included
+	#tryinclude <alar/YSI_foreach>
+#endif
+
+#tryinclude "alar/String"
+#if !defined _alar_string_included
+	#include <alar/String>
+#endif
 
 #if defined INVALID_TEXT_DRAW
 	#undef INVALID_TEXT_DRAW
-	#define INVALID_TEXT_DRAW (Text:0xFFFF)
+#endif
+#define INVALID_TEXT_DRAW (Text:0xFFFF)
+
+#if defined INVALID_3DTEXT_ID
+	#undef INVALID_3DTEXT_ID
+#endif
+#define INVALID_3DTEXT_ID (Text3D:0xFFFF)
+
+#if defined INVALID_PLAYER3DTEXT_ID
+	#undef INVALID_PLAYER3DTEXT_ID
+#endif
+#define INVALID_PLAYER3DTEXT_ID (PlayerText3D:0xFFFF)
+
+#if !defined FLOAT_INF
+	#define FLOAT_INF (Float:0x7F800000)
 #endif
 
-#if !defined INFINITY
-	#define INFINITY (Float:0x7F800000)
+#if !defined FLOAT_NAN
+	#define FLOAT_NAN (Float:0xFFFFFFFF)
+#endif
+
+#if !defined MAX_COMM_FUNC_NAME
+	#define MAX_COMM_FUNC_NAME (32)
 #endif
 
 #if !defined WEAPON_NVGOGGLES
-	#define WEAPON_NVGOGGLES	44
+	#define WEAPON_NVGOGGLES	(44)
 #endif
 
 #if !defined WEAPON_IRGOGGLES
-	#define WEAPON_IRGOGGLES	45
+	#define WEAPON_IRGOGGLES	(45)
 #endif
 
 #if !defined INVALID_WEAPON_ID
-	#define INVALID_WEAPON_ID	-1
+	#define INVALID_WEAPON_ID	(-1)
 #endif
 
 #if !defined INVALID_WEAPON_SLOT
-	#define INVALID_WEAPON_SLOT	-1
+	#define INVALID_WEAPON_SLOT	(-1)
 #endif
 
 #if !defined MAX_IP
-	#define MAX_IP	16
+	#define MAX_IP	(16)
 #endif
 
 #if !defined MAX_INPUT
-	#define MAX_INPUT	128
+	#define MAX_INPUT	(128)
+#endif
+
+#if !defined MAX_TIMESTAMP
+	#define MAX_TIMESTAMP	(30)
 #endif
 
 /**
@@ -105,9 +142,16 @@ stock ReturnPlayerName(playerid)
 stock ReturnPlayerID(const playername[])
 {
 	if(playername[0] == 0) return INVALID_PLAYER_ID;
-	new pid = INVALID_PLAYER_ID;
-	for(new i, maxp = GetMaxPlayers(), bool:found, pname[MAX_PLAYER_NAME], length = strlen(playername); i < maxp; i++) {
+	new pid = INVALID_PLAYER_ID,
+		bool:found,
+		pname[MAX_PLAYER_NAME],
+		length = strlen(playername);
+#if defined _foreach_included
+	foreach(Player, i) {
+#else 
+	for(new i, maxp = GetMaxPlayers(); i < maxp; i++) {
 		if(!IsPlayerConnected(i)) continue;
+#endif
 		GetPlayerName(i, pname, sizeof(pname));
 		new j = strfind(pname, playername, true);
 		if((j == 0) && (strlen(pname) == length)) return i;
@@ -164,28 +208,6 @@ stock ReturnWeaponName(weaponid)
 		default: GetWeaponName(weaponid, wname, sizeof(wname));
 	}
 	return wname;
-}
-
-/**
- *	Return the default colour for a player
- *	@param	playerid	The playerid of the player
- *	@return The default colour of the player
- */
-stock GetDefaultColour(playerid)
-{
-	static const playerColors[] = {
-		0xFF8C13FF, 0xC715FFFF, 0x20B2AAFF, 0xDC143CFF, 0x6495EDFF, 0xf0e68cFF, 0x778899FF, 0xFF1493FF, 0xF4A460FF, 0xEE82EEFF,
-		0xFFD720FF, 0x8b4513FF, 0x4949A0FF, 0x148b8bFF, 0x14ff7fFF, 0x556b2fFF, 0x0FD9FAFF, 0x10DC29FF, 0x534081FF, 0x0495CDFF,
-		0xEF6CE8FF, 0xBD34DAFF, 0x247C1BFF, 0x0C8E5DFF, 0x635B03FF, 0xCB7ED3FF, 0x65ADEBFF, 0x5C1ACCFF, 0xF2F853FF, 0x11F891FF,
-		0x7B39AAFF, 0x53EB10FF, 0x54137DFF, 0x275222FF, 0xF09F5BFF, 0x3D0A4FFF, 0x22F767FF, 0xD63034FF, 0x9A6980FF, 0xDFB935FF,
-		0x3793FAFF, 0x90239DFF, 0xE9AB2FFF, 0xAF2FF3FF, 0x057F94FF, 0xB98519FF, 0x388EEAFF, 0x028151FF, 0xA55043FF, 0x0DE018FF,
-		0x93AB1CFF, 0x95BAF0FF, 0x369976FF, 0x18F71FFF, 0x4B8987FF, 0x491B9EFF, 0x829DC7FF, 0xBCE635FF, 0xCEA6DFFF, 0x20D4ADFF,
-		0x2D74FDFF, 0x3C1C0DFF, 0x12D6D4FF, 0x48C000FF, 0x2A51E2FF, 0xE3AC12FF, 0xFC42A8FF, 0x2FC827FF, 0x1A30BFFF, 0xB740C2FF,
-		0x42ACF5FF, 0x2FD9DEFF, 0xFAFB71FF, 0x05D1CDFF, 0xC471BDFF, 0x94436EFF, 0xC1F7ECFF, 0xCE79EEFF, 0xBD1EF2FF, 0x93B7E4FF,
-		0x3214AAFF, 0x184D3BFF, 0xAE4B99FF, 0x7E49D7FF, 0x4C436EFF, 0xFA24CCFF, 0xCE76BEFF, 0xA04E0AFF, 0x9F945CFF, 0xDCDE3DFF,
-		0x10C9C5FF, 0x70524DFF, 0x0BE472FF, 0x8A2CD7FF, 0x6152C2FF, 0xCF72A9FF, 0xE59338FF, 0xEEDC2DFF, 0xD8C762FF, 0x3FE65CFF
-	};
-	return playerColors[playerid % sizeof(playerColors)];
 }
 
 /**
@@ -249,7 +271,7 @@ stock bool:isValidName(const string[], wildcards=false)
 	new chars, bool:wildfound;
 	for(new pos; string[pos] != '\0'; pos++) {
 		switch(string[pos]) {
-			case 'a'..'z', 'A'..'Z', '0'..'9', '_', '[', ']': chars++;
+			case 'a'..'z', 'A'..'Z', '0'..'9', '_', '[', ']', '@', '$', '=', '.', '(', ')': chars++;
 			case '?': {
 				if(!wildcards) return false;
 				chars++;
@@ -261,7 +283,7 @@ stock bool:isValidName(const string[], wildcards=false)
 			default: return false;
 		}
 	}
-	return (wildfound || chars >= 3) && (chars <= 16);
+	return (wildfound || chars >= 3) && (chars <= 20);
 }
 
 /**
@@ -279,25 +301,26 @@ stock SendWrappedMessageToPlayer(playerid, colour, const msg[], maxlength=85, co
 		SendClientMessage(playerid, colour, msg);
 		return;
 	}
-	new string[MAX_INPUT], idx, space, plen, bool:useprefix;
-	for(new i;i<length;i++) {
-		if(i-idx+plen >= maxlength) {
-			if(idx == space || i-space >= 25) {
+	new string[MAX_INPUT], idx;
+	for(new i, space, plen, bool:useprefix; i < length; i++) {
+		if(i - idx + plen >= maxlength) {
+			if(idx == space || i - space >= 25) {
 				strmid(string, msg, idx, i);
 				idx = i;
-			}
-			else {
+			} else {
 				strmid(string, msg, idx, space);
-				idx = space+1;
+				idx = space + 1;
 			}
-			if(useprefix) strins(string, prefix, 0);
-			else {
+			if(useprefix) {
+				strins(string, prefix, 0);
+			} else {
 				plen = strlen(prefix);
 				useprefix = true;
 			}
 			SendClientMessage(playerid, colour, string);
+		} else if(msg[i] == ' ') {
+			space = i;
 		}
-		else if(msg[i]==' ') space = i;
 	}
 	if(idx < length) {
 		strmid(string, msg, idx, length);
@@ -319,41 +342,54 @@ stock SendWrappedMessageToClients(Bit:players[Bit_Bits(MAX_PLAYERS)], colour, co
 {
 	new length = strlen(msg);
 	if(length <= maxlength) {
+#if defined _foreach_included
+		foreach(Player, i) {
+#else
 		for(new i, j = GetMaxPlayers(); i < j; i++) {
+#endif
 			if(Bit_GetBit(players, i)) {
 				SendClientMessage(i, colour, msg);
 			}
 		}
 		return;
 	}
-	new string[MAX_INPUT], idx, space, plen, bool:useprefix;
-	for(new i;i<length;i++) {
-		if(i-idx+plen >= maxlength) {
-			if(idx == space || i-space >= 25) {
+	new string[MAX_INPUT], idx;
+	for(new i, space, plen, bool:useprefix; i < length; i++) {
+		if(i - idx + plen >= maxlength) {
+			if(idx == space || i - space >= 25) {
 				strmid(string, msg, idx, i);
 				idx = i;
-			}
-			else {
+			} else {
 				strmid(string, msg, idx, space);
-				idx = space+1;
+				idx = space + 1;
 			}
-			if(useprefix) strins(string, prefix, 0);
-			else {
+			if(useprefix) {
+				strins(string, prefix, 0);
+			} else {
 				plen = strlen(prefix);
 				useprefix = true;
 			}
+#if defined _foreach_included
+			foreach(Player, j) {
+#else
 			for(new j, k = GetMaxPlayers(); j < k; j++) {
+#endif
 				if(Bit_GetBit(players, j)) {
 					SendClientMessage(j, colour, string);
 				}
 			}
+		} else if(msg[i] == ' ') {
+			space = i;
 		}
-		else if(msg[i]==' ') space = i;
 	}
 	if(idx < length) {
 		strmid(string, msg, idx, length);
 		strins(string, prefix, 0);
+#if defined _foreach_included
+		foreach(Player, i) {
+#else
 		for(new i, j = GetMaxPlayers(); i < j; i++) {
+#endif
 			if(Bit_GetBit(players, i)) {
 				SendClientMessage(i, colour, string);
 			}
@@ -376,25 +412,26 @@ stock SendWrappedMessageToAll(colour, const msg[], maxlength=85, const prefix[]=
 		SendClientMessageToAll(colour, msg);
 		return;
 	}
-	new string[MAX_INPUT], idx, space, plen, bool:useprefix;
-	for(new i;i<length;i++) {
-		if(i-idx+plen >= maxlength) {
-			if(idx == space || i-space >= 25) {
+	new string[MAX_INPUT], idx;
+	for(new i, space, plen, bool:useprefix; i < length; i++) {
+		if(i - idx + plen >= maxlength) {
+			if(idx == space || i - space >= 25) {
 				strmid(string, msg, idx, i);
 				idx = i;
-			}
-			else {
+			} else {
 				strmid(string, msg, idx, space);
-				idx = space+1;
+				idx = space + 1;
 			}
-			if(useprefix) strins(string, prefix, 0);
-			else {
+			if(useprefix) {
+				strins(string, prefix, 0);
+			} else {
 				plen = strlen(prefix);
 				useprefix = true;
 			}
 			SendClientMessageToAll(colour, string);
+		} else if(msg[i] == ' ') {
+			space = i;
 		}
-		else if(msg[i]==' ') space = i;
 	}
 	if(idx < length) {
 		strmid(string, msg, idx, length);
@@ -457,12 +494,17 @@ stock FindClosestPlayer(playerid)
 		Float:tmpy,
 		Float:tmpz,
 		world,
-		sameid = INVALID_PLAYER_ID, Float:samedist = INFINITY,
-		id = INVALID_PLAYER_ID, Float:dist = INFINITY;
+		sameid = INVALID_PLAYER_ID, Float:samedist = FLOAT_INF,
+		id = INVALID_PLAYER_ID, Float:dist = FLOAT_INF;
 
 	GetPlayerPos(playerid, px, py, pz);
 	world = GetPlayerVirtualWorld(playerid);
-	for(new i; i < GetMaxPlayers(); i++) {
+#if defined _foreach_included
+	foreach(Player, i) {
+#else
+	for(new i, j = GetMaxPlayers(); i < j; i++) {
+		if(!IsPlayerConnected(i)) continue;
+#endif
 		if(i != playerid && IsSpawned(i)) {
 			GetPlayerPos(i, tmpx, tmpy, tmpz);
 			new Float:tmpdist = tmpx * tmpx + tmpy * tmpy + tmpz * tmpz;
@@ -521,37 +563,36 @@ stock ReturnGameText(const text[])
 }
 
 /**
- *	Adds a number of hours to the current time
- *	@param	addhours	The number of hours to add
- *	@param	year		The year of the current time plus the hours
- *	@param	month		The month of the current time plus the hours
- *	@param	day			The day of the current time plus the hours
- *	@param	hour		The hour of the current time plus the hours
+ *	Get a timestamp for the current server time
+ *	@return A string containing the timestamp formatted as 'YYYY-MM-DD HH:MM:SS'
  */
-stock DatePlusHours(Float:addhours, &year, &month, &day, &Float:hour)
+stock ReturnTimeStamp()
 {
-	new currenthour,
-		currentminute,
-		currentsecond;
+	new datetime[MAX_TIMESTAMP],
+		year, month, day,
+		hour, minute, second;
 
 	getdate(year, month, day);
-	gettime(currenthour, currentminute, currentsecond);
-	hour = currenthour + floatdiv(currentminute, 60) + floatdiv(currentminute, 3600) + addhours;
+	gettime(hour, minute, second);
+	format(datetime, sizeof(datetime), "%04i-%02i-%02i %02i:%02i:%02i", year, month, day, hour, minute, second);
 
-	day += floatround(hour / 24, floatround_tozero);
-	hour = floatsub(hour, floatround(hour / 24, floatround_tozero) * 24);
-
-	new const DaysInMonths[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-	for(new thismonth;;) {
-		thismonth = DaysInMonths[month-1] + ((month == 2 && (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))) ? 1 : 0);
-		if(day <= thismonth) return;
-		month++;
-		day -= thismonth;
-		if(month == 13) {
-			year++;
-			month = 1;
-		}
-	}
+	return datetime;
 }
 
+/**
+ *	Check if a timestamp is valid (quick and ugly)
+ *	@return true if the string is in the form 'YYYY-MM-DD HH:MM:SS'
+ */
+stock bool:isValidTimestamp(const string[])
+{
+	new year, month, day,
+		hour, minute, second;
+
+	if(!strwild("????-??-?? ??:??:??", string) || strscan(string, "-- iii -: iii", year, month, day, hour, minute, second)) return false;
+	return 1970 <= year <= 2038 &&
+			1 <= month <= 12 &&
+			00 <= day <= 31 &&
+			00 <= hour <= 23 &&
+			00 <= minute <= 59 &&
+			00 <= second <= 59;
+}

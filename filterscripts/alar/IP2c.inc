@@ -31,19 +31,25 @@
 
 	native Unsigned:IP2Code(const IP[]);
 	native Code2IP(Unsigned:IPCode);
+	native IPsubnet(const IP[]);
 
-	native ReturnCuntCode(const IP[]);
+	native ReturnCuntCode(DB:db, const IP[]);
 	native ReturnCuntName(const cuntcode[]);
-	native CreateCuntDefinitions(const destfolder[]=IP_DEFINITIONS);
+	native CreateCuntDefinitions(DB:db);
 */
 
 #include <a_samp>
-#include <alar/Functions>
-#include <alar/Unsigned>
 
-#if !defined IP_DEFINITIONS
-	#error IP_DEFINITIONS has not been defined
+#tryinclude "alar/Functions"
+#if !defined _alar_functions_included
+	#include <alar/Functions>
 #endif
+
+#tryinclude "alar/Unsigned"
+#if !defined _alar_unsigned_included
+	#include <alar/Unsigned>
+#endif
+
 
 #if !defined MAX_IP
 	#define MAX_IP 16
@@ -521,11 +527,26 @@ stock Code2IP(Unsigned:IPCode)
 }
 
 /**
- *  Return a ISO 3166-1 alpha-2 country code from an IPv4 address string
+ *  Returns the subnet of an IPv4 address
+ *  @param	IP	The IPv4 address string
+ *  @return	An IPv4 address code for the IPv4 address string
+ */
+stock IPsubnet(const IP[])
+{
+	new Unsigned:IPCode = IP2Code(IP),
+		IPSubnet[MAX_IP];
+	if(IPCode) {
+		format(IPSubnet, sizeof(IPSubnet), "%i.%i.*.*", (_:IPCode & 0xFF000000) >>> 24, (_:IPCode & 0x00FF0000) >> 16);
+	}
+	return IPSubnet;
+}
+
+/**
+ *  Return an ISO 3166-1 alpha-2 country code from an IPv4 address string
  *  @param	IP	The IPv4 address string
  *  @return	A string containing the a 3166-1 alpha-2 country code, or a blank string if the ip is unknown
  */
-stock ReturnCuntCode(const IP[])
+stock ReturnCuntCode(DB:db, const IP[])
 {
 	new Unsigned:IPcode = IP2Code(IP),
 		cuntcode[3];
@@ -545,35 +566,22 @@ stock ReturnCuntCode(const IP[])
 		return cuntcode;
 	}
 
-	new filename[MAX_STRING];
-	format(filename, sizeof(filename), IP_DEFINITIONS "%i.dat", strval(IP));
-
-	new File:handle = fopen(filename, io_read);
-	if(handle) {
-		new line[MAX_STRING];
-		while(fread(handle, line)) {
-			new Unsigned:start, Unsigned:end;
-			if(!strscan(line, "uus", start, end, cuntcode, sizeof(cuntcode))) {
-				if(start <= IPcode) {
-					if(IPcode <= end) {
-						fclose(handle);
-						return cuntcode;
-					}
-				} else {
-					break;
-				}
-			}
+	if(db) {
+		new string[110];
+		format(string, sizeof(string), "SELECT * FROM `Countries` WHERE ( %s BETWEEN `start` AND `end` ) LIMIT 1", ustr(IPcode));
+		new DBResult:result = db_query(db, string);
+		if(db_num_rows(result)) {
+			db_get_field_assoc(result, "code", cuntcode, sizeof(cuntcode));
+			db_free_result(result);
+			return cuntcode;
 		}
-		fclose(handle);
-	} else {
-		printf("Warning: Missing IP definitions (%s)", filename);
+		db_free_result(result);
 	}
-	cuntcode[0] = '\0';
 	return cuntcode;
 }
 
 /**
- *  Return a country name from a ISO 3166-1 alpha-2 country code
+ *  Return a country name from an ISO 3166-1 alpha-2 country code
  *  @param	cuntcode	The ISO 3166-1 alpha-2 country code
  *  @return	A string containing the country name or "Unknown" if the name could not be found
  */
@@ -593,110 +601,60 @@ stock ReturnCuntName(const cuntcode[])
 
 /**
  *	Create the IP definition files from a comma seperated cvs file
- *	@param destfolder	The folder to put the definition files in
-
+ *	Supports cvs files from the following sources:
+ *		http://www.maxmind.com/app/geoip_country	(recommended)
+ *		http://software77.net/geo-ip
+ *		http://ip-to-country.webhosting.info
+ *	@param db	The database to store the definitions
+ *	@return The number of entries written
  */
-stock CreateCuntDefinitions(const destfolder[]=IP_DEFINITIONS)
+stock CreateCuntDefinitions(DB:db)
 {
+	if(!db) return 0;
+
 	static const inputfiles[][][] = {
 		{"GeoIPCountryWhois.csv", "-, _ _ s s s "},
+		{"IpToCountry.csv", "-, s s _ _ s "},
 		{"ip-to-country.csv", "-, s s s "}
 	};
 
-	new File:rhandle,
-		inputidx,
-		counter,
-		string[MAX_STRING];
+	// I don't think this does anything since the sqlite version samp uses is over 2 and a half years old...
+	db_free_result(db_query(db, "SAVEPOINT CreateCuntDefinitions"));
 
-	for(; inputidx < sizeof(inputfiles); inputidx++) {
-		format(string, sizeof(string), "%s%s", destfolder, inputfiles[inputidx][0]);
+	db_free_result(db_query(db, "CREATE TABLE IF NOT EXISTS `Countries` ( `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `code` TEXT NOT NULL , PRIMARY KEY ( `start` , `end` ) ); DELETE FROM `Countries`"));
 
-		// look for an input file
-		while(!(rhandle = fopen(string, io_read))) {
-			new bool:found;
-			for(new idx = strlen(string) - 1; idx > 0; idx--) {
-				if(string[idx] == '\\' || string[idx] == '/') {
-					if(found) {
-						string[idx+1] = '\0';
-						strcat(string, inputfiles[inputidx][0]);
-						continue;
-					} else {
-						found = true;
-					}
-				}
-			}
-			if(found) {
-				strcpy(string, inputfiles[inputidx][0]);
-			} else {
-				break;
-			}
-		}
-
-		// process file
-		if(rhandle) {
-			format(string, sizeof(string), "%s0.dat", destfolder);
-			new octet,
-				File:whandle = fopen(string, io_write);
-
+	new counter;
+	for(new inputidx, length, File:rhandle, string[MAX_STRING]; inputidx < sizeof(inputfiles); inputidx++) {
+		if((rhandle = fopen(inputfiles[inputidx][0], io_read))) {
 			while(fread(rhandle, string)) {
+				if(string[0] == '#') continue;
+
 				new quotedstart[13], quotedend[13], quotedcode[5];
 				strscan(string, inputfiles[inputidx][1], quotedstart, sizeof(quotedstart), quotedend, sizeof(quotedend), quotedcode, sizeof(quotedcode));
 
-				new value = strlen(quotedstart);
-				if(value < 2 || quotedstart[value-1] != '"') continue;		// " stupid notepad++ function list
-				quotedstart[value-1] = '\0';
+				length = strlen(quotedstart);
+				if(length < 2 || quotedstart[length-1] != '"') continue;	// " stupid notepad++ function list
+				quotedstart[length-1] = '\0';
 
-				value = strlen(quotedend);
-				if(value < 2 || quotedend[value-1] != '"') continue;		// " stupid notepad++ function list
-				quotedend[value-1] = '\0';
+				length = strlen(quotedend);
+				if(length < 2 || quotedend[length-1] != '"') continue;		// " stupid notepad++ function list
+				quotedend[length-1] = '\0';
 
-				value = strlen(quotedcode);
-				if(value < 2 || quotedcode[value-1] != '"') continue;		// " stupid notepad++ function list
-				quotedcode[value-1] = '\0';
+				length = strlen(quotedcode);
+				if(length < 2 || quotedcode[length-1] != '"') continue;		// " stupid notepad++ function list
+				quotedcode[length-1] = '\0';
 
-				new Unsigned:startcode = strval(quotedstart[1]),
-					Unsigned:endcode = strval(quotedend[1]);
+				format(string, sizeof(string), "INSERT INTO `Countries` ( `start` , `end` , `code` ) VALUES ( %s , %s , upper( '%s' ) )", quotedstart[1], quotedend[1], quotedcode[1]);
+				db_free_result(db_query(db, string));
 
-				// empty files
-				while(octet < _:startcode >>> 24) {
-					if(whandle) fclose(whandle);
-					octet++;
-					format(string, sizeof(string), "%s%i.dat", destfolder, octet);
-					whandle = fopen(string, io_write);
-				}
-
-				// range covers more than one file
-				for(; _:endcode >>> 24 > octet;) {
-					octet++;
-					if(whandle) {
-						format(string, sizeof(string), "%s %s %s\r\n", ustr(startcode), ustr(usub(Unsigned:(octet << 24), Unsigned:1)), quotedcode[1]);
-						fwrite(whandle, string);
-						fclose(whandle);
-						counter++;
-					}
-					startcode = Unsigned:(octet << 24);
-					format(string, sizeof(string), "%s%i.dat", destfolder, octet);
-					whandle = fopen(string, io_write);
-				}
-
-				if(whandle) {
-					format(string, sizeof(string), "%s %s %s\r\n", ustr(startcode), ustr(endcode), quotedcode[1]);
-					fwrite(whandle, string);
-					counter++;
-				}
-			}
-			while(octet < 255) {
-				octet++;
-				if(whandle) fclose(whandle);
-				format(string, sizeof(string), "%s%i.dat", destfolder, octet);
-				whandle = fopen(string, io_write);
-			}
-			if(whandle) {
-				fclose(whandle);
+				counter++;
 			}
 			fclose(rhandle);
-			return counter;
+			break;
 		}
 	}
+
+	db_free_result(db_query(db, "RELEASE SAVEPOINT CreateCuntDefinitions"));
+
 	return counter;
 }

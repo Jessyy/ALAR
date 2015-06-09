@@ -32,18 +32,35 @@
 /*
 	native ReturnVehicleName(modelid);
 	native ReturnPlayerVehicleName(playerid);
-	native ReturnVehicleID(const vname[]);
+	native ReturnVehicleModel(const vname[]);
 	native GetServerVehicleInfo(&numvehicles, &numtypes);
 	native isValidNosVehicle(model);
 	native isValidVehicleMod(model, componentid);
+	native GetVehicleSeats(model);
+	native Bit:GetVehicleUsedSeats(vehicleid);
+	native IsVehicleSeatFree(vehicleid, seatid);
+	native GetVehicleFreeSeat(vehicleid, includedriver=true);
 	native ExistsVehicleModel(model);
 	native GetCarColour(const string[]);
 */
 
 #include <a_samp>
 
-#define MAX_VEHICLE_MODELS	128
+#tryinclude "alar/YSI_bit"
+#if !defined _YSI_bit_included
+	#include <alar/YSI_bit>
+#endif
+
+#tryinclude "alar/YSI_foreach"
+#if !defined _foreach_included
+	#tryinclude <alar/YSI_foreach>
+#endif
+
+
+#define MAX_VEHICLE_MODELS	150
 #define INVALID_MODEL_ID	0
+#define INVALID_SEAT_ID		-1
+#define MAX_SEATS			10
 #define MAX_CAR_COLOUR_NAME	15
 #define UNKNOWN_CAR_COLOUR	0xFFFF
 #define VEHICLETOBIT(%1)	(1<<((%1-400)&0x1F))
@@ -268,6 +285,221 @@ stock static const scInvalidNosVehicles[] = {
 	463, 464, 465, 468, 469, 472, 473, 476, 481, 484, 487, 488, 493, 497,
 	501, 509, 510, 511, 512, 513, 519, 520, 521, 522, 523, 537, 538, 548,
 	553, 563, 569, 570, 571, 577, 581, 584, 586, 590, 591, 592, 593, 595
+};
+
+stock static const scVehicleSeats[212] = {
+	4,	//Landstalker
+	2,	//Bravura
+	2,	//Buffalo
+	2,	//Linerunner
+	4,	//Perennial
+	2,	//Sentinel
+	1,	//Dumper
+	2,	//Firetruck
+	2,	//Trashmaster
+	4,	//Stretch
+	2,	//Manana
+	2,	//Infernus
+	2,	//Voodoo
+	4,	//Pony
+	2,	//Mule
+	2,	//Cheetah
+	4,	//Ambulance
+	2,	//Leviathan
+	4,	//Moonbeam
+	2,	//Esperanto
+	4,	//Taxi
+	4,	//Washington
+	2,	//Bobcat
+	2,	//Mr Whoopee
+	2,	//BF Injection
+	1,	//Hunter
+	4,	//Premier
+	4,	//Enforcer
+	4,	//Securicar
+	2,	//Banshee
+	1,	//Predator
+	MAX_PLAYERS,	//Bus	?????
+	1,	//Rhino
+	2,	//Barracks
+	2,	//Hotknife
+	0,	//Article Trailer
+	2,	//Previon
+	MAX_PLAYERS,	//Coach	?????
+	4,	//Cabbie
+	2,	//Stallion
+	4,	//Rumpo
+	1,	//RC Bandit
+	2,	//Romero
+	2,	//Packer
+	2,	//Monster
+	4,	//Admiral
+	1,	//Squalo
+	2,	//Seasparrow
+	2,	//Pizzaboy
+	2,	//Tram	?????
+	0,	//Article Trailer 2
+	2,	//Turismo
+	1,	//Speeder
+	1,	//Reefer
+	1,	//Tropic
+	2,	//Flatbed
+	2,	//Yankee
+	2,	//Caddy
+	4,	//Solair
+	4,	//Berkley's RC Van
+	2,	//Skimmer
+	2,	//PCJ-600
+	2,	//Faggio
+	2,	//Freeway
+	1,	//RC Baron
+	1,	//RC Raider
+	4,	//Glendale
+	4,	//Oceanic
+	2,	//Sanchez
+	2,	//Sparrow
+	4,	//Patriot
+	2,	//Quad
+	1,	//Coastguard
+	1,	//Dinghy
+	2,	//Hermes
+	2,	//Sabre
+	1,	//Rustler
+	2,	//ZR-350
+	2,	//Walton
+	4,	//Regina
+	2,	//Comet
+	1,	//BMX
+	4,	//Burrito
+	3,	//Camper
+	1,	//Marquis
+	1,	//Baggage
+	1,	//Dozer
+	4,	//Maverick
+	4,	//News Chopper
+	2,	//Rancher
+	4,	//FBI Rancher
+	2,	//Virgo
+	2,	//Greenwood
+	1,	//Jetmax
+	2,	//Hotring
+	2,	//Sandking
+	2,	//Blista Compact
+	4,	//Police Maverick
+	4,	//Boxville
+	2,	//Benson
+	2,	//Mesa
+	1,	//RC Goblin
+	2,	//Hotring Racer A
+	2,	//Hotring Racer B
+	2,	//Bloodring Banger
+	2,	//Rancher
+	2,	//Super GT
+	2,	//Elegant
+	2,	//Journey
+	1,	//Bike
+	1,	//Mountain Bike
+	2,	//Beagle
+	1,	//Cropduster
+	1,	//Stuntplane
+	2,	//Petrol Tanker
+	2,	//Roadtrain
+	2,	//Nebula
+	2,	//Majestic
+	2,	//Buccaneer
+	1,	//Shamal
+	1,	//Hydra
+	2,	//FCR-900
+	2,	//NRG-500
+	2,	//HPV1000
+	2,	//Cement Truck
+	2,	//Towtruck
+	2,	//Fortune
+	2,	//Cadrona
+	2,	//FBI Truck
+	2,	//Willard
+	1,	//Forklift
+	1,	//Tractor
+	1,	//Combine Harvester
+	2,	//Feltzer
+	2,	//Remington
+	2,	//Slamvan
+	2,	//Blade
+	2,	//Freight	?????
+	2,	//Brown Streak
+	1,	//Vortex
+	4,	//Vincent
+	2,	//Bullet
+	2,	//Clover
+	2,	//Sadler
+	2,	//Firetruck LA
+	2,	//Hustler
+	2,	//Intruder
+	2,	//Primo
+	2,	//Cargobob
+	2,	//Tampa
+	2,	//Sunrise
+	4,	//Merit
+	2,	//Utility Van
+	1,	//Nevada
+	3,	//Yosemite
+	2,	//Windsor
+	2,	//Monster A
+	2,	//Monster B
+	2,	//Uranus
+	2,	//Jester
+	4,	//Sultan
+	4,	//Stratum
+	2,	//Elegy
+	2,	//Raindance
+	1,	//RC Tiger
+	2,	//Flash
+	4,	//Tahoma
+	4,	//Savanna
+	1,	//Bandito
+	0,	//Freight Flat Carriage
+	6,	//Streak Carriage (no driver though)
+	1,	//Kart
+	1,	//Mower
+	2,	//Dune
+	1,	//Sweeper
+	2,	//Broadway
+	2,	//Tornado
+	2,	//AT-400
+	2,	//DFT-30
+	4,	//Huntley
+	4,	//Stafford
+	2,	//BF-400
+	4,	//Newsvan
+	1,	//Tug
+	0,	//Petrol Trailer
+	2,	//Emperor
+	2,	//Wayfarer
+	2,	//Euros
+	2,	//Hotdog
+	2,	//Club
+	0,	//Freight Box Carriage
+	0,	//Article Trailer 3
+	2,	//Andromada
+	2,	//Dodo
+	2,	//RC Cam
+	1,	//Launch
+	4,	//Police Car (LSPD)
+	4,	//Police Car (SFPD)
+	4,	//Police Car (LVPD)
+	2,	//Police Ranger
+	2,	//Picador
+	1,	//S.W.A.T. Van
+	2,	//Alpha
+	2,	//Phoenix
+	4,	//Shitty Glendale
+	2,	//Shitty Sadler
+	0,	//Baggage Box A
+	0,	//Baggage Box B
+	0,	//Tug Stair Trailer
+	4,	//Boxville
+	0,	//Farm Trailer
+	0	//Utility Trailer
 };
 
 enum E_CARCOLOURS {
@@ -2336,6 +2568,97 @@ stock isValidVehicleMod(model, componentid)
 		return scValidMods[componentid - 1000][model >> 5] & (1 << (model & 0x1F));
 	}
 	return false;
+}
+
+/**
+ *	Get the number of seats in a vehicle
+ *	@param	model		The model of the vehicle
+ *	@return The number of seats in the vehicle
+ */
+stock GetVehicleSeats(model)
+{
+	if(model < 400 || model > 611) return 0;
+	return scVehicleSeats[model - 400];
+}
+
+/**
+ *	Gets a mask of all the seats used in a vehicle
+ *	@param	vehicleid		The vehicleid of the vehicle
+ *	@return The mask of the seats used
+ */
+stock Bit:GetVehicleUsedSeats(vehicleid)
+{
+	new Bit:mask[Bit_Bits(MAX_SEATS)];
+#if defined _foreach_included
+	foreach(Player, i) {
+#else
+	for(new i, j = GetMaxPlayers(); i < j; i++) {
+#endif
+		if(GetPlayerVehicleID(i) == vehicleid) {
+			new seatid = GetPlayerVehicleSeat(i);
+			if(seatid != INVALID_SEAT_ID) {
+				Bit_Let(mask, seatid);
+			}
+		}
+	}
+	if(GetVehicleModel(vehicleid) == 570) {
+		Bit_Let(mask, 0);
+	}
+	return mask;
+}
+
+/**
+ *	Checks if a seat is free in a vehicle
+ *	@param	vehicleid		The vehicleid of the vehicle
+ *	@param	seatid			The seatid in the vehicle
+ *	@return true if the seat is free, otherwise false
+ */
+stock IsVehicleSeatFree(vehicleid, seatid)
+{
+	if(seatid == 0 && GetVehicleModel(vehicleid) == 570) return false;
+#if defined _foreach_included
+	foreach(Player, i) {
+#else
+	for(new i, j = GetMaxPlayers(); i < j; i++) {
+#endif
+		if(GetPlayerVehicleID(i) == vehicleid && GetPlayerVehicleSeat(i) == seatid) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/**
+ *	Finds the first free seat in a vehicle
+ *	@param	vehicleid		The vehicleid of the vehicle
+ *	@param	includedriver	If the driver seat is allowed
+ *	@return The first free seat, or INVALID_SEAT_ID if there are no free seats
+ */
+stock GetVehicleFreeSeat(vehicleid, includedriver=true)
+{
+	new Bit:mask[Bit_Bits(MAX_SEATS)],
+		modelid = GetVehicleModel(vehicleid);
+	if(!includedriver || modelid == 570) {
+		Bit_Let(mask, 0);
+	}
+#if defined _foreach_included
+	foreach(Player, i) {
+#else
+	for(new i, j = GetMaxPlayers(); i < j; i++) {
+#endif
+		if(GetPlayerVehicleID(i) == vehicleid) {
+			new seatid = GetPlayerVehicleSeat(i);
+			if(seatid != INVALID_SEAT_ID) {
+				Bit_Let(mask, seatid);
+			}
+		}
+	}
+	for(new i, j = GetVehicleSeats(modelid); i < j; i++) {
+		if(!Bit_Get(mask, i)) {
+			return i;
+		}
+	}
+	return INVALID_SEAT_ID;
 }
 
 /**

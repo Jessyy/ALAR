@@ -40,6 +40,7 @@
 
 	native straddword(dest[], const source[], maxlength=sizeof(dest));
 	native strcpy(dest[], const source[], maxlength=sizeof(dest), end=cellmax, bool:pack=false);
+	native stock strdelword(const string[], const word[], bool:ignorecase=false);
 	native strfindchar(const string[], const character, bool:ignorecase=false, pos=0);
 	native strfindword(const string[], const word[], bool:ignorecase=false, pos=0);
 	native strmakeroom(string[], space, length=sizeof(string));
@@ -48,7 +49,9 @@
 	native strscan(const string[], const format[], {Float,Unsigned,_}:...);
 	native bool:strsplit(const string[], dest[][], delim, height=sizeof(dest), width=sizeof(dest[]), bool:pack=false);
 	native strstripnewline(string[]);
+	native strstripwhitespace(string[]);
 	native strtok(const string[], &index, seperator=' ', bool:pack=false);
+	native strtruncate(string[], length, const ellipsis[]="...", wordlength=15, maxlength=sizeof(string));
 	native bool:strwild(const wild[], const string[], bool:ignorecase=false);
 */
 
@@ -62,105 +65,9 @@
 	#define cellchars	(cellbits/charbits)
 #endif
 
-
-// Temporary solution for floatstr bugs
-stock Float:floatstrEx(const string[])
-{
-	new buf[20];
-	memcpy(buf, string, 0, sizeof(buf) * 4);
-	return floatstr(buf);
-}
-#define floatstr(%1) floatstrEx(%1)
-
-// Temorary solution for strins crashes
-stock strinsEx(string[], const substr[], pos, maxlength=sizeof(string))
-{
-	if(substr[0] == '\0') return;
-
-	new len = strlen(string),
-		sublen = strlen(substr);
-
-	if(pos > len) pos = len;
-	else if(pos < 0) pos = 0;
-
-	if(ispacked(string)) {
-		maxlength *= cellchars;
-		if(ispacked(substr)) {
-			for(new i = len + sublen < maxlength - 1 ? len : maxlength - sublen - 2; i >= pos; i--) {
-				string{i + sublen} = string{i};
-			}
-			for(new i; i < sublen; i++) {
-				if(pos + i == maxlength - 1) {
-					string{maxlength - 1} = '\0';
-					return;
-				}
-				string{pos + i} = substr{i};
-			}
-		} else {
-			for(new i = len + sublen < maxlength - 1 ? len : maxlength - sublen - 2; i >= pos; i--) {
-				string{i + sublen} = string{i};
-			}
-			for(new i; i < sublen; i++) {
-				if(pos + i == maxlength - 1) {
-					string{maxlength - 1} = '\0';
-					return;
-				}
-				string{pos + i} = substr[i];
-			}
-		}
-	} else {
-		if(ispacked(substr)) {
-			for(new i = len + sublen < maxlength - 1 ? len : maxlength - sublen - 2; i >= pos; i--) {
-				string[i + sublen] = string[i];
-			}
-			for(new i; i < sublen; i++) {
-				if(pos + i == maxlength - 1) {
-					string[maxlength - 1] = '\0';
-					return;
-				}
-				string[pos + i] = substr{i};
-			}
-		} else {
-			for(new i = len + sublen < maxlength - 1 ? len : maxlength - sublen - 2; i >= pos; i--) {
-				string[i + sublen] = string[i];
-			}
-			for(new i; i < sublen; i++) {
-				if(pos + i == maxlength - 1) {
-					string[maxlength - 1] = '\0';
-					return;
-				}
-				string[pos + i] = substr[i];
-			}
-		}
-	}
-}
-#define strins(%1) strinsEx(%1)
-
-// Temporary solution for strval crashes
-stock strvalEx(const string[])
-{
-	new val, i, neg = 1;
-	if(ispacked(string)) {
-		if(string{0} == '-') {
-			i = 1;
-			neg = -1;
-		}
-		for(; i < 20 && string{i} >= '0' && string{i} <= '9'; i++) {
-			val = (val * 10) + string{i} - '0';
-		}
-	} else {
-		if(string[0] == '-') {
-			i = 1;
-			neg = -1;
-		}
-		for(; i < 20 && string[i] >= '0' && string[i] <= '9'; i++) {
-			val = (val * 10) + string[i] - '0';
-		}
-	}
-	return val * neg;
-}
-#define strval(%1) strvalEx(%1)
-
+#if !defined isnull
+	#define isnull(%1) (((%1[0]) == '\0') || (((%1[0]) == '\1') && ((%1[1]) == '\0')))
+#endif
 
 /**
  *  Convert a number to a hexadecimal string
@@ -185,7 +92,7 @@ stock hexstr({Unsigned,Float,_}:number)
  */
 stock bool:isFloat(const string[])
 {
-	if(string[0] == '\0') return false;
+	if(isnull(string)) return false;
 	if(ispacked(string)) {
 		new unary = string{0} == '-' || string{0} == '+',
 			i = unary ? 1 : 0;
@@ -221,7 +128,7 @@ stock bool:isFloat(const string[])
  */
 stock bool:isInteger(const string[])
 {
-	if(string[0] == '\0') return false;
+	if(isnull(string)) return false;
 	if(ispacked(string)) {
 		for(new i = ((string{0} == '-' || string{0} == '+') && string{1} != '\0') ? 1 : 0; string{i} != '\0'; i++) {
 			if(string{i} > '9' || string{i} < '0') {
@@ -245,7 +152,7 @@ stock bool:isInteger(const string[])
  */
 stock bool:isNumeric(const string[])
 {
-	if(string[0] == '\0') return false;
+	if(isnull(string)) return false;
 	if(ispacked(string)) {
 		for(new i; string{i} != '\0'; i++) {
 			if(string{i} > '9' || string{i} < '0') {
@@ -260,23 +167,6 @@ stock bool:isNumeric(const string[])
 		}
 	}
 	return true;
-}
-
-/**
- *  Adds words to a string if they are not already present
- *  @param	dest		The string to add words to
- *  @param	source		The string with space seperated words to add
- *  @param	maxlength	The length of the destination string
- */
-stock straddword(dest[], const source[], maxlength=sizeof(dest))
-{
-	new idx, tmp[MAX_STRING];
-	for(tmp = strtok(source, idx); tmp[0] != '\0'; tmp = strtok(source, idx)) {
-		if(strfindword(dest, tmp) == -1) {
-			strcat(dest, " ", maxlength);
-			strcat(dest, tmp, maxlength);
-		}
-	}
 }
 
 /**
@@ -307,16 +197,35 @@ stock strcpy(dest[], const source[], maxlength=sizeof(dest), end=cellmax, bool:p
 	} else {
 		end = maxlength > end ? end : maxlength - 1;
 		if(ispacked(source)) {
-			for(; source{pos} != '\0' && pos < end; pos++) {
+			dest[end] = '\0';
+			for(pos = end - 1; pos >= 0; pos--) {
 				dest[pos] = source{pos};
 			}
 		} else {
 			for(; source[pos] != '\0' && pos < end; pos++) {
 				dest[pos] = source[pos];
 			}
+			dest[pos] = '\0';
 		}
-		dest[pos] = '\0';
 	}
+}
+
+/**
+ *  Deletes a word from a string
+ *  @param	string		The string to search
+ *  @param	word		The word to search for
+ *  @param	ignorecase	If the search is case insensitive
+ *	@return The number of words deleted
+ */
+stock strdelword(string[], const word[], bool:ignorecase=false)
+{
+	new count;
+	for(new wlen = strlen(word), pos = strfindword(string, word, ignorecase); pos != -1; pos = strfindword(string, word, ignorecase, pos)) {
+		strdel(string, pos, pos + wlen + 1);
+		count++;
+	}
+
+	return count;
 }
 
 /**
@@ -351,7 +260,7 @@ stock strfindchar(const string[], const character, bool:ignorecase=false, pos=0)
  */
 stock strfindword(const string[], const word[], bool:ignorecase=false, pos=0)
 {
-	if(word[0] == '\0') return -1;
+	if(isnull(word)) return -1;
 	new wlen = strlen(word);
 	if(ispacked(string)) {
 		for(new i = strfind(string, word, ignorecase, pos); i != -1; i = strfind(string, word, ignorecase, ++i)) {
@@ -407,14 +316,15 @@ stock strmakeroom(string[], space, length=sizeof(string))
  *  @param	find		The substring to be replaced
  *  @param	replace		The substring to replace with
  *  @param	ignorecase	If the search is case insensitive
+ *  @param	count		The number of substrings to be replaced
  *  @param	maxlength	The length of the source string
  *  @return	The number of substrings replaced
  */
-stock strreplace(string[], const find[], const replace[], bool:ignorecase=false, maxlength=sizeof(string))
+stock strreplace(string[], const find[], const replace[], bool:ignorecase=false, count=cellmax, maxlength=sizeof(string))
 {
-	if(find[0] == '\0' || string[0] == '\0') return 0;
+	if(isnull(find) || isnull(string)) return 0;
 	new matches;
-	for(new idx, flen = strlen(find), rlen = strlen(replace), pos = strfind(string, find, ignorecase); pos != -1 && idx < maxlength; pos = strfind(string, find, ignorecase, idx)) {
+	for(new idx, flen = strlen(find), rlen = strlen(replace), pos = strfind(string, find, ignorecase); pos != -1 && idx < maxlength && matches < count; pos = strfind(string, find, ignorecase, idx)) {
 		strdel(string, pos, pos + flen);
 		if(rlen) strins(string, replace, pos, maxlength);	// Crashy
 		idx = pos + rlen;
@@ -486,8 +396,8 @@ stock strreplacechar(string[], oldchar, newchar)
  *		f - A float
  *		h, x - A hex number (e.g. a colour)
  *		s - A string
- *		> - Pack strings
- *		< - Don't pack strings
+ *		 - Pack strings
+ *		 - Don't pack strings
  *		p - A playerid
  *		u - An unsigned integer
  *		z - An optional string
@@ -501,7 +411,7 @@ stock strreplacechar(string[], oldchar, newchar)
  */
 stock strscan(const string[], const format[], {Float,Unsigned,_}:...)
 {
-	if(string[0] == '\0') {
+	if(isnull(string)) {
 		return format[0];
 	}
 	new formatPos = 0,
@@ -671,7 +581,8 @@ stock strscan(const string[], const format[], {Float,Unsigned,_}:...)
 						num = false;
 						ch = end - stringPos;
 						id = INVALID_PLAYER_ID;
-						memcpy(strname, string, stringPos, ch);
+						strmid(strname, string, stringPos, end);
+						//memcpy(strname, string, stringPos, ch);
 						for(new i, j = GetMaxPlayers(); i < j; i++) {
 							if(IsPlayerConnected(i)) {
 								GetPlayerName(i, pname, sizeof(pname));
@@ -875,7 +786,8 @@ stock strscan(const string[], const format[], {Float,Unsigned,_}:...)
 						num = false;
 						ch = end - stringPos;
 						id = INVALID_PLAYER_ID;
-						memcpy(strname, string, stringPos, ch * 4);
+						strmid(strname, string, stringPos, end);
+						//memcpy(strname, string, stringPos, ch * 4);
 						for(new i, j = GetMaxPlayers(); i < j; i++) {
 							if(IsPlayerConnected(i)) {
 								GetPlayerName(i, pname, sizeof(pname));
@@ -934,7 +846,7 @@ stock strscan(const string[], const format[], {Float,Unsigned,_}:...)
  */
 stock bool:strsplit(const string[], dest[][], delim, height=sizeof(dest), width=sizeof(dest[]), bool:pack=false)
 {
-	if(string[0] == '\0') return true;
+	if(isnull(string)) return true;
 	new i, j, k;
 	if(pack) {
 		width *= cellchars;
@@ -1006,7 +918,7 @@ stock bool:strsplit(const string[], dest[][], delim, height=sizeof(dest), width=
  */
 stock strstripnewline(string[])
 {
-	if(string[0] == '\0') return;
+	if(isnull(string)) return;
 	new len = strlen(string);
 	if(ispacked(string)) {
 		if((string{len - 1} == '\n') || (string{len - 1} == '\r')) {
@@ -1019,6 +931,46 @@ stock strstripnewline(string[])
 			string[len - 1] = '\0';
 			if(string[0] == '\0') return;
 			if((string[len - 2] == '\n') || (string[len - 2] == '\r')) string[len - 2] = '\0';
+		}
+	}
+}
+
+/**
+ *  Strips leading, trailing and unnecessary whitespace from a string
+ *  @param	string	The string to strip whitespace from
+ */
+stock strstripwhitespace(string[])
+{
+	if(isnull(string)) return;
+	if(ispacked(string)) {
+		for(new i; string{i}; i++) {
+			if(string{i} <= ' ') {
+				new end = i;
+				while('\0' < string{end + 1} <= ' ') end++;
+				if(i == 0) {
+					strdel(string, i, end + 1);
+				} else if(string{end + 1} == '\0') {
+					strdel(string, i, end + 1);
+					return;
+				} else if(i != end) {
+					strdel(string, i, end);
+				}
+			}
+		}
+	} else {
+		for(new i; string[i]; i++) {
+			if(string[i] <= ' ') {
+				new end = i;
+				while('\0' < string[end + 1] <= ' ') end++;
+				if(i == 0) {
+					strdel(string, i, end + 1);
+				} else if(string[end + 1] == '\0') {
+					strdel(string, i, end + 1);
+					return;
+				} else if(i != end) {
+					strdel(string, i, end);
+				}
+			}
 		}
 	}
 }
@@ -1061,6 +1013,77 @@ stock strtok(const string[], &index, seperator=' ', bool:pack=false)
 			if(string[index] == seperator) index++;
 			return result;
 		}
+	}
+}
+
+/**
+ *  Truncate a string and append an ellipsis
+ *  @param	string		The string to truncate
+ *  @param	length		The maximium length of the final string
+ *  @param	ellipsis	The string to append
+ *  @param	wordlength	The maximium length of a word
+ *  @param	pack		If the destination string should be packed
+ *  @param	maxlength	The size of the string
+ */
+stock strtruncate(dest[], const string[], length=sizeof(dest), const ellipsis[]="...", wordlength=15, bool:pack=false, maxlength=sizeof(dest))
+{
+	length--;
+	if(strlen(string) <= length) {
+		strcpy(dest, string, maxlength, .pack=pack);
+		return;
+	}
+
+	if(ispacked(string)) {
+		new cutoff = length - strlen(ellipsis);
+		if(cutoff <= 0) {
+			strcpy(dest, ellipsis, maxlength, .pack=pack);
+			return;
+		}
+
+		if(string{cutoff} > ' ') {
+			new pos = cutoff;
+			for(new i; i < wordlength; i++) {
+				if(--pos == 0 || string{pos} <= ' ') break;
+			}
+			if(string{pos} > ' ') {
+				strcpy(dest, string, maxlength, cutoff, .pack=pack);
+				strcat(dest, ellipsis, maxlength);
+				return;
+			}
+			cutoff = pos;
+		}
+
+		while(string{cutoff-1} <= ' ') {
+			if(--cutoff == 0) {
+				strcpy(dest, ellipsis, maxlength, .pack=pack);
+				return;
+			}
+		}
+		strcpy(dest, string, maxlength, cutoff, .pack=pack);
+		strcat(dest, ellipsis, maxlength);
+	} else {
+		new cutoff = length - strlen(ellipsis);
+		if(cutoff < 0) {
+			strcpy(dest, ellipsis, maxlength, .pack=pack);
+			return;
+		}
+
+		if(string[cutoff] > ' ') {
+			new pos = cutoff;
+			for(new i; i < wordlength; i++) {
+				if(--pos == 0 || string[pos] <= ' ') break;
+			}
+			if(string[pos] > ' ') {
+				strcpy(dest, string, maxlength, cutoff, .pack=pack);
+				strcat(dest, ellipsis, maxlength);
+				return;
+			}
+			cutoff = pos;
+		}
+
+		while(cutoff > 0 && string[cutoff-1] <= ' ') cutoff--;
+		strcpy(dest, string, maxlength, cutoff, .pack=pack);
+		strcat(dest, ellipsis, maxlength);
 	}
 }
 
