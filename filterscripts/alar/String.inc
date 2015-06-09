@@ -396,8 +396,8 @@ stock strreplacechar(string[], oldchar, newchar)
  *		f - A float
  *		h, x - A hex number (e.g. a colour)
  *		s - A string
- *		 - Pack strings
- *		 - Don't pack strings
+ *		> - Pack strings
+ *		< - Don't pack strings
  *		p - A playerid
  *		u - An unsigned integer
  *		z - An optional string

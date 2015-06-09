@@ -376,11 +376,11 @@ stock static const scVehicleSeats[212] = {
 	1,	//Baggage
 	1,	//Dozer
 	4,	//Maverick
-	4,	//News Chopper
+	2,	//News Chopper
 	2,	//Rancher
 	4,	//FBI Rancher
 	2,	//Virgo
-	2,	//Greenwood
+	4,	//Greenwood
 	1,	//Jetmax
 	2,	//Hotring
 	2,	//Sandking
@@ -395,7 +395,7 @@ stock static const scVehicleSeats[212] = {
 	2,	//Bloodring Banger
 	2,	//Rancher
 	2,	//Super GT
-	2,	//Elegant
+	4,	//Elegant
 	2,	//Journey
 	1,	//Bike
 	1,	//Mountain Bike
@@ -404,7 +404,7 @@ stock static const scVehicleSeats[212] = {
 	1,	//Stuntplane
 	2,	//Petrol Tanker
 	2,	//Roadtrain
-	2,	//Nebula
+	4,	//Nebula
 	2,	//Majestic
 	2,	//Buccaneer
 	1,	//Shamal
@@ -417,7 +417,7 @@ stock static const scVehicleSeats[212] = {
 	2,	//Fortune
 	2,	//Cadrona
 	2,	//FBI Truck
-	2,	//Willard
+	4,	//Willard
 	1,	//Forklift
 	1,	//Tractor
 	1,	//Combine Harvester
@@ -434,15 +434,15 @@ stock static const scVehicleSeats[212] = {
 	2,	//Sadler
 	2,	//Firetruck LA
 	2,	//Hustler
-	2,	//Intruder
-	2,	//Primo
+	4,	//Intruder
+	4,	//Primo
 	2,	//Cargobob
 	2,	//Tampa
-	2,	//Sunrise
+	4,	//Sunrise
 	4,	//Merit
 	2,	//Utility Van
 	1,	//Nevada
-	3,	//Yosemite
+	2,	//Yosemite
 	2,	//Windsor
 	2,	//Monster A
 	2,	//Monster B
@@ -473,7 +473,7 @@ stock static const scVehicleSeats[212] = {
 	4,	//Newsvan
 	1,	//Tug
 	0,	//Petrol Trailer
-	2,	//Emperor
+	4,	//Emperor
 	2,	//Wayfarer
 	2,	//Euros
 	2,	//Hotdog
@@ -489,7 +489,7 @@ stock static const scVehicleSeats[212] = {
 	4,	//Police Car (LVPD)
 	2,	//Police Ranger
 	2,	//Picador
-	1,	//S.W.A.T. Van
+	2,	//S.W.A.T. Van
 	2,	//Alpha
 	2,	//Phoenix
 	4,	//Shitty Glendale

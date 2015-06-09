@@ -20,7 +20,7 @@
  */
 
 
-#define ALAR_VERSION 		1.4
+#define ALAR_VERSION 		1.4.1
 
 // Database
 #define ALAR_DATABASE		"Alar.sqlite"
@@ -6533,7 +6533,7 @@ acmd:ainfo(const playerid, const params[], const bool:help)
 			else format(string, sizeof(string), "%s %s(%i)", string, ReturnWeaponName(pweapon), pammo);
 		}
 	}
-	if(string[8]) {
+	if(string[12]) {
 		if(playerid == INVALID_PLAYER_ID) {
 			print(string);
 		} else {
@@ -11408,9 +11408,9 @@ acmd:awarnings(const playerid, const params[], const bool:help)
 				Warnings_GetWarningInfo(gAlarDB, pname, i, WarnInfo);
 				if(isnull(WarnInfo[E_WARN_ADMIN])) {
 					if(isnull(WarnInfo[E_WARN_REASON])) {
-						format(string, sizeof(string), "%4i. Date: %s  Reason: %s", i + 1, WarnInfo[E_WARN_DATETIME], WarnInfo[E_WARN_REASON]);
-					} else {
 						format(string, sizeof(string), "%4i. Date: %s", i + 1, WarnInfo[E_WARN_DATETIME]);
+					} else {
+						format(string, sizeof(string), "%4i. Date: %s  Reason: %s", i + 1, WarnInfo[E_WARN_DATETIME], WarnInfo[E_WARN_REASON]);
 					}
 				} else {
 					if(isnull(WarnInfo[E_WARN_REASON])) {

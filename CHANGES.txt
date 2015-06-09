@@ -1,3 +1,7 @@
+1.4.1
+	Fixed: /ainfo displaying "Weapons:" even if the player has none
+	Fixed: /awarnings not displaying correctly when no admin is stored
+	Fixed: Some incorrect vehicle seat numbers
 1.4
 	Added: 3D texts showing the vehicle IDs of alar created vehicles when the /adestroy command is used
 	Added: Check for invalid paintjobs

@@ -543,6 +543,7 @@ stock IPsubnet(const IP[])
 
 /**
  *  Return an ISO 3166-1 alpha-2 country code from an IPv4 address string
+ *	@param db	The database where the definitions are stored
  *  @param	IP	The IPv4 address string
  *  @return	A string containing the a 3166-1 alpha-2 country code, or a blank string if the ip is unknown
  */

@@ -39,7 +39,7 @@
 	native SuspendPlayer(const playername[]="\01", const playerip[]="\01", Float:hours, const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false);
 	native SuspendPlayerid(playerid, Float:hours, const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false);
 	native WarnPlayer(playerid, const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false);
-	native Warn(const playername[], const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false);
+	native WarnPlayerid(const playername[], const reason[]="No reason", const adminname[]="\01", const adminip[]="\01", bool:hidename=false);
 
 	native IsPlayerScriptAdmin(playerid);
 	native GetAdminLevel(playerid);
@@ -797,6 +797,4 @@ forward OnAdminLogout(playerid);
 forward OnAdminStateChange(playerid, newstate, oldstate);
 forward OnAdminNameChange(playerid, newname[], oldname[]);
 forward OnAdminSpectate(playerid, newid, oldid);
-
-forward IsPlayerLoggedIn(playerid);
 
