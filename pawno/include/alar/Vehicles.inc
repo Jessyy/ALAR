@@ -1,8 +1,8 @@
 /*
- *	Any Last Administrative Requests - Zones.inc
+ *	Any Last Administrative Requests - Vehicles.inc
  *		Vehicle name functions
  *
- *	VehicleNames by Betamaster
+ *	VehicleNames originally by Betamaster
  *
  *	Copyright © 2009 [DRuG]Dabombber
  *
@@ -35,7 +35,7 @@ new VehicleNames[212][] = {
 	{"Bravura"},
 	{"Buffalo"},
 	{"Linerunner"},
-	{"Perrenial"},
+	{"Perennial"},
 	{"Sentinel"},
 	{"Dumper"},
 	{"Firetruck"},
@@ -66,7 +66,7 @@ new VehicleNames[212][] = {
 	{"Rhino"},
 	{"Barracks"},
 	{"Hotknife"},
-	{"Trailer 1"}, //artict1
+	{"Article Trailer"},
 	{"Previon"},
 	{"Coach"},
 	{"Cabbie"},
@@ -81,7 +81,7 @@ new VehicleNames[212][] = {
 	{"Seasparrow"},
 	{"Pizzaboy"},
 	{"Tram"},
-	{"Trailer 2"}, //artict2
+	{"Article Trailer 2"},
 	{"Turismo"},
 	{"Speeder"},
 	{"Reefer"},
@@ -133,8 +133,8 @@ new VehicleNames[212][] = {
 	{"Benson"},
 	{"Mesa"},
 	{"RC Goblin"},
-	{"Hotring Racer A"}, //hotrina
-	{"Hotring Racer B"}, //hotrinb
+	{"Hotring Racer A"},
+	{"Hotring Racer B"},
 	{"Bloodring Banger"},
 	{"Rancher"},
 	{"Super GT"},
@@ -143,9 +143,9 @@ new VehicleNames[212][] = {
 	{"Bike"},
 	{"Mountain Bike"},
 	{"Beagle"},
-	{"Cropdust"},
-	{"Stunt"},
-	{"Tanker"}, //petro
+	{"Cropduster"},
+	{"Stuntplane"},
+	{"Petrol Tanker"},
 	{"Roadtrain"},
 	{"Nebula"},
 	{"Majestic"},
@@ -156,26 +156,26 @@ new VehicleNames[212][] = {
 	{"NRG-500"},
 	{"HPV1000"},
 	{"Cement Truck"},
-	{"Tow Truck"},
+	{"Towtruck"},
 	{"Fortune"},
 	{"Cadrona"},
 	{"FBI Truck"},
 	{"Willard"},
 	{"Forklift"},
 	{"Tractor"},
-	{"Combine"},
+	{"Combine Harvester"},
 	{"Feltzer"},
 	{"Remington"},
 	{"Slamvan"},
 	{"Blade"},
 	{"Freight"},
-	{"Streak"},
+	{"Brown Streak"},
 	{"Vortex"},
 	{"Vincent"},
 	{"Bullet"},
 	{"Clover"},
 	{"Sadler"},
-	{"Firetruck LA"}, //firela
+	{"Firetruck LA"},
 	{"Hustler"},
 	{"Intruder"},
 	{"Primo"},
@@ -183,12 +183,12 @@ new VehicleNames[212][] = {
 	{"Tampa"},
 	{"Sunrise"},
 	{"Merit"},
-	{"Utility"},
+	{"Utility Van"},
 	{"Nevada"},
 	{"Yosemite"},
 	{"Windsor"},
-	{"Monster A"}, //monstera
-	{"Monster B"}, //monsterb
+	{"Monster A"},
+	{"Monster B"},
 	{"Uranus"},
 	{"Jester"},
 	{"Sultan"},
@@ -200,11 +200,11 @@ new VehicleNames[212][] = {
 	{"Tahoma"},
 	{"Savanna"},
 	{"Bandito"},
-	{"Freight Flat"}, //freiflat
-	{"Streak Carriage"}, //streakc
+	{"Freight Flat Carriage"},
+	{"Streak Carriage"},
 	{"Kart"},
 	{"Mower"},
-	{"Duneride"},
+	{"Dune"},
 	{"Sweeper"},
 	{"Broadway"},
 	{"Tornado"},
@@ -215,14 +215,14 @@ new VehicleNames[212][] = {
 	{"BF-400"},
 	{"Newsvan"},
 	{"Tug"},
-	{"Trailer 3"}, //petrotr
+	{"Petrol Trailer"},
 	{"Emperor"},
 	{"Wayfarer"},
 	{"Euros"},
 	{"Hotdog"},
 	{"Club"},
-	{"Freight Carriage"}, //freibox
-	{"Trailer 3"}, //artict3
+	{"Freight Box Carriage"},
+	{"Article Trailer 3"},
 	{"Andromada"},
 	{"Dodo"},
 	{"RC Cam"},
@@ -235,14 +235,14 @@ new VehicleNames[212][] = {
 	{"S.W.A.T. Van"},
 	{"Alpha"},
 	{"Phoenix"},
-	{"Glendale"},
-	{"Sadler"},
-	{"Luggage Trailer A"}, //bagboxa
-	{"Luggage Trailer B"}, //bagboxb
-	{"Stair Trailer"}, //tugstair
+	{"Shitty Glendale"},
+	{"Shitty Sadler"},
+	{"Baggage Box A"},
+	{"Baggage Box B"},
+	{"Tug Stair Trailer"},
 	{"Boxville"},
-	{"Farm Plow"}, //farmtr1
-	{"Utility Trailer"} //utiltr1
+	{"Farm Trailer"},
+	{"Utility Trailer"}
 };
 
 

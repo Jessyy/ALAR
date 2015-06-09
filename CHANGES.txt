@@ -1,0 +1,9 @@
+1.1
+	Added a warning to /aservername when names will truncate in the browser
+	More rigorous file opening checks for /alistmodes
+	Added parameter [player] to /asuspendip
+	Changed some vehicle names to match those in the gxt file and remove duplicates
+	/ainterior and /aworld work on admins in free spec
+	Fixed textdraws being destroyed when /achangemode is used with an incorrect mode name
+1.0
+	Initial version

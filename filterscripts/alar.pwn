@@ -20,7 +20,7 @@
  */
 
 
-#define ALAR_VERSION 		1.0
+#define ALAR_VERSION 		1.1
 
 
 // Folders
@@ -28,7 +28,7 @@
 #define PLAYERFOLDER		"alar/Players/"
 #define IP_DEFINITIONS		"alar/IP2c/"
 
-// File names
+// File Names
 #define BANFILE				"alar/Bans.ini"
 #define LOGFILE				"alar/AdminLog.txt"
 #define MODESFILE			"alar/Gamemodes.ini"
@@ -37,7 +37,7 @@
 #define SUSPENDFILE			"alar/Suspensions.ini"
 #define USERFILE			"alar/Users.ini"
 
-// Default values
+// Default Values
 #define CHATPREFIX			"@"			// The prefix for admin chat
 #define BANMSG				"If you feel you have been WRONGFULLY banned, please appeal on the website $(WEBSITE)|Name: $(NAME)|IP: $(IP)|Admin: $(ADMIN)|Date: $(DATE) $(TIME)"
 #define DEFAULTNUMPLATE		"alr pwns"	// The default number plate for admin created vehicles (! - vehicleid, # - random number from 0 to 9, $ - random letter from A to Z)
@@ -150,7 +150,7 @@
 #define WILDBANLEVEL		9
 #define WORLDLEVEL			3
 
-// Join Flood kicker
+// Join Flood Kicker
 #define JOINCOUNT			4		// The maximum amount of joins in the specified time
 #define JOINTIME			10		// The time, in seconds, for the player to join x times
 #define JOINBANTIME			120		// The number of seconds to ban for (set to 0 or less for a permanent ban)
@@ -190,7 +190,7 @@
 #define COLOUR_SUSPEND		0xFF6600AA
 #define COLOUR_BAN			0xBB2222AA
 
-// Join message textdraw
+// Join Message Textdraw
 #define JOINMSG_LINES		10		// The number of joins/quits to show in the text box
 #define JOINMSG_SIZE		2.8		// Scaling factor
 
@@ -199,7 +199,7 @@
 #define JOINMSG_TIME		10		// The time in seconds before the messages start fading (0 or less for no fading)
 #define JOINMSG_UPDATE		200		// The time in ms to update the fading (lower = more cpu/bandwidth, higher = more jumpyness)
 
-// Log settings
+// Log Settings
 #define LOG_LINES			15		// Number of lines for the in-game admin log
 #define LOG_PAGES			4		// Number of pages for the in-game admin log
 #define LOG_SIZE			3.5		// Scaling factor
@@ -210,13 +210,13 @@
 #define KEY_LOG_UP			KEY_ANALOG_RIGHT
 #define NAME_LOG_UP			"right analog"
 
-// Mute/jail/freeze
+// Mute/Jail/Freeze
 #define MIN_ACTION_TIME		10		// The minimium time (in seconds) to mute/jail/freeze for
 
-// Spec mode
+// Spec Mode
 #define SPEC_TXT_TIME		10		// The time to show the spec keys (in seconds)
 
-// Key definitions
+// Key Definitions
 #define KEY_SPEC_LEFT		KEY_HANDBRAKE			// I dunno...
 #define NAME_SPEC_LEFT		"aim"
 #define KMAP_SPEC_LEFT		"~k~~PED_LOCK_TARGET~"
@@ -3108,12 +3108,12 @@ cmd_alistmodes(const playerid)
 {
 	if(LevelCheck(playerid, E_CHANGEMODE_LEVEL)) return 1;
 
-	if(!fexist(MODESFILE)) {
+	new File:handle = fopen(MODESFILE, io_read);
+	if(!handle) {
 		SendClientMessage(playerid, COLOUR_WARNING, "No gamemodes are listed in " MODESFILE);
 		return 1;
 	}
-
-	new File:handle = fopen(MODESFILE, io_read), msg[MAX_STRING] = "Gamemodes:", line[MAX_STRING];
+	new msg[700] = "Gamemodes:", line[MAX_STRING];
 	while(fread(handle, line)) {
 		if(line[0] != '\0' && line[0] != '#') {
 			StripNewLine(line);
@@ -4410,63 +4410,6 @@ dcmd_achangemode(const playerid, params[])
 		format(line, sizeof(line), "The gamemode has been changed to %s", msg);
 	}
 	SendClientMessageToAll(COLOUR_PLAYER, line);
-
-	// Hide textdraws so they dont get stuck on the screen
-	LoopPlayers(i) {
-		#if SPEC_TXT_TIME > 0
-			if(gPlayerData[i][E_SPECTXT] != INVALID_TEXT_DRAW) {
-				KillTimer(gPlayerData[i][E_SPECTIMER]);
-				gPlayerData[i][E_SPECTIMER] = 0;
-				TextDrawHideForPlayer(i, gPlayerData[i][E_SPECTXT]);
-				gPlayerData[i][E_SPECTXT] = INVALID_TEXT_DRAW;
-			}
-		#endif
-		#if LOG_LINES > 0 && LOG_PAGES > 0
-			if(gPlayerData[i][E_LOG_PAGE]) {
-				#if LOG_PAGES > 1
-					TextDrawHideForPlayer(i, gLogPage[gPlayerData[i][E_LOG_PAGE]-1]);
-				#endif
-				for(new j, offset = (gPlayerData[i][E_LOG_PAGE] - 1) * LOG_LINES; j < LOG_LINES; j++) {
-					TextDrawHideForPlayer(i, gAdminLog[j + offset][E_TEXTBOX_TEXT]);
-				}
-				gPlayerData[i][E_LOG_PAGE] = 0;
-			}
-		#endif
-		#if JOINMSG_LINES > 0
-			if(!gPlayerData[i][E_JOINTEXT]) {
-				gPlayerData[i][E_JOINTEXT] = true;
-				for(new j; j < JOINMSG_LINES; j++) {
-					TextDrawHideForPlayer(i, gJoinMessage[j][E_TEXTBOX_TEXT]);
-				}
-			}
-		#endif
-		if(gPlayerData[i][E_SPECHUD] != INVALID_TEXT_DRAW) {
-			TextDrawHideForPlayer(i, gPlayerData[i][E_SPECHUD]);
-			TextDrawDestroy(gPlayerData[i][E_SPECHUD]);
-			gPlayerData[i][E_SPECHUD] = INVALID_TEXT_DRAW;
-		}
-	}
-
-	#if SPEC_TXT_TIME > 0
-		for(new i; i < sizeof(g_txtSpecMode); i++) {
-			g_txtSpecMode[i] = INVALID_TEXT_DRAW;
-		}
-	#endif
-	#if LOG_LINES > 0 && LOG_PAGES > 0
-		#if LOG_PAGES > 1
-			for(new i; i < sizeof(gLogPage); i++) {
-				gLogPage[i] = INVALID_TEXT_DRAW;
-			}
-		#endif
-		for(new i; i < sizeof(gAdminLog); i++) {
-			gAdminLog[i][E_TEXTBOX_TEXT] = INVALID_TEXT_DRAW;
-		}
-	#endif
-	#if JOINMSG_LINES > 0
-		for(new i; i < sizeof(gJoinMessage); i++) {
-			gJoinMessage[i][E_TEXTBOX_TEXT] = INVALID_TEXT_DRAW;
-		}
-	#endif
 
 	format(line, sizeof(line), "changemode %s", msg);
 	SendRconCommand(line);
@@ -5965,7 +5908,7 @@ dcmd_ainterior(const playerid, params[])
 		return 1;
 	}
 	new msg[MAX_INPUT];
-	if(!IsSpawned(pid)) {
+	if(!IsSpawned(pid) && !(gPlayerData[pid][E_SPECTATING] && gPlayerData[pid][E_SPECID] == INVALID_PLAYER_ID)) {
 		if(playerid != pid) {
 			format(msg, sizeof(msg), "%s is not spawned", ReturnPlayerName(pid));
 			SendClientMessage(playerid, COLOUR_WARNING, msg);
@@ -7279,6 +7222,10 @@ dcmd_aservername(const playerid, params[])
 	format(string, sizeof(string), "The server name has been changed to %s", params);
 	SendWrappedMessageToPlayer(playerid, COLOUR_ADMIN, string);
 
+	if(strlen(params) > 50) {
+		SendClientMessage(playerid, COLOUR_WARNING, "Warning: Server name will truncate in browser");
+	}
+
 	format(string, sizeof(string), "%s changed the server name to %s", ReturnPlayerName(playerid), params);
 
 	LogAction(string);
@@ -8010,8 +7957,13 @@ dcmd_asuspendip(const playerid, params[])
 	sscanf(params, "sss", sIP, sizeof(sIP), stime, sizeof(stime), sreason, sizeof(sreason));
 
 	if(!IPisvalid(sIP, cmdchk(playerid, E_RANGESUSPEND_LEVEL))) {
-		SendClientMessage(playerid, COLOUR_WARNING, "Invalid IP");
-		return 1;
+		new pid = FindPlayer(sIP);
+		if(pid == INVALID_PLAYER_ID) {
+			SendClientMessage(playerid, COLOUR_WARNING, "Invalid IP");
+			return 1;
+		} else {
+			GetPlayerIp(pid, sIP, sizeof(sIP));
+		}
 	}
 
 	new Float:suspendtime = floatstr(stime);
@@ -8683,7 +8635,7 @@ dcmd_aworld(const playerid, params[])
 		return 1;
 	}
 	new msg[MAX_INPUT];
-	if(!IsSpawned(pid)) {
+	if(!IsSpawned(pid) && !(gPlayerData[pid][E_SPECTATING] && gPlayerData[pid][E_SPECID] == INVALID_PLAYER_ID)) {
 		if(playerid != pid) {
 			format(msg, sizeof(msg), "%s is not spawned", ReturnPlayerName(pid));
 			SendClientMessage(playerid, COLOUR_WARNING, msg);
