@@ -28,7 +28,29 @@
 
 #define _alar_functions_included
 
+/*
+	native ReturnPlayerName(playerid);
+	native ReturnPlayerID(const playername[]);
+	native ReturnPlayerIP(playerid);
+	native ReturnServerVar(const string[]);
+	native ReturnWeaponName(weaponid);
+	native GetDefaultColour(playerid);
+	native GetWeaponSlot(weaponid);
+	native bool:IsSpawned(playerid);
+	native bool:isValidName(const string[], wildcards=false);
+	native SendWrappedMessageToPlayer(playerid, colour, const msg[], maxlength=85, const prefix[]="    ");
+	native SendWrappedMessageToClients(Bit:players[], colour, const msg[], maxlength=85, const prefix[]="    ");
+	native SendWrappedMessageToAll(colour, const msg[], maxlength=85, const prefix[]="    ");
+	native ReturnWeaponID(const WeaponName[]);
+	native FindPlayer(const string[]);
+	native FindClosestPlayer(playerid);
+	native isValidGameText(const string[]);
+	native ReturnGameText(const text[]);
+	native DatePlusHours(Float:addhours, &year, &month, &day, &Float:hour);
+*/
+
 #include <alar/YSI_bit>
+#include <alar/String>
 
 #if defined INVALID_TEXT_DRAW
 	#undef INVALID_TEXT_DRAW
@@ -40,94 +62,34 @@
 #endif
 
 #if !defined WEAPON_NVGOGGLES
-	#define WEAPON_NVGOGGLES 44
+	#define WEAPON_NVGOGGLES	44
 #endif
 
 #if !defined WEAPON_IRGOGGLES
-	#define WEAPON_IRGOGGLES 45
+	#define WEAPON_IRGOGGLES	45
+#endif
+
+#if !defined INVALID_WEAPON_ID
+	#define INVALID_WEAPON_ID	-1
+#endif
+
+#if !defined INVALID_WEAPON_SLOT
+	#define INVALID_WEAPON_SLOT	-1
 #endif
 
 #if !defined MAX_IP
-	#define MAX_IP 16
-#endif
-
-#if !defined MAX_STRING
-	#define MAX_STRING 256
+	#define MAX_IP	16
 #endif
 
 #if !defined MAX_INPUT
-	#define MAX_INPUT 128
+	#define MAX_INPUT	128
 #endif
 
-#if !defined isnull
-	#define isnull(%1) (%1[0] == 0 || (%1[0] == 1 && %1[1] == 0))
-#endif
-
-// Temporary solution for strval crashes
-stock strvalEx(const string[])
-{
-	new val, i, neg = 1;
-	if(string[0] == '-') {
-		i = 1;
-		neg = -1;
-	}
-	for(; i < 30 && string[i] >= '0' && string[i] <= '9'; i++) {
-		val = (val * 10) + string[i] - '0';
-	}
-	return val * neg;
-}
-#define strval(%1) strvalEx(%1)
-
-// Temporary solution for floatstr bugs
-stock Float:floatstrEx(const string[])
-{
-	new pos, bool:decimal, buf[40];
-	if(string[0] == '-' || string[0] == '+') {
-		buf[0] = string[0];
-		pos++;
-	}
-	for(;string[pos] > ' ' && pos < sizeof(buf) - 1; pos++) {
-		if(string[pos] == '.') {
-			if(decimal) return 0.0;
-			decimal = true;
-		}
-		else if(string[pos] > '9' || string[pos] < '0') return 0.0;
-		buf[pos] = string[pos];
-	}
-	if((pos == 1 && buf[0] == '.') || (pos == 2 && (buf[0] == '-' || buf[0] == '+') && buf[1] == '.')) return 0.0;
-	return floatstr(buf);
-}
-#define floatstr(%1) floatstrEx(%1)
-
-// Temorary solution for strins crashes
-stock strinsEx(string[], const substr[], pos, maxlength=sizeof(string))
-{
-	if(substr[0] == '\0' || pos >= maxlength) return;
-
-	new len = strlen(string);
-	if(len >= maxlength) return;
-
-	if(pos > len) pos = len;
-	else if(pos < 0) pos = 0;
-
-	new sublen = strlen(substr);
-
-	// make room in string
-	for(new i = len + sublen < maxlength - 1 ? len : maxlength - sublen - 2; i >= pos; i--) {
-		string[i + sublen] = string[i];
-	}
-
-	// insert substring
-	for(new i; i < sublen; i++) {
-		if(pos + i == maxlength - 1) {
-			string[maxlength - 1] = '\0';
-			return;
-		}
-		string[pos + i] = substr[i];
-	}
-}
-#define strins(%1) strinsEx(%1)
-
+/**
+ *	Return a player's name
+ *	@param	playerid	The playerid of the player
+ *	@return A string containing the player's name
+ */
 stock ReturnPlayerName(playerid)
 {
 	new pname[MAX_PLAYER_NAME];
@@ -135,6 +97,11 @@ stock ReturnPlayerName(playerid)
 	return pname;
 }
 
+/**
+ *	Finds a playerid from a player's name, or part of a player's name
+ *	@param	playername	The full or partial name of a player
+ *	@return The playerid of the player, or INVALID_PLAYER_ID if there were no matches
+ */
 stock ReturnPlayerID(const playername[])
 {
 	if(playername[0] == 0) return INVALID_PLAYER_ID;
@@ -157,6 +124,11 @@ stock ReturnPlayerID(const playername[])
 	return pid;
 }
 
+/**
+ *	Return a player's IP
+ *	@param	playerid	The playerid of the player
+ *	@return A string containing the player's IP
+ */
 stock ReturnPlayerIP(playerid)
 {
 	new pIP[MAX_IP];
@@ -164,6 +136,11 @@ stock ReturnPlayerIP(playerid)
 	return pIP;
 }
 
+/**
+ *	Return a server variable
+ *	@param	string	The name of the server variable to retrive
+ *	@return A string containing the server variable
+ */
 stock ReturnServerVar(const string[])
 {
 	new buffer[MAX_INPUT];
@@ -171,6 +148,11 @@ stock ReturnServerVar(const string[])
 	return buffer;
 }
 
+/**
+ *	Return a weapon's name
+ *	@param	weaponid	The id of the weapon
+ *	@return A string containing the weapon's name
+ */
 stock ReturnWeaponName(weaponid)
 {
 	new wname[20];
@@ -184,6 +166,33 @@ stock ReturnWeaponName(weaponid)
 	return wname;
 }
 
+/**
+ *	Return the default colour for a player
+ *	@param	playerid	The playerid of the player
+ *	@return The default colour of the player
+ */
+stock GetDefaultColour(playerid)
+{
+	static const playerColors[] = {
+		0xFF8C13FF, 0xC715FFFF, 0x20B2AAFF, 0xDC143CFF, 0x6495EDFF, 0xf0e68cFF, 0x778899FF, 0xFF1493FF, 0xF4A460FF, 0xEE82EEFF,
+		0xFFD720FF, 0x8b4513FF, 0x4949A0FF, 0x148b8bFF, 0x14ff7fFF, 0x556b2fFF, 0x0FD9FAFF, 0x10DC29FF, 0x534081FF, 0x0495CDFF,
+		0xEF6CE8FF, 0xBD34DAFF, 0x247C1BFF, 0x0C8E5DFF, 0x635B03FF, 0xCB7ED3FF, 0x65ADEBFF, 0x5C1ACCFF, 0xF2F853FF, 0x11F891FF,
+		0x7B39AAFF, 0x53EB10FF, 0x54137DFF, 0x275222FF, 0xF09F5BFF, 0x3D0A4FFF, 0x22F767FF, 0xD63034FF, 0x9A6980FF, 0xDFB935FF,
+		0x3793FAFF, 0x90239DFF, 0xE9AB2FFF, 0xAF2FF3FF, 0x057F94FF, 0xB98519FF, 0x388EEAFF, 0x028151FF, 0xA55043FF, 0x0DE018FF,
+		0x93AB1CFF, 0x95BAF0FF, 0x369976FF, 0x18F71FFF, 0x4B8987FF, 0x491B9EFF, 0x829DC7FF, 0xBCE635FF, 0xCEA6DFFF, 0x20D4ADFF,
+		0x2D74FDFF, 0x3C1C0DFF, 0x12D6D4FF, 0x48C000FF, 0x2A51E2FF, 0xE3AC12FF, 0xFC42A8FF, 0x2FC827FF, 0x1A30BFFF, 0xB740C2FF,
+		0x42ACF5FF, 0x2FD9DEFF, 0xFAFB71FF, 0x05D1CDFF, 0xC471BDFF, 0x94436EFF, 0xC1F7ECFF, 0xCE79EEFF, 0xBD1EF2FF, 0x93B7E4FF,
+		0x3214AAFF, 0x184D3BFF, 0xAE4B99FF, 0x7E49D7FF, 0x4C436EFF, 0xFA24CCFF, 0xCE76BEFF, 0xA04E0AFF, 0x9F945CFF, 0xDCDE3DFF,
+		0x10C9C5FF, 0x70524DFF, 0x0BE472FF, 0x8A2CD7FF, 0x6152C2FF, 0xCF72A9FF, 0xE59338FF, 0xEEDC2DFF, 0xD8C762FF, 0x3FE65CFF
+	};
+	return playerColors[playerid % sizeof(playerColors)];
+}
+
+/**
+ *	Return a weapons's slot
+ *	@param	weaponid	The id of the weapon
+ *	@return The slot of the weapon, INVALID_WEAPON_SLOT if the weaponid is invalid
+ */
 stock GetWeaponSlot(weaponid)
 {
 	switch(weaponid) {
@@ -214,9 +223,14 @@ stock GetWeaponSlot(weaponid)
 		case WEAPON_BOMB:
 			return 12;
 	}
-	return -1;
+	return INVALID_WEAPON_SLOT;
 }
 
+/**
+ *	Checks if a player is spawned
+ *	@param	playerid	The playerid of the player
+ *	@return true if the player is spawned, false otherwise
+ */
 stock bool:IsSpawned(playerid)
 {
 	new pstate = GetPlayerState(playerid);
@@ -224,368 +238,12 @@ stock bool:IsSpawned(playerid)
 	return false;
 }
 
-/*----------------------------------------------------------------------------*-
-Function:
-	sscanf
-Params:
-	string[] - String to extract parameters from.
-	format[] - Parameter types to get.
-	{Float,Unsigned,_}:... - Data return variables.
-Return:
-	0 - Successful, not 0 - fail.
-Notes:
-	A fail is either insufficient variables to store the data or insufficient
-	data for the format string - excess data is disgarded.
-
-	A string in the middle of the input data is extracted as a single word, a
-	string at the end of the data collects all remaining text. The length of
-	a string must be passed after the string.
-
-	The format codes are:
-
-	c - A character.
-	d, i - An integer.
-	u - An unsigned integer.
-	h, x - A hex number (e.g. a colour).
-	f - A float.
-	s - A string.
-	z - An optional string.
-	_ - Skip a parameter.
-	pX - An additional delimiter where X is another character.
-
-	Now has IsNumeric integrated into the code.
-
-	Added additional delimiters in the form of all whitespace and an
-	optionally specified one in the format string.
--*----------------------------------------------------------------------------*/
-
-stock sscanf(string[], format[], {Float,Unsigned,_}:...)
-{
-	if (isnull(string))
-	{
-		return format[0];
-	}
-	new
-		formatPos = 0,
-		stringPos = 0,
-		paramPos = 2,
-		paramCount = numargs(),
-		delim = ' ';
-	while (paramPos < paramCount && string[stringPos])
-	{
-		switch (format[formatPos++])
-		{
-			case '\0':
-			{
-				return 0;
-			}
-			case 'i', 'd':
-			{
-				new
-					neg = 1,
-					num = 0,
-					ch = string[stringPos];
-				if (ch == '-')
-				{
-					neg = -1;
-					ch = string[++stringPos];
-				}
-				do
-				{
-					stringPos++;
-					if (ch >= '0' && ch <= '9')
-					{
-						num = (num * 10) + (ch - '0');
-					}
-					else
-					{
-						return -1;
-					}
-				}
-				while ((ch = string[stringPos]) > ' ' && ch != delim);
-				setarg(paramPos, 0, num * neg);
-			}
-			case 'u':
-			{
-				new
-					num = 0,
-					ch = string[stringPos];
-				do
-				{
-					stringPos++;
-					if (ch >= '0' && ch <= '9')
-					{
-						num = (num * 10) + (ch - '0');
-					}
-					else
-					{
-						return -1;
-					}
-				}
-				while ((ch = string[stringPos]) > ' ' && ch != delim);
-				setarg(paramPos, 0, num);
-			}
-			case 'h', 'x':
-			{
-				new
-					num = 0,
-					ch = string[stringPos];
-				do
-				{
-					stringPos++;
-					switch (ch)
-					{
-						case 'x', 'X':
-						{
-							num = 0;
-							continue;
-						}
-						case '0' .. '9':
-						{
-							num = (num << 4) | (ch - '0');
-						}
-						case 'a' .. 'f':
-						{
-							num = (num << 4) | (ch - ('a' - 10));
-						}
-						case 'A' .. 'F':
-						{
-							num = (num << 4) | (ch - ('A' - 10));
-						}
-						default:
-						{
-							return -1;
-						}
-					}
-				}
-				while ((ch = string[stringPos]) > ' ' && ch != delim);
-				setarg(paramPos, 0, num);
-			}
-			case 'c':
-			{
-				setarg(paramPos, 0, string[stringPos++]);
-			}
-			case 'f':
-			{
-				setarg(paramPos, 0, _:floatstr(string[stringPos]));
-			}
-			case 'p':
-			{
-				delim = format[formatPos++];
-				continue;
-			}
-			case 's', 'z':
-			{
-				new
-					i = 0,
-					len = getarg(paramPos + 1, 0) - 1,
-					ch;
-				if (format[formatPos])
-				{
-					while (i < len && (ch = string[stringPos]) > ' ' && ch != delim)
-					{
-						setarg(paramPos, i++, ch);
-						stringPos++;
-					}
-					if (!i && len > 1)
-					{
-						return -1;
-					}
-				}
-				else
-				{
-					while (i < len && (ch = string[stringPos]))
-					{
-						setarg(paramPos, i++, ch);
-						stringPos++;
-					}
-				}
-				setarg(paramPos++, i, '\0');
-			}
-			case '_':
-			{
-				goto Dengo;	// Eh, screw good practice. How bad can it be?
-			}
-			default:
-			{
-				continue;
-			}
-		}
-		paramPos++;
-		Dengo:
-		while (string[stringPos] && string[stringPos] != delim && string[stringPos] > ' ')
-		{
-			stringPos++;
-		}
-		while (string[stringPos] && (string[stringPos] == delim || string[stringPos] <= ' '))
-		{
-			stringPos++;
-		}
-	}
-	while (format[formatPos] == 'z')
-	{
-		formatPos++;
-	}
-	if (format[formatPos] > ' ')
-	{
-		return format[formatPos];
-	}
-	return 0;
-}
-
-stock bool:isNumeric(const string[])
-{
-	if(string[0] == '\0') return false;
-	for(new i; string[i] != '\0'; i++) if(string[i] > '9' || string[i] < '0') return false;
-	return true;
-}
-
-stock bool:isInteger(const string[])
-{
-	if(string[0] == '\0') return false;
-	for(new i = ((string[0] == '-' || string[0] == '+') && string[1] != '\0') ? 1 : 0; string[i] != '\0'; i++) if(string[i] > '9' || string[i] < '0') return false;
-	return true;
-}
-
-stock bool:isFloat(const string[])
-{
-	if(string[0] == '\0') return false;
-	new unary = string[0] == '-' || string[0] == '+',
-		i = unary ? 1 : 0;
-	for(new bool:decimal; string[i] != '\0'; i++) {
-		if(string[i] == '.') {
-			if(decimal) return false;
-			decimal = true;
-		}
-		else if(string[i] > '9' || string[i] < '0') return false;
-	}
-	if(i == 1 && string[0] == '.') return false;
-	if(i == 2 && unary && (string[1] == '.' || string[1] == '\0')) return false;
-	return true;
-}
-
-stock wildcmp(const wild[], const string[], bool:ignorecase=false)
-{
-	new idx, idx2, cp, mp;
-
-	while((string[idx]) && (wild[idx2] != '*')) {
-		if (wild[idx2] != string[idx] && (!ignorecase || (toupper(wild[idx2]) != toupper(string[idx]))) && (wild[idx2] != '?')) {
-			return 0;
-		}
-		idx2++;
-		idx++;
-	}
-
-	while(string[idx]) {
-		if(wild[idx2] == '*') {
-			if (!wild[++idx2]) {
-				return 1;
-			}
-			mp = idx2;
-			cp = idx+1;
-		} else if((wild[idx2] == string[idx] || (ignorecase && (toupper(wild[idx2]) == toupper(string[idx])))) || wild[idx2] == '?') {
-			idx2++;
-			idx++;
-		} else {
-			idx2 = mp;
-			idx = cp++;
-		}
-	}
-
-	while (wild[idx2] == '*') {
-		idx2++;
-	}
-
-	return !wild[idx2];
-}
-
-stock strcpy(dest[], const source[], maxlength=sizeof(dest), end=cellmax)
-{
-	new pos;
-	end = maxlength > end ? end : maxlength - 1;
-	for(;source[pos] != '\0' && pos < end; pos++) dest[pos] = source[pos];
-	dest[pos] = '\0';
-}
-
-stock strreplace(string[], const find[], const replace[], bool:ignorecase=false, maxlength=sizeof(string))
-{
-	if(find[0] == '\0' || string[0] == '\0') return 0;
-	new matches;
-	for(new idx, flen = strlen(find), rlen = strlen(replace), pos = strfind(string, find, ignorecase); pos != -1 && idx < maxlength; pos = strfind(string, find, ignorecase, idx)) {
-		strdel(string, pos, pos + flen);
-		if(rlen) strins(string, replace, pos, maxlength);	// Crashy
-		idx = pos + rlen;
-		matches++;
-	}
-	return matches;
-}
-
-stock strreplacechar(string[], oldchar, newchar)
-{
-	for(new i; string[i] != '\0'; i++) {
-		if(string[i] == oldchar) string[i] = newchar;
-	}
-}
-
-stock strcatnodup(dest[], const source[], maxlength=sizeof(dest))
-{
-	new idx, tmp[MAX_STRING];
-	for(tmp = strtok(source, idx); tmp[0] != '\0'; tmp = strtok(source, idx)) {
-		if(strfindword(dest, tmp) == -1) {
-			format(dest, maxlength, "%s %s", dest, tmp);
-		}
-	}
-}
-
-stock strfindchar(const string[], const character, bool:ignorecase=false, pos=0)
-{
-	for(new i = pos; string[i] != '\0'; i++) {
-		if(string[i] == character || (ignorecase && tolower(string[i]) == tolower(character))) return i;
-	}
-	return -1;
-}
-
-/*
-//Ah my poor function, so very very slow
-stock strfindword(const string[], const word[], bool:ignorecase=false, pos=0)
-{
-	for(new i = pos; string[i] != '\0'; i++) {
-		if((string[i] == word[0] || (ignorecase && tolower(string[i]) == tolower(word[0]))) && (i == 0 || string[i-1] <= ' ')) {
-			new j = 1;
-			for(; word[j] != '\0'; j++) {
-				if(!(string[i+j] == word[j] || (ignorecase && tolower(string[i+j]) == tolower(word[j])))) break;
-			}
-			if(word[j] == '\0' && string[i+j] <= ' ') return i;
-		}
-	}
-	return -1;
-}
-*/
-
-stock strfindword(const string[], const word[], bool:ignorecase=false, pos=0)
-{
-	if(word[0] == '\0') return -1;
-	new wlen = strlen(word);
-	for(new i = strfind(string, word, ignorecase, pos); i != -1; i = strfind(string, word, ignorecase, ++i)) {
-		if((i == 0 || string[i-1] <= ' ') && string[i+wlen] <= ' ') {
-			return i;
-		}
-	}
-	return -1;
-}
-
-stock strmakeroom(string[], space, length=sizeof(string)) {
-	if(space >= length) {
-		string[0] = '\0';
-		return;
-	}
-	if(strlen(string) + space <= length) return;
-	while(string[space] != '\0' && string[space - 1] != ' ') {
-		space++;
-	}
-	strdel(string, 0, space);
-}
-
+/**
+ *	Checks if a player name is valid
+ *	@param	string		The string to check
+ *	@param	wildcards	If wildcards (* and ?) are allowed
+ *	@return true if the name is valid, false otherwise
+ */
 stock bool:isValidName(const string[], wildcards=false)
 {
 	new chars, bool:wildfound;
@@ -606,12 +264,20 @@ stock bool:isValidName(const string[], wildcards=false)
 	return (wildfound || chars >= 3) && (chars <= 16);
 }
 
+/**
+ *	Sends a wrapped message to player with indentation
+ *	@param	playerid	The playerid to send the message to
+ *	@param	colour		The colour of the message
+ *	@param	msg			The message to send
+ *	@param	maxlength	The length to wrap to
+ *	@param	prefix		The string to indent with
+ */
 stock SendWrappedMessageToPlayer(playerid, colour, const msg[], maxlength=85, const prefix[]="    ")
 {
 	new length = strlen(msg);
 	if(length <= maxlength) {
 		SendClientMessage(playerid, colour, msg);
-		return 1;
+		return;
 	}
 	new string[MAX_INPUT], idx, space, plen, bool:useprefix;
 	for(new i;i<length;i++) {
@@ -638,10 +304,18 @@ stock SendWrappedMessageToPlayer(playerid, colour, const msg[], maxlength=85, co
 		strins(string, prefix, 0);
 		SendClientMessage(playerid, colour, string);
 	}
-	return true;
+	return;
 }
 
-stock SendWrappedMessageToClients(Bit:players[], colour, const msg[], maxlength=85, const prefix[]="    ")
+/**
+ *	Sends a wrapped message to players with indentation
+ *	@param	players		A bit array of the players to send the message to
+ *	@param	colour		The colour of the message
+ *	@param	msg			The message to send
+ *	@param	maxlength	The length to wrap to
+ *	@param	prefix		The string to indent with
+ */
+stock SendWrappedMessageToClients(Bit:players[Bit_Bits(MAX_PLAYERS)], colour, const msg[], maxlength=85, const prefix[]="    ")
 {
 	new length = strlen(msg);
 	if(length <= maxlength) {
@@ -650,7 +324,7 @@ stock SendWrappedMessageToClients(Bit:players[], colour, const msg[], maxlength=
 				SendClientMessage(i, colour, msg);
 			}
 		}
-		return 1;
+		return;
 	}
 	new string[MAX_INPUT], idx, space, plen, bool:useprefix;
 	for(new i;i<length;i++) {
@@ -685,15 +359,22 @@ stock SendWrappedMessageToClients(Bit:players[], colour, const msg[], maxlength=
 			}
 		}
 	}
-	return true;
+	return;
 }
 
+/**
+ *	Sends a wrapped message to all players with indentation
+ *	@param	colour		The colour of the message
+ *	@param	msg			The message to send
+ *	@param	maxlength	The length to wrap to
+ *	@param	prefix		The string to indent with
+ */
 stock SendWrappedMessageToAll(colour, const msg[], maxlength=85, const prefix[]="    ")
 {
 	new length = strlen(msg);
 	if(length <= maxlength) {
 		SendClientMessageToAll(colour, msg);
-		return 1;
+		return;
 	}
 	new string[MAX_INPUT], idx, space, plen, bool:useprefix;
 	for(new i;i<length;i++) {
@@ -720,41 +401,14 @@ stock SendWrappedMessageToAll(colour, const msg[], maxlength=85, const prefix[]=
 		strins(string, prefix, 0);
 		SendClientMessageToAll(colour, string);
 	}
-	return 1;
+	return;
 }
 
 /**
- *  Returns an element of a string splitted by ' ', default index is 0.
- *  @param	string
- *		index
+ *	Return a weapon's id
+ *	@param	WeaponName	The full or partial name of the weapon
+ *	@return The weapon's id, or INVALID_WEAPON_ID if no match was found
  */
-stock strtok(const string[], &index, seperator=' ')
-{
-	while (string[index] != '\0' && string[index] <= ' ') index++;
-	new result[MAX_STRING], offset = index;
-	while ((string[index] != '\0') && (string[index] != seperator) && ((index - offset) < (sizeof(result) - 1))) result[index - offset] = string[index++];
-	result[index - offset] = '\0';
-	if (string[index] == seperator) index++;
-	return result;
-}
-
-/**
- *  Strips Newline from the end of a string.
- *  Idea: Y_Less, Bugfixing (when length=1) by DracoBlue
- *  @param	string
- */
-stock StripNewLine(string[])
-{
-	if (string[0] == '\0') return;
-	new len = strlen(string);
-	if ((string[len - 1] == '\n') || (string[len - 1] == '\r')) {
-		string[len - 1] = '\0';
-		if (string[0] == '\0') return;
-		if ((string[len - 2] == '\n') || (string[len - 2] == '\r')) string[len - 2] = '\0';
-	}
-}
-
-// stolen from Xadmin
 stock ReturnWeaponID(const WeaponName[])
 {
 	if(strfind("Molotovs",WeaponName,true) != -1) return 18;
@@ -772,9 +426,14 @@ stock ReturnWeaponID(const WeaponName[])
 			}
 		}
 	}
-	return -1;
+	return INVALID_WEAPON_ID;
 }
 
+/**
+ *	Finds a playerid from a player's name, part of a player's name, or a playerid
+ *	@param	string	The full or partial name of a player, or a playerid
+ *	@return The playerid of the player, or INVALID_PLAYER_ID if there were no matches
+ */
 stock FindPlayer(const string[])
 {
 	new id = strval(string);
@@ -784,6 +443,48 @@ stock FindPlayer(const string[])
 	return ReturnPlayerID(string);
 }
 
+/**
+ *	Finds the closest player to a player, looking first for players in the same virtual world
+ *	@param	playerid	The playerid of the player to search around
+ *	@return The playerid of the closest player, or INVALID_PLAYER_ID if noone was found
+ */
+stock FindClosestPlayer(playerid)
+{
+	new Float:px,
+		Float:py,
+		Float:pz,
+		Float:tmpx,
+		Float:tmpy,
+		Float:tmpz,
+		world,
+		sameid = INVALID_PLAYER_ID, Float:samedist = INFINITY,
+		id = INVALID_PLAYER_ID, Float:dist = INFINITY;
+
+	GetPlayerPos(playerid, px, py, pz);
+	world = GetPlayerVirtualWorld(playerid);
+	for(new i; i < GetMaxPlayers(); i++) {
+		if(i != playerid && IsSpawned(i)) {
+			GetPlayerPos(i, tmpx, tmpy, tmpz);
+			new Float:tmpdist = tmpx * tmpx + tmpy * tmpy + tmpz * tmpz;
+			if(GetPlayerVirtualWorld(i) == world) {
+				if(tmpdist < samedist) {
+					sameid = i;
+				}
+			} else {
+				if(tmpdist < dist) {
+					id = i;
+				}
+			}
+		}
+	}
+	return sameid == INVALID_PLAYER_ID ? id : sameid;
+}
+
+/**
+ *	Checks if a string is valid gametext (won't crash the server)
+ *	@param	string	The string to check
+ *	@return true if the string is valid gametext, false otherwise
+ */
 stock isValidGameText(const string[])
 {
 	if(string[0] == '\0') return false;
@@ -800,6 +501,11 @@ stock isValidGameText(const string[])
 	return true;
 }
 
+/**
+ *	Returns a copy of the text which will display some common charachters in gta properly
+ *	@param	text	The text to copy
+ *	@return The modified gametext
+ */
 stock ReturnGameText(const text[])
 {
 	new string[MAX_STRING];
@@ -814,6 +520,14 @@ stock ReturnGameText(const text[])
 	return string;
 }
 
+/**
+ *	Adds a number of hours to the current time
+ *	@param	addhours	The number of hours to add
+ *	@param	year		The year of the current time plus the hours
+ *	@param	month		The month of the current time plus the hours
+ *	@param	day			The day of the current time plus the hours
+ *	@param	hour		The hour of the current time plus the hours
+ */
 stock DatePlusHours(Float:addhours, &year, &month, &day, &Float:hour)
 {
 	new currenthour,

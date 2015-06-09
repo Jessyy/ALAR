@@ -1,20 +1,47 @@
+1.3
+	Added: (amount) parameter to /arepair, requires player parameter to be entered
+	Added: /acarcolour command
+	Added: /aipupdate command
+	Added: /aspectating command
+	Added: Additonal RCON commands
+	Added: Chat history for joining players (/ahistory)
+	Added: Enabled going to a player from spec using the look behind key (requires agoto privlages)
+	Added: OnAlarInit() and OnAlarExit() callbacks, and GetAlarVersion() function
+	Added: Option to check for invalid vehicle mods (CHECKMODS compile setting)
+	Added: Option to enable extra spectate views (ExtraSpecViews INI setting)
+	Added: Players in the server who are immune to the ping kicker can be viewed with the /aimmune command
+	Added: Spectate HUD setting is saved
+	Added: SuspendPlayer() and BanPlayer() functions
+	Added: Whitelist from range bans (/awhitelist /aunwhitelist)
+	Changed: /asetname and /aloginas so banned or suspended names cannot be used
+	Changed: How admins spawn from spec (added SetSpawnType() function) and how jailed players spawn
+	Changed: Locahost and LAN IP address no longer show as Unknown
+	Changed: Players with the same IP as a player banned or suspended with /aban or /asuspend are kicked from the server (KickAllIPs INI setting)
+	Changed: Ranges bans/suspensions can have a different message (RangeBanMsg/RangeSuspensionMsg INI settings)
+	Changed: Spectating admins will view the closest player in their virtual world if their current player dies (with no killer) or leaves
+	Changed: The ping kicker can now be disabled by setting the max ping to 0 or less
+	Fixed: Added password length check to RCON account creation
+	Fixed: Join textdraws not appearing for joining players
+	Fixed: Restricted spawning where you look in free spec to only admins who can right click teleport
+	Fixed: Set virtual world and interior of passengers when using /agoto and /abring
+	Fixed: Various minor bugs
 1.2
-	Fixed background alpha in admin logs, also changed so using 0 as the colour uses the default colour
-	Changed /aflip to put out the fires on vehicles
-	Fixed newline in reason when unsuspending/unbanning
-	Multiple adminchat prefixes now possible using | as a seperator eg) "@|#|//"
-	Fixed random bug where ban/suspend messages didn't show with some gamemodes using YSF
-	Added "Admins Spectating" to /asinfo
-	Added "paused" to spec hud
-	Added log message when a permanently muted/jailed/frozen player joins
-	Fixed the spectate HUD so it updates when /asetname is used
-	Added /alog command to toggle whether admin log keys enabled, and to change the log page
+	Added: "Admins Spectating" to /asinfo
+	Added: "paused" to spec hud
+	Added: /alog command to toggle whether admin log keys enabled, and to change the log page
+	Added: Log message when a permanently muted/jailed/frozen player joins
+	Added: Multiple adminchat prefixes now possible using | as a seperator eg) "@|#|//"
+	Changed: Using /aflip now puts out the fires on vehicles
+	Fixed: Background alpha in admin logs, also changed so using 0 as the colour uses the default colour
+	Fixed: Newline in reason when unsuspending/unbanning
+	Fixed: Random bug where ban/suspend messages didn't show with some gamemodes using YSF
+	Fixed: The spectate HUD so it updates when /asetname is used
 1.1
-	Added a warning to /aservername when names will truncate in the browser
-	More rigorous file opening checks for /alistmodes
-	Added parameter [player] to /asuspendip
-	Changed some vehicle names to match those in the gxt file and remove duplicates
-	/ainterior and /aworld work on admins in free spec
-	Fixed textdraws being destroyed when /achangemode is used with an incorrect mode name
+	Added: Parameter [player] to /asuspendip
+	Added: Warning when /aservername will truncate in the sa-mp browser
+	Changed: More rigorous file opening checks for /alistmodes
+	Changed: Some vehicle names to match those in the gxt file and remove duplicates
+	Fixed: /ainterior and /aworld work on admins in free spec
+	Fixed: Textdraws being destroyed when /achangemode is used with an incorrect mode name
 1.0
 	Initial version

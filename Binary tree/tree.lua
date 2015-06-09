@@ -23,7 +23,7 @@ OUTPUT = "output.pwn"
 
 COMMANDS = {
 --	{"command"},	-- Command without parameters
---	"command", 	-- Command with parameters
+--	"command",		-- Command with parameters
 
 	{"aautologin"},
 	{"aclearbans"},
@@ -32,12 +32,14 @@ COMMANDS = {
 	{"aejectall"},
 	{"ahelp"},
 	{"ahide"},
+	{"aipupdate"},
 	{"alistmodes"},
 	{"alogout"},
 	{"apaused"},
 	{"areloaddata"},
 	{"aremallcash"},
 	{"aremallweapons"},
+	{"aspectating"},
 	{"aunhide"},
 	"aalias",
 	"aalias2",
@@ -49,6 +51,7 @@ COMMANDS = {
 	"abanip",
 	"abanname",
 	"abring",
+	"acarcolour",
 	"achangemode",
 	"achangepw",
 	"acreate",
@@ -105,7 +108,9 @@ COMMANDS = {
 	"aunmute",
 	"aunrape",
 	"aunsuspend",
+	"aunwhitelist",
 	"aweather",
+	"awhitelist",
 	"aworld"
 }
 

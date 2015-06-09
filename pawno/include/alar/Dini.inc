@@ -28,43 +28,107 @@
 #endif
 
 #define _alar_dini_included
-#pragma library dutils
+
+/*
+	native bool:dini_Exists(const filename[]);
+	native bool:dini_Remove(const filename[]);
+	native bool:dini_Create(const filename[]);
+	native dini_ExtractKey(const line[]);
+	native dini_ExtractValue(const line[]);
+	native bool:dini_Set(const filename[], const key[], value[]);
+	native bool:dini_IntSet(const filename[], const key[], value);
+	native dini_Int(const filename[], const key[]);
+	native bool:dini_FloatSet(const filename[], const key[], Float:value);
+	native Float:dini_Float(const filename[], const key[]);
+	native bool:dini_BoolSet(const filename[], const key[], bool:value);
+	native bool:dini_Bool(const filename[], const key[]);
+	native bool:dini_Unset(const filename[], const key[]);
+	native dini_Return(const filename[], const key[]);
+	native bool:dini_Get(const filename[], const key[], dest[], maxlength=sizeof(dest));
+	native bool:dini_Isset(const filename[], const key[]);
+	native bool:fcopytextfile(const oldname[], const newname[]);
+	native bool:fcopy(const oldname[], const newname[]);
+*/
 
 #include <alar/Functions>
 
-stock dini_Exists(const filename[]) {
-	if (fexist(filename)) return true;
+// avoid forced reparse
+forward bool:dini_Get(const filename[], const key[], dest[], maxlength=sizeof(dest));
+forward bool:fcopytextfile(const oldname[], const newname[]);
+
+/**
+ *	Checks if a file exists
+ *	@param	filename	The path and name of the file to check
+ *	@return true if the file exists, false otherwise
+ */
+stock bool:dini_Exists(const filename[])
+{
+	if(fexist(filename)) return true;
 	return false;
 }
 
-stock dini_Remove(const filename[]) {
-	if (!fexist(filename)) return false;
-	fremove(filename);
-	return true;
+/**
+ *	Deletes a file
+ *	@param	filename	The path and name of the file to delete
+ *	@return true if the file was deleted, false if it did not exist or couldn't be deleted
+ */
+stock bool:dini_Remove(const filename[])
+{
+	if(!fexist(filename)) return false;
+	return fremove(filename);
 }
 
-stock dini_Create(const filename[]) {
-	if (fexist(filename)) return false;
+/**
+ *	Creates a file
+ *	@param	filename	The path and name of the file to create
+ *	@return true if the file was created, false if it already existed or couldn't be created
+ */
+stock bool:dini_Create(const filename[])
+{
+	if(fexist(filename)) return false;
 	new File:fhnd = fopen(filename, io_write);
-	fclose(fhnd);
-	return true;
+	if(fhnd) {
+		fclose(fhnd);
+		return true;
+	}
+	return false;
 }
 
-stock dini_ExtractKey(const line[]) {
+/**
+ *	Returns the key of a string in the form "key=value"
+ *	@param	line	The string to get the key from
+ *	@return A string containing the key
+ */
+stock dini_ExtractKey(const line[])
+{
 	new tmp[MAX_STRING], pos = strfind(line, "=", true);
 	if (pos == -1) return tmp;
 	strcpy(tmp, line, sizeof(tmp), pos);
 	return tmp;
 }
 
-stock dini_ExtractValue(const line[]) {
+/**
+ *	Returns the value of a string in the form "key=value"
+ *	@param	line	The string to get the value from
+ *	@return A string containing the value
+ */
+stock dini_ExtractValue(const line[])
+{
     new tmp[MAX_STRING], pos = strfind(line, "=", true);
     if (pos == -1) return tmp;
 	strcpy(tmp, line[pos + 1]);
     return tmp;
 }
 
-stock dini_Set(const filename[], const key[], value[]) {
+/**
+ *	Sets the value of a key
+ *	@param	filename	The ini file
+ *	@param	key			The key to set the value of
+ *	@param	value		The value to set
+ *	@return true if the key was set, false otherwise
+ */
+stock bool:dini_Set(const filename[], const key[], value[])
+{
 	if (key[0] == '\0') return false; /* If we have no sign in key, it can't be set*/
 	new File:fohnd = fopen(filename, io_read);
 	if (!fohnd) return false;
@@ -84,7 +148,7 @@ stock dini_Set(const filename[], const key[], value[]) {
 			wasset = true;
 		}
 		else {
-			StripNewLine(tmpres);
+			strstripnewline(tmpres);
 		}
 		if(tmpres[0] != '\0') {
 			// ignore blank lines
@@ -108,40 +172,91 @@ stock dini_Set(const filename[], const key[], value[]) {
 	return false;
 }
 
-
-stock dini_IntSet(const filename[], const key[], value) {
+/**
+ *	Sets the value of a key to an integer
+ *	@param	filename	The ini file
+ *	@param	key			The key to set the value of
+ *	@param	value		The value to set
+ *	@return true if the key was set, false otherwise
+ */
+stock bool:dini_IntSet(const filename[], const key[], value)
+{
 	new valuestring[50];
-	format(valuestring, sizeof(valuestring), "%d", value);
+	format(valuestring, sizeof(valuestring), "%i", value);
 	return dini_Set(filename, key, valuestring);
 }
 
-stock dini_Int(const filename[], const key[]) {
+/**
+ *	Gets the value of a key as an integer
+ *	@param	filename	The ini file
+ *	@param	key			The key to get the value of
+ *	@return true value was an integer, 0 otherwise
+ */
+stock dini_Int(const filename[], const key[])
+{
 	return strval(dini_Return(filename, key));
 }
 
-stock dini_FloatSet(const filename[], const key[], Float:value) {
+/**
+ *	Sets the value of a key to a float
+ *	@param	filename	The ini file
+ *	@param	key			The key to set the value of
+ *	@param	value		The value to set
+ *	@return true if the key was set, false otherwise
+ */
+stock bool:dini_FloatSet(const filename[], const key[], Float:value)
+{
 	new valuestring[50];
 	format(valuestring, sizeof(valuestring), "%f", value);
 	return dini_Set(filename, key, valuestring);
 }
 
-stock Float:dini_Float(const filename[], const key[]) {
+/**
+ *	Gets the value of a key as a floating point number
+ *	@param	filename	The ini file
+ *	@param	key			The key to get the value of
+ *	@return true value was a floating point number, 0.0 otherwise
+ */
+stock Float:dini_Float(const filename[], const key[])
+{
 	return floatstr(dini_Return(filename, key));
 }
 
-stock bool:dini_Bool(const filename[], const key[]) {
-	new tmpres[10];
+/**
+ *	Sets the value of a key to a boolean
+ *	@param	filename	The ini file
+ *	@param	key			The key to set the value of
+ *	@param	value		The value to set
+ *	@return true if the key was set, false otherwise
+ */
+stock bool:dini_BoolSet(const filename[], const key[], bool:value)
+{
+	return dini_Set(filename, key, value ? ("true") : ("false"));
+}
+
+/**
+ *	Gets the value of a key as a boolean
+ *	@param	filename	The ini file
+ *	@param	key			The key to get the value of
+ *	@return true value was "true", "t", or non-zero, false otherwise
+ */
+stock bool:dini_Bool(const filename[], const key[])
+{
+	new tmpres[6];
 	if(!dini_Get(filename, key, tmpres)) return false;
 	if(strcmp(tmpres, "true", true) == 0 || strcmp(tmpres, "t", true) == 0) return true;
 	if(strcmp(tmpres, "false", true) == 0 || strcmp(tmpres, "f", true) == 0) return false;
 	return strval(tmpres) ? true : false;
 }
 
-stock dini_BoolSet(const filename[], const key[], bool:value) {
-	return dini_Set(filename, key, value ? ("true") : ("false"));
-}
-
-stock dini_Unset(const filename[], const key[]) {
+/**
+ *	Removes an ini key
+ *	@param	filename	The ini file
+ *	@param	key			The key to remove
+ *	@return true if the key was removed, false otherwise
+ */
+stock bool:dini_Unset(const filename[], const key[])
+{
 	new File:fohnd = fopen(filename, io_read);
 	if (!fohnd) return false;
 
@@ -156,7 +271,7 @@ stock dini_Unset(const filename[], const key[]) {
 		if (pos != -1 && tmpres[0] != '#' && strcmp(tmpres, key, true, pos) == 0 && key[pos] == '\0') {
 			/* We've got what needs to be removed! */
 		} else {
-			StripNewLine(tmpres);
+			strstripnewline(tmpres);
 			if(tmpres[0] != '\0') {
 				// ignore blank lines
 				fwrite(fwhnd, tmpres);
@@ -175,7 +290,14 @@ stock dini_Unset(const filename[], const key[]) {
 	return false;
 }
 
-stock dini_Return(const filename[], const key[]) {
+/**
+ *	Returns the value of an ini setting
+ *	@param	filename	The ini file
+ *	@param	key			The key to get the value of
+ *	@return The value of the ini setting
+ */
+stock dini_Return(const filename[], const key[])
+{
 	new File:fohnd = fopen(filename, io_read), tmpres[MAX_STRING];
 	if (!fohnd) return tmpres;
 
@@ -185,7 +307,7 @@ stock dini_Return(const filename[], const key[]) {
 		new pos = strfind(tmpres, "=", false);
 		if (pos != -1 && strcmp(tmpres, key, true, pos) == 0 && key[pos] == '\0') {
 			/* We've got what we need */
-			StripNewLine(tmpres);
+			strstripnewline(tmpres);
 			strcpy(tmpres2, tmpres[pos + 1]);
 			fclose(fohnd);
 			return tmpres2;
@@ -195,7 +317,16 @@ stock dini_Return(const filename[], const key[]) {
 	return tmpres2;
 }
 
-stock dini_Get(const filename[], const key[], dest[], maxlength=sizeof(dest)) {
+/**
+ *	Gets the value of an ini setting
+ *	@param	filename	The ini file
+ *	@param	key			The key to get the value of
+ *	@param	dest		The string to store the value in
+ *	@param	maxlength	The length of the destination string
+ *	@return true if the key is set, false otherwise
+ */
+stock bool:dini_Get(const filename[], const key[], dest[], maxlength=sizeof(dest))
+{
 	new File:fohnd = fopen(filename, io_read);
 	if (!fohnd) return false;
 
@@ -205,7 +336,7 @@ stock dini_Get(const filename[], const key[], dest[], maxlength=sizeof(dest)) {
 		new pos = strfind(tmpres, "=", false);
 		if (pos != -1 && strcmp(tmpres, key, true, pos) == 0 && key[pos] == '\0') {
 			/* We've got what we need */
-			StripNewLine(tmpres);
+			strstripnewline(tmpres);
 			strcpy(dest, tmpres[pos + 1], maxlength);
 			fclose(fohnd);
 			return true;
@@ -215,7 +346,14 @@ stock dini_Get(const filename[], const key[], dest[], maxlength=sizeof(dest)) {
 	return false;
 }
 
-stock dini_Isset(const filename[], const key[]) {
+/**
+ *	Checks if a key is set
+ *	@param	filename	The ini file
+ *	@param	key			The key to check
+ *	@return true if the key is set, false otherwise
+ */
+stock bool:dini_Isset(const filename[], const key[])
+{
 	new File:fohnd = fopen(filename, io_read);
 	if (!fohnd) return false;
 
@@ -233,11 +371,13 @@ stock dini_Isset(const filename[], const key[]) {
 }
 
 /**
- *	Copies a textfile (Source file won't be deleted!)
- *	@param	oldname
- *			newname
+ *	Copies a textfile
+ *	@param	oldname		The path and name of the file to be copied
+ *	@param	newname		The path and name of the file to created
+ *	@return true if the file was copied successfully
  */
-stock fcopytextfile(const oldname[], const newname[]) {
+stock bool:fcopytextfile(const oldname[], const newname[])
+{
 	if (!fexist(oldname)) return false;
 	new File:ohnd = fopen(oldname, io_read);
 	if(!ohnd) return false;
@@ -246,7 +386,7 @@ stock fcopytextfile(const oldname[], const newname[]) {
 
 	new tmpres[MAX_STRING];
 	while (fread(ohnd, tmpres)) {
-		StripNewLine(tmpres);
+		strstripnewline(tmpres);
 		fwrite(nhnd, tmpres);
 		fwrite(nhnd, "\r\n");
 	}
@@ -255,12 +395,22 @@ stock fcopytextfile(const oldname[], const newname[]) {
 	return true;
 }
 
-stock fcopy(const oldname[], const newname[]) {
+/**
+ *	Copies a file
+ *	@param	oldname		The path and name of the file to be copied
+ *	@param	newname		The path and name of the file to created
+ *	@return true if the file was copied successfully
+ */
+stock bool:fcopy(const oldname[], const newname[])
+{
 	if (!fexist(oldname)) return false;
 	new File:ohnd = fopen(oldname, io_read);
 	if(!ohnd) return false;
 	new File:nhnd = fopen(newname, io_write);
-	if(!ohnd) return false;
+	if(!nhnd) {
+		fclose(ohnd);
+		return false;
+	}
 
 	for (new value, i = flength(ohnd); i > 0; i--) {
 		fputchar(nhnd, fgetchar(ohnd, value, false), false);
