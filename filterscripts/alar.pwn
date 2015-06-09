@@ -20,7 +20,7 @@
  */
 
 
-#define ALAR_VERSION 		1.3
+#define ALAR_VERSION 		1.3.1
 
 
 // Folders
@@ -3494,7 +3494,7 @@ cmd_ahelp(const playerid)
 		format(msg, sizeof(msg), "Admin chat can be used by typing \"%s\"", gChatPrefix[0][E_CHAT_STRING]);
 		for(new i = 1; i < sizeof(gChatPrefix); i++) {
 			if(gChatPrefix[i][E_CHAT_STRING] != '\0') {
-				format(msg, sizeof(msg), "%s\" or \"%s", gChatPrefix[i][E_CHAT_STRING]);
+				format(msg, sizeof(msg), "%s or \"%s\"", msg, gChatPrefix[i][E_CHAT_STRING]);
 			} else {
 				break;
 			}
@@ -4599,6 +4599,8 @@ dcmd_aban(const playerid, params[])
 
 dcmd_abancheck(const playerid, params[])
 {
+	if(LevelCheck(playerid, E_BANCHECK_LEVEL)) return 1;
+
 	new bool:isanip = IPisvalid(params, false);
 	if(params[0] == '\0' || (!isanip && !isValidName(params))) {
 		SendMessage(playerid, COLOUR_HELP, "USAGE: /abancheck [player name] or [IP]");
@@ -7283,7 +7285,7 @@ dcmd_aloginas(const playerid, params[])
 			}
 			LoopPlayers(i) {
 				if(strcmp(pname, ReturnPlayerName(i), true) == 0) {
-					format(msg, sizeof(msg), "%s(%i) has been kicked from the server (Admin impersonation)", pname, playerid);
+					format(msg, sizeof(msg), "%s(%i) has been kicked from the server (Admin impersonation)", ReturnPlayerName(playerid), playerid);
 					SendClientMessage(playerid, COLOUR_WARNING, "You have been kicked from the server (Admin impersonation)");
 					AddJoinString(playerid, COLOUR_KICK, msg);
 					AddLogString(msg);
@@ -7351,7 +7353,7 @@ dcmd_aloginas(const playerid, params[])
 		}
 
 		SendClientMessage(playerid, COLOUR_WARNING, "You have been kicked from the server (Incorrect password)");
-		format(msg, sizeof(msg), "%s(%i) has been kicked from the server (Incorrect password)", pname, playerid);
+		format(msg, sizeof(msg), "%s(%i) has been kicked from the server (Incorrect password)", ReturnPlayerName(playerid), playerid);
 		AddJoinString(playerid, COLOUR_KICK, msg);
 		AddLogString(msg);
 		LogAction(msg);
@@ -9208,7 +9210,6 @@ dcmd_asuspendname(const playerid, params[])
 
 			AddJoinString(i, COLOUR_SUSPEND, msg);
 			Kick(i);
-			break;
 		}
 	}
 	return 1;
@@ -11916,6 +11917,7 @@ public alar_SetAdminState(playerid, newstate, seconds)
 			UnwriteAdminState(playerid, ADMIN_STATE_MUTED);
 		} else {
 			WriteAdminState(playerid, ADMIN_STATE_MUTED);
+			gPlayerData[playerid][E_MUTE_TIME] = 0;
 		}
 		gPlayerData[playerid][E_STATE] |= ADMIN_STATE_MUTED;
 	}
@@ -11928,6 +11930,7 @@ public alar_SetAdminState(playerid, newstate, seconds)
 			UnwriteAdminState(playerid, ADMIN_STATE_JAILED);
 		} else {
 			WriteAdminState(playerid, ADMIN_STATE_JAILED);
+			gPlayerData[playerid][E_JAIL_TIME] = 0;
 		}
 		gPlayerData[playerid][E_STATE] |= ADMIN_STATE_JAILED;
 	}
@@ -11940,6 +11943,7 @@ public alar_SetAdminState(playerid, newstate, seconds)
 			UnwriteAdminState(playerid, ADMIN_STATE_FROZEN);
 		} else {
 			WriteAdminState(playerid, ADMIN_STATE_FROZEN);
+			gPlayerData[playerid][E_FREEZE_TIME] = 0;
 		}
 		gPlayerData[playerid][E_STATE] |= ADMIN_STATE_FROZEN;
 	}
@@ -11949,6 +11953,8 @@ public alar_SetAdminState(playerid, newstate, seconds)
 		if(seconds > 0) {
 			gPlayerData[playerid][E_UNDESYNC] = SetTimerEx("alar_undesync", seconds * 1000, 0, "i", playerid);
 			gPlayerData[playerid][E_DESYNC_TIME] = gettime() + seconds;
+		} else {
+			gPlayerData[playerid][E_DESYNC_TIME] = 0;
 		}
 		gPlayerData[playerid][E_STATE] |= ADMIN_STATE_DESYNCED;
 	}
@@ -11972,7 +11978,10 @@ public alar_ClearAdminState(playerid, newstate)
 	new oldstate = gPlayerData[playerid][E_STATE];
 
 	if(newstate & ADMIN_STATE_MUTED & oldstate) {
-		if(gPlayerData[playerid][E_UNMUTE]) KillTimer(gPlayerData[playerid][E_UNMUTE]);
+		if(gPlayerData[playerid][E_UNMUTE]) {
+			KillTimer(gPlayerData[playerid][E_UNMUTE]);
+			gPlayerData[playerid][E_UNMUTE] = 0;
+		}
 		UnwriteAdminState(playerid, ADMIN_STATE_MUTED);
 		gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_MUTED;
 		gPlayerData[playerid][E_MUTE_TIME] = 0;
@@ -11981,7 +11990,10 @@ public alar_ClearAdminState(playerid, newstate)
 	}
 
 	if(newstate & ADMIN_STATE_JAILED & oldstate) {
-		if(gPlayerData[playerid][E_UNJAIL]) KillTimer(gPlayerData[playerid][E_UNJAIL]);
+		if(gPlayerData[playerid][E_UNJAIL]) {
+			KillTimer(gPlayerData[playerid][E_UNJAIL]);
+			gPlayerData[playerid][E_UNJAIL] = 0;
+		}
 		UnwriteAdminState(playerid, ADMIN_STATE_JAILED);
 		gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_JAILED;
 		gPlayerData[playerid][E_JAIL_TIME] = 0;
@@ -12011,7 +12023,10 @@ public alar_ClearAdminState(playerid, newstate)
 	}
 
 	if(newstate & ADMIN_STATE_FROZEN & oldstate) {
-		if(gPlayerData[playerid][E_UNFREEZE]) KillTimer(gPlayerData[playerid][E_UNFREEZE]);
+		if(gPlayerData[playerid][E_UNFREEZE]) {
+			KillTimer(gPlayerData[playerid][E_UNFREEZE]);
+			gPlayerData[playerid][E_UNFREEZE] = 0;
+		}
 		UnwriteAdminState(playerid, ADMIN_STATE_FROZEN);
 		gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_FROZEN;
 		gPlayerData[playerid][E_FREEZE_TIME] = 0;

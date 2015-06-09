@@ -350,7 +350,7 @@ stock alarPlayerSpectatePlayer(playerid, targetplayerid, mode = SPECTATE_MODE_NO
 
 stock alarPlayerSpectateVehicle(playerid, targetvehicleid, mode = SPECTATE_MODE_NORMAL)
 {
-	if(PlayerSpectatePlayer(playerid, targetvehicleid, mode)) {
+	if(PlayerSpectateVehicle(playerid, targetvehicleid, mode)) {
 		CallRemoteFunction("alar_OnPlayerSpectateVehicle", "ii", playerid, targetvehicleid);
 		return 1;
 	}
