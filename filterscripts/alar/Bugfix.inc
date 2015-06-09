@@ -217,6 +217,32 @@ stock bf_BanEx(playerid, const reason[])
 #endif
 #define BanEx	bf_BanEx
 
+// PVars crashing when setting to empty strings
+stock bf_SetPVarString(playerid, varname[], string_value[])
+{
+	if(string_value[0] == '\0') return SetPVarString(playerid, varname, "\1");
+	return SetPVarString(playerid, varname, string_value);
+}
+#if defined _ALS_SetPVarString
+    #error "Bugfix.inc must be included immediately after a_samp.inc"
+#else
+    #define _ALS_SetPVarString
+#endif
+#define SetPVarString	bf_SetPVarString
+
+stock bf_GetPVarString(playerid, varname[], string_return[], len)
+{
+	new ret = GetPVarString(playerid, varname, string_return, len);
+	if(isnull(string_return)) string_return[0] = '\0';
+	return ret;
+}
+#if defined _ALS_GetPVarString
+    #error "Bugfix.inc must be included immediately after a_samp.inc"
+#else
+    #define _ALS_GetPVarString
+#endif
+#define GetPVarString	bf_GetPVarString
+
 // GetVehicleTrailer doesn't work for trains
 stock bf_GetVehicleTrailer(vehicleid)
 {

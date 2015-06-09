@@ -20,7 +20,7 @@
  */
 
 
-#define ALAR_VERSION 		1.4.3
+#define ALAR_VERSION 		1.4.4
 
 // Database
 #define ALAR_DATABASE		"Alar.sqlite"
@@ -1134,7 +1134,7 @@ public OnFilterScriptInit()
 
 		if(GetPVarType(i, "CountryCode") != PLAYER_VARTYPE_STRING) {
 			strcpy(gPlayerData[i][E_COUNTRY], ReturnCuntCode(gAlarDB, pIP), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
-			if(gPlayerData[i][E_COUNTRY][0]) {
+			if(gPlayerData[i][E_COUNTRY][0] != '\0') {
 				SetPVarString(i, "CountryCode", gPlayerData[i][E_COUNTRY]);
 			}
 		} else {
@@ -1617,7 +1617,9 @@ public OnPlayerConnect(playerid)
 
 	if(GetPVarType(playerid, "CountryCode") != PLAYER_VARTYPE_STRING) {
 		strcpy(gPlayerData[playerid][E_COUNTRY], ReturnCuntCode(gAlarDB, pIP), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
-		SetPVarString(playerid, "CountryCode", gPlayerData[playerid][E_COUNTRY]);
+		if(gPlayerData[playerid][E_COUNTRY][0] != '\0') {
+			SetPVarString(playerid, "CountryCode", gPlayerData[playerid][E_COUNTRY]);
+		}
 	} else {
 		GetPVarString(playerid, "CountryCode", gPlayerData[playerid][E_COUNTRY], sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
 	}
