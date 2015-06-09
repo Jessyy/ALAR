@@ -20,7 +20,7 @@
  */
 
 
-#define ALAR_VERSION 		1.4.1
+#define ALAR_VERSION 		1.4.2
 
 // Database
 #define ALAR_DATABASE		"Alar.sqlite"
@@ -769,11 +769,7 @@ forward alar_AddMessageToHistory(const playername[], colour, const message[], fl
 forward alar_AddLineToHistory(colour, const message[], flags);
 forward alar_ClearHistory();
 forward alar_DestroyVehicle(vehicleid);
-forward alar_GetPlayerCountryCode(playerid);
-forward alar_GetCountryCode(const IP[]);
-forward alar_GetAdminLevel(playerid);
 forward alar_GetAdminState(playerid);
-forward alar_GetAdminSpectating(playerid);
 forward alar_SetAdminSpectating(playerid, targetid, bool:saveplayer);
 forward alar_DisableAdminSpectating(playerid);
 forward alar_ClearAdminSpawnData(playerid);
@@ -783,6 +779,7 @@ forward alar_OnPlayerSpectatePlayer(playerid, specid);
 forward alar_OnPlayerSpectateVehicle(playerid, vehicleid);
 forward alar_OnPlayerVehicleChange(playerid, newvehicleid, oldvehicleid);
 forward alar_OnPlayerWorldChange(playerid, newworldid);
+forward alar_OnVehicleDestroyed(vehicleid);
 forward alar_SetAdminState(playerid, newstate, seconds);
 forward alar_ClearAdminState(playerid, newstate);
 forward alar_Ban(const playername[], const playerip[], const reason[], const adminname[], const adminip[], bool:hidename);
@@ -1049,7 +1046,7 @@ public OnFilterScriptInit()
 			strcpy(gPlayerData[i][E_NAME], pname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
 			if(!logininfo[E_LOGIN_MANUAL] && gServerData[E_AUTO_LOGIN] && IPcompare(logininfo[E_LOGIN_IP], pIP)) {
 				Bit_Set(g_bitAdmins, i, 1);
-				gPlayerData[i][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL];
+				SetPVarInt(i, "AlarLevel", (gPlayerData[i][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL]));
 
 				if(logininfo[E_LOGIN_HIDDEN]) {
 					gPlayerData[i][E_STATE] |= ADMIN_STATE_HIDDEN;
@@ -1133,8 +1130,26 @@ public OnFilterScriptInit()
 			}
 			CallRemoteFunction("OnAdminStateChange", "iii", i, gPlayerData[i][E_STATE], 0);
 		}
+		SetPVarInt(i, "AlarStatus", gPlayerData[i][E_STATE]);
 
-		strcpy(gPlayerData[i][E_COUNTRY], ReturnCuntCode(gAlarDB, pIP), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
+		if(GetPVarType(i, "CountryCode") != PLAYER_VARTYPE_STRING) {
+			strcpy(gPlayerData[i][E_COUNTRY], ReturnCuntCode(gAlarDB, pIP), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
+			if(gPlayerData[i][E_COUNTRY][0]) {
+				SetPVarString(i, "CountryCode", gPlayerData[i][E_COUNTRY]);
+			}
+		} else {
+			GetPVarString(i, "CountryCode", gPlayerData[i][E_COUNTRY], sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
+		}
+
+		if(gPlayerData[i][E_COUNTRY][0] != '\0') {
+			if(GetPVarType(i, "CountryName") != PLAYER_VARTYPE_STRING) {
+				new CountryName[MAX_COUNTRY_NAME];
+				if(GetCuntName(gPlayerData[i][E_COUNTRY], CountryName)) {
+					SetPVarString(i, "CountryName", CountryName);
+				}
+			}
+		}
+
 		gPlayerData[i][E_IPCODE] = IP2Code(pIP);
 	}
 
@@ -1163,6 +1178,7 @@ public OnFilterScriptExit()
 			} else {
 				CallRemoteFunction("OnAdminSpectate", "iii", i, INVALID_PLAYER_ID, gPlayerData[i][E_SPECID]);
 			}
+			DeletePVar(i, "AlarSpectating");
 			SpawnUsingData(i);
 		}
 
@@ -1172,6 +1188,7 @@ public OnFilterScriptExit()
 			if(gPlayerData[i][E_STATE] & ADMIN_STATE_FROZEN) alar_unfreeze(i);
 			CallRemoteFunction("OnAdminStateChange", "iii", i, 0, gPlayerData[i][E_STATE]);
 		}
+		DeletePVar(i, "AlarStatus");
 
 		if(!IsPlayerNPC(i)) Alias_Update(gAlarDB, ReturnPlayerName(i), Code2IP(gPlayerData[i][E_IPCODE]), exittime - gPlayerData[i][E_JOIN_TIME]);
 
@@ -1209,6 +1226,8 @@ public OnFilterScriptExit()
 				}
 			}
 		#endif
+
+		DeletePVar(i, "AlarLevel");
 	}
 
 	Bit_Loop(gCreatedVehicles, i) {
@@ -1550,7 +1569,7 @@ public OnPlayerConnect(playerid)
 
 		if(!logininfo[E_LOGIN_MANUAL] && gServerData[E_AUTO_LOGIN] && IPcompare(logininfo[E_LOGIN_IP], pIP)) {
 			Bit_Set(g_bitAdmins, playerid, 1);
-			gPlayerData[playerid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL];
+			SetPVarInt(playerid, "AlarLevel", (gPlayerData[playerid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL]));
 
 			if(logininfo[E_LOGIN_HIDDEN]) {
 				gPlayerData[playerid][E_STATE] |= ADMIN_STATE_HIDDEN;
@@ -1595,6 +1614,23 @@ public OnPlayerConnect(playerid)
 
 	if(gServerData[E_STORE_ALIASES] && !IsPlayerNPC(playerid)) Alias_Add(gAlarDB, pname, pIP);
 	strcpy(gPlayerData[playerid][E_COUNTRY], ReturnCuntCode(gAlarDB, pIP), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
+
+	if(GetPVarType(playerid, "CountryCode") != PLAYER_VARTYPE_STRING) {
+		strcpy(gPlayerData[playerid][E_COUNTRY], ReturnCuntCode(gAlarDB, pIP), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
+		SetPVarString(playerid, "CountryCode", gPlayerData[playerid][E_COUNTRY]);
+	} else {
+		GetPVarString(playerid, "CountryCode", gPlayerData[playerid][E_COUNTRY], sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
+	}
+
+	new CountryName[MAX_COUNTRY_NAME];
+	if(GetPVarType(playerid, "CountryName") != PLAYER_VARTYPE_STRING) {
+		if(gPlayerData[playerid][E_COUNTRY][0] != '\0' && GetCuntName(gPlayerData[playerid][E_COUNTRY], CountryName)) {
+			SetPVarString(playerid, "CountryName", CountryName);
+		}
+	} else {
+		GetPVarString(playerid, "CountryCode", CountryName, sizeof(CountryName));
+	}
+
 	gPlayerData[playerid][E_IPCODE] = IP2Code(pIP);
 
 	db_free_result(db_query(gAlarDB, "END TRANSACTION"));
@@ -1605,8 +1641,8 @@ public OnPlayerConnect(playerid)
 				if(gServerData[E_LOG_LOGINS]) {
 					AddLogString(msg);
 
-					if(gServerData[E_JOIN_COUNTRIES] && gPlayerData[playerid][E_COUNTRY][0]) {
-						format(msg, sizeof(msg), "*** %s(%i) has joined the server (%s)", pname, playerid, ReturnCuntName(gPlayerData[playerid][E_COUNTRY]));
+					if(gServerData[E_JOIN_COUNTRIES] && CountryName[0]) {
+						format(msg, sizeof(msg), "*** %s(%i) has joined the server (%s)", pname, playerid, CountryName);
 						AddJoinChatLine(playerid, COLOUR_CONNECT, msg);
 						#if CHATHISTORY_SIZE > 0
 							if(gServerData[E_CHAT_JOINS]) AddHistoryLine(COLOUR_CONNECT, msg, playerid);
@@ -1628,11 +1664,9 @@ public OnPlayerConnect(playerid)
 					#endif
 
 					new amsg[MAX_INPUT];
-					if(gServerData[E_JOIN_COUNTRIES] && gPlayerData[playerid][E_COUNTRY][0]) {
-						new cuntname[100];
-						strcpy(cuntname, ReturnCuntName(gPlayerData[playerid][E_COUNTRY]));
-						format(string, sizeof(string), "*** %s(%i) has joined the server (%s)", pname, playerid, cuntname);
-						format(amsg, sizeof(amsg), "*** %s(%i) has joined the server as a level %i admin (%s)", pname, playerid, gPlayerData[playerid][E_ADMINLEVEL], cuntname);
+					if(gServerData[E_JOIN_COUNTRIES] && CountryName[0]) {
+						format(string, sizeof(string), "*** %s(%i) has joined the server (%s)", pname, playerid, CountryName);
+						format(amsg, sizeof(amsg), "*** %s(%i) has joined the server as a level %i admin (%s)", pname, playerid, gPlayerData[playerid][E_ADMINLEVEL], CountryName);
 					} else {
 						format(string, sizeof(string), "*** %s(%i) has joined the server", pname, playerid);
 						format(amsg, sizeof(amsg), "*** %s(%i) has joined the server as a level %i admin", pname, playerid, gPlayerData[playerid][E_ADMINLEVEL]);
@@ -1666,8 +1700,8 @@ public OnPlayerConnect(playerid)
 					}
 				}
 			} else {
-				if(gServerData[E_JOIN_COUNTRIES] && gPlayerData[playerid][E_COUNTRY][0]) {
-					format(msg, sizeof(msg), "*** %s(%i) has joined the server (%s)", pname, playerid, ReturnCuntName(gPlayerData[playerid][E_COUNTRY]));
+				if(gServerData[E_JOIN_COUNTRIES] && CountryName[0]) {
+					format(msg, sizeof(msg), "*** %s(%i) has joined the server (%s)", pname, playerid, CountryName);
 					AddJoinChatLine(playerid, COLOUR_CONNECT, msg);
 					#if CHATHISTORY_SIZE > 0
 						if(gServerData[E_CHAT_JOINS]) AddHistoryLine(COLOUR_CONNECT, msg, playerid);
@@ -1724,6 +1758,7 @@ public OnPlayerConnect(playerid)
 		}
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], 0);
 	}
+	SetPVarInt(playerid, "AlarStatus", gPlayerData[playerid][E_STATE]);
 
 	gPlayerData[playerid][E_LAST_ACTIVE] = gPlayerData[playerid][E_LAST_WARNING] = GetTickCount();
 
@@ -1771,6 +1806,7 @@ public OnPlayerDisconnect(playerid, reason)
 				if(gPlayerData[i][E_SPECID] == playerid) {	// technically the player is still connected :(
 					gPlayerData[i][E_SPECMODE] = 3;
 					CallRemoteFunction("OnAdminSpectate", "iii", i, FREE_SPECTATE_ID, gPlayerData[i][E_SPECID]);
+					SetPVarInt(i, "AlarSpectating", INVALID_PLAYER_ID);
 
 					PutPlayerIntoFreeSpec(i);
 					gPlayerData[i][E_SPECID] = INVALID_PLAYER_ID;
@@ -1939,13 +1975,6 @@ public OnPlayerSpawn(playerid)
 
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_FROZEN) {
 		TogglePlayerControllable(playerid, false);
-	}
-
-	// People spawning using the SpawnPlayer() command
-	LoopPlayers(i) {
-		if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == playerid) {
-			PlayerSpectatePlayer(i, gPlayerData[i][E_SPECID]);
-		}
 	}
 	return 1;
 }
@@ -2129,6 +2158,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				CallRemoteFunction("OnAdminSpectate", "iii", playerid, INVALID_PLAYER_ID, FREE_SPECTATE_ID);
 				SetCameraBehindPlayer(playerid);
 			}
+			DeletePVar(playerid, "AlarSpectating");
 			if(gPlayerData[playerid][E_SPECHUD] != INVALID_TEXT_DRAW) {
 				SpecHUDHide(playerid);
 			}
@@ -2262,6 +2292,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					SetPlayerSpectating(playerid, target);
 
 					CallRemoteFunction("OnAdminSpectate", "iii", playerid, target, FREE_SPECTATE_ID);
+					SetPVarInt(playerid, "AlarSpectating", target);
 
 					#if SPEC_TXT_TIME > 0
 						ShowSpecTxt(playerid);
@@ -2366,6 +2397,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 						case 3: {
 							// free spec
 							CallRemoteFunction("OnAdminSpectate", "iii", playerid, FREE_SPECTATE_ID, gPlayerData[playerid][E_SPECID]);
+							DeletePVar(playerid, "AlarSpectating");
 							PutPlayerIntoFreeSpec(playerid);
 							gPlayerData[playerid][E_SPECID] = INVALID_PLAYER_ID;
 						}
@@ -2375,6 +2407,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					// free spec
 					gPlayerData[playerid][E_SPECMODE] = 3;
 					CallRemoteFunction("OnAdminSpectate", "iii", playerid, FREE_SPECTATE_ID, gPlayerData[playerid][E_SPECID]);
+					DeletePVar(playerid, "AlarSpectating");
 
 					PutPlayerIntoFreeSpec(playerid);
 					gPlayerData[playerid][E_SPECID] = INVALID_PLAYER_ID;
@@ -2573,7 +2606,7 @@ acmd:aalias(const playerid, const params[], const bool:help)
 		return 1;
 	}
 
-	if(isnull(params)) {
+	if(isnull(params) && !(gPlayerData[playerid][E_SPECTATING] && gPlayerData[playerid][E_SPECID] != INVALID_PLAYER_ID)) {
 		SendMessage(playerid, COLOUR_HELP, "USAGE: /aalias [player] or [player name] or [IP]");
 		return 1;
 	}
@@ -2610,7 +2643,7 @@ acmd:aalias(const playerid, const params[], const bool:help)
 			format(string, sizeof(string), "No aliases found for %s", params);
 			SendMessage(playerid, COLOUR_WARNING, string);
 		}
-	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID) {
+	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID || (isnull(params) && gPlayerData[playerid][E_SPECTATING] && (pid = gPlayerData[playerid][E_SPECID]) != INVALID_PLAYER_ID)) {
 		format(string, sizeof(string), "%s's Aliases: ", ReturnPlayerName(pid));
 		if(Alias_GetAliasFromIP(gAlarDB, ReturnPlayerIP(pid), string)) {
 			if(playerid == INVALID_PLAYER_ID) {
@@ -2651,7 +2684,7 @@ acmd:aalias2(const playerid, const params[], const bool:help)
 		return 1;
 	}
 
-	if(isnull(params)) {
+	if(isnull(params) && !(gPlayerData[playerid][E_SPECTATING] && gPlayerData[playerid][E_SPECID] != INVALID_PLAYER_ID)) {
 		SendMessage(playerid, COLOUR_HELP, "USAGE: /aalias2 [player] or [player name] or [IP]");
 		return 1;
 	}
@@ -2672,7 +2705,7 @@ acmd:aalias2(const playerid, const params[], const bool:help)
 		}
 	} else if(IPisvalid(params, false)) {
 		pIP = IPsubnet(params);
-	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID) {
+	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID  || (isnull(params) && gPlayerData[playerid][E_SPECTATING] && (pid = gPlayerData[playerid][E_SPECID]) != INVALID_PLAYER_ID)) {
 		GetPlayerIp(pid, pIP, sizeof(pIP));
 		pIP = IPsubnet(pIP);
 	} else if(isValidName(params)) {
@@ -2716,7 +2749,7 @@ acmd:aalias3(const playerid, const params[], const bool:help)
 		return 1;
 	}
 
-	if(isnull(params)) {
+	if(isnull(params) && !(gPlayerData[playerid][E_SPECTATING] && gPlayerData[playerid][E_SPECID] != INVALID_PLAYER_ID)) {
 		SendMessage(playerid, COLOUR_HELP, "USAGE: /aalias3 [player] or [player name]");
 		return 1;
 	}
@@ -2742,7 +2775,7 @@ acmd:aalias3(const playerid, const params[], const bool:help)
 			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
 			return 1;
 		}
-	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID) {
+	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID  || (isnull(params) && gPlayerData[playerid][E_SPECTATING] && (pid = gPlayerData[playerid][E_SPECID]) != INVALID_PLAYER_ID)) {
 		new pname[MAX_PLAYER_NAME];
 		GetPlayerName(pid, pname, sizeof(pname));
 		format(string, sizeof(string), "%s's Aliases: ", pname);
@@ -3686,6 +3719,7 @@ acmd:abring(const playerid, const params[], const bool:help)
 					gPlayerData[playerid][E_SPECMODE] = 3;
 					CallRemoteFunction("OnAdminSpectate", "iii", pid, FREE_SPECTATE_ID, gPlayerData[pid][E_SPECID]);
 					gPlayerData[pid][E_SPECID] = INVALID_PLAYER_ID;
+					SetPVarInt(playerid, "AlarSpectating", INVALID_PLAYER_ID);
 					#if SPEC_TXT_TIME > 0
 						ShowSpecTxt(pid);
 					#endif
@@ -3706,6 +3740,7 @@ acmd:abring(const playerid, const params[], const bool:help)
 					StoreSpawnData(pid);
 				}
 				CallRemoteFunction("OnAdminSpectate", "iii", pid, FREE_SPECTATE_ID, INVALID_PLAYER_ID);
+				SetPVarInt(playerid, "AlarSpectating", INVALID_PLAYER_ID);
 
 				TogglePlayerSpectating(pid, true);
 
@@ -3746,6 +3781,7 @@ acmd:abring(const playerid, const params[], const bool:help)
 				gPlayerData[pid][E_SPECMODE] = 0;
 				if(gSpawnMethod <= SPAWN_DEFAULT) StoreSpawnData(pid);
 				CallRemoteFunction("OnAdminSpectate", "iii", pid, gPlayerData[pid][E_SPECID], INVALID_PLAYER_ID);
+				SetPVarInt(playerid, "AlarSpectating", gPlayerData[pid][E_SPECID]);
 				TogglePlayerSpectating(pid, true);
 				gPlayerData[pid][E_SPECTATING] = true;
 				SetPlayerSpectating(pid, gPlayerData[tid][E_SPECID]);
@@ -4126,6 +4162,7 @@ acmd:aclearstatus(const playerid, const params[], const bool:help)
 
 		if(oldstatus != gPlayerData[i][E_STATE]) {
 			CallRemoteFunction("OnAdminStateChange", "iii", i, gPlayerData[i][E_STATE], oldstatus);
+			SetPVarInt(i, "AlarStatus", gPlayerData[i][E_STATE]);
 			LoopPlayers(j) {
 				if(gPlayerData[j][E_SPECTATING] && gPlayerData[j][E_SPECID] == i) {
 					SpecHUDUpdate(j);
@@ -4390,8 +4427,8 @@ acmd:acreate(const playerid, const params[], const bool:help)
 		}
 	}
 
-	// cant get in rc cars (441, 464, 465, 501, 564, 594), trains (449, 569, 537, 538, 570, 590) are crashy
-	if(modid == 441 || modid == 464 || modid == 465 || modid == 501 || modid == 564 || modid == 594 || modid == 569 || modid == 449 || modid == 537 || modid == 538 || modid == 570 || modid == 590) {
+	// can't create trains
+	if(modid == 537 || modid == 538) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Unsupported vehicle");
 		return 1;
 	}
@@ -4770,6 +4807,7 @@ acmd:adesync(const playerid, const params[], const bool:help)
 		}
 	}
 	CallRemoteFunction("OnAdminStateChange", "iii", pid, gPlayerData[pid][E_STATE], gPlayerData[pid][E_STATE] & ~ADMIN_STATE_DESYNCED);
+	SetPVarInt(pid, "AlarStatus", gPlayerData[pid][E_STATE]);
 	return 1;
 }
 
@@ -5386,6 +5424,7 @@ acmd:afreeze(const playerid, const params[], const bool:help)
 		}
 	}
 	CallRemoteFunction("OnAdminStateChange", "iii", pid, gPlayerData[pid][E_STATE], gPlayerData[pid][E_STATE] & ~ADMIN_STATE_FROZEN);
+	SetPVarInt(pid, "AlarStatus", gPlayerData[pid][E_STATE]);
 	return 1;
 }
 
@@ -5449,13 +5488,14 @@ acmd:agiveallcash(const playerid, const params[], const bool:help)
 		GivePlayerMoney(i, amt);
 	}
 
-	new msg[MAX_INPUT];
-	format(msg, sizeof(msg), "%s has given everyone $%i", ReturnPlayerName(playerid), amt);
+	new msg[MAX_INPUT], string[16];
+	string = strcommaval(amt);
+	format(msg, sizeof(msg), "%s has given everyone $%s", ReturnPlayerName(playerid), string);
 	LogAction(msg);
 	AddLogString(msg);
 
 	if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-		format(msg, sizeof(msg), "Everyone has been given $%i", amt);
+		format(msg, sizeof(msg), "Everyone has been given $%s", string);
 	}
 	SendClientMessageToAll(COLOUR_PLAYER, msg);
 	return 1;
@@ -5551,29 +5591,31 @@ acmd:agivecash(const playerid, const params[], const bool:help)
 	}
 
 	GivePlayerMoney(pid, amt);
+	new string[16];
+	string = strcommaval(amt);
 
 	if(pid == playerid) {
-		format(tmp, sizeof(tmp), "%s has given themself $%i", ReturnPlayerName(playerid), amt);
+		format(tmp, sizeof(tmp), "%s has given themself $%s", ReturnPlayerName(playerid), string);
 		LogAction(tmp);
 		AddLogString(tmp);
 
-		format(tmp, sizeof(tmp), "You have given yourself $%i", amt);
+		format(tmp, sizeof(tmp), "You have given yourself $%s", string);
 		SendClientMessage(playerid, COLOUR_ADMIN, tmp);
 		return 1;
 	} else {
 		if(gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN) {
-			format(tmp, sizeof(tmp), "You have been given $%i", amt);
+			format(tmp, sizeof(tmp), "You have been given $%s", string);
 		} else {
-			format(tmp, sizeof(tmp), "%s has given you $%i", ReturnPlayerName(playerid), amt);
+			format(tmp, sizeof(tmp), "%s has given you $%s", ReturnPlayerName(playerid), string);
 		}
 
 		SendClientMessage(pid, amt > 0 ? COLOUR_PLAYER : COLOUR_WARNING, tmp);
 
-		format(tmp, sizeof(tmp), "%s has given %s $%i", ReturnPlayerName(playerid), ReturnPlayerName(pid), amt);
+		format(tmp, sizeof(tmp), "%s has given %s $%s", ReturnPlayerName(playerid), ReturnPlayerName(pid), string);
 		LogAction(tmp);
 		AddLogString(tmp);
 
-		format(tmp, sizeof(tmp), "%s has been given $%i", ReturnPlayerName(pid), amt);
+		format(tmp, sizeof(tmp), "%s has been given $%s", ReturnPlayerName(pid), string);
 		SendClientMessage(playerid, COLOUR_ADMIN, tmp);
 		return 1;
 	}
@@ -5743,6 +5785,7 @@ acmd:agoto(const playerid, const params[], const bool:help)
 					gPlayerData[pid][E_SPECMODE] = 3;
 					CallRemoteFunction("OnAdminSpectate", "iii", playerid, FREE_SPECTATE_ID, gPlayerData[playerid][E_SPECID]);
 					gPlayerData[playerid][E_SPECID] = INVALID_PLAYER_ID;
+					SetPVarInt(playerid, "AlarSpectating", INVALID_PLAYER_ID);
 
 					#if SPEC_TXT_TIME > 0
 						ShowSpecTxt(playerid);
@@ -5760,6 +5803,7 @@ acmd:agoto(const playerid, const params[], const bool:help)
 					StoreSpawnData(playerid);
 				}
 				CallRemoteFunction("OnAdminSpectate", "iii", playerid, FREE_SPECTATE_ID, INVALID_PLAYER_ID);
+				SetPVarInt(playerid, "AlarSpectating", INVALID_PLAYER_ID);
 
 				TogglePlayerSpectating(playerid, true);
 
@@ -5802,6 +5846,7 @@ acmd:agoto(const playerid, const params[], const bool:help)
 					StoreSpawnData(playerid);
 				}
 				CallRemoteFunction("OnAdminSpectate", "iii", playerid, gPlayerData[playerid][E_SPECID], INVALID_PLAYER_ID);
+				SetPVarInt(playerid, "AlarSpectating", gPlayerData[playerid][E_SPECID]);
 
 				TogglePlayerSpectating(playerid, true);
 
@@ -6153,6 +6198,7 @@ acmd:ahide(const playerid, const params[], const bool:help)
 	gPlayerData[playerid][E_STATE] |= ADMIN_STATE_HIDDEN;
 	SendClientMessage(playerid, COLOUR_ADMIN, "You have been hidden from the admin list");
 	CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] & ~ADMIN_STATE_HIDDEN);
+	SetPVarInt(playerid, "AlarStatus", gPlayerData[playerid][E_STATE]);
 	return 1;
 }
 
@@ -6417,8 +6463,14 @@ acmd:ainfo(const playerid, const params[], const bool:help)
 	if(isnull(params)) {
 		if(playerid == INVALID_PLAYER_ID) {
 			print("ID   Name              Level  Ping  IP               Location");
+			new CountryName[MAX_COUNTRY_NAME];
 			LoopPlayers(i) {
-				printf("%3i  %16s  %5i %5i  %15s  %s", i, ReturnPlayerName(i), gPlayerData[i][E_ADMINLEVEL], GetAvePing(i), ReturnPlayerIP(i), ReturnCuntName(gPlayerData[i][E_COUNTRY]));
+				if(GetPVarType(i, "CountryName") == PLAYER_VARTYPE_STRING) {
+					GetPVarString(i, "CountryName", CountryName, sizeof(CountryName));
+				} else {
+					CountryName = "Unknown";
+				}
+				printf("%3i  %16s  %5i %5i  %15s  %s", i, ReturnPlayerName(i), gPlayerData[i][E_ADMINLEVEL], GetAvePing(i), ReturnPlayerIP(i), CountryName);
 			}
 			return 1;
 		} else if(!gPlayerData[playerid][E_SPECTATING] || gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID) {
@@ -6711,7 +6763,7 @@ acmd:aipupdate(const playerid, const params[], const bool:help)
 
 	if(help) {
 		SendMessage(playerid, COLOUR_HELP, "USAGE: /aipupdate");
-		SendMessage(playerid, COLOUR_HELP, "Updates the IP to Country files from a CVS file (may cause server lag)");
+		SendMessage(playerid, COLOUR_HELP, "Updates the IP to Country files from a CSV file (may cause server lag)");
 		return 1;
 	}
 
@@ -6732,6 +6784,14 @@ acmd:aipupdate(const playerid, const params[], const bool:help)
 
 		LoopPlayers(i) {
 			strcpy(gPlayerData[i][E_COUNTRY], ReturnCuntCode(gAlarDB, ReturnPlayerIP(i)), sizeof(SIZE_E_PLAYERDATA[E_COUNTRY]));
+
+			if(gPlayerData[i][E_COUNTRY][0] != '\0') {
+				SetPVarString(i, "CountryCode", gPlayerData[i][E_COUNTRY]);
+				new CountryName[MAX_COUNTRY_NAME];
+				if(GetCuntName(gPlayerData[i][E_COUNTRY], CountryName)) {
+					SetPVarString(i, "CountryName", CountryName);
+				}
+			}
 		}
 	} else {
 		SendMessage(playerid, COLOUR_WARNING, "IP definitions update failed");
@@ -6958,6 +7018,7 @@ acmd:ajail(const playerid, const params[], const bool:help)
 		}
 	}
 	CallRemoteFunction("OnAdminStateChange", "iii", pid, gPlayerData[pid][E_STATE], gPlayerData[pid][E_STATE] & ~ADMIN_STATE_JAILED);
+	SetPVarInt(pid, "AlarStatus", gPlayerData[pid][E_STATE]);
 	return 1;
 }
 
@@ -7298,7 +7359,7 @@ acmd:alogin(const playerid, const params[], const bool:help)
 		new msg[MAX_INPUT];
 		if(Hash_Compare(params, logininfo[E_LOGIN_HASH])) {
 			Bit_Set(g_bitAdmins, playerid, 1);
-			gPlayerData[playerid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL];
+			SetPVarInt(playerid, "AlarLevel", (gPlayerData[playerid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL]));
 
 			if(logininfo[E_LOGIN_HIDDEN]) {
 				gPlayerData[playerid][E_STATE] |= ADMIN_STATE_HIDDEN;
@@ -7402,7 +7463,7 @@ acmd:alogin(const playerid, const params[], const bool:help)
 			format(msg, sizeof(msg), "Your password has been set to \"%s\"", params);
 			SendClientMessage(playerid, COLOUR_ADMIN, msg);
 
-			gPlayerData[playerid][E_ADMINLEVEL] = gServerData[E_RCON_LOGIN_LEVEL];
+			SetPVarInt(playerid, "AlarLevel", (gPlayerData[playerid][E_ADMINLEVEL] = gServerData[E_RCON_LOGIN_LEVEL]));
 
 			AllowPlayerTeleport(playerid, cmdchk(playerid, E_TELE_LEVEL));
 
@@ -7505,7 +7566,7 @@ acmd:aloginas(const playerid, const params[], const bool:help)
 			}
 
 			Bit_Set(g_bitAdmins, playerid, 1);
-			gPlayerData[playerid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL];
+			SetPVarInt(playerid, "AlarLevel", (gPlayerData[playerid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL]));
 			gPlayerData[playerid][E_STATE] |= ADMIN_STATE_HIDDEN;
 			gPlayerData[playerid][E_SHOWHUD] = logininfo[E_LOGIN_HUD];
 			strcpy(gPlayerData[playerid][E_NAME], pname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
@@ -7607,6 +7668,7 @@ acmd:alogout(const playerid, const params[], const bool:help)
 		Bit_Set(g_bitAdmins, playerid, 0);
 	}
 	gPlayerData[playerid][E_ADMINLEVEL] = 0;
+	DeletePVar(playerid, "AlarLevel");
 	gPlayerData[playerid][E_NAME][0] = '\0';
 	gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_HIDDEN;
 
@@ -7874,6 +7936,7 @@ acmd:amute(const playerid, const params[], const bool:help)
 		}
 	}
 	CallRemoteFunction("OnAdminStateChange", "iii", pid, gPlayerData[pid][E_STATE], gPlayerData[pid][E_STATE] & ~ADMIN_STATE_MUTED);
+	SetPVarInt(pid, "AlarStatus", gPlayerData[pid][E_STATE]);
 	return 1;
 }
 
@@ -8440,6 +8503,7 @@ acmd:arape(const playerid, const params[], const bool:help)
 	}
 
 	CallRemoteFunction("OnAdminStateChange", "iii", pid, gPlayerData[pid][E_STATE], oldstatus);
+	SetPVarInt(pid, "AlarStatus", gPlayerData[pid][E_STATE]);
 	return 1;
 }
 
@@ -8731,7 +8795,7 @@ acmd:arepair(const playerid, const params[], const bool:help)
 		new Float:current,
 			vid = GetPlayerVehicleID(pid);
 		GetVehicleHealth(vid, current);
-		if(current >= 1000.0) {
+		if(current >= 1000.0 && !IsVehicleDamaged(vid)) {
 			if(playerid == pid) {
 				format(msg, sizeof(msg), "Your %s already has full health", ReturnPlayerVehicleName(pid));
 			} else {
@@ -8742,7 +8806,11 @@ acmd:arepair(const playerid, const params[], const bool:help)
 		}
 
 		new mid = GetVehicleModel(vid);
-		RepairVehicle(vid);
+		if(current >= 1000.0) {
+			UpdateVehicleDamageStatus(vid, 0, 0, 0, 0);
+		} else {
+			RepairVehicle(vid);
+		}
 		if(playerid == pid) {
 			format(msg, sizeof(msg), "You have repaired your %s", ReturnVehicleName(mid));
 			SendClientMessage(pid, COLOUR_ADMIN, msg);
@@ -9075,6 +9143,7 @@ acmd:asetadmin(const playerid, const params[], const bool:help)
 			Bit_Set(g_bitAdmins, pid, 0);
 		}
 		gPlayerData[pid][E_ADMINLEVEL] = 0;
+		DeletePVar(pid, "AlarLevel");
 		gPlayerData[pid][E_NAME][0] = '\0';
 
 		CallRemoteFunction("OnAdminLogout", "i", pid);
@@ -9115,7 +9184,7 @@ acmd:asetadmin(const playerid, const params[], const bool:help)
 	strcpy(logininfo[E_LOGIN_HASH], Hash_String(gServerData[E_DEFAULT_PW]), sizeof(SIZE_E_LOGINDATA[E_LOGIN_HASH]));
 	Admin_SetAdmin(gAlarDB, gPlayerData[pid][E_NAME], logininfo);
 
-	gPlayerData[pid][E_ADMINLEVEL] = plvl;
+	SetPVarInt(pid, "AlarLevel", (gPlayerData[pid][E_ADMINLEVEL] = plvl));
 
 	AllowPlayerTeleport(pid, cmdchk(pid, E_TELE_LEVEL));
 
@@ -9257,7 +9326,7 @@ acmd:asetname(const playerid, const params[], const bool:help)
 			new msg[MAX_INPUT];
 			if(!logininfo[E_LOGIN_MANUAL] && gServerData[E_AUTO_LOGIN] && IPcompare(logininfo[E_LOGIN_IP], ReturnPlayerIP(pid))) {
 				Bit_Set(g_bitAdmins, pid, 1);
-				gPlayerData[pid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL];
+				SetPVarInt(pid, "AlarLevel", (gPlayerData[pid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL]));
 				if(logininfo[E_LOGIN_HIDDEN]) {
 					gPlayerData[pid][E_STATE] |= ADMIN_STATE_HIDDEN;
 				}
@@ -9715,6 +9784,7 @@ acmd:aspec(const playerid, const params[], const bool:help)
 			StoreSpawnData(playerid);
 		}
 		CallRemoteFunction("OnAdminSpectate", "iii", playerid, FREE_SPECTATE_ID, INVALID_PLAYER_ID);
+		SetPVarInt(playerid, "AlarSpectating", INVALID_PLAYER_ID);
 
 		gPlayerData[playerid][E_SPECTATING] = true;
 		gPlayerData[playerid][E_SPECID] = INVALID_PLAYER_ID;
@@ -9756,6 +9826,7 @@ acmd:aspec(const playerid, const params[], const bool:help)
 			StoreSpawnData(playerid);
 		}
 		CallRemoteFunction("OnAdminSpectate", "iii", playerid, pid, INVALID_PLAYER_ID);
+		SetPVarInt(playerid, "AlarSpectating", pid);
 
 		TogglePlayerSpectating(playerid, true);
 
@@ -10499,7 +10570,8 @@ acmd:aundesync(const playerid, const params[], const bool:help)
 		}
 	}
 
-	CallRemoteFunction("OnAdminStateChange", "i", pid, gPlayerData[pid][E_STATE], gPlayerData[pid][E_STATE] | ADMIN_STATE_DESYNCED);
+	CallRemoteFunction("OnAdminStateChange", "iii", pid, gPlayerData[pid][E_STATE], gPlayerData[pid][E_STATE] | ADMIN_STATE_DESYNCED);
+	SetPVarInt(pid, "AlarStatus", gPlayerData[pid][E_STATE]);
 	return 1;
 }
 
@@ -10561,7 +10633,8 @@ acmd:aunfreeze(const playerid, const params[], const bool:help)
 		}
 	}
 
-	CallRemoteFunction("OnAdminStateChange", "i", pid, gPlayerData[pid][E_STATE], gPlayerData[pid][E_STATE] | ADMIN_STATE_FROZEN);
+	CallRemoteFunction("OnAdminStateChange", "iii", pid, gPlayerData[pid][E_STATE], gPlayerData[pid][E_STATE] | ADMIN_STATE_FROZEN);
+	SetPVarInt(pid, "AlarStatus", gPlayerData[pid][E_STATE]);
 	return 1;
 }
 
@@ -10587,6 +10660,7 @@ acmd:aunhide(const playerid, const params[], const bool:help)
 	gPlayerData[playerid][E_STATE] &= ~ADMIN_STATE_HIDDEN;
 	SendClientMessage(playerid, COLOUR_ADMIN, "You have been unhidden from the admin list");
 	CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] | ADMIN_STATE_HIDDEN);
+	SetPVarInt(playerid, "AlarStatus", gPlayerData[playerid][E_STATE]);
 	return 1;
 }
 
@@ -10677,6 +10751,7 @@ acmd:aunjail(const playerid, const params[], const bool:help)
 	}
 
 	CallRemoteFunction("OnAdminStateChange", "iii", pid, gPlayerData[pid][E_STATE], gPlayerData[pid][E_STATE] | ADMIN_STATE_JAILED);
+	SetPVarInt(pid, "AlarStatus", gPlayerData[pid][E_STATE]);
 	return 1;
 }
 
@@ -10742,6 +10817,7 @@ acmd:aunmute(const playerid, const params[], const bool:help)
 	}
 
 	CallRemoteFunction("OnAdminStateChange", "iii", pid, gPlayerData[pid][E_STATE], gPlayerData[pid][E_STATE] | ADMIN_STATE_MUTED);
+	SetPVarInt(pid, "AlarStatus", gPlayerData[pid][E_STATE]);
 	return 1;
 }
 
@@ -10844,6 +10920,7 @@ acmd:aunrape(const playerid, const params[], const bool:help)
 	}
 
 	CallRemoteFunction("OnAdminStateChange", "iii", pid, gPlayerData[pid][E_STATE], oldstatus);
+	SetPVarInt(pid, "AlarStatus", gPlayerData[pid][E_STATE]);
 
 	LoopPlayers(i) {
 		if(gPlayerData[i][E_SPECTATING] && gPlayerData[i][E_SPECID] == pid) {
@@ -11838,6 +11915,7 @@ public alar_unfreeze(playerid)
 			}
 		}
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] | ADMIN_STATE_FROZEN);
+		SetPVarInt(playerid, "AlarStatus", gPlayerData[playerid][E_STATE]);
 	}
 	gPlayerData[playerid][E_UNFREEZE] = 0;
 }
@@ -11883,6 +11961,7 @@ public alar_unjail(playerid)
 			}
 		}
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] | ADMIN_STATE_JAILED);
+		SetPVarInt(playerid, "AlarStatus", gPlayerData[playerid][E_STATE]);
 	}
 	gPlayerData[playerid][E_UNJAIL] = 0;
 }
@@ -11907,6 +11986,7 @@ public alar_unmute(playerid)
 		}
 
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] | ADMIN_STATE_MUTED);
+		SetPVarInt(playerid, "AlarStatus", gPlayerData[playerid][E_STATE]);
 	}
 	gPlayerData[playerid][E_UNMUTE] = 0;
 }
@@ -11927,6 +12007,7 @@ public alar_undesync(playerid)
 			}
 		}
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] | ADMIN_STATE_DESYNCED);
+		SetPVarInt(playerid, "AlarStatus", gPlayerData[playerid][E_STATE]);
 	}
 	gPlayerData[playerid][E_UNDESYNC] = 0;
 }
@@ -12229,6 +12310,7 @@ stock SpamCheck(const playerid, const text[])
 		}
 
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], gPlayerData[playerid][E_STATE] & ~ADMIN_STATE_MUTED);
+		SetPVarInt(playerid, "AlarStatus", gPlayerData[playerid][E_STATE]);
 		return 1;
 	}
 	#if MSGRBLOCK
@@ -13023,6 +13105,7 @@ ObserverSwitchPlayer(playerid, idealplayer)
 				SetPlayerSpectating(playerid, gPlayerData[playerid][E_SPECID]);
 				SpecHUDUpdate(playerid);
 				CallRemoteFunction("OnAdminSpectate", "iii", playerid, gPlayerData[playerid][E_SPECID], oldid);
+				SetPVarInt(playerid, "AlarSpectating", gPlayerData[playerid][E_SPECID]);
 			}
 			return;
 		}
@@ -13032,6 +13115,7 @@ ObserverSwitchPlayer(playerid, idealplayer)
 	PutPlayerIntoFreeSpec(playerid);
 	if(oldid != INVALID_PLAYER_ID) {
 		CallRemoteFunction("OnAdminSpectate", "iii", playerid, FREE_SPECTATE_ID, oldid);
+		SetPVarInt(playerid, "AlarSpectating", INVALID_PLAYER_ID);
 		#if SPEC_TXT_TIME > 0
 			gPlayerData[playerid][E_SPECMODE] = 3;
 			ShowSpecTxt(playerid);
@@ -13039,7 +13123,7 @@ ObserverSwitchPlayer(playerid, idealplayer)
 	}
 }
 
-PutPlayerIntoFreeSpec(playerid)
+/*PutPlayerIntoFreeSpec(playerid)
 {
 	if(gPlayerData[playerid][E_SPECHUD] != INVALID_TEXT_DRAW) {
 		SpecHUDHide(playerid);
@@ -13085,8 +13169,58 @@ PutPlayerIntoFreeSpec(playerid)
 	if(gSpecTimer == 0) {
 		gSpecTimer = SetTimer("alar_specupdate", 20, 1);
 	}
-}
+}*/
 
+PutPlayerIntoFreeSpec(playerid)
+{
+	if(gPlayerData[playerid][E_SPECHUD] != INVALID_TEXT_DRAW) {
+		SpecHUDHide(playerid);
+	}
+	new pstate = GetPlayerState(playerid);
+	if(pstate == PLAYER_STATE_SPECTATING) {
+		if(gPlayerData[playerid][E_SPECID] != INVALID_PLAYER_ID) {
+			if(IsPlayerInAnyVehicle(gPlayerData[playerid][E_SPECID])) {
+				new vid = GetPlayerVehicleID(gPlayerData[playerid][E_SPECID]);
+				GetVehiclePos(vid, gPlayerData[playerid][E_CAM_POS_X], gPlayerData[playerid][E_CAM_POS_Y], gPlayerData[playerid][E_CAM_POS_Z]);
+				GetVehicleZAngle(vid, gPlayerData[playerid][E_CAM_ROT_XY]);
+			} else {
+				GetPlayerPos(gPlayerData[playerid][E_SPECID], gPlayerData[playerid][E_CAM_POS_X], gPlayerData[playerid][E_CAM_POS_Y], gPlayerData[playerid][E_CAM_POS_Z]);
+				GetPlayerFacingAngle(gPlayerData[playerid][E_SPECID], gPlayerData[playerid][E_CAM_ROT_XY]);
+			}
+			gPlayerData[playerid][E_CAM_ROT_XY] += 90.0;
+			gPlayerData[playerid][E_CAM_POS_Z] += 2.0;
+			gPlayerData[playerid][E_CAM_POS_X] -= 3.0 * floatcos(gPlayerData[playerid][E_CAM_ROT_XY], degrees);
+			gPlayerData[playerid][E_CAM_POS_Y] -= 3.0 * floatsin(gPlayerData[playerid][E_CAM_ROT_XY], degrees);
+
+		} else {
+			GetPlayerPos(playerid, gPlayerData[playerid][E_CAM_POS_X], gPlayerData[playerid][E_CAM_POS_Y], gPlayerData[playerid][E_CAM_POS_Z]);
+			gPlayerData[playerid][E_CAM_POS_Z] -= 10.0;
+			GetPlayerFacingAngle(playerid, gPlayerData[playerid][E_CAM_ROT_XY]);
+			gPlayerData[playerid][E_CAM_ROT_XY] += 90.0;
+		}
+		gPlayerData[playerid][E_CAM_ROT_Z] = 0.0;
+	} else if((pstate == PLAYER_STATE_DRIVER && !IsPlayerInTurretVehicle(playerid)) || pstate == PLAYER_STATE_PASSENGER) {
+		new vehicleid = GetPlayerVehicleID(playerid);
+		GetVehiclePos(vehicleid, gPlayerData[playerid][E_CAM_POS_X], gPlayerData[playerid][E_CAM_POS_Y], gPlayerData[playerid][E_CAM_POS_Z]);
+		GetVehicleZAngle(vehicleid, gPlayerData[playerid][E_CAM_ROT_XY]);
+		gPlayerData[playerid][E_CAM_ROT_XY] += 90.0;
+		gPlayerData[playerid][E_CAM_ROT_Z] = 0.0;
+	} else {
+		GetPlayerCameraPos(playerid, gPlayerData[playerid][E_CAM_POS_X], gPlayerData[playerid][E_CAM_POS_Y], gPlayerData[playerid][E_CAM_POS_Z]);
+		new Float:cam_x, Float:cam_y, Float:cam_z;
+		GetPlayerCameraFrontVector(playerid, cam_x, cam_y, cam_z);
+		gPlayerData[playerid][E_CAM_ROT_Z] = 90.0 - acos(cam_z);
+		gPlayerData[playerid][E_CAM_ROT_XY] = atan2(cam_y, cam_x);
+	}
+	gPlayerData[playerid][E_SPECID] = INVALID_PLAYER_ID;
+	TogglePlayerSpectating(playerid, true);
+	SetPlayerCameraPos(playerid, gPlayerData[playerid][E_CAM_POS_X], gPlayerData[playerid][E_CAM_POS_Y], gPlayerData[playerid][E_CAM_POS_Z]);
+	SetPlayerCameraLookAt(playerid, gPlayerData[playerid][E_CAM_POS_X] + floatcos(gPlayerData[playerid][E_CAM_ROT_XY], degrees), gPlayerData[playerid][E_CAM_POS_Y] + floatsin(gPlayerData[playerid][E_CAM_ROT_XY], degrees), gPlayerData[playerid][E_CAM_POS_Z]);
+
+	if(gSpecTimer == 0) {
+		gSpecTimer = SetTimer("alar_specupdate", 20, 1);
+	}
+}
 
 stock AddHistoryLine(colour, const message[], playerid=INVALID_PLAYER_ID, flags=0)
 {
@@ -13253,6 +13387,7 @@ public alar_AddJoinLine(playerid, colour, const string[])
 		// Copy new string
 		strcpy(gAdminLog[0][E_TEXTBOX_STRING], string, sizeof(SIZE_E_TEXTBOX[E_TEXTBOX_STRING]));
 		strreplacechar(gAdminLog[0][E_TEXTBOX_STRING], '~', '-');
+		strreplacechar(gAdminLog[0][E_TEXTBOX_STRING], ' ', '_');
 		TextDrawSetString(gAdminLog[0][E_TEXTBOX_TEXT], gAdminLog[0][E_TEXTBOX_STRING]);
 
 		// Update colour
@@ -13332,46 +13467,6 @@ public alar_DestroyVehicle(vehicleid)
 	return 0;
 }
 
-public alar_GetPlayerCountryCode(playerid)
-{
-	if(!IsPlayerConnected(playerid)) return 0;
-	new string[3 char];
-	strpack(string, gPlayerData[playerid][E_COUNTRY]);
-	return string[0];
-}
-
-public alar_GetCountryCode(const IP[])
-{
-	if(isnull(IP)) return 0;
-	new string[3 char];
-	strpack(string, ReturnCuntCode(gAlarDB, IP));
-	return string[0];
-}
-
-public alar_GetAdminLevel(playerid)
-{
-	if(!IsPlayerConnected(playerid)) return 0;
-	return gPlayerData[playerid][E_ADMINLEVEL];
-}
-
-public alar_GetAdminState(playerid)
-{
-	if(!IsPlayerConnected(playerid)) return 0;
-	return gPlayerData[playerid][E_STATE];
-}
-
-public alar_GetAdminSpectating(playerid)
-{
-	if(!IsPlayerConnected(playerid)) return INVALID_PLAYER_ID;
-	if(gPlayerData[playerid][E_SPECTATING]) {
-		if(gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID) {
-			return FREE_SPECTATE_ID;
-		}
-		return gPlayerData[playerid][E_SPECID] + 1;
-	}
-	return INVALID_PLAYER_ID;
-}
-
 public alar_SetAdminSpectating(playerid, targetid, bool:saveplayer)
 {
 	if(!IsPlayerConnected(playerid) || IsPlayerNPC(playerid) || !IsPlayerConnected(targetid) || targetid == playerid || !cmdchk(playerid, E_SPEC_LEVEL)) {
@@ -13408,6 +13503,7 @@ public alar_SetAdminSpectating(playerid, targetid, bool:saveplayer)
 			StoreSpawnData(playerid);
 		}
 		CallRemoteFunction("OnAdminSpectate", "iii", playerid, targetid, INVALID_PLAYER_ID);
+		SetPVarInt(playerid, "AlarSpectating", targetid);
 
 		TogglePlayerSpectating(playerid, true);
 
@@ -13523,6 +13619,17 @@ public alar_OnPlayerWorldChange(playerid, newworldid)
 	return 1;
 }
 
+public alar_OnVehicleDestroyed(vehicleid)
+{
+	for(new i; i < sizeof(gPlayerData); i++) {
+		if(gPlayerData[i][E_VEHICLEID] == vehicleid) {
+			gPlayerData[i][E_VEHICLEID] = INVALID_VEHICLE_ID;
+			gPlayerData[i][E_SEATID] = INVALID_SEAT_ID;
+		}
+	}
+	return 1;
+}
+
 public alar_SetAdminState(playerid, newstate, seconds)
 {
 	if(!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return 0;
@@ -13587,6 +13694,7 @@ public alar_SetAdminState(playerid, newstate, seconds)
 			}
 		}
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], oldstate);
+		SetPVarInt(playerid, "AlarStatus", gPlayerData[playerid][E_STATE]);
 	}
 	return 1;
 }
@@ -13662,6 +13770,7 @@ public alar_ClearAdminState(playerid, newstate)
 			}
 		}
 		CallRemoteFunction("OnAdminStateChange", "iii", playerid, gPlayerData[playerid][E_STATE], oldstate);
+		SetPVarInt(playerid, "AlarStatus", gPlayerData[playerid][E_STATE]);
 	}
 	return 1;
 }

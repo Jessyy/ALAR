@@ -47,6 +47,7 @@
 	native bool:GetCountryFromCode(const code[], dest[], maxlength=sizeof(dest));
 	native bool:GetIPCountryCode(const IP[], dest[], maxlength=sizeof(dest));
 	native bool:GetPlayerCountryCode(playerid, dest[], maxlength=sizeof(dest));
+	native bool:GetPlayerCountryName(playerid, dest[], maxlength=sizeof(dest));
 
 	native GetAdminSpectating(playerid);
 	native SetAdminSpectating(playerid, targetid, bool:saveplayer);
@@ -414,7 +415,7 @@ stock static const scCountryCodes[][E_COUNTRYCODES] = {
  *  @param	playerid	The playerid of the player
  *  @return	The level of the player, or 0 if no player is found
  */
-#define GetAdminLevel(%1)			(CallRemoteFunction("alar_GetAdminLevel", "i", %1))
+#define GetAdminLevel(%1)			GetPVarInt(%1, "AlarLevel")
 
 /**
  *  Remove an admin from admin spec
@@ -435,7 +436,7 @@ stock static const scCountryCodes[][E_COUNTRYCODES] = {
  *  @param	playerid	The playerid of the player
  *  @return	A mask of the state bits (ADMIN_STATE_MUTED/ADMIN_STATE_FROZEN etc)
  */
-#define GetAdminState(%1)			(CallRemoteFunction("alar_GetAdminState", "i", %1))
+#define GetAdminState(%1)			GetPVarInt(%1, "AlarStatus")
 
 /**
  *  Clear the state of a player (ie unmute/unjail etc)
@@ -450,7 +451,7 @@ stock static const scCountryCodes[][E_COUNTRYCODES] = {
  *  @param	playerid	The playerid of the player
  *  @return	true if the player is an admin, otherwise false
  */
-#define IsPlayerScriptAdmin(%1)		(IsPlayerAdmin(%1) || CallRemoteFunction("alar_GetAdminLevel", "i", %1) > 0)
+#define IsPlayerScriptAdmin(%1)		(IsPlayerAdmin(%1) || GetPVarInt(%1, "AlarLevel") > 0)
 
 /**
  *  Check if a player is either and RCON or alar admin
@@ -534,12 +535,26 @@ stock bool:GetIPCountryCode(const IP[], dest[], maxlength=sizeof(dest))
  */
 stock bool:GetPlayerCountryCode(playerid, dest[], maxlength=sizeof(dest))
 {
-	new string[MAX_COUNTRY_CODE char];
-	if((string[0] = CallRemoteFunction("alar_GetPlayerCountryCode", "i", playerid))) {
-		strunpack(dest, string, maxlength);
+	if(GetPVarType(playerid, "CountryCode") == PLAYER_VARTYPE_STRING) {
+		GetPVarString(playerid, "CountryCode", dest, maxlength);
 		return true;
 	}
-	dest[0] = '\0';
+	return false;
+}
+
+/**
+ *  Get the player's country name
+ *  @param	playerid	The playerid of the player
+ *  @param	dest		The destination string
+ *  @param	maxlength	The size of the destination string
+ *  @return	true if the player's country was found, false if it is unknown
+ */
+stock bool:GetPlayerCountryName(playerid, dest[], maxlength=sizeof(dest))
+{
+	if(GetPVarType(playerid, "CountryName") == PLAYER_VARTYPE_STRING) {
+		GetPVarString(playerid, "CountryName", dest, maxlength);
+		return true;
+	}
 	return false;
 }
 
@@ -551,10 +566,10 @@ stock bool:GetPlayerCountryCode(playerid, dest[], maxlength=sizeof(dest))
  */
 stock GetAdminSpectating(playerid)
 {
-	new specID = CallRemoteFunction("alar_GetAdminSpectating", "i", playerid);
-	if(specID) {
-		if(specID == FREE_SPECTATE_ID) return FREE_SPECTATE_ID;
-		return specID - 1;
+	if(GetPVarType(playerid, "AlarSpectating") == PLAYER_VARTYPE_INT) {
+		new specID = GetPVarInt(playerid, "AlarSpectating");
+		if(specID == INVALID_PLAYER_ID) return FREE_SPECTATE_ID;
+		return specID;
 	}
 	return INVALID_PLAYER_ID;
 }
@@ -783,6 +798,21 @@ stock alarPlayerSpectateVehicle(playerid, targetvehicleid, mode = SPECTATE_MODE_
     #define _ALS_PlayerSpectateVehicle
 #endif
 #define PlayerSpectateVehicle	alarPlayerSpectateVehicle
+
+stock alarDestroyVehicle(vehicleid)
+{
+	if(DestroyVehicle(vehicleid)) {
+		CallRemoteFunction("alar_OnVehicleDestroyed", "i", vehicleid);
+		return 1;
+	}
+	return 0;
+}
+#if defined _ALS_DestroyVehicle
+    #undef DestroyVehicle
+#else
+    #define _ALS_DestroyVehicle
+#endif
+#define DestroyVehicle	alarDestroyVehicle
 
 // --------------------------------------------------
 // Forwards (Callback declarations)

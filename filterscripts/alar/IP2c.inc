@@ -601,6 +601,26 @@ stock ReturnCuntName(const cuntcode[])
 }
 
 /**
+ *  Get a country name from an ISO 3166-1 alpha-2 country code
+ *  @param	cuntcode	The ISO 3166-1 alpha-2 country code
+ *  @param	dest		The destination string
+ *  @param	maxlength	The size of the destination string
+ *  @return	true if the country name was found, otherwise false
+ */
+stock GetCuntName(const cuntcode[], dest[], maxlength=sizeof(dest))
+{
+	if(cuntcode[0] != '\0') {
+		for(new i; i < sizeof(scCuntCodes); i++) {
+			if(strcmp(cuntcode, scCuntCodes[i][E_CUNT_CODE], true) == 0) {
+				strunpack(dest, scCuntCodes[i][E_CUNT_NAME], maxlength);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/**
  *	Create the IP definition files from a comma seperated cvs file
  *	Supports cvs files from the following sources:
  *		http://www.maxmind.com/app/geoip_country	(recommended)

@@ -389,7 +389,7 @@ stock static const scVehicleSeats[212] = {
 	4,	//Boxville
 	2,	//Benson
 	2,	//Mesa
-	1,	//RC Goblin
+	2,	//RC Goblin
 	2,	//Hotring Racer A
 	2,	//Hotring Racer B
 	2,	//Bloodring Banger
@@ -2686,7 +2686,7 @@ stock GetCarColour(const string[])
 	new number = UNKNOWN_CAR_COLOUR;
 	if(isInteger(string)) {
 		number = strval(string);
-		if(number < -1 || 126 < number) {
+		if(number < -1 || 255 < number) {
 			return UNKNOWN_CAR_COLOUR;
 		}
 	}
@@ -2700,5 +2700,19 @@ stock GetCarColour(const string[])
 		return random(127);
 	}
 	return number;
+}
+
+stock IsPlayerInTurretVehicle(playerid)
+{
+	new modelid = GetVehicleModel(GetPlayerVehicleID(playerid));
+	if(modelid && (modelid == 407 || modelid == 432 || modelid == 601)) return true;
+	return false;
+}
+
+stock IsVehicleDamaged(vehicleid)
+{
+	new panels, doors, lights, tyres;
+	GetVehicleDamageStatus(vehicleid, panels, doors, lights, tyres);
+	return (panels | doors | lights | tyres) != 0;
 }
 

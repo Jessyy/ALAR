@@ -30,10 +30,6 @@
 #define _alar_string_included
 
 /*
-	native floatstrEx(const string[]);
-	native strinsEx(string[], const substr[], pos, maxlength=sizeof(string));
-	native strvalEx(const string[]);
-
 	native bool:isFloat(const string[]);
 	native bool:isInteger(const string[]);
 	native bool:isNumeric(const string[]);
@@ -251,11 +247,11 @@ stock strfindchar(const string[], const character, bool:ignorecase=false, pos=0)
 }
 
 /**
- *  Finds a word in a string
- *  @param	string		The string to search
- *  @param	word		The word to search for
- *  @param	ignorecase	If the search is case insensitive
- *  @param	pos			The starting position for the search
+ *	Finds a word in a string
+ *	@param	string		The string to search
+ *	@param	word		The word to search for
+ *	@param	ignorecase	If the search is case insensitive
+ *	@param	pos			The starting position for the search
  *	@return The position in the string of the begining of the word, or -1 if not found
  */
 stock strfindword(const string[], const word[], bool:ignorecase=false, pos=0)
@@ -1085,6 +1081,25 @@ stock strtruncate(dest[], const string[], length=sizeof(dest), const ellipsis[]=
 		strcpy(dest, string, maxlength, cutoff, .pack=pack);
 		strcat(dest, ellipsis, maxlength);
 	}
+}
+
+/**
+ *  Convert a number to a string with commas for easy readability
+ *  @param	value		The number to convert to a string
+ *  @return	A string containing a number formatted with commas
+ */
+stock strcommaval(value)
+{
+	new string[16];
+	format(string, sizeof(string), "%i", value);
+	if(-10000 < value < 10000) return string;
+	for(new pos=strlen(string), count, start = value < 0 ? 1 : 0; pos > start; pos--, count++) {
+		if(count == 3) {
+			strins(string, ",", pos);
+			count = 0;
+		}
+	}
+	return string;
 }
 
 /**

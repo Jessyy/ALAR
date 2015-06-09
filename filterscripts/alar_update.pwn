@@ -106,17 +106,29 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			db_free_result(db_query(AlarDB, "BEGIN TRANSACTION"));
 
 			new string[128];
+			GetPlayerName(playerid, string, sizeof(string));
+			printf("ALAR_UPDATE: %s is updating the alar database", string);
+
 			SendClientMessage(playerid, 0x0000FFAA, "Updating...");
 			format(string, sizeof(string), "    %i bans added", UpdateBans(AlarDB));
 			SendClientMessage(playerid, 0x0000FFAA, string);
+			print(string);
+
 			format(string, sizeof(string), "    %i suspensions added", UpdateSuspensions(AlarDB));
 			SendClientMessage(playerid, 0x0000FFAA, string);
+			print(string);
+
 			format(string, sizeof(string), "    %i whitelist entries added", UpdateWhitelist(AlarDB));
 			SendClientMessage(playerid, 0x0000FFAA, string);
+			print(string);
+
 			format(string, sizeof(string), "    %i gamemodes added", UpdateGamemodes(AlarDB));
 			SendClientMessage(playerid, 0x0000FFAA, string);
+			print(string);
+
 			format(string, sizeof(string), "    %i settings added", UpdateSettings(AlarDB));
 			SendClientMessage(playerid, 0x0000FFAA, string);
+			print(string);
 
 			db_free_result(db_query(AlarDB, "END TRANSACTION"));
 			db_close(AlarDB);
@@ -182,12 +194,12 @@ stock Bans_UpdateBan(DB:db, const BanData[E_ALAR_BAN])
 
 	if(!isnull(BanData[E_BAN_NAME])) {
 		if(!isnull(BanData[E_BAN_IP])) {
-			format(string, sizeof(string), "INSERT INTO `Bans` ( `name` , `ip` , `admin` , `reason` , `datetime` ) VALUES ( '%s' , '%s' , '%s' , '%s' , datetime('%s','utc') )", BanData[E_BAN_NAME], BanData[E_BAN_IP], BanData[E_BAN_ADMIN], string, BanData[E_BAN_DATETIME]);
+			format(string, sizeof(string), "INSERT INTO `Bans` ( `name` , `ip` , `adminname` , `reason` , `datetime` ) VALUES ( '%s' , '%s' , '%s' , '%s' , datetime('%s','utc') )", BanData[E_BAN_NAME], BanData[E_BAN_IP], BanData[E_BAN_ADMIN], string, BanData[E_BAN_DATETIME]);
 		} else {
-			format(string, sizeof(string), "INSERT INTO `Bans` ( `name` , `admin` , `reason` , `datetime` ) VALUES ( '%s' , '%s' , '%s' , datetime('%s','utc') )", BanData[E_BAN_NAME], BanData[E_BAN_ADMIN], string, BanData[E_BAN_DATETIME]);
+			format(string, sizeof(string), "INSERT INTO `Bans` ( `name` , `adminname` , `reason` , `datetime` ) VALUES ( '%s' , '%s' , '%s' , datetime('%s','utc') )", BanData[E_BAN_NAME], BanData[E_BAN_ADMIN], string, BanData[E_BAN_DATETIME]);
 		}
 	} else {
-		format(string, sizeof(string), "INSERT INTO `Bans` ( `ip` , `admin` , `reason` , `datetime` ) VALUES ( '%s' , '%s' , '%s' , datetime('%s','utc') )", BanData[E_BAN_IP], BanData[E_BAN_ADMIN], string, BanData[E_BAN_DATETIME]);
+		format(string, sizeof(string), "INSERT INTO `Bans` ( `ip` , `adminname` , `reason` , `datetime` ) VALUES ( '%s' , '%s' , '%s' , datetime('%s','utc') )", BanData[E_BAN_IP], BanData[E_BAN_ADMIN], string, BanData[E_BAN_DATETIME]);
 	}
 	db_free_result(db_query(db, string));
 }
@@ -253,12 +265,12 @@ stock Suspensions_UpdateSuspension(DB:db, const SuspendData[E_ALAR_SUSPENSION])
 
 	if(!isnull(SuspendData[E_SUSPEND_NAME])) {
 		if(!isnull(SuspendData[E_SUSPEND_IP])) {
-			format(string, sizeof(string), "INSERT INTO `Suspensions` ( `name` , `ip` , `expires` , `admin` , `reason` , `datetime` ) VALUES ( '%s' , '%s' , datetime('%s','utc') , '%s' , '%s' , datetime('%s','utc') )", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_ADMIN], string, SuspendData[E_SUSPEND_DATETIME]);
+			format(string, sizeof(string), "INSERT INTO `Suspensions` ( `name` , `ip` , `expires` , `adminname` , `reason` , `datetime` ) VALUES ( '%s' , '%s' , datetime('%s','utc') , '%s' , '%s' , datetime('%s','utc') )", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_ADMIN], string, SuspendData[E_SUSPEND_DATETIME]);
 		} else {
-			format(string, sizeof(string), "INSERT INTO `Suspensions` ( `name` , `expires` , `admin` , `datetime` ) VALUES ( '%s' , datetime('%s','utc') , '%s' , datetime('%s','utc') )", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_ADMIN], SuspendData[E_SUSPEND_DATETIME]);
+			format(string, sizeof(string), "INSERT INTO `Suspensions` ( `name` , `expires` , `adminname` , `datetime` ) VALUES ( '%s' , datetime('%s','utc') , '%s' , datetime('%s','utc') )", SuspendData[E_SUSPEND_NAME], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_ADMIN], SuspendData[E_SUSPEND_DATETIME]);
 		}
 	} else {
-		format(string, sizeof(string), "INSERT INTO `Suspensions` ( `ip` , `expires` , `admin` , `reason` , `datetime` ) VALUES ( '%s' , datetime('%s','utc') , '%s' , '%s' , datetime('%s','utc') )", SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_ADMIN], string, SuspendData[E_SUSPEND_DATETIME]);
+		format(string, sizeof(string), "INSERT INTO `Suspensions` ( `ip` , `expires` , `adminname` , `reason` , `datetime` ) VALUES ( '%s' , datetime('%s','utc') , '%s' , '%s' , datetime('%s','utc') )", SuspendData[E_SUSPEND_IP], SuspendData[E_SUSPEND_EXPIRES], SuspendData[E_SUSPEND_ADMIN], string, SuspendData[E_SUSPEND_DATETIME]);
 	}
 	db_free_result(db_query(db, string));
 }

@@ -1,8 +1,22 @@
-1.4.1
+1.4.2	(2010-05-06)
+	Added: GetPlayerCountryName() function
+	Changed: /aalias, /aalias2 and /aalias3 don't need parameters when spectating a player
+	Changed: /arepair will fix vehicle damage on vehicles with full health
+	Changed: Increased /acarcolour limits to include all possible colour ids
+	Changed: Removed /acreate model limits for rc vehicles and the tram
+	Changed: Use commas for money
+	Changed: Use native sa-mp camera functions where possible instead of trying to guess where the camera is
+	Changed: Use PVars for cross script player variables (CountryCode, CountryName, AlarLevel, AlarSpectating, AlarStatus)
+	Fixed: alar_update filterscript not importing bans/suspensions correctly
+	Fixed: Better checking for putting players in the right vehicle when leaving spectate/jail
+	Fixed: Blank lines in the admin log when the string ends with a space
+	Fixed: OnAdminStateChange having the wrong values for newstate and oldstate when unfreezing or undesyncing a player
+	Fixed: RC Goblin seat number
+1.4.1	(2010-03-15)
 	Fixed: /ainfo displaying "Weapons:" even if the player has none
 	Fixed: /awarnings not displaying correctly when no admin is stored
 	Fixed: Some incorrect vehicle seat numbers
-1.4
+1.4		(2010-01-11)
 	Added: 3D texts showing the vehicle IDs of alar created vehicles when the /adestroy command is used
 	Added: Check for invalid paintjobs
 	Added: Check for too many RCON login attempts
@@ -35,7 +49,7 @@
 	Removed: Length limit for reasons (ban/mute etc)
 	Removed: Option to show personal messages to admins
 	Removed: Vehicle model limit check
-1.3.1
+1.3.1	(2009-10-09)
 	Fixed: Adminchat prefixes not showing correctly in /ahelp
 	Fixed: Banshee missing from allowed mod list
 	Fixed: Displaying the wrong name for failed /aloginas attempts
@@ -43,7 +57,7 @@
 	Fixed: PlayerSpectateVehicle bug in alar.inc
 	Fixed: Some timers were not being reset properly when using alar.inc functions
 	Fixed: Suspending a name with a wildcard only kicked the first player
-1.3
+1.3		(2009-08-08)
 	Added: /acarcolour command
 	Added: /aipupdate command
 	Added: /aspectating command
@@ -70,7 +84,7 @@
 	Fixed: Restricted spawning where you look in free spec to only admins who can right click teleport
 	Fixed: Set virtual world and interior of passengers when using /agoto and /abring
 	Fixed: Various minor bugs
-1.2
+1.2		(2009-05-14)
 	Added: "Admins Spectating" to /asinfo
 	Added: "paused" to spec hud
 	Added: /alog command to toggle whether admin log keys enabled, and to change the log page
@@ -81,12 +95,12 @@
 	Fixed: Newline in reason when unsuspending/unbanning
 	Fixed: Random bug where ban/suspend messages didn't show with some gamemodes using YSF
 	Fixed: The spectate HUD so it updates when /asetname is used
-1.1
+1.1		(2009-05-04)
 	Added: Parameter [player] to /asuspendip
 	Added: Warning when /aservername will truncate in the sa-mp browser
 	Changed: More rigorous file opening checks for /alistmodes
 	Changed: Some vehicle names to match those in the gxt file and remove duplicates
 	Fixed: /ainterior and /aworld work on admins in free spec
 	Fixed: Textdraws being destroyed when /achangemode is used with an incorrect mode name
-1.0
+1.0		(2009-04-17)
 	Initial version

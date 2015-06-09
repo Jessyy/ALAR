@@ -357,6 +357,11 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			sPlayerSpecMode[playerid] = SPECTATE_MODE_NORMAL;
 			return CallLocalFunction("bf_OnPlayerStateChange", "iii", playerid, PLAYER_STATE_SPAWNED, PLAYER_STATE_SPECTATING);
 		}
+		for(new i, j = GetMaxPlayers(); i < j; i++) {
+			if(sPlayerSpectating[i] == playerid) {
+				PlayerSpectatePlayer(i, playerid, sPlayerSpecMode[i]);
+			}
+		}
 		return 1;
 	}
 	return CallLocalFunction("bf_OnPlayerStateChange", "iii", playerid, newstate, oldstate);
