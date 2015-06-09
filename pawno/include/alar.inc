@@ -65,7 +65,7 @@
 	native HistoryAddLine(colour, const message[], flags=0);
 	native HistoryClear();
 
-	native DestroyAdminVehicle(Vehicleid)
+	native DestroyAdminVehicle(Vehicleid);
 */
 
 

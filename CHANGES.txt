@@ -1,3 +1,5 @@
+1.4.3	(2010-05-08)
+	Fixed: Incorrectly putting admins in a vehicle when exiting spectate
 1.4.2	(2010-05-06)
 	Added: GetPlayerCountryName() function
 	Changed: /aalias, /aalias2 and /aalias3 don't need parameters when spectating a player

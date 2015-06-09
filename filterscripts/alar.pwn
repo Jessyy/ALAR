@@ -20,7 +20,7 @@
  */
 
 
-#define ALAR_VERSION 		1.4.2
+#define ALAR_VERSION 		1.4.3
 
 // Database
 #define ALAR_DATABASE		"Alar.sqlite"
@@ -2317,7 +2317,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				gPlayerData[playerid][E_WORLD] = GetPlayerVirtualWorld(playerid);
 
 				gPlayerData[playerid][E_VEHICLEID] = INVALID_VEHICLE_ID;
-				gPlayerData[playerid][E_SEATID] = INVALID_VEHICLE_ID;
+				gPlayerData[playerid][E_SEATID] = INVALID_SEAT_ID;
 
 				SpawnUsingPosition(playerid);
 				return;
@@ -2369,6 +2369,9 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 							gPlayerData[playerid][E_VEHICLEID] = INVALID_VEHICLE_ID;
 						}
 					}
+				} else {
+					gPlayerData[playerid][E_VEHICLEID] = INVALID_VEHICLE_ID;
+					gPlayerData[playerid][E_SEATID] = INVALID_SEAT_ID;
 				}
 
 				SpawnUsingPosition(playerid);
@@ -3839,6 +3842,9 @@ acmd:abring(const playerid, const params[], const bool:help)
 					gPlayerData[pid][E_VEHICLEID] = INVALID_VEHICLE_ID;
 				}
 			}
+		} else {
+			gPlayerData[pid][E_VEHICLEID] = INVALID_VEHICLE_ID;
+			gPlayerData[pid][E_SEATID] = INVALID_SEAT_ID;
 		}
 
 		SpawnUsingPosition(pid);
@@ -5919,6 +5925,9 @@ acmd:agoto(const playerid, const params[], const bool:help)
 							gPlayerData[playerid][E_VEHICLEID] = INVALID_VEHICLE_ID;
 						}
 					}
+				} else {
+					gPlayerData[playerid][E_VEHICLEID] = INVALID_VEHICLE_ID;
+					gPlayerData[playerid][E_SEATID] = INVALID_SEAT_ID;
 				}
 
 				SpawnUsingPosition(playerid);
