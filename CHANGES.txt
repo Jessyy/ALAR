@@ -1,3 +1,14 @@
+1.2
+	Fixed background alpha in admin logs, also changed so using 0 as the colour uses the default colour
+	Changed /aflip to put out the fires on vehicles
+	Fixed newline in reason when unsuspending/unbanning
+	Multiple adminchat prefixes now possible using | as a seperator eg) "@|#|//"
+	Fixed random bug where ban/suspend messages didn't show with some gamemodes using YSF
+	Added "Admins Spectating" to /asinfo
+	Added "paused" to spec hud
+	Added log message when a permanently muted/jailed/frozen player joins
+	Fixed the spectate HUD so it updates when /asetname is used
+	Added /alog command to toggle whether admin log keys enabled, and to change the log page
 1.1
 	Added a warning to /aservername when names will truncate in the browser
 	More rigorous file opening checks for /alistmodes

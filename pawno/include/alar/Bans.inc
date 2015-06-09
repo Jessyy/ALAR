@@ -166,6 +166,7 @@ stock bool:UnbanPlayer(const playername[], const playerip[], BanData[E_ALAR_BAN]
 		if(unbanned == false && line[0] != '#') {
 			sscanf(line, "sss", name, sizeof(name), ip, sizeof(ip), data, sizeof(data));
 			if((playername[0] != '\0' && wildcmp(name, playername, true)) || (playerip[0] != '\0' && IPcompare(ip, playerip))) {
+				StripNewLine(data);
 				strcpy(BanData[E_BAN_NAME], name, sizeof(SIZE_E_ALAR_BAN[E_BAN_NAME]));
 				strcpy(BanData[E_BAN_IP], ip, sizeof(SIZE_E_ALAR_BAN[E_BAN_IP]));
 				sscanf(data, "ssss", BanData[E_BAN_DATE], sizeof(SIZE_E_ALAR_BAN[E_BAN_DATE]), BanData[E_BAN_TIME], sizeof(SIZE_E_ALAR_BAN[E_BAN_TIME]), BanData[E_BAN_ADMIN], sizeof(SIZE_E_ALAR_BAN[E_BAN_ADMIN]), BanData[E_BAN_REASON], sizeof(SIZE_E_ALAR_BAN[E_BAN_REASON]));
@@ -312,6 +313,7 @@ stock bool:UnsuspendPlayer(const playername[], const playerip[], SuspendData[E_A
 		if(unsuspended == false && line[0] != '#') {
 			sscanf(line, "sss", name, sizeof(name), ip, sizeof(ip), data, sizeof(data));
 			if((playername[0] != '\0' && wildcmp(name, playername, true)) || (playerip[0] != '\0' && IPcompare(ip, playerip))) {
+				StripNewLine(data);
 				strcpy(SuspendData[E_SUSPEND_NAME], name, sizeof(SIZE_E_ALAR_SUSPENSION[E_SUSPEND_NAME]));
 				strcpy(SuspendData[E_SUSPEND_IP], ip, sizeof(SIZE_E_ALAR_SUSPENSION[E_SUSPEND_IP]));
 				sscanf(data, "iiifssss", SuspendData[E_SUSPEND_YEAR], SuspendData[E_SUSPEND_MONTH], SuspendData[E_SUSPEND_DAY], SuspendData[E_SUSPEND_HOUR], SuspendData[E_SUSPEND_DATE], sizeof(SIZE_E_ALAR_SUSPENSION[E_SUSPEND_DATE]), SuspendData[E_SUSPEND_TIME], sizeof(SIZE_E_ALAR_SUSPENSION[E_SUSPEND_TIME]), SuspendData[E_SUSPEND_ADMIN], sizeof(SIZE_E_ALAR_SUSPENSION[E_SUSPEND_ADMIN]), SuspendData[E_SUSPEND_REASON], sizeof(SIZE_E_ALAR_SUSPENSION[E_SUSPEND_REASON]));
