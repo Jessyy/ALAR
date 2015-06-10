@@ -1,16 +1,16 @@
 Any Last Administrative Requests
 ================================
 
-1.4.4 (2010-05-16)
+v1.4.4 (2010-05-16)
 -----
 
 - Fixed: Work around a bug in PVars
 
-1.4.3 (2010-05-08)
+v1.4.3 (2010-05-08)
 -----
 - Fixed: Incorrectly putting admins in a vehicle when exiting spectate
 
-1.4.2 (2010-05-06)
+v1.4.2 (2010-05-06)
 -----
 
 - Added: GetPlayerCountryName() function
@@ -27,14 +27,14 @@ Any Last Administrative Requests
 - Fixed: OnAdminStateChange having the wrong values for newstate and oldstate when unfreezing or undesyncing a player
 - Fixed: RC Goblin seat number
 
-1.4.1 (2010-03-15)
+v1.4.1 (2010-03-15)
 -----
 
 - Fixed: /ainfo displaying "Weapons:" even if the player has none
 - Fixed: /awarnings not displaying correctly when no admin is stored
 - Fixed: Some incorrect vehicle seat numbers
 
-1.4 (2010-01-11)
+v1.4 (2010-01-11)
 ---
 
 - Added: 3D texts showing the vehicle IDs of alar created vehicles when the /adestroy command is used
@@ -49,7 +49,7 @@ Any Last Administrative Requests
 - Added: Sounds to aslap and apunch
 - Added: StoreAliases setting
 - Added: Support for NPCs (aliases are not saved, cannot be muted/jailed/frozen/desynced/banned/suspended/ejected/brought/dropped/cause a join flood)
-- Added: Warnings system (Commands: /awarn, /aunwarn, /awarnings  Settings: WarnLimit, WarnProtection, WarnSuspendTime, WarnTimeout, WarnLevel, UnwarnLevel  Functions: WarnPlayer, WarnPlayerid)
+- Added: Warnings system (Commands: /awarn, /aunwarn, /awarnings Settings: WarnLimit, WarnProtection, WarnSuspendTime, WarnTimeout, WarnLevel, UnwarnLevel Functions: WarnPlayer, WarnPlayerid)
 - Added: When spectating, double click a player from the list to spectate them
 - Added: Wildcard support to /akick (WildKickLevel setting)
 - Changed: /aban and /asuspend only ban/suspend the player's IP unless a public function (set with SetAlarLoginCheck) returns true
@@ -70,7 +70,7 @@ Any Last Administrative Requests
 - Removed: Option to show personal messages to admins
 - Removed: Vehicle model limit check
 
-1.3.1 (2009-10-09)
+v1.3.1 (2009-10-09)
 -----
 
 - Fixed: Adminchat prefixes not showing correctly in /ahelp
@@ -81,7 +81,7 @@ Any Last Administrative Requests
 - Fixed: Some timers were not being reset properly when using alar.inc functions
 - Fixed: Suspending a name with a wildcard only kicked the first player
 
-1.3 (2009-08-08)
+v1.3 (2009-08-08)
 ---
 
 - Added: /acarcolour command
@@ -111,7 +111,7 @@ Any Last Administrative Requests
 - Fixed: Set virtual world and interior of passengers when using /agoto and /abring
 - Fixed: Various minor bugs
 
-1.2 (2009-05-14)
+v1.2 (2009-05-14)
 ---
 
 - Added: "Admins Spectating" to /asinfo
@@ -125,7 +125,7 @@ Any Last Administrative Requests
 - Fixed: Random bug where ban/suspend messages didn't show with some gamemodes using YSF
 - Fixed: The spectate HUD so it updates when /asetname is used
 
-1.1 (2009-05-04)
+v1.1 (2009-05-04)
 ---
 
 - Added: Parameter [player] to /asuspendip
@@ -135,7 +135,7 @@ Any Last Administrative Requests
 - Fixed: /ainterior and /aworld work on admins in free spec
 - Fixed: Textdraws being destroyed when /achangemode is used with an incorrect mode name
 
-1.0 (2009-04-17)
+v1.0 (2009-04-17)
 ---
 
 - Initial version
