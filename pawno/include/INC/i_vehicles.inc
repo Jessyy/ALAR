@@ -1,69 +1,54 @@
-/*
- *	Any Last Administrative Requests - Vehicles.inc
+/**
+ *	Any Last Administrative Requests - i_vehicles.inc
  *		Vehicle functions
- *
+ *	
  *	scVehicleNames originally by Betamaster
  *	scValidMods originally by Crack, Davee, 0xF29323, Alex and Jeremy Cole
- *
- *	Copyright © 2009 [DRuG]Dabombber
- *
- *	This file is part of Alar.
- *
- * 	Alar is free software: you can redistribute it and/or modify
- *	it under the terms of the GNU General Public License as published by
- *	the Free Software Foundation, either version 3 of the License, or
- *	(at your option) any later version.
- *
- * 	Alar is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
- *
- *	You should have received a copy of the GNU General Public License
- *	along with Alar.  If not, see <http://www.gnu.org/licenses/>.
+ *	
+ *	Copyright (c) 2009 [DRuG]Dabombber
  */
 
-#if defined _alar_vehicles_included
-  #endinput
+#if defined _inc_vehicles_included
+	#endinput
 #endif
+#define _inc_vehicles_included
 
-#define _alar_vehicles_included
+#include <a_samp>
 
-/*
+/**
 	native ReturnVehicleName(modelid);
 	native ReturnPlayerVehicleName(playerid);
 	native ReturnVehicleModel(const vname[]);
 	native GetServerVehicleInfo(&numvehicles, &numtypes);
-	native isValidNosVehicle(model);
-	native isValidVehicleMod(model, componentid);
+	native bool:IsVehicleNosValid(model);
+	native IsVehicleModValid(model, componentid);
 	native GetVehicleSeats(model);
-	native Bit:GetVehicleUsedSeats(vehicleid);
+	native BitArray:GetVehicleUsedSeats(vehicleid);
 	native IsVehicleSeatFree(vehicleid, seatid);
-	native GetVehicleFreeSeat(vehicleid, includedriver=true);
+	native GetVehicleFreeSeat(vehicleid, includedriver = true);
 	native ExistsVehicleModel(model);
 	native GetCarColour(const string[]);
+	
+	native bool:IsPlayerInTurretVehicle(playerid);
+	native bool:IsVehicleDamaged(vehicleid);
+	
+	FormatSpecifier<'V'>(output[], modelid);
 */
 
-#include <a_samp>
+#include "i_bitcore"
+#include "i_foreach"
+#include "i_string"
 
-#tryinclude "alar/YSI_bit"
-#if !defined _YSI_bit_included
-	#include <alar/YSI_bit>
-#endif
-
-#tryinclude "alar/YSI_foreach"
-#if !defined _foreach_included
-	#tryinclude <alar/YSI_foreach>
-#endif
-
-
-#define MAX_VEHICLE_MODELS	150
-#define INVALID_MODEL_ID	0
-#define INVALID_SEAT_ID		-1
-#define MAX_SEATS			10
-#define MAX_CAR_COLOUR_NAME	15
-#define UNKNOWN_CAR_COLOUR	0xFFFF
-#define VEHICLETOBIT(%1)	(1<<((%1-400)&0x1F))
+/**
+ *  Keeping the number of vehicle models below 150 is a good idea
+ */
+#define MAX_VEHICLE_MODELS		(150)
+#define INVALID_MODEL_ID		(-1)
+#define INVALID_SEAT_ID			(-1)
+#define MAX_SEATS				(10)
+#define MAX_CAR_COLOUR_NAME		(15)
+#define UNKNOWN_CAR_COLOUR		(0xFFFF)
+#define VEHICLETOBIT(%1)		(1<<((%1-400)&0x1F))
 
 stock static const scVehicleNames[212][] = {
 	{!"Landstalker"},
@@ -506,6 +491,7 @@ enum E_CARCOLOURS {
 	E_CARCOLOUR_NAME[MAX_CAR_COLOUR_NAME],
 	E_CARCOLOUR_VALUE
 };
+
 stock static const scCarColours[][E_CARCOLOURS] = {
 	{"Random", -1},
 	{"Black", 0},
@@ -2475,52 +2461,62 @@ stock static const scValidMods[194][7] = {
 };
 
 /**
- *	Return the name of a vehicle's model
- *	@param	modelid	The model of the vehicle
- *	@return A string containing the vehicle's model name
+ *  Return the name of a vehicle's model
+ *  @param	modelid	The model of the vehicle
+ *  @return	A string containing the vehicle's model name
  */
 stock ReturnVehicleName(modelid)
 {
 	new vname[25] = "Unknown";
-	if((modelid < 400) || (modelid > 611)) return vname;
+	if((modelid < 400) || (modelid > 611)) {
+		return vname;
+	}
 	strunpack(vname, scVehicleNames[modelid - 400]);
 	return vname;
 }
 
 /**
- *	Return the name of a player's vehicle
- *	@param	playerid	The ID of the player
- *	@return A string containing the vehicle's model name, or "Unknown" if the player is not in a vehicle
+ *  Return the name of a player's vehicle
+ *  @param	playerid	The ID of the player
+ *  @return	A string containing the vehicle's model name, or "Unknown" if the player is not in a vehicle
  */
 stock ReturnPlayerVehicleName(playerid)
 {
 	new vname[25] = "Unknown",
 		modelid = GetVehicleModel(GetPlayerVehicleID(playerid));
-	if((modelid < 400) || (modelid > 611)) return vname;
+	if((modelid < 400) || (modelid > 611)) {
+		return vname;
+	}
 	strunpack(vname, scVehicleNames[modelid - 400]);
 	return vname;
 }
 
 /**
- *	Return the model of a vehicle from it's name
- *	@param	vname	The full or partial name of the vehicle
- *	@return The vehicle's modelid, or INVALID_MODEL_ID if no vehicle was found
+ *  Return the model of a vehicle from it's name
+ *  @param	vname	The full or partial name of the vehicle
+ *  @return	The vehicle's modelid, or INVALID_MODEL_ID if no vehicle was found
  */
 stock ReturnVehicleModel(const vname[])
 {
-	if(vname[0] == '\0') return INVALID_MODEL_ID;
+	if(vname[0] == '\0') {
+		return INVALID_MODEL_ID;
+	}
 	new modelid = INVALID_MODEL_ID;
-	for(new i; i < sizeof(scVehicleNames); i++) {
-		if(strcmp(scVehicleNames[i], vname, true) == 0) return i + 400;
-		if(strfind(scVehicleNames[i], vname, true) != -1) modelid = i + 400;
+	for(new i, j = sizeof(scVehicleNames); i < j; i++) {
+		if(strcmp(scVehicleNames[i], vname, true) == 0) {
+			return i + 400;
+		}
+		if(strfind(scVehicleNames[i], vname, true) != -1) {
+			modelid = i + 400;
+		}
 	}
 	return modelid;
 }
 
 /**
- *	Get the number of vehicles and the number of types being used in the server
- *	@param	numvehicles	The number of vehicles
- *	@param	numtypes	The number of types
+ *  Get the number of vehicles and the number of types being used in the server
+ *  @param	numvehicles	The number of vehicles
+ *  @param	numtypes	The number of types
  */
 stock GetServerVehicleInfo(&numvehicles, &numtypes)
 {
@@ -2537,33 +2533,37 @@ stock GetServerVehicleInfo(&numvehicles, &numtypes)
 			}
 		}
 	}
-	// Firetruck, Predator, Rhino, Sea Sparrow, hydra, Rustler, RC Barron, S.W.A.T Van  take 2 slots...i think
+	// Firetruck, Predator, Rhino, Sea Sparrow, hydra, Rustler, RC Barron, S.W.A.T Van take 2 slots... i think
 	numtypes += (types[7]?1:0) + (types[30]?1:0) + (types[32]?1:0) + (types[47]?1:0) + (types[64]?1:0) + (types[76]?1:0) + (types[120]?1:0) + (types[144]?1:0) + (types[201]?1:0);
 }
 
 /**
- *	Check if NOS can be added to a vehicle
- *	@param	model	The model of the vehicle
- *	@return true if NOS can be added, otherwise false
+ *  Check if NOS can be added to a vehicle
+ *  @param	model	The model of the vehicle
+ *  @return	true if NOS can be added, otherwise false
  */
-stock isValidNosVehicle(model)
+stock bool:IsVehicleNosValid(model)
 {
-	if(model < 400 || model > 611) return false;
-	for(new i; i < sizeof(scInvalidNosVehicles); i++) {
-		if(scInvalidNosVehicles[i] == model) return false;
+	if(model < 400 || model > 611) {
+		return false;
+	}
+	for(new i, j = sizeof(scInvalidNosVehicles); i < j; i++) {
+		if(scInvalidNosVehicles[i] == model) {
+			return false;
+		}
 	}
 	return true;
 }
 
 /**
- *	Check if a component can be put on a vehicle via a mod shop
- *	@param	model		The model of the vehicle
- *	@param	componentid	The ID of the component
- *	@return true if the component can be legitimately added, otherwise false
+ *  Check if a component can be put on a vehicle via a mod shop
+ *  @param	model		The model of the vehicle
+ *  @param	componentid	The ID of the component
+ *  @return	true if the component can be legitimately added, otherwise false
  */
-stock isValidVehicleMod(model, componentid)
+stock IsVehicleModValid(model, componentid)
 {
-	if ((1000 <= componentid <= 1193) && (400 <= model <= 603)) {
+	if((1000 <= componentid <= 1193) && (400 <= model <= 603)) {
 		model -= 400;
 		return scValidMods[componentid - 1000][model >> 5] & (1 << (model & 0x1F));
 	}
@@ -2571,29 +2571,27 @@ stock isValidVehicleMod(model, componentid)
 }
 
 /**
- *	Get the number of seats in a vehicle
- *	@param	model		The model of the vehicle
- *	@return The number of seats in the vehicle
+ *  Get the number of seats in a vehicle
+ *  @param	model	The model of the vehicle
+ *  @return	The number of seats in the vehicle
  */
 stock GetVehicleSeats(model)
 {
-	if(model < 400 || model > 611) return 0;
+	if(model < 400 || model > 611) {
+		return 0;
+	}
 	return scVehicleSeats[model - 400];
 }
 
 /**
- *	Gets a mask of all the seats used in a vehicle
- *	@param	vehicleid		The vehicleid of the vehicle
- *	@return The mask of the seats used
+ *  Gets a mask of all the seats used in a vehicle
+ *  @param	vehicleid	The vehicleid of the vehicle
+ *  @return	The mask of the seats used
  */
-stock Bit:GetVehicleUsedSeats(vehicleid)
+stock BitArray:GetVehicleUsedSeats(vehicleid)
 {
-	new Bit:mask[Bit_Bits(MAX_SEATS)];
-#if defined _foreach_included
-	foreach(Player, i) {
-#else
-	for(new i, j = GetMaxPlayers(); i < j; i++) {
-#endif
+	new BitArray:mask<MAX_SEATS>;
+	foreach(new i : Player) {
 		if(GetPlayerVehicleID(i) == vehicleid) {
 			new seatid = GetPlayerVehicleSeat(i);
 			if(seatid != INVALID_SEAT_ID) {
@@ -2608,19 +2606,17 @@ stock Bit:GetVehicleUsedSeats(vehicleid)
 }
 
 /**
- *	Checks if a seat is free in a vehicle
- *	@param	vehicleid		The vehicleid of the vehicle
- *	@param	seatid			The seatid in the vehicle
- *	@return true if the seat is free, otherwise false
+ *  Checks if a seat is free in a vehicle
+ *  @param	vehicleid	The vehicleid of the vehicle
+ *  @param	seatid		The seatid in the vehicle
+ *  @return	true if the seat is free, otherwise false
  */
 stock IsVehicleSeatFree(vehicleid, seatid)
 {
-	if(seatid == 0 && GetVehicleModel(vehicleid) == 570) return false;
-#if defined _foreach_included
-	foreach(Player, i) {
-#else
-	for(new i, j = GetMaxPlayers(); i < j; i++) {
-#endif
+	if(seatid == 0 && GetVehicleModel(vehicleid) == 570) {
+		return false;
+	}
+	foreach(new i : Player) {
 		if(GetPlayerVehicleID(i) == vehicleid && GetPlayerVehicleSeat(i) == seatid) {
 			return false;
 		}
@@ -2629,23 +2625,19 @@ stock IsVehicleSeatFree(vehicleid, seatid)
 }
 
 /**
- *	Finds the first free seat in a vehicle
- *	@param	vehicleid		The vehicleid of the vehicle
- *	@param	includedriver	If the driver seat is allowed
- *	@return The first free seat, or INVALID_SEAT_ID if there are no free seats
+ *  Finds the first free seat in a vehicle
+ *  @param	vehicleid		The vehicleid of the vehicle
+ *  @param	includedriver	If the driver seat is allowed
+ *  @return	The first free seat, or INVALID_SEAT_ID if there are no free seats
  */
-stock GetVehicleFreeSeat(vehicleid, includedriver=true)
+stock GetVehicleFreeSeat(vehicleid, includedriver = true)
 {
-	new Bit:mask[Bit_Bits(MAX_SEATS)],
+	new BitArray:mask<MAX_SEATS>,
 		modelid = GetVehicleModel(vehicleid);
 	if(!includedriver || modelid == 570) {
 		Bit_Let(mask, 0);
 	}
-#if defined _foreach_included
-	foreach(Player, i) {
-#else
-	for(new i, j = GetMaxPlayers(); i < j; i++) {
-#endif
+	foreach(new i : Player) {
 		if(GetPlayerVehicleID(i) == vehicleid) {
 			new seatid = GetPlayerVehicleSeat(i);
 			if(seatid != INVALID_SEAT_ID) {
@@ -2662,13 +2654,15 @@ stock GetVehicleFreeSeat(vehicleid, includedriver=true)
 }
 
 /**
- *	Check if the server contains a vehicle model
- *	@param	model		The model of the vehicle
- *	@return true if the server has a vehicle of that model, otherwise false
+ *  Check if the server contains a vehicle model
+ *  @param	model	The model of the vehicle
+ *  @return	true if the server has a vehicle of that model, otherwise false
  */
 stock ExistsVehicleModel(model)
 {
-	if(model < 400 || model > 611) return false;
+	if(model < 400 || model > 611) {
+		return false;
+	}
 	for(new i = 1; i < MAX_VEHICLES; i++) {
 		if(GetVehicleModel(i) == model) return true;
 	}
@@ -2676,13 +2670,15 @@ stock ExistsVehicleModel(model)
 }
 
 /**
- *	Get a car colour from a string
- *	@param	string	The string to get the colour from
- *	@return The ID of the colour, or UNKNOWN_CAR_COLOUR if the colour is unknown
+ *  Get a car colour from a string
+ *  @param	string	The string to get the colour from
+ *  @return	The ID of the colour, or UNKNOWN_CAR_COLOUR if the colour is unknown
  */
 stock GetCarColour(const string[])
 {
-	if(string[0] == '\0') return UNKNOWN_CAR_COLOUR;
+	if(string[0] == '\0') {
+		return UNKNOWN_CAR_COLOUR;
+	}
 	new number = UNKNOWN_CAR_COLOUR;
 	if(isInteger(string)) {
 		number = strval(string);
@@ -2702,17 +2698,28 @@ stock GetCarColour(const string[])
 	return number;
 }
 
-stock IsPlayerInTurretVehicle(playerid)
+stock bool:IsPlayerInTurretVehicle(playerid)
 {
 	new modelid = GetVehicleModel(GetPlayerVehicleID(playerid));
-	if(modelid && (modelid == 407 || modelid == 432 || modelid == 601)) return true;
+	if(modelid && (modelid == 407 || modelid == 432 || modelid == 601)) {
+		return true;
+	}
 	return false;
 }
 
-stock IsVehicleDamaged(vehicleid)
+stock bool:IsVehicleDamaged(vehicleid)
 {
 	new panels, doors, lights, tyres;
 	GetVehicleDamageStatus(vehicleid, panels, doors, lights, tyres);
 	return (panels | doors | lights | tyres) != 0;
 }
 
+#if defined _inc_formatex_included
+	/**
+	 *  
+	 */
+	FormatSpecifier<'V'>(output[], modelid)
+	{
+		strcat(output, ReturnVehicleName(modelid));
+	}
+#endif
