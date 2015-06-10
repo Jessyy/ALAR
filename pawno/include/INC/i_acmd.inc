@@ -1,78 +1,172 @@
-/*
- *	Any Last Administrative Requests - Acmd.inc
+/**
+ *	Any Last Administrative Requests - i_acmd.inc
  *		Command handling
- *
- *	Based on zcmd 0.2.3 by ZeeX
- *
- *	Copyright © 2009 [DRuG]Dabombber
- *
- *	This file is part of Alar.
- *
- * 	Alar is free software: you can redistribute it and/or modify
- *	it under the terms of the GNU General Public License as published by
- *	the Free Software Foundation, either version 3 of the License, or
- *	(at your option) any later version.
- *
- * 	Alar is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
- *
- *	You should have received a copy of the GNU General Public License
- *	along with Alar.  If not, see <http://www.gnu.org/licenses/>.
+ *	
+ *	based on zcmd v0.3.1 by ZeeX and y_commands by Y_Less
+ *		@released: 31/10/2009
+ *	
+ *	Copyright (c) 2009 [DRuG]Dabombber
  */
 
-
-#if defined _alar_acmd_included
+#if defined _inc_acmd_included
 	#endinput
 #endif
-#define _alar_acmd_included
-
-/*
-	native ACMD_FunctionHelp(const playerid, const command[]);
-*/
+#define _inc_acmd_included
 
 #include <a_samp>
 
-#if !defined MAX_COMM_FUNC_NAME
-	#define MAX_COMM_FUNC_NAME (32)
+/**
+	native ACMD_CommandProcess(playerid, const cmdtext[], bool:help = false)
+	native ACMD_CommandHelp(const playerid, const command[]);
+*/
+
+#include "i_utils"
+
+/**
+ *  Definitions
+ */
+#define MAX_COMMAND_LENGTH		(32)	// The maximum length of a command string
+#define hcmd:%1->%2;			acmd:%2(const playerid, const params[], const bool:help) { return acmd_%1(playerid, params, help); }
+#define acmd:%1(%2)				forward acmd_%1(%2); public acmd_%1(%2)
+
+/**
+ *  Basic command flags
+ */
+enum E_COMMFLAG (<<=1) {
+	E_COMMFLAG_OPCR = 1,	// On player command received
+	E_COMMFLAG_OPCP,		// On player command performed
+};
+
+/**
+ *  Variables
+ */
+static stock E_COMMFLAG:gCommandFlags = E_COMMFLAG:0;
+
+#if defined FILTERSCRIPT
+public OnFilterScriptInit()
+#else
+public OnGameModeInit()
 #endif
 
-#define acmd:%1(%2,%3,%4)				\
-			forward acmd_%1(%2,%3,%4);	\
-			public acmd_%1(%2,%3,%4)
+{
+	if(funcidx("OnPlayerCommandReceived") != -1) {
+		gCommandFlags |= E_COMMFLAG_OPCR;
+	}
+	if(funcidx("OnPlayerCommandPerformed") != -1) {
+		gCommandFlags |= E_COMMFLAG_OPCP;
+	}
+	
+	#if defined FILTERSCRIPT
+		#if defined ACMD_OnFilterScriptInit
+			return ACMD_OnFilterScriptInit();
+		#else
+			return 1;
+		#endif
+	#else
+		#if defined ACMD_OnGameModeInit
+			return ACMD_OnGameModeInit();
+		#else
+			return 1;
+		#endif
+	#endif
+}
 
-#if !defined isnull
-	#define isnull(%1) (((%1[0]) == '\0') || (((%1[0]) == '\1') && ((%1[1]) == '\0')))
+#if defined FILTERSCRIPT
+	#if defined _ALS_OnFilterScriptInit
+		#undef OnFilterScriptInit
+	#else
+		#define _ALS_OnFilterScriptInit
+	#endif
+	#define OnFilterScriptInit ACMD_OnFilterScriptInit
+	
+	#if defined ACMD_OnFilterScriptInit
+		forward ACMD_OnFilterScriptInit();
+	#endif
+#else
+	#if defined _ALS_OnGameModeInit
+		#undef OnGameModeInit
+	#else
+		#define _ALS_OnGameModeInit
+	#endif
+	#define OnGameModeInit ACMD_OnGameModeInit
+	
+	#if defined ACMD_OnGameModeInit
+		forward ACMD_OnGameModeInit();
+	#endif
 #endif
 
 public OnPlayerCommandText(playerid, cmdtext[])
 {
-    if(ACMD_OnPlayerCommandText(playerid, cmdtext)) {
+	if(isnull(cmdtext)) {
 		return 1;
 	}
-	new pos,
-		funcname[MAX_COMM_FUNC_NAME];
-	do { cmdtext[pos] = tolower(cmdtext[pos]); } while(cmdtext[++pos] > ' ');
-	if(cmdtext[pos] == '\0') {
-		format(funcname, sizeof(funcname), "acmd_%s", cmdtext[1]);
-	} else {
-		format(funcname, sizeof(funcname), "acmd_%.*s", pos-1, cmdtext[1]);
-		while('\0' < cmdtext[++pos] <= ' ') {}
-		if(cmdtext[pos]) {
-			return CallLocalFunction(funcname, "isi", playerid, cmdtext[pos], false);
+	
+	if(gCommandFlags & E_COMMFLAG_OPCR) {
+		new ret = CallRemoteFunction("OnPlayerCommandReceived", "is", playerid, cmdtext);
+		switch(ret)
+		{
+			case  0: return 1;
+			case -1: return 0;
 		}
 	}
-	return CallLocalFunction(funcname, "isi", playerid, "\1", false);
+	
+	if(gCommandFlags & E_COMMFLAG_OPCP) {
+		new ret = ACMD_CommandProcess(playerid, cmdtext);
+		switch(CallRemoteFunction("OnPlayerCommandPerformed", "isi", playerid, cmdtext, ret))
+		{
+			case 1: return 1;
+			case 0: return 0;
+		}
+		return ret;
+	}
+	else {
+		new ret = ACMD_CommandProcess(playerid, cmdtext);
+		return ret;
+	}
 }
-
 #if defined _ALS_OnPlayerCommandText
-    #undef OnPlayerCommandText
+	#undef OnPlayerCommandText
 #else
-    #define _ALS_OnPlayerCommandText
+	#define _ALS_OnPlayerCommandText
 #endif
 #define OnPlayerCommandText ACMD_OnPlayerCommandText
-forward ACMD_OnPlayerCommandText(playerid, cmdtext[]);
+
+#if defined ACMD_OnPlayerCommandText
+	forward ACMD_OnPlayerCommandText(playerid, cmdtext[]);
+#endif
+
+/**
+ *  Forwards for initial command callbacks
+ */
+forward OnPlayerCommandReceived(playerid, cmdtext[]);
+forward OnPlayerCommandPerformed(playerid, cmdtext[], success);
+
+/**
+ *  Called from OnPlayerCommandText to process entered commands
+ *  @param	playerid	-
+ *  @param	command		-
+ *  @param	help		-
+ *  @return	-
+ */
+stock ACMD_CommandProcess(playerid, const cmdtext[], bool:help = false)
+{
+	new function[MAX_COMMAND_LENGTH], index;
+	while(cmdtext[++index] > ' ') {
+		function[index - 1] = tolower(cmdtext[index]);	// cmdtext[pos] |= 0x20;
+	}
+	while(cmdtext[index] == ' ') {
+		index += 1;
+	}
+	
+	format(function, sizeof(function), "acmd_%s", function);
+	
+	if(cmdtext[index]) {
+		return CallLocalFunction(function, "isi", playerid, cmdtext[index], help);
+	}
+	else {
+		return CallLocalFunction(function, "isi", playerid, "\1", help);
+	}
+}
 
 /**
  *  Call a function to have it show it's usage
@@ -80,11 +174,11 @@ forward ACMD_OnPlayerCommandText(playerid, cmdtext[]);
  *  @param	command		The command name
  *  @return	what the function returns if it exists, otherwise 0
  */
-stock ACMD_FunctionHelp(const playerid, const command[])
+stock ACMD_CommandHelp(playerid, const command[])
 {
-	new funcname[MAX_COMM_FUNC_NAME] = "acmd_";
-	for(new pos = 5; pos < sizeof(funcname) - 1 && command[pos - 5] > ' '; pos++) {
-		funcname[pos] = tolower(command[pos - 5]);
+	new function[MAX_COMMAND_LENGTH] = "acmd_";
+	for(new pos = 5; pos < sizeof(function) - 1 && command[pos - 5] > ' '; pos++) {
+		function[pos] = tolower(command[pos - 5]);	// funcname[pos] = command[pos - 5] | 0x20;
 	}
-	return CallLocalFunction(funcname, "isi", playerid, "\1", true);
+	return CallLocalFunction(function, "isi", playerid, "\1", true);
 }
