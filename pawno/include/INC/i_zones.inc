@@ -1,54 +1,54 @@
-/*
- *	Any Last Administrative Requests - Zones.inc
- *		Zone functions
- *
- *	Based on zones.pwn by mabako
- *
- *	Copyright © 2009 [DRuG]Dabombber
- *
- *	This file is part of Alar.
- *
- * 	Alar is free software: you can redistribute it and/or modify
- *	it under the terms of the GNU General Public License as published by
- *	the Free Software Foundation, either version 3 of the License, or
- *	(at your option) any later version.
- *
- * 	Alar is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
- *
- *	You should have received a copy of the GNU General Public License
- *	along with Alar.  If not, see <http://www.gnu.org/licenses/>.
+/**
+ *	Any Last Administrative Requests - i_zones.inc
+ *		Zones functions
+ *	
+ *	Based on zones v0.1.0 by mabako
+ *  	@released: 11/08/2006
+ *	
+ *	Copyright (c) 2009 [DRuG]Dabombber
  */
 
-#if defined _alar_zones_included
-  #endinput
+#if defined _inc_zones_included
+	#endinput
 #endif
-
-#define _alar_zones_included
-
-/*
-	native IsPlayerInZone(playerid, zoneid);
-	native ReturnPlayerZone(playerid);
-	native GetPlayerZoneID(playerid);
-	native ReturnZoneName(zoneid);
-*/
+#define _inc_zones_included
 
 #include <a_samp>
 
-#define MAX_ZONE_NAME	32
-#define INVALID_ZONE_ID -1
+/**
+	native ReturnZoneName(zoneid);
+	native ReturnPlayerZoneName(playerid);
+	native ReturnPlayerZoneID(playerid);
+	native IsPlayerInZone(playerid, zoneid);
+	
+	FormatSpecifier<'Z'>(output[], zoneid);
+*/
 
+#include "i_string"
+
+/**
+ *  Definitions
+ */
+#define INVALID_ZONE_ID				(-1)
+#define MAX_ZONE_NAME				(32)
+#define ZONE_BETWEEN<%0>(%1,%2)		(scZones[%1][E_ZONE_MIN%0] <= %2 <= scZones[%1][E_ZONE_MAX%0])
+
+/**
+ *  Basic zone info
+ */
 enum E_ZONEINFO {
 	E_ZONE_NAME[MAX_ZONE_NAME char],
-    Float:E_ZONE_MINX,
-    Float:E_ZONE_MINY,
-    Float:E_ZONE_MINZ,
-    Float:E_ZONE_MAXX,
-    Float:E_ZONE_MAXY,
-    Float:E_ZONE_MAXZ
+	Float:E_ZONE_MINX,
+	Float:E_ZONE_MINY,
+	Float:E_ZONE_MINZ,
+	Float:E_ZONE_MAXX,
+	Float:E_ZONE_MAXY,
+	Float:E_ZONE_MAXZ
 }
+
+/**
+ *  Data for all the zones
+ */
 stock static const scZones[][E_ZONEINFO] = {
 	{!"'The Big Ear'",                -410.00,  1403.30,    -3.00,  -137.90,  1681.20,   200.00},
 	{!"Aldea Malvada",               -1372.10,  2498.50,     0.00, -1277.50,  2615.30,   200.00},
@@ -418,21 +418,18 @@ stock static const scZones[][E_ZONEINFO] = {
 };
 
 /**
- *  Checks if a player is in a zone
- *  @param	playerid	The player to check
- *  @param	zoneid		The zone to check
- *  @return	true if the player is in the zone, false otherwise
+ *  Gets the name of a zone
+ *  @param	zoneid	The id of the zone
+ *  @return	A string containing the name of the zone
  */
-stock IsPlayerInZone(playerid, zoneid)
+stock ReturnZoneName(zoneid)
 {
-	if(zoneid < 0 || zoneid >= sizeof(scZones)) return false;
-	new Float:x, Float:y, Float:z;
-	GetPlayerPos(playerid, x, y, z);
-	if( scZones[zoneid][E_ZONE_MINX] <= x <= scZones[zoneid][E_ZONE_MAXX] &&
-		scZones[zoneid][E_ZONE_MINY] <= y <= scZones[zoneid][E_ZONE_MAXY] &&
-		scZones[zoneid][E_ZONE_MINZ] <= z <= scZones[zoneid][E_ZONE_MAXZ]
-	) return true;
-	return false;
+	new string[MAX_ZONE_NAME] = "Unknown";
+	if(zoneid < 0 || zoneid >= sizeof(scZones)) {
+		return string;
+	}
+	strunpack(string, scZones[zoneid][E_ZONE_NAME]);
+	return string;
 }
 
 /**
@@ -440,16 +437,16 @@ stock IsPlayerInZone(playerid, zoneid)
  *  @param	playerid	The player to check
  *  @return	A string containing the zone name, or "Unknown" if the player is not in a zone
  */
-stock ReturnPlayerZone(playerid)
+stock ReturnPlayerZoneName(playerid)
 {
 	new playerzone[MAX_ZONE_NAME] = "Unknown";
-	for(new j; j < sizeof(scZones); j++) {
-		if(IsPlayerInZone(playerid,j)) {
-			strunpack(playerzone, scZones[j][E_ZONE_NAME]);
+	for(new i, j = sizeof(scZones); i < j; i++) {
+		if(ZONE_BETWEEN<X>(i, x) && ZONE_BETWEEN<Y>(i, y) && ZONE_BETWEEN<Z>(i, z)) {
+			strunpack(playerzone, scZones[i][E_ZONE_NAME]);
 			break;
 		}
 	}
-    return playerzone;
+	return playerzone;
 }
 
 /**
@@ -457,28 +454,43 @@ stock ReturnPlayerZone(playerid)
  *  @param	playerid	The player to check
  *  @return	The zoneid of the player, or INVALID_ZONE_ID if they are not in a zone
  */
-stock GetPlayerZoneID(playerid)
+stock ReturnPlayerZoneID(playerid)
 {
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(playerid, x, y, z);
-	for(new j; j < sizeof(scZones); j++) {
-		if( scZones[j][E_ZONE_MINX] <= x <= scZones[j][E_ZONE_MAXX] &&
-			scZones[j][E_ZONE_MINY] <= y <= scZones[j][E_ZONE_MAXY] &&
-			scZones[j][E_ZONE_MINZ] <= z <= scZones[j][E_ZONE_MAXZ]
-		) return j;
+	for(new i, j = sizeof(scZones); i < j; i++) {
+		if(ZONE_BETWEEN<X>(i, x) && ZONE_BETWEEN<Y>(i, y) && ZONE_BETWEEN<Z>(i, z)) {
+			return i;
+		}
 	}
-    return INVALID_ZONE_ID;
+	return INVALID_ZONE_ID;
 }
 
 /**
- *  Gets the name of a zone
- *  @param	zoneid	The id of the zone
- *  @return	A string containing the name of the zone
+ *  Checks if a player is in a zone
+ *  @param	playerid	The player to check
+ *  @param	zoneid		The zone to check
+ *  @return	true if the player is in the zone, false otherwise
  */
-stock ReturnZoneName(zoneid)
+stock IsPlayerInZone(playerid, zoneid)
 {
-	new string[MAX_ZONE_NAME];
-	if(zoneid < 0 || zoneid >= sizeof(scZones)) return string;
-	strunpack(playerzone, scZones[zoneid][E_ZONE_NAME]);
-	return string;
+	if(zoneid < 0 || zoneid >= sizeof(scZones)) {
+		return false;
+	}
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(playerid, x, y, z);
+	if(ZONE_BETWEEN<X>(zoneid, x) && ZONE_BETWEEN<Y>(zoneid, y) && ZONE_BETWEEN<Z>(zoneid, z)) {
+		return true;
+	}
+	return false;
 }
+
+#if defined _inc_formatex_included
+	/**
+	 *  
+	 */
+	FormatSpecifier<'Z'>(output[], zoneid)
+	{
+		strcat(output, ReturnZoneName(zoneid));
+	}
+#endif
