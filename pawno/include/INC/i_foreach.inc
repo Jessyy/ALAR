@@ -31,9 +31,7 @@ Legal:
 	
 Version:
 	0.4
-Changelog:
-	14/07/13:
-		Fixed a issue whit _Y_ITER_C3
+Changelog: @released: 14/07/2013
 	17/10/12:
 		Fixed a bug that was here but not in "foreach.inc".
 	04/10/12:

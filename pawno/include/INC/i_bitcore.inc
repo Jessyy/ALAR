@@ -31,9 +31,7 @@ Legal:
 	
 Version:
 	0.2
-Changelog:
-	02/03/13:
-		MASSIVE documentation rework.
+Changelog: @released: 02/03/2013
 	21/10/12:
 		Changed "Bit_Display" to print in the correct order.
 	22/02/12:
