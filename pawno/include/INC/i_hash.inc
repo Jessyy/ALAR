@@ -1,51 +1,37 @@
-/*
- *	Any Last Administrative Requests - Hash.inc
+/**
+ *	Any Last Administrative Requests - i_hash.inc
  *		Password hashing
- *
- *	Copyright © 2009 [DRuG]Dabombber
- *
- *	This file is part of Alar.
- *
- * 	Alar is free software: you can redistribute it and/or modify
- *	it under the terms of the GNU General Public License as published by
- *	the Free Software Foundation, either version 3 of the License, or
- *	(at your option) any later version.
- *
- * 	Alar is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
- *
- *	You should have received a copy of the GNU General Public License
- *	along with Alar.  If not, see <http://www.gnu.org/licenses/>.
+ *	
+ *	Copyright (c) 2009 [DRuG]Dabombber
  */
 
-
-#if defined _alar_hash_included
+#if defined _inc_hash_included
 	#endinput
 #endif
-#define _alar_hash_included
-
-native WP_Hash(buffer[], len, const str[]);
-
-/*
-	native Hash_String(const string[]);
-	native Hash_Compare(const string[], const hash[]);
-*/
+#define _inc_hash_included
 
 #include <a_samp>
 
+/**
+	native ReturnHashString(const string[]);
+	native Hash_Compare(const string[], const hash[]);
+*/
 
-#define MAX_HASH 145
+/**
+ *
+ */
+#define MAX_HASH_LENGTH		(145)
+
+native WP_Hash(buffer[], len, const str[]);
 
 /**
  *  Hash a string
  *  @param	string	The string to hash
- *  @return The hash of the string
+ *  @return	The hash of the string
  */
-stock Hash_String(const string[])
+stock ReturnHashString(const string[])
 {
-	new hash[MAX_HASH];
+	new hash[MAX_HASH_LENGTH];
 	WP_Hash(hash, sizeof(hash), string);
 	return hash;
 }
@@ -54,12 +40,16 @@ stock Hash_String(const string[])
  *  Check if a string has a specified hash
  *  @param	string	The string
  *  @param	hash	The hash
- *  @return true if the hash is that of the string
+ *  @return	true if the hash is that of the string
  */
 stock Hash_Compare(const string[], const hash[])
 {
-	if(string[0] == '\0' || hash[0] == '\0') return false;
-	new strhash[MAX_HASH];
+	if(string[0] == '\0' || hash[0] == '\0') {
+		return false;
+	}
+	
+	new strhash[MAX_HASH_LENGTH];
 	WP_Hash(strhash, sizeof(strhash), string);
-	return strcmp(strhash, hash, true) == 0;
+	
+	return (strcmp(strhash, hash, true) == 0);
 }
