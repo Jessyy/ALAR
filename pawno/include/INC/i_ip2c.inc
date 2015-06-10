@@ -1,63 +1,37 @@
-/*
- *	Any Last Administrative Requests - IP2c.inc
+/**
+ *	Any Last Administrative Requests - i_ip2c.inc
  *		IP functions
- *
- *	Copyright © 2009 [DRuG]Dabombber
- *
- *	This file is part of Alar.
- *
- * 	Alar is free software: you can redistribute it and/or modify
- *	it under the terms of the GNU General Public License as published by
- *	the Free Software Foundation, either version 3 of the License, or
- *	(at your option) any later version.
- *
- * 	Alar is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
- *
- *	You should have received a copy of the GNU General Public License
- *	along with Alar.  If not, see <http://www.gnu.org/licenses/>.
+ *	
+ *	Copyright (c) 2009 [DRuG]Dabombber
  */
 
-#if defined _alar_ip2c_included
-  #endinput
+#if defined _inc_ip2c_included
+	#endinput
 #endif
-#define _alar_ip2c_included
-
-/*
-	native bool:IPisvalid(const string[], bool:allowranges=true);
-	native IPcompare(const ip1[], const ip2[]);
-
-	native Unsigned:IP2Code(const IP[]);
-	native Code2IP(Unsigned:IPCode);
-	native IPsubnet(const IP[]);
-
-	native ReturnCuntCode(DB:db, const IP[]);
-	native ReturnCuntName(const cuntcode[]);
-	native CreateCuntDefinitions(DB:db);
-*/
+#define _inc_ip2c_included
 
 #include <a_samp>
 
-#tryinclude "alar/Functions"
-#if !defined _alar_functions_included
-	#include <alar/Functions>
-#endif
+/**
+	native bool:IPisvalid(const string[], bool:allowranges=true);
+	native IPcompare(const ip1[], const ip2[]);
+	native Unsigned:IP2Code(const IP[]);
+	native Code2IP(Unsigned:IPCode);
+	native IPsubnet(const IP[]);
+	native ReturnCuntCode(DB:db, const IP[]);
+	native ReturnCuntName(const cuntcode[]);
+	native GetCuntName(const cuntcode[], dest[], maxlength=sizeof(dest));
+	native CreateCuntDefinitions(DB:db);
+*/
 
-#tryinclude "alar/Unsigned"
-#if !defined _alar_unsigned_included
-	#include <alar/Unsigned>
-#endif
+#include "i_functions"
+#include "i_unsigned"
 
-
-#if !defined MAX_IP
-	#define MAX_IP 16
-#endif
-
-#if !defined MAX_COUNTRY_NAME
-	#define MAX_COUNTRY_NAME 64
-#endif
+/**
+ *
+ */
+#define MAX_IP				(16)
+#define MAX_COUNTRY_NAME	(64)
 
 enum E_CUNTCODE {
 	E_CUNT_CODE[3 char],
@@ -336,13 +310,15 @@ stock static const scCuntCodes[][E_CUNTCODE] = {
 stock bool:IPisvalid(const string[], bool:allowranges=true)
 {
 	if(ispacked(string)) {
-		for(new pos, num, octet = 1;; pos++) {
+		for(new pos, num, octet = 1; ; pos++) {
 			switch(string{pos}) {
 				case '0': {
 					if(num == 0 && string{pos+1} != '.' && string{pos+1} != '\0') return false;
 					num *= 10;
 				}
-				case '1'..'9': num = (num * 10) + (string{pos} - '0');
+				case '1'..'9': {
+					num = (num * 10) + (string{pos} - '0');
+				}
 				case '.': {
 					if(pos == 0 || num > 255 || ++octet > 4 || string{pos+1} == '.' || string{pos+1} == '\0') return false;
 					num = 0;
@@ -357,14 +333,17 @@ stock bool:IPisvalid(const string[], bool:allowranges=true)
 				default: return false;
 			}
 		}
-	} else {
-		for(new pos, num, octet = 1;; pos++) {
+	}
+	else {
+		for(new pos, num, octet = 1; ; pos++) {
 			switch(string[pos]) {
 				case '0': {
 					if(num == 0 && string[pos+1] != '.' && string[pos+1] != '\0') return false;
 					num *= 10;
 				}
-				case '1'..'9': num = (num * 10) + (string[pos] - '0');
+				case '1'..'9': {
+					num = (num * 10) + (string[pos] - '0');
+				}
 				case '.': {
 					if(pos == 0 || num > 255 || ++octet > 4 || string[pos+1] == '.' || string[pos+1] == '\0') return false;
 					num = 0;
@@ -384,22 +363,22 @@ stock bool:IPisvalid(const string[], bool:allowranges=true)
 }
 
 /**
-	Compares two IPv4 addresses to find a match
-	@param	ip1	The first IP
-	@param	ip2	The second IP
-	@return	0 - no match
-			1 - perfect match
-			2 - first IP contains second IP
-			3 - second IP contains first IP
-			4 - neither IP contains the other
-*/
+ *  Compares two IPv4 addresses to find a match
+ *  @param	ip1	The first IP
+ *  @param	ip2	The second IP
+ *  @return	0 - no match
+ *  		1 - perfect match
+ *  		2 - first IP contains second IP
+ *  		3 - second IP contains first IP
+ *  		4 - neither IP contains the other
+ */
 stock IPcompare(const ip1[], const ip2[])
 {
 	if(ispacked(ip1)) {
 		if(ispacked(ip2)) {
 			for(new idx1, idx2, octet = 1, rvalue = 1; octet <= 4; octet++, idx1++, idx2++) {
 				if(ip1{idx1} == '*') {
-					for(; ip2{idx2} != '\0' && ip2{idx2} != '.'; idx2++) if(ip2{idx2} >= '0' && ip2{idx2} <= '9' && (rvalue == 1 || rvalue == 3)) rvalue += 1;
+					for( ; ip2{idx2} != '\0' && ip2{idx2} != '.'; idx2++) if(ip2{idx2} >= '0' && ip2{idx2} <= '9' && (rvalue == 1 || rvalue == 3)) rvalue += 1;
 					if(!ip1{++idx1}) return octet == 4 && !ip2{idx2} ? rvalue : 0;
 					if(!ip2{idx2}) return 0;
 				}
@@ -407,61 +386,68 @@ stock IPcompare(const ip1[], const ip2[])
 					for(;ip1{idx1} != '\0' && ip1{idx1} != '.'; idx1++) if(ip1{idx1} >= '0' && ip1{idx1} <= '9' && (rvalue == 1 || rvalue == 2)) rvalue += 2;
 					if(!ip2{++idx2}) return octet == 4 && !ip1{idx1} ? rvalue : 0;
 					if(!ip1{idx2}) return 0;
-				} else {
-					for(; ip1{idx1} > '.' && ip2{idx2} > '.'; idx1++, idx2++) if(ip1{idx1} != ip2{idx2}) return 0;
+				}
+				else {
+					for( ; ip1{idx1} > '.' && ip2{idx2} > '.'; idx1++, idx2++) if(ip1{idx1} != ip2{idx2}) return 0;
 					if(!ip1{idx1}) return octet == 4 && !ip2{idx2} ? rvalue : 0;
 					if(ip2{idx2} > '.') return 0;
 				}
 			}
-		} else {
+		}
+		else {
 			for(new idx1, idx2, octet = 1, rvalue = 1; octet <= 4; octet++, idx1++, idx2++) {
 				if(ip1{idx1} == '*') {
-					for(; ip2[idx2] != '\0' && ip2[idx2] != '.'; idx2++) if(ip2[idx2] >= '0' && ip2[idx2] <= '9' && (rvalue == 1 || rvalue == 3)) rvalue += 1;
+					for( ; ip2[idx2] != '\0' && ip2[idx2] != '.'; idx2++) if(ip2[idx2] >= '0' && ip2[idx2] <= '9' && (rvalue == 1 || rvalue == 3)) rvalue += 1;
 					if(!ip1{++idx1}) return octet == 4 && !ip2[idx2] ? rvalue : 0;
 					if(!ip2[idx2]) return 0;
 				}
 				else if(ip2[idx2] == '*') {
-					for(;ip1{idx1} != '\0' && ip1{idx1} != '.'; idx1++) if(ip1{idx1} >= '0' && ip1{idx1} <= '9' && (rvalue == 1 || rvalue == 2)) rvalue += 2;
+					for( ;ip1{idx1} != '\0' && ip1{idx1} != '.'; idx1++) if(ip1{idx1} >= '0' && ip1{idx1} <= '9' && (rvalue == 1 || rvalue == 2)) rvalue += 2;
 					if(!ip2[++idx2]) return octet == 4 && !ip1{idx1} ? rvalue : 0;
 					if(!ip1{idx2}) return 0;
-				} else {
-					for(; ip1{idx1} > '.' && ip2[idx2] > '.'; idx1++, idx2++) if(ip1{idx1} != ip2[idx2]) return 0;
+				}
+				else {
+					for( ; ip1{idx1} > '.' && ip2[idx2] > '.'; idx1++, idx2++) if(ip1{idx1} != ip2[idx2]) return 0;
 					if(!ip1{idx1}) return octet == 4 && !ip2[idx2] ? rvalue : 0;
 					if(ip2[idx2] > '.') return 0;
 				}
 			}
 		}
-	} else {
+	}
+	else {
 		if(ispacked(ip2)) {
 			for(new idx1, idx2, octet = 1, rvalue = 1; octet <= 4; octet++, idx1++, idx2++) {
 				if(ip1[idx1] == '*') {
-					for(; ip2{idx2} != '\0' && ip2{idx2} != '.'; idx2++) if(ip2{idx2} >= '0' && ip2{idx2} <= '9' && (rvalue == 1 || rvalue == 3)) rvalue += 1;
+					for( ; ip2{idx2} != '\0' && ip2{idx2} != '.'; idx2++) if(ip2{idx2} >= '0' && ip2{idx2} <= '9' && (rvalue == 1 || rvalue == 3)) rvalue += 1;
 					if(!ip1[++idx1]) return octet == 4 && !ip2{idx2} ? rvalue : 0;
 					if(!ip2{idx2}) return 0;
 				}
 				else if(ip2{idx2} == '*') {
-					for(;ip1[idx1] != '\0' && ip1[idx1] != '.'; idx1++) if(ip1[idx1] >= '0' && ip1[idx1] <= '9' && (rvalue == 1 || rvalue == 2)) rvalue += 2;
+					for( ;ip1[idx1] != '\0' && ip1[idx1] != '.'; idx1++) if(ip1[idx1] >= '0' && ip1[idx1] <= '9' && (rvalue == 1 || rvalue == 2)) rvalue += 2;
 					if(!ip2[++idx2]) return octet == 4 && !ip1[idx1] ? rvalue : 0;
 					if(!ip1[idx2]) return 0;
-				} else {
-					for(; ip1[idx1] > '.' && ip2{idx2} > '.'; idx1++, idx2++) if(ip1[idx1] != ip2{idx2}) return 0;
+				}
+				else {
+					for( ; ip1[idx1] > '.' && ip2{idx2} > '.'; idx1++, idx2++) if(ip1[idx1] != ip2{idx2}) return 0;
 					if(!ip1[idx1]) return octet == 4 && !ip2{idx2} ? rvalue : 0;
 					if(ip2{idx2} > '.') return 0;
 				}
 			}
-		} else {
+		}
+		else {
 			for(new idx1, idx2, octet = 1, rvalue = 1; octet <= 4; octet++, idx1++, idx2++) {
 				if(ip1[idx1] == '*') {
-					for(; ip2[idx2] != '\0' && ip2[idx2] != '.'; idx2++) if(ip2[idx2] >= '0' && ip2[idx2] <= '9' && (rvalue == 1 || rvalue == 3)) rvalue += 1;
+					for( ; ip2[idx2] != '\0' && ip2[idx2] != '.'; idx2++) if(ip2[idx2] >= '0' && ip2[idx2] <= '9' && (rvalue == 1 || rvalue == 3)) rvalue += 1;
 					if(!ip1[++idx1]) return octet == 4 && !ip2[idx2] ? rvalue : 0;
 					if(!ip2[idx2]) return 0;
 				}
 				else if(ip2[idx2] == '*') {
-					for(;ip1[idx1] != '\0' && ip1[idx1] != '.'; idx1++) if(ip1[idx1] >= '0' && ip1[idx1] <= '9' && (rvalue == 1 || rvalue == 2)) rvalue += 2;
+					for( ;ip1[idx1] != '\0' && ip1[idx1] != '.'; idx1++) if(ip1[idx1] >= '0' && ip1[idx1] <= '9' && (rvalue == 1 || rvalue == 2)) rvalue += 2;
 					if(!ip2[++idx2]) return octet == 4 && !ip1[idx1] ? rvalue : 0;
 					if(!ip1[idx2]) return 0;
-				} else {
-					for(; ip1[idx1] > '.' && ip2[idx2] > '.'; idx1++, idx2++) if(ip1[idx1] != ip2[idx2]) return 0;
+				}
+				else {
+					for( ; ip1[idx1] > '.' && ip2[idx2] > '.'; idx1++, idx2++) if(ip1[idx1] != ip2[idx2]) return 0;
 					if(!ip1[idx1]) return octet == 4 && !ip2[idx2] ? rvalue : 0;
 					if(ip2[idx2] > '.') return 0;
 				}
@@ -480,9 +466,11 @@ stock Unsigned:IP2Code(const IP[])
 {
 	new IPCode;
 	if(ispacked(IP)) {
-		for(new pos, num;; pos++) {
+		for(new pos, num; ; pos++) {
 			switch(IP{pos}) {
-				case '0'..'9': num = (num * 10) + (IP{pos} - '0');
+				case '0'..'9': {
+					num = (num * 10) + (IP{pos} - '0');
+				}
 				case '.': {
 					IPCode = (IPCode << 8) | num;
 					num = 0;
@@ -495,10 +483,13 @@ stock Unsigned:IP2Code(const IP[])
 			}
 		}
 
-	} else {
-		for(new pos, num;; pos++) {
+	}
+	else {
+		for(new pos, num; ; pos++) {
 			switch(IP[pos]) {
-				case '0'..'9': num = (num * 10) + (IP[pos] - '0');
+				case '0'..'9': {
+					num = (num * 10) + (IP[pos] - '0');
+				}
 				case '.': {
 					IPCode = (IPCode << 8) | num;
 					num = 0;
@@ -543,7 +534,7 @@ stock IPsubnet(const IP[])
 
 /**
  *  Return an ISO 3166-1 alpha-2 country code from an IPv4 address string
- *	@param db	The database where the definitions are stored
+ *  @param	db	The database where the definitions are stored
  *  @param	IP	The IPv4 address string
  *  @return	A string containing the a 3166-1 alpha-2 country code, or a blank string if the ip is unknown
  */
@@ -551,22 +542,22 @@ stock ReturnCuntCode(DB:db, const IP[])
 {
 	new Unsigned:IPcode = IP2Code(IP),
 		cuntcode[3];
-
-	// localhost
+	
+	// LOCALHOST
 	if(IPcode == Unsigned:0x7F000001) {	// 127.0.0.1
 		cuntcode = "XL";
 		return cuntcode;
 	}
-
+	
 	// LAN
 	if( Unsigned:0x0A000000 <= IPcode <= Unsigned:0x0AFFFFFF ||	// 10.0.0.0    - 10.255.255.255
-		Unsigned:0xAC100000 <= IPcode <= Unsigned:0xAC1FFFFF ||	// 172.16.0.0  – 172.31.255.255
+		Unsigned:0xAC100000 <= IPcode <= Unsigned:0xAC1FFFFF ||	// 172.16.0.0  - 172.31.255.255
 		Unsigned:0xC0A80000 <= IPcode <= Unsigned:0xC0A8FFFF	// 192.168.0.0 - 192.168.255.255
 	) {
 		cuntcode = "XN";
 		return cuntcode;
 	}
-
+	
 	if(db) {
 		new string[110];
 		format(string, sizeof(string), "SELECT * FROM `Countries` WHERE ( %s BETWEEN `start` AND `end` ) LIMIT 1", ustr(IPcode));
@@ -590,7 +581,7 @@ stock ReturnCuntName(const cuntcode[])
 {
 	new cuntname[MAX_COUNTRY_NAME] = "Unknown";
 	if(cuntcode[0] != '\0') {
-		for(new i; i < sizeof(scCuntCodes); i++) {
+		for(new i, j = sizeof(scCuntCodes); i < j; i++) {
 			if(strcmp(cuntcode, scCuntCodes[i][E_CUNT_CODE], true) == 0) {
 				strunpack(cuntname, scCuntCodes[i][E_CUNT_NAME]);
 				break;
@@ -610,7 +601,7 @@ stock ReturnCuntName(const cuntcode[])
 stock GetCuntName(const cuntcode[], dest[], maxlength=sizeof(dest))
 {
 	if(cuntcode[0] != '\0') {
-		for(new i; i < sizeof(scCuntCodes); i++) {
+		for(new i, j = sizeof(scCuntCodes); i < j; i++) {
 			if(strcmp(cuntcode, scCuntCodes[i][E_CUNT_CODE], true) == 0) {
 				strunpack(dest, scCuntCodes[i][E_CUNT_NAME], maxlength);
 				return true;
@@ -621,61 +612,61 @@ stock GetCuntName(const cuntcode[], dest[], maxlength=sizeof(dest))
 }
 
 /**
- *	Create the IP definition files from a comma seperated cvs file
- *	Supports cvs files from the following sources:
- *		http://www.maxmind.com/app/geoip_country	(recommended)
- *		http://software77.net/geo-ip
- *		http://ip-to-country.webhosting.info
- *	@param db	The database to store the definitions
- *	@return The number of entries written
+ *  Create the IP definition files from a comma seperated cvs file
+ *  Supports cvs files from the following sources:
+ *  	http://www.maxmind.com/app/geoip_country (recommended)
+ *  	http://ip-to-country.webhosting.info
+ *  	http://software77.net/geo-ip
+ *  @param	db	The database to store the definitions
+ *  @return	The number of entries written
  */
 stock CreateCuntDefinitions(DB:db)
 {
 	if(!db) return 0;
-
+	
 	static const inputfiles[][][] = {
 		{"GeoIPCountryWhois.csv", "-, _ _ s s s "},
 		{"IpToCountry.csv", "-, s s _ _ s "},
 		{"ip-to-country.csv", "-, s s s "}
 	};
-
+	
 	// I don't think this does anything since the sqlite version samp uses is over 2 and a half years old...
 	db_free_result(db_query(db, "SAVEPOINT CreateCuntDefinitions"));
-
+	
 	db_free_result(db_query(db, "CREATE TABLE IF NOT EXISTS `Countries` ( `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `code` TEXT NOT NULL , PRIMARY KEY ( `start` , `end` ) ); DELETE FROM `Countries`"));
-
+	
 	new counter;
 	for(new inputidx, length, File:rhandle, string[MAX_STRING]; inputidx < sizeof(inputfiles); inputidx++) {
 		if((rhandle = fopen(inputfiles[inputidx][0], io_read))) {
 			while(fread(rhandle, string)) {
 				if(string[0] == '#') continue;
-
+				
 				new quotedstart[13], quotedend[13], quotedcode[5];
 				strscan(string, inputfiles[inputidx][1], quotedstart, sizeof(quotedstart), quotedend, sizeof(quotedend), quotedcode, sizeof(quotedcode));
-
+				
 				length = strlen(quotedstart);
 				if(length < 2 || quotedstart[length-1] != '"') continue;	// " stupid notepad++ function list
 				quotedstart[length-1] = '\0';
-
+				
 				length = strlen(quotedend);
 				if(length < 2 || quotedend[length-1] != '"') continue;		// " stupid notepad++ function list
 				quotedend[length-1] = '\0';
-
+				
 				length = strlen(quotedcode);
 				if(length < 2 || quotedcode[length-1] != '"') continue;		// " stupid notepad++ function list
 				quotedcode[length-1] = '\0';
-
+				
 				format(string, sizeof(string), "INSERT INTO `Countries` ( `start` , `end` , `code` ) VALUES ( %s , %s , upper( '%s' ) )", quotedstart[1], quotedend[1], quotedcode[1]);
 				db_free_result(db_query(db, string));
-
+				
 				counter++;
 			}
 			fclose(rhandle);
 			break;
 		}
 	}
-
+	
 	db_free_result(db_query(db, "RELEASE SAVEPOINT CreateCuntDefinitions"));
-
+	
 	return counter;
 }
