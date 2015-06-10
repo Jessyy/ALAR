@@ -2,7 +2,7 @@
  *	Any Last Administrative Requests - i_formatex.inc
  *		Formatex handling
  *	
- *	based on formatex by Slice from http://forum.sa-mp.com/showthread.php?t=313488
+ *	Based on formatex by Slice from http://forum.sa-mp.com/showthread.php?t=313488
  *		@released: 26/01/2012
  *	
  *	Worth mentioning is this is a superset of format, meaning it has exactly all

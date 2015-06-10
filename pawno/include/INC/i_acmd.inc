@@ -2,7 +2,7 @@
  *	Any Last Administrative Requests - i_acmd.inc
  *		Command handling
  *	
- *	based on zcmd v0.3.1 by ZeeX and y_commands by Y_Less
+ *	Based on zcmd v0.3.1 by ZeeX and y_commands by Y_Less
  *		@released: 31/10/2009
  *	
  *	Copyright (c) 2009 [DRuG]Dabombber
