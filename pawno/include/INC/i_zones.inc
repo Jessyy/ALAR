@@ -440,6 +440,8 @@ stock ReturnZoneName(zoneid)
 stock ReturnPlayerZoneName(playerid)
 {
 	new playerzone[MAX_ZONE_NAME] = "Unknown";
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(playerid, x, y, z);
 	for(new i, j = sizeof(scZones); i < j; i++) {
 		if(ZONE_BETWEEN<X>(i, x) && ZONE_BETWEEN<Y>(i, y) && ZONE_BETWEEN<Z>(i, z)) {
 			strunpack(playerzone, scZones[i][E_ZONE_NAME]);

@@ -190,6 +190,8 @@ stock ReturnInteriorName(interiorid)
 stock ReturnPlayerInteriorName(playerid)
 {
 	new playerinterior[MAX_INTERIOR_NAME] = "Unknown";
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(playerid, x, y, z);
 	for(new i, j = sizeof(scInteriors); i < j; i++) {
 		if(INTERIOR_BETWEEN<X>(i, x) && INTERIOR_BETWEEN<Y>(i, y) && INTERIOR_BETWEEN<Z>(i, z)) {
 			strunpack(playerinterior, scInteriors[i][E_INTERIORINFO]);
