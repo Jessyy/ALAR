@@ -70,12 +70,12 @@
 */
 
 #include <a_samp>
-
+/*
 #tryinclude "alar/Functions"
 #if !defined _alar_functions_included
 	#include <alar/Functions>
 #endif
-
+*/
 
 enum E_ALAR_BAN {
 	E_BAN_NAME[MAX_PLAYER_NAME],
@@ -333,7 +333,7 @@ stock bool:Bans_BanPlayer(DB:db, const playername[], const playerip[], const rea
 		new string[190 + (MAX_PLAYER_NAME * 2) + (MAX_IP * 2) + (MAX_INPUT * 2)];
 		if(!isnull(reason)) {
 			strcat(string, reason);
-			strreplace(string, "'", "''");
+			strreplaceword(string, "'", "''");
 		}
 
 		if(!isnull(playername)) {
@@ -759,7 +759,7 @@ stock bool:Suspensions_SuspendPlayer(DB:db, const playername[], const playerip[]
 		new string[270 + (MAX_PLAYER_NAME * 2) + (MAX_IP * 2) + (MAX_INPUT * 2)];
 		if(!isnull(reason)) {
 			strcat(string, reason);
-			strreplace(string, "'", "''");
+			strreplaceword(string, "'", "''");
 		}
 
 		if(!isnull(playername)) {
@@ -1146,7 +1146,7 @@ stock Warnings_WarnPlayer(DB:db, const playername[], const reason[], const admin
 	if(db) {
 		new string[90 + (MAX_PLAYER_NAME * 2) + MAX_IP + (MAX_INPUT * 2)];
 		strcat(string, reason);
-		strreplace(string, "'", "''");
+		strreplaceword(string, "'", "''");
 		if(isnull(adminname)) {
 			if(isnull(adminip)) {
 				format(string, sizeof(string), "INSERT INTO `Warnings` ( `name` , `reason` ) VALUES ( '%s' , '%s' )", playername, string);

@@ -73,7 +73,7 @@
 */
 
 #include <a_samp>
-
+/*
 #tryinclude "alar/String"
 #if !defined _alar_string_included
 	#include <alar/String>
@@ -88,11 +88,11 @@
 #if !defined _alar_hash_included
 	#include <alar/Hash>
 #endif
-
+*/
 enum E_LOGINDATA {
 	E_LOGIN_LEVEL,
 	E_LOGIN_IP[MAX_IP],
-	E_LOGIN_HASH[MAX_HASH],
+	E_LOGIN_HASH[MAX_HASH_LENGTH],
 	bool:E_LOGIN_HIDDEN,
 	E_LOGIN_PAGE,
 	bool:E_LOGIN_MANUAL,
@@ -205,7 +205,7 @@ stock bool:Admin_GetData(DB:db, const playername[], LoginData[E_LOGINDATA])
 stock bool:Admin_SetAdmin(DB:db, const playername[], LoginData[E_LOGINDATA], bool:online=true)
 {
 	if(db) {
-		new string[280 + MAX_PLAYER_NAME + MAX_HASH + MAX_IP];
+		new string[280 + MAX_PLAYER_NAME + MAX_HASH_LENGTH + MAX_IP];
 		format(string, sizeof(string), "SELECT ROWID FROM `Admins` WHERE ( `name` = '%s' )", playername);
 		new DBResult:result = db_query(db, string);
 		if(db_num_rows(result)) {
@@ -304,7 +304,7 @@ stock bool:Admin_Manuallogin(DB:db, const playername[])
 stock bool:Admin_Password(DB:db, const playername[], const password[])
 {
 	if(db) {
-		new string[70 + MAX_HASH + MAX_PLAYER_NAME];
+		new string[70 + MAX_HASH_LENGTH + MAX_PLAYER_NAME];
 		format(string, sizeof(string), "UPDATE `Admins` SET `password` = '%s' WHERE ( `name` = '%s' )", password, playername);
 		db_free_result(db_query(db, string));
 		return true;

@@ -355,51 +355,39 @@ enum E_SPAWNTYPE {
 
 //-------------------------------------------------------------------------------------------------------------------
 
-#include <a_samp>
+/**
+ *  Libraries and respective links to their release pages
+ */
+#include	<a_samp>				// By SA-MP team:   http://www.sa-mp.com/download.php
 
-#tryinclude "alar/Bugfix"
-#if !defined _alar_bugfix_included
-	#include <alar/Bugfix>
-#endif
-
-#tryinclude "alar/Acmd"
-#if !defined _alar_acmd_included
-	#include <alar/Acmd>
-#endif
-
-#tryinclude "alar/String"
-#if !defined _alar_string_included
-	#include <alar/String>
-#endif
+/**
+ *  INC Library ...
+ */
+//#include	"INC\i_benchmark"		// Loading "Benchmark setup"
+#include	"INC\i_bugfix.inc"		// Loading "Fixes for sa-mp bugs"
+#include	"INC\i_utils.inc"		// Loading "Util functions"
+#include	"INC\i_debug.inc"		// Loading "Debug setup"
+//#include	"INC\i_amx.inc"			// Loading "Access amx data"
+//#include	"INC\i_malloc.inc"		// Loading "Malloc functions"
+#include	"INC\i_bitcore.inc"		// Loading "Bitcore"
+#include	"INC\i_foreach.inc"		// Loading "Efficient looping"
+//#include	"INC\i_timers.inc"		// Loading "Timers efficiently"
+#include	"INC\i_acmd.inc"		// Loading "Command handling"
+//#include	"INC\i_formatex.inc"	// Loading "Formatex handling"
+#include	"INC\i_string.inc"		// Loading "String functions"
+#include	"INC\i_functions.inc"	// Loading "Assorted functions"
+#include	"INC\i_players.inc"		// Loading "Player functions"
+#include	"INC\i_weapons.inc"		// Loading "Weapon functions"
+#include	"INC\i_vehicles.inc"	// Loading "Vehicle functions"
+#include	"INC\i_zones.inc"		// Loading "Zones functions"
+//#include	"INC\i_interiors.inc"	// Loading "Interiors functions"
+#include	"INC\i_hash.inc"		// Loading "Password hashing"
+#include	"INC\i_ip2c.inc"		// Loading "IP functions"
+#include	"INC\i_unsigned.inc"	// Loading "Unsigned integer datatype"
 
 #tryinclude "alar/Bans"
 #if !defined _alar_bans_included
 	#include <alar/Bans>
-#endif
-
-#tryinclude "alar/IP2c"
-#if !defined _alar_ip2c_included
-	#include <alar/IP2c>
-#endif
-
-#tryinclude "alar/Functions"
-#if !defined _alar_functions_included
-	#include <alar/Functions>
-#endif
-
-#tryinclude "alar/Zones"
-#if !defined _alar_zones_included
-	#include <alar/Zones>
-#endif
-
-#tryinclude "alar/Vehicles"
-#if !defined _alar_vehicles_included
-	#include <alar/Vehicles>
-#endif
-
-#tryinclude "alar/YSI_foreach"
-#if !defined _foreach_included
-	#tryinclude <alar/YSI_foreach>
 #endif
 
 #tryinclude "alar/Data"
@@ -424,7 +412,7 @@ enum E_SPAWNTYPE {
 #endif
 
 #if defined _foreach_included
-	#define LoopPlayers(%1)		foreach(Player,%1)
+	#define LoopPlayers(%1)		foreach(new %1 : Player)
 #else
 	#define LoopPlayers(%1)		for(new %1; %1 < gMaxPlayers; %1++) if(IsPlayerConnected(%1))
 #endif
@@ -561,7 +549,7 @@ enum E_SERVERDATA {
 	E_BAN_MSG[MAX_STRING],
 	E_DEFAULT_NUM_PLATE[9],
 	E_DEFAULT_PW[20],
-	E_LOGGEDIN_FUNC[MAX_COMM_FUNC_NAME],
+	E_LOGGEDIN_FUNC[MAX_COMMAND_LENGTH],
 	E_RANGEBAN_MSG[MAX_STRING],
 	E_RANGESUSPEND_MSG[MAX_STRING],
 	E_SUSPEND_MSG[MAX_STRING],
@@ -733,8 +721,8 @@ stock
 	#endif
 	gJoinTimer;
 
-new Bit:g_bitAdmins[Bit_Bits(MAX_PLAYERS)],
-	Bit:gCreatedVehicles[Bit_Bits(MAX_VEHICLES)],
+new BitArray:g_bitAdmins<MAX_PLAYERS>,
+	BitArray:gCreatedVehicles<MAX_VEHICLES>,
 	DB:gAlarDB,
 	gDefaultPlayerData[E_PLAYERDATA],
 	gChatPrefix[CHATPREFIX_NUMBER][E_CHATPREFIX],
@@ -1036,7 +1024,7 @@ public OnFilterScriptInit()
 		if(IsPlayerAdmin(i)) {
 			gPlayerData[i][E_RCONLEVEL] = gServerData[E_RCON_LEVEL];
 			if(gServerData[E_RCON_LEVEL] > 0) {
-				Bit_Set(g_bitAdmins, i, 1);
+				Bit_Set(g_bitAdmins, i, true);
 				AllowPlayerTeleport(i, cmdchk(i, E_TELE_LEVEL));
 			}
 		}
@@ -1045,7 +1033,7 @@ public OnFilterScriptInit()
 		if(Admin_GetData(gAlarDB, pname, logininfo)) {
 			strcpy(gPlayerData[i][E_NAME], pname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
 			if(!logininfo[E_LOGIN_MANUAL] && gServerData[E_AUTO_LOGIN] && IPcompare(logininfo[E_LOGIN_IP], pIP)) {
-				Bit_Set(g_bitAdmins, i, 1);
+				Bit_Set(g_bitAdmins, i, true);
 				SetPVarInt(i, "AlarLevel", (gPlayerData[i][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL]));
 
 				if(logininfo[E_LOGIN_HIDDEN]) {
@@ -1230,7 +1218,7 @@ public OnFilterScriptExit()
 		DeletePVar(i, "AlarLevel");
 	}
 
-	Bit_Loop(gCreatedVehicles, i) {
+	foreach(new i : Bits(gCreatedVehicles)) {
 		DestroyVehicle(i);
 	}
 
@@ -1341,7 +1329,7 @@ public OnGameModeInit()
 
 public OnGameModeExit()
 {
-	Bit_SetAll(gCreatedVehicles, 0, sizeof(gCreatedVehicles));
+	Bit_SetAll(gCreatedVehicles, false, sizeof(gCreatedVehicles));
 
 	gSpawnMethod = DEFAULT_SPAWNTYPE;
 
@@ -1384,7 +1372,7 @@ public OnPlayerConnect(playerid)
 {
 	// This shouldn't be needed but sometimes it doesn't get done in OnPlayerDisconnect...
 	gPlayerData[playerid] = gDefaultPlayerData;
-	Bit_Set(g_bitAdmins, playerid, 0);
+	Bit_Set(g_bitAdmins, playerid, false);
 
 	new pname[MAX_PLAYER_NAME],
 		pIP[MAX_IP],
@@ -1568,7 +1556,7 @@ public OnPlayerConnect(playerid)
 		strcpy(gPlayerData[playerid][E_NAME], pname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
 
 		if(!logininfo[E_LOGIN_MANUAL] && gServerData[E_AUTO_LOGIN] && IPcompare(logininfo[E_LOGIN_IP], pIP)) {
-			Bit_Set(g_bitAdmins, playerid, 1);
+			Bit_Set(g_bitAdmins, playerid, true);
 			SetPVarInt(playerid, "AlarLevel", (gPlayerData[playerid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL]));
 
 			if(logininfo[E_LOGIN_HIDDEN]) {
@@ -1825,7 +1813,7 @@ public OnPlayerDisconnect(playerid, reason)
 		Alias_Update(gAlarDB, ReturnPlayerName(playerid), Code2IP(gPlayerData[playerid][E_IPCODE]), gettime() - gPlayerData[playerid][E_JOIN_TIME]);
 	}
 
-	Bit_Set(g_bitAdmins, playerid, 0);
+	Bit_Set(g_bitAdmins, playerid, false);
 	if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
 		Admin_Update(gAlarDB, gPlayerData[playerid][E_NAME], "", gPlayerData[playerid][E_STATE] & ADMIN_STATE_HIDDEN != 0, gPlayerData[playerid][E_LOGKEYS] ? gPlayerData[playerid][E_LOG_PAGE] : -gPlayerData[playerid][E_LOG_PAGE] - 1, gPlayerData[playerid][E_SHOWHUD]);
 		CallRemoteFunction("OnAdminLogout", "i", playerid);
@@ -2111,7 +2099,7 @@ public OnVehicleMod(playerid, vehicleid, componentid)
 {
 	if(gServerData[E_CHECK_MODS]) {
 		new modelid = GetVehicleModel(vehicleid);
-		if(isValidVehicleMod(modelid, componentid)) {
+		if(IsVehicleModValid(modelid, componentid)) {
 			return true;
 		} else {
 			new msg[MAX_INPUT];
@@ -2261,6 +2249,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 		}
 	}
+	return 1;
 }
 
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
@@ -2273,7 +2262,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		if(gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID) {
  			if(IsKeyJustDown(KEY_WALK, newkeys, oldkeys)) {
 				new target = INVALID_PLAYER_ID,
-					Float:dist = FLOAT_INF,
+					Float:dist = FLOAT_POS_INFINITY,
 					Float:px,
 					Float:py,
 					Float:pz,
@@ -2621,7 +2610,7 @@ acmd:aalias(const playerid, const params[], const bool:help)
 	if(params[0] == '"' && (pid = strlen(params)) > 2 && params[pid-1] == '"') {
 		new pname[MAX_PLAYER_NAME];
 		strmid(pname, params, 1, pid-1);
-		if(isValidName(pname)) {
+		if(IsValidName(pname)) {
 			format(string, sizeof(string), "%s's Aliases: ", pname);
 			if(Alias_GetAliasFromName(gAlarDB, pname, string)) {
 				if(playerid == INVALID_PLAYER_ID) {
@@ -2660,7 +2649,7 @@ acmd:aalias(const playerid, const params[], const bool:help)
 			format(string, sizeof(string), "No aliases found for %s", ReturnPlayerName(pid));
 			SendMessage(playerid, COLOUR_WARNING, string);
 		}
-	} else if(isValidName(params)) {
+	} else if(IsValidName(params)) {
 		format(string, sizeof(string), "%s's Aliases: ", params);
 		if(Alias_GetAliasFromName(gAlarDB, params, string)) {
 			if(playerid == INVALID_PLAYER_ID) {
@@ -2699,7 +2688,7 @@ acmd:aalias2(const playerid, const params[], const bool:help)
 	if(params[0] == '"' && (pid = strlen(params)) > 2 && params[pid-1] == '"') {
 		new pname[MAX_PLAYER_NAME];
 		strmid(pname, params, 1, pid-1);
-		if(isValidName(pname)) {
+		if(IsValidName(pname)) {
 			pIP = Alias_GetLastIP(gAlarDB, pname);
 			if(!isnull(pIP)) {
 				pIP = IPsubnet(pIP);
@@ -2713,7 +2702,7 @@ acmd:aalias2(const playerid, const params[], const bool:help)
 	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID  || (isnull(params) && gPlayerData[playerid][E_SPECTATING] && (pid = gPlayerData[playerid][E_SPECID]) != INVALID_PLAYER_ID)) {
 		GetPlayerIp(pid, pIP, sizeof(pIP));
 		pIP = IPsubnet(pIP);
-	} else if(isValidName(params)) {
+	} else if(IsValidName(params)) {
 		pIP = Alias_GetLastIP(gAlarDB, params);
 		if(!isnull(pIP)) {
 			pIP = IPsubnet(pIP);
@@ -2764,7 +2753,7 @@ acmd:aalias3(const playerid, const params[], const bool:help)
 	if(params[0] == '"' && (pid = strlen(params)) > 2 && params[pid-1] == '"') {
 		new pname[MAX_PLAYER_NAME];
 		strmid(pname, params, 1, pid-1);
-		if(isValidName(pname)) {
+		if(IsValidName(pname)) {
 			format(string, sizeof(string), "%s's Aliases: ", params);
 			if(Alias_GetAlias3FromName(gAlarDB, params, string, sizeof(string))) {
 				if(playerid == INVALID_PLAYER_ID) {
@@ -2794,7 +2783,7 @@ acmd:aalias3(const playerid, const params[], const bool:help)
 			format(string, sizeof(string), "No aliases found for %s", pname);
 			SendMessage(playerid, COLOUR_WARNING, string);
 		}
-	} else if(isValidName(params)) {
+	} else if(IsValidName(params)) {
 		format(string, sizeof(string), "%s's Aliases: ", params);
 		if(Alias_GetAlias3FromName(gAlarDB, params, string, sizeof(string))) {
 			if(playerid == INVALID_PLAYER_ID) {
@@ -3168,7 +3157,7 @@ acmd:abancheck(const playerid, const params[], const bool:help)
 		if(len > 2 && params[len-1] == '"') {
 			new pname[MAX_PLAYER_NAME];
 			strmid(pname, params, 1, len-1);
-			if(isValidName(pname)) {
+			if(IsValidName(pname)) {
 				strcpy(check, pname);
 			} else {
 				SendMessage(playerid, COLOUR_WARNING, "Invalid name");
@@ -3180,7 +3169,7 @@ acmd:abancheck(const playerid, const params[], const bool:help)
 		}
 	} else {
 		isanip = IPisvalid(params, false);
-		if(isnull(params) || (!isanip && !isValidName(params))) {
+		if(isnull(params) || (!isanip && !IsValidName(params))) {
 			SendMessage(playerid, COLOUR_HELP, "USAGE: /abancheck [player name] or [IP]");
 			return 1;
 		}
@@ -3514,7 +3503,7 @@ acmd:abanname(const playerid, const params[], const bool:help)
 		}
 	}
 
-	if(!isValidName(bname, cmdchk(playerid, E_WILDBAN_LEVEL))) {
+	if(!IsValidName(bname, cmdchk(playerid, E_WILDBAN_LEVEL))) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 		return 1;
 	}
@@ -4057,7 +4046,7 @@ acmd:achangepw(const playerid, const params[], const bool:help)
 		return 1;
 	}
 
-	Admin_Password(gAlarDB, gPlayerData[playerid][E_NAME], Hash_String(params));
+	Admin_Password(gAlarDB, gPlayerData[playerid][E_NAME], ReturnHashString(params));
 
 	format(msg, sizeof(msg), "%s has changed their password", ReturnPlayerName(playerid));
 	LogAction(msg);
@@ -4509,7 +4498,7 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 	new vid;
 	if(strcmp("all", params, true) == 0) {
 		new num;
-		Bit_Loop(gCreatedVehicles, i) {
+		foreach(new i : Bits(gCreatedVehicles)) {
 			DestroyVehicle(i);
 			num++;
 		}
@@ -4517,7 +4506,7 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 			SendClientMessage(playerid, COLOUR_WARNING, "There are no vehicles to destroy");
 			return 1;
 		}
-		Bit_SetAll(gCreatedVehicles, 0, sizeof(gCreatedVehicles));
+		Bit_SetAll(gCreatedVehicles, false, sizeof(gCreatedVehicles));
 
 		format(string, sizeof(string), "You have destroyed all %i created vehicles", num);
 		SendClientMessage(playerid, COLOUR_ADMIN, string);
@@ -4539,8 +4528,8 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 
 	} else if(strcmp("visible", params, true) == 0) {
 		new num,
-			Bit:destroyed[Bit_Bits(MAX_VEHICLES)];
-		Bit_Loop(gCreatedVehicles, i) {
+			BitArray:destroyed<MAX_VEHICLES>;
+		foreach(new i : Bits(gCreatedVehicles)) {
 			if(IsVehicleStreamedIn(i, playerid)) {
 				Bit_Let(destroyed, i);
 				num++;
@@ -4551,7 +4540,7 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 			SendClientMessage(playerid, COLOUR_WARNING, "There are no visible admin vehicles");
 			return 1;
 		} else if(num > 0) {
-			Bit_Loop(destroyed, i) {
+			foreach(new i : Bits(destroyed)) {
 				DestroyVehicle(i);
 				Bit_Vet(gCreatedVehicles, i);
 			}
@@ -4567,9 +4556,9 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 	} else {
 		if(!isNumeric(params)) {
 			new num,
-				Bit:destroyed[Bit_Bits(MAX_VEHICLES)];
+				BitArray:destroyed<MAX_VEHICLES>;
 			if(Bit_GetArrayFromString(destroyed, params)) {
-				Bit_Loop(destroyed, i) {
+				foreach(new i : Bits(destroyed)) {
 					if(!Bit_Get(gCreatedVehicles, i)) {
 						Bit_Vet(destroyed, i);
 					} else {
@@ -4581,7 +4570,7 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 					SendClientMessage(playerid, COLOUR_WARNING, "There are no admin vehicles in the list");
 					return 1;
 				} else if(num > 1) {
-					Bit_Loop(destroyed, i) {
+					foreach(new i : Bits(destroyed)) {
 						DestroyVehicle(i);
 						Bit_Vet(gCreatedVehicles, i);
 					}
@@ -6144,7 +6133,7 @@ acmd:ahelp(const playerid, const params[], const bool:help)
 	}
 
 	if(!isnull(params)) {
-		if(!ACMD_FunctionHelp(playerid, params)) {
+		if(!ACMD_CommandHelp(playerid, params)) {
 			SendClientMessage(playerid, COLOUR_WARNING, "Unknown command, for a complete command list type /acommands");
 		}
 		return 1;
@@ -6369,7 +6358,7 @@ acmd:aimmune(const playerid, const params[], const bool:help)
 		if(len > 2 && params[len-1] == '"') {
 			strmid(pname, params, 1, len-1);
 		}
-		if(!isValidName(pname)) {
+		if(!IsValidName(pname)) {
 			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
 			return 1;
 		}
@@ -6383,7 +6372,7 @@ acmd:aimmune(const playerid, const params[], const bool:help)
 	} else if((pid = FindPlayer(params)) != INVALID_PLAYER_ID) {
 		GetPlayerName(pid, pname, sizeof(pname));
 	} else {
-		if(!isValidName(params)) {
+		if(!IsValidName(params)) {
 			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
 			return 1;
 		}
@@ -6473,7 +6462,7 @@ acmd:ainfo(const playerid, const params[], const bool:help)
 
 	if(isnull(params)) {
 		if(playerid == INVALID_PLAYER_ID) {
-			print("ID   Name              Level  Ping  IP               Location");
+			print(" ID  Name              Level  Ping  IP               Location");
 			new CountryName[MAX_COUNTRY_NAME];
 			LoopPlayers(i) {
 				if(GetPVarType(i, "CountryName") == PLAYER_VARTYPE_STRING) {
@@ -6555,7 +6544,7 @@ acmd:ainfo(const playerid, const params[], const bool:help)
 	}
 	SendMessage(playerid, COLOUR_ADMIN, msg);
 
-	format(msg, sizeof(msg), "    Position: %s  Interior: %i  World: %i", ReturnPlayerZone(pid), GetPlayerInterior(pid), GetPlayerVirtualWorld(pid));
+	format(msg, sizeof(msg), "    Position: %s  Interior: %i  World: %i", ReturnPlayerZoneName(pid), GetPlayerInterior(pid), GetPlayerVirtualWorld(pid));
 	SendMessage(playerid, COLOUR_ADMIN, msg);
 
 	if(IsPlayerInAnyVehicle(pid)) {
@@ -6722,7 +6711,7 @@ acmd:aip(const playerid, const params[], const bool:help)
 			} else {
 				strcpy(pname, params);
 			}
-			if(!isValidName(pname)) {
+			if(!IsValidName(pname)) {
 				SendMessage(playerid, COLOUR_WARNING, "Invalid name");
 				return 1;
 			}
@@ -7179,7 +7168,7 @@ acmd:akick(const playerid, const params[], const bool:help)
 			}
 		}
 		if(cmdchk(playerid, E_WILDKICK_LEVEL) && (strfind(target, "*") != -1 || strfind(target, "?") != -1)) {
-			if(!isValidName(target, true)) {
+			if(!IsValidName(target, true)) {
 				SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 				return 1;
 			}
@@ -7369,7 +7358,7 @@ acmd:alogin(const playerid, const params[], const bool:help)
 	if(Admin_GetData(gAlarDB, gPlayerData[playerid][E_NAME], logininfo)) {
 		new msg[MAX_INPUT];
 		if(Hash_Compare(params, logininfo[E_LOGIN_HASH])) {
-			Bit_Set(g_bitAdmins, playerid, 1);
+			Bit_Set(g_bitAdmins, playerid, true);
 			SetPVarInt(playerid, "AlarLevel", (gPlayerData[playerid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL]));
 
 			if(logininfo[E_LOGIN_HIDDEN]) {
@@ -7465,7 +7454,7 @@ acmd:alogin(const playerid, const params[], const bool:help)
 			new newinfo[E_LOGINDATA];
 			newinfo[E_LOGIN_LEVEL] = gServerData[E_RCON_LOGIN_LEVEL];
 			GetPlayerIp(playerid, newinfo[E_LOGIN_IP], sizeof(SIZE_E_LOGINDATA[E_LOGIN_IP]));
-			strcpy(newinfo[E_LOGIN_HASH], Hash_String(params), sizeof(SIZE_E_LOGINDATA[E_LOGIN_HASH]));
+			strcpy(newinfo[E_LOGIN_HASH], ReturnHashString(params), sizeof(SIZE_E_LOGINDATA[E_LOGIN_HASH]));
 			Admin_SetAdmin(gAlarDB, pname, newinfo);
 
 
@@ -7509,7 +7498,7 @@ acmd:aloginas(const playerid, const params[], const bool:help)
 	new pname[MAX_PLAYER_NAME], password[MAX_INPUT];
 	strscan(params, "ss", pname, sizeof(pname), password, sizeof(password));
 
-	if(!isValidName(pname)) {
+	if(!IsValidName(pname)) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 		return 1;
 	}
@@ -7576,7 +7565,7 @@ acmd:aloginas(const playerid, const params[], const bool:help)
 				}
 			}
 
-			Bit_Set(g_bitAdmins, playerid, 1);
+			Bit_Set(g_bitAdmins, playerid, true);
 			SetPVarInt(playerid, "AlarLevel", (gPlayerData[playerid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL]));
 			gPlayerData[playerid][E_STATE] |= ADMIN_STATE_HIDDEN;
 			gPlayerData[playerid][E_SHOWHUD] = logininfo[E_LOGIN_HUD];
@@ -7676,7 +7665,7 @@ acmd:alogout(const playerid, const params[], const bool:help)
 	SendClientMessage(playerid, COLOUR_PLAYER, "You have been logged out");
 
 	if(gPlayerData[playerid][E_RCONLEVEL] <= 0) {
-		Bit_Set(g_bitAdmins, playerid, 0);
+		Bit_Set(g_bitAdmins, playerid, false);
 	}
 	gPlayerData[playerid][E_ADMINLEVEL] = 0;
 	DeletePVar(playerid, "AlarLevel");
@@ -8113,7 +8102,7 @@ acmd:apm(const playerid, const params[], const bool:help)
 		}
 
 		format(string, sizeof(string), "%s sent an admin pm to %s(%i): %s", pname, ReturnPlayerName(pid), pid, msg);
-		new Bit:bitPlayers[Bit_Bits(MAX_PLAYERS)];
+		new BitArray:bitPlayers<MAX_PLAYERS>;
 		bitPlayers = g_bitAdmins;
 		Bit_Vet(bitPlayers, playerid);
 		SendWrappedMessageToClients(bitPlayers, COLOUR_MSG, string);
@@ -8958,7 +8947,7 @@ acmd:asay(const playerid, const params[], const bool:help)
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
-	if(!isValidGameText(msg) || strlen(msg) > 80) {
+	if(!IsValidGameText(msg) || strlen(msg) > 80) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid message");
 		return 1;
 	}
@@ -9151,7 +9140,7 @@ acmd:asetadmin(const playerid, const params[], const bool:help)
 		SendClientMessage(pid, COLOUR_WARNING, "You have been removed as an admin");
 
 		if(gPlayerData[pid][E_RCONLEVEL] <= 0) {
-			Bit_Set(g_bitAdmins, pid, 0);
+			Bit_Set(g_bitAdmins, pid, false);
 		}
 		gPlayerData[pid][E_ADMINLEVEL] = 0;
 		DeletePVar(pid, "AlarLevel");
@@ -9187,12 +9176,12 @@ acmd:asetadmin(const playerid, const params[], const bool:help)
 			SpawnUsingData(pid);
 		}
 	} else {
-		Bit_Set(g_bitAdmins, pid, 1);
+		Bit_Set(g_bitAdmins, pid, true);
 		strcpy(gPlayerData[pid][E_NAME], pname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
 	}
 	logininfo[E_LOGIN_LEVEL] = plvl;
 	GetPlayerIp(pid, logininfo[E_LOGIN_IP], sizeof(SIZE_E_LOGINDATA[E_LOGIN_IP]));
-	strcpy(logininfo[E_LOGIN_HASH], Hash_String(gServerData[E_DEFAULT_PW]), sizeof(SIZE_E_LOGINDATA[E_LOGIN_HASH]));
+	strcpy(logininfo[E_LOGIN_HASH], ReturnHashString(gServerData[E_DEFAULT_PW]), sizeof(SIZE_E_LOGINDATA[E_LOGIN_HASH]));
 	Admin_SetAdmin(gAlarDB, gPlayerData[pid][E_NAME], logininfo);
 
 	SetPVarInt(pid, "AlarLevel", (gPlayerData[pid][E_ADMINLEVEL] = plvl));
@@ -9235,7 +9224,7 @@ acmd:asetname(const playerid, const params[], const bool:help)
 		SendClientMessage(playerid, COLOUR_WARNING, "Player not found");
 		return 1;
 	}
-	if(!isValidName(newname)) {
+	if(!IsValidName(newname)) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 		return 1;
 	}
@@ -9336,7 +9325,7 @@ acmd:asetname(const playerid, const params[], const bool:help)
 			strcpy(gPlayerData[pid][E_NAME], newname, sizeof(SIZE_E_PLAYERDATA[E_NAME]));
 			new msg[MAX_INPUT];
 			if(!logininfo[E_LOGIN_MANUAL] && gServerData[E_AUTO_LOGIN] && IPcompare(logininfo[E_LOGIN_IP], ReturnPlayerIP(pid))) {
-				Bit_Set(g_bitAdmins, pid, 1);
+				Bit_Set(g_bitAdmins, pid, true);
 				SetPVarInt(pid, "AlarLevel", (gPlayerData[pid][E_ADMINLEVEL] = logininfo[E_LOGIN_LEVEL]));
 				if(logininfo[E_LOGIN_HIDDEN]) {
 					gPlayerData[pid][E_STATE] |= ADMIN_STATE_HIDDEN;
@@ -9465,7 +9454,7 @@ acmd:ashout(const playerid, const params[], const bool:help)
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /ashout [message]");
 		return 1;
 	}
-	if(!isValidGameText(params) || strlen(params) > 80) {
+	if(!IsValidGameText(params) || strlen(params) > 80) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid message");
 		return 1;
 	}
@@ -10317,7 +10306,7 @@ acmd:asuspendname(const playerid, const params[], const bool:help)
 		}
 	}
 
-	if(!isValidName(sname, cmdchk(playerid, E_WILDSUSPEND_LEVEL))) {
+	if(!IsValidName(sname, cmdchk(playerid, E_WILDSUSPEND_LEVEL))) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 		return 1;
 	}
@@ -10468,7 +10457,7 @@ acmd:aunban(const playerid, const params[], const bool:help)
 		if(len > 2 && params[len-1] == '"') {
 			new pname[MAX_PLAYER_NAME];
 			strmid(pname, params, 1, len-1);
-			if(isValidName(pname)) {
+			if(IsValidName(pname)) {
 				strcpy(check, pname);
 			} else {
 				SendMessage(playerid, COLOUR_WARNING, "Invalid name");
@@ -10480,7 +10469,7 @@ acmd:aunban(const playerid, const params[], const bool:help)
 		}
 	} else {
 		isanip = IPisvalid(params, false);
-		if(isnull(params) || (!isanip && !isValidName(params))) {
+		if(isnull(params) || (!isanip && !IsValidName(params))) {
 			SendMessage(playerid, COLOUR_HELP, "USAGE: /aunban [player name] or [IP]");
 			return 1;
 		}
@@ -10967,7 +10956,7 @@ acmd:aunsuspend(const playerid, const params[], const bool:help)
 		if(len > 2 && params[len-1] == '"') {
 			new pname[MAX_PLAYER_NAME];
 			strmid(pname, params, 1, len-1);
-			if(isValidName(pname)) {
+			if(IsValidName(pname)) {
 				strcpy(check, pname);
 			} else {
 				SendMessage(playerid, COLOUR_WARNING, "Invalid name");
@@ -10979,7 +10968,7 @@ acmd:aunsuspend(const playerid, const params[], const bool:help)
 		}
 	} else {
 		isanip = IPisvalid(params, false);
-		if(isnull(params) || (!isanip && !isValidName(params))) {
+		if(isnull(params) || (!isanip && !IsValidName(params))) {
 			SendMessage(playerid, COLOUR_HELP, "USAGE: /aunsuspend [player name] or [IP]");
 			return 1;
 		}
@@ -11051,7 +11040,7 @@ acmd:aunwarn(const playerid, const params[], const bool:help)
 		if(len > 2 && params[len-1] == '"') {
 			strmid(pname, params, 1, len-1);
 		}
-		if(!isValidName(pname)) {
+		if(!IsValidName(pname)) {
 			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
 			return 1;
 		}
@@ -11062,7 +11051,7 @@ acmd:aunwarn(const playerid, const params[], const bool:help)
 		}
 		GetPlayerName(pid, pname, sizeof(pname));
 	} else {
-		if(!isValidName(params)) {
+		if(!IsValidName(params)) {
 			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
 			return 1;
 		}
@@ -11135,7 +11124,7 @@ acmd:aunwhitelist(const playerid, const params[], const bool:help)
 		strcpy(wname, params);
 	}
 
-	if(!isValidName(wname)) {
+	if(!IsValidName(wname)) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 		return 1;
 	}
@@ -11438,7 +11427,7 @@ acmd:awarnings(const playerid, const params[], const bool:help)
 		if(len > 2 && params[len-1] == '"') {
 			strmid(pname, params, 1, len-1);
 		}
-		if(!isValidName(pname)) {
+		if(!IsValidName(pname)) {
 			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
 			return 1;
 		}
@@ -11449,7 +11438,7 @@ acmd:awarnings(const playerid, const params[], const bool:help)
 		}
 		GetPlayerName(pid, pname, sizeof(pname));
 	} else {
-		if(!isValidName(params)) {
+		if(!IsValidName(params)) {
 			SendMessage(playerid, COLOUR_WARNING, "Invalid name");
 			return 1;
 		}
@@ -11593,7 +11582,7 @@ acmd:awhitelist(const playerid, const params[], const bool:help)
 		strcpy(wname, params);
 	}
 
-	if(!isValidName(wname)) {
+	if(!IsValidName(wname)) {
 		SendClientMessage(playerid, COLOUR_WARNING, "Invalid name");
 		return 1;
 	}
@@ -11744,7 +11733,7 @@ stock ShowVehicleTags(playerid)
 		Float:vx, Float:vy, Float:vz,
 		Float:dist,
 		CloseVehicleID[sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS])] = {INVALID_VEHICLE_ID, ...},
-		Float:CloseVehicleDistance[sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS])] = {FLOAT_INF, ...};
+		Float:CloseVehicleDistance[sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS])] = {FLOAT_POS_INFINITY, ...};
 
 	if(IsPlayerInAnyVehicle(playerid)) {
 		GetVehiclePos(GetPlayerVehicleID(playerid), px, py, pz);
@@ -12058,7 +12047,7 @@ public alar_rconupdate(Unsigned:IPCode)
 		if(strcmp(IP, ReturnPlayerIP(i)) == 0 && IsPlayerAdmin(i) && gServerData[E_RCON_LEVEL] != gPlayerData[i][E_RCONLEVEL]) {
 			gPlayerData[i][E_RCONLEVEL] = gServerData[E_RCON_LEVEL];
 			if(gServerData[E_RCON_LEVEL] > 0) {
-				Bit_Set(g_bitAdmins, i, 1);
+				Bit_Set(g_bitAdmins, i, true);
 				AllowPlayerTeleport(i, cmdchk(i, E_TELE_LEVEL));
 			}
 			format(string, sizeof(string), "%s logged in as an RCON admin", ReturnPlayerName(i));
@@ -12077,7 +12066,7 @@ stock ReturnNumPlateTxt(vehicleid)
 	strcpy(string, gServerData[E_DEFAULT_NUM_PLATE]);
 	new value[12];
 	valstr(value, vehicleid);
-	strreplace(string, "!", value);
+	strreplaceword(string, "!", value);
 	for (new i; i < 8; i++) {
 	    switch(string[i]){
 	        case 'a'..'z': string[i] += 'A' - 'a';
@@ -12631,25 +12620,25 @@ stock SendBanMsg(playerid, const message[], const datetime[], const adminname[])
 	new msg[512];
 	strcpy(msg, message);
 
-	strreplace(msg, "$(WEBSITE)", ReturnServerVar("weburl"));
-	strreplace(msg, "$(NAME)", ReturnPlayerName(playerid));
-	strreplace(msg, "$(IP)", ReturnPlayerIP(playerid));
+	strreplaceword(msg, "$(WEBSITE)", ReturnServerVar("weburl"));
+	strreplaceword(msg, "$(NAME)", ReturnPlayerName(playerid));
+	strreplaceword(msg, "$(IP)", ReturnPlayerIP(playerid));
 	if(isnull(datetime)) {
-		strreplace(msg, "$(DATE)", "??-??-??");
-		strreplace(msg, "$(TIME)", "??:??:??");
-		strreplace(msg, "$(DATETIME)", "??-??-?? ??:??:??");
+		strreplaceword(msg, "$(DATE)", "??-??-??");
+		strreplaceword(msg, "$(TIME)", "??:??:??");
+		strreplaceword(msg, "$(DATETIME)", "??-??-?? ??:??:??");
 	} else {
 		new time[MAX_TIMESTAMP],
 			date[MAX_TIMESTAMP];
 		strscan(message, "ss ", date, sizeof(date), time, sizeof(time));
-		strreplace(msg, "$(DATE)", date);
-		strreplace(msg, "$(TIME)", time);
-		strreplace(msg, "$(DATETIME)", datetime);
+		strreplaceword(msg, "$(DATE)", date);
+		strreplaceword(msg, "$(TIME)", time);
+		strreplaceword(msg, "$(DATETIME)", datetime);
 	}
 	if(isnull(adminname)) {
-		strreplace(msg, "$(ADMIN)", DEFAULT_NAME);
+		strreplaceword(msg, "$(ADMIN)", DEFAULT_NAME);
 	} else {
-		strreplace(msg, "$(ADMIN)", adminname);
+		strreplaceword(msg, "$(ADMIN)", adminname);
 	}
 
 	new start, end;
@@ -13419,7 +13408,7 @@ public alar_AddJoinLine(playerid, colour, const string[])
 #if CHATHISTORY_SIZE > 0
 	public alar_AddMessageToHistory(const playername[], colour, const message[], flags)
 	{
-		if(!isValidName(playername) || isnull(message)) return 0;
+		if(!IsValidName(playername) || isnull(message)) return 0;
 
 		for(new i; i < sizeof(gChatHistory) - 1; i++) {
 			gChatHistory[i] = gChatHistory[i + 1];
@@ -13464,11 +13453,11 @@ public alar_DestroyVehicle(vehicleid)
 {
 	if(vehicleid == INVALID_VEHICLE_ID) {
 		new count;
-		Bit_Loop(gCreatedVehicles, i) {
+		foreach(new i : Bits(gCreatedVehicles)) {
 			DestroyVehicle(i);
 			count++;
 		}
-		Bit_SetAll(gCreatedVehicles, 0, sizeof(gCreatedVehicles));
+		Bit_SetAll(gCreatedVehicles, false, sizeof(gCreatedVehicles));
 		return count;
 	} else if(0 < vehicleid < MAX_VEHICLES && Bit_Get(gCreatedVehicles, vehicleid)) {
 		DestroyVehicle(vehicleid);
@@ -13791,9 +13780,9 @@ public alar_Ban(const playername[], const playerip[], const reason[], const admi
 	if(isnull(playername)) {
 		if(!IPisvalid(playerip, true)) return 0;
 	} else if(isnull(playerip)) {
-		if(!isValidName(playername, true)) return 0;
+		if(!IsValidName(playername, true)) return 0;
 	} else {
-		if(!IPisvalid(playerip, true) || !isValidName(playername, true)) return 0;
+		if(!IPisvalid(playerip, true) || !IsValidName(playername, true)) return 0;
 	}
 
 	new msg[50 + MAX_INPUT];
@@ -13968,9 +13957,9 @@ public alar_Suspend(const playername[], const playerip[], Float:hours, const rea
 	if(isnull(playername)) {
 		if(!IPisvalid(playerip, true)) return 0;
 	} else if(isnull(playerip)) {
-		if(!isValidName(playername, true)) return 0;
+		if(!IsValidName(playername, true)) return 0;
 	} else {
-		if(!IPisvalid(playerip, true) || !isValidName(playername, true)) return 0;
+		if(!IPisvalid(playerip, true) || !IsValidName(playername, true)) return 0;
 	}
 
 	new shortreason[MAX_REASON],
@@ -14141,7 +14130,7 @@ public alar_SuspendPlayer(playerid, Float:hours, const reason[], const adminname
 
 public alar_Warn(const playername[], const reason[], const adminname[], const adminip[], bool:hidename)
 {
-	if(!isValidName(playername, false)) return 0;
+	if(!IsValidName(playername, false)) return 0;
 
 	LoopPlayers(i) {
 		if(!IsPlayerNPC(i) && strcmp(ReturnPlayerName(i), playername, true) == 0) {
@@ -14172,7 +14161,7 @@ public alar_Warn(const playername[], const reason[], const adminname[], const ad
 
 		if(!isnull(reason)) {
 			strcpy(msg, reason);
-			strreplace(msg, "'", "''");
+			strreplaceword(msg, "'", "''");
 		} else {
 			msg[0] = '\0';
 		}
@@ -14236,7 +14225,7 @@ public alar_WarnPlayer(playerid, const reason[], const adminname[], const admini
 
 		if(isnull(reason)) {
 			strcpy(msg, reason);
-			strreplace(msg, "'", "''");
+			strreplaceword(msg, "'", "''");
 		} else {
 			msg[0] = '\0';
 		}

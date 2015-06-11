@@ -38,21 +38,29 @@
 const Menu:@INVALID_MENU = Menu:INVALID_MENU;
 const Text:@INVALID_TEXT_DRAW = Text:INVALID_TEXT_DRAW;
 const Text3D:@INVALID_3DTEXT_ID = Text3D:INVALID_3DTEXT_ID;
-const PlayerText3D:@INVALID_PLAYER3DTEXT_ID = PlayerText3D:INVALID_PLAYER3DTEXT_ID;
+const PlayerText3D:@INVALID_PLAYER3DTEXT_ID = PlayerText3D:(0xFFFF);
 
 /**
  *  Undefine the macros then make them refer to the symbolic constants above
  */
-#undef INVALID_MENU
+#if defined INVALID_MENU
+	#undef INVALID_MENU
+#endif
 #define INVALID_MENU				@INVALID_MENU
 
-#undef INVALID_TEXT_DRAW
+#if defined INVALID_TEXT_DRAW
+	#undef INVALID_TEXT_DRAW
+#endif
 #define INVALID_TEXT_DRAW			@INVALID_TEXT_DRAW
 
-#undef INVALID_3DTEXT_ID
+#if defined INVALID_3DTEXT_ID
+	#undef INVALID_3DTEXT_ID
+#endif
 #define INVALID_3DTEXT_ID			@INVALID_3DTEXT_ID
 
-#undef INVALID_PLAYER3DTEXT_ID
+#if defined INVALID_PLAYER3DTEXT_ID
+	#undef INVALID_PLAYER3DTEXT_ID
+#endif
 #define INVALID_PLAYER3DTEXT_ID		@INVALID_PLAYER3DTEXT_ID
 
 /**
@@ -330,7 +338,7 @@ stock bf_GetPVarString(playerid, varname[], string_return[], len)
  */
 stock bf_SetPVarString(playerid, varname[], string_value[])
 {
-	if(string_value[0] == '\0') {
+	if(string_value[0] == '\0') {	//if(!string_value[0]) {
 		return SetPVarString(playerid, varname, "\1");
 	}
 	return SetPVarString(playerid, varname, string_value);
