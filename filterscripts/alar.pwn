@@ -359,6 +359,7 @@ enum E_SPAWNTYPE {
  *  Libraries and respective links to their release pages
  */
 #include	<a_samp>				// By SA-MP team:   http://www.sa-mp.com/download.php
+#include	<streamer>				// By Incognito:    http://forum.sa-mp.com/showthread.php?t=102865
 
 /**
  *  INC Library ...
@@ -501,7 +502,7 @@ enum E_PLAYERDATA {
 
 	// Admin stuff
 	#if VEHICLE_TAGS_TIME > 0 && VEHICLE_TAGS_NUMBER > 0
-		PlayerText3D:E_VEHICLETAGS[VEHICLE_TAGS_NUMBER],
+		Text3D:E_VEHICLETAGS[VEHICLE_TAGS_NUMBER],
 		E_TIMER_VEHICLETAGS,
 	#endif
 
@@ -789,8 +790,8 @@ public OnFilterScriptInit()
 	gDefaultPlayerData[E_SEATID] = INVALID_SEAT_ID;
 	gDefaultPlayerData[E_LOGKEYS] = true;
 	#if VEHICLE_TAGS_TIME > 0 && VEHICLE_TAGS_NUMBER > 0
-		for(new i; i < sizeof(gDefaultPlayerData[E_VEHICLETAGS]); i++) {
-			gDefaultPlayerData[E_VEHICLETAGS][i] = INVALID_PLAYER3DTEXT_ID;
+		for(new i, j = sizeof(gDefaultPlayerData[E_VEHICLETAGS]); i < j; i++) {
+			gDefaultPlayerData[E_VEHICLETAGS][i] = INVALID_3DTEXT_ID;
 		}
 	#endif
 	#if SPEC_TXT_TIME > 0
@@ -4472,16 +4473,21 @@ acmd:acreate(const playerid, const params[], const bool:help)
 
 acmd:adestroy(const playerid, const params[], const bool:help)
 {
-	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) return 0;
-	if(LevelCheck(playerid, E_DESTROY_LEVEL)) return 1;
-
+	if(gPlayerData[playerid][E_ADMINLEVEL] <= 0 && gPlayerData[playerid][E_RCONLEVEL] <= 0) {
+		return 0;
+	}
+	
+	if(LevelCheck(playerid, E_DESTROY_LEVEL)) {
+		return 1;
+	}
+	
 	if(help) {
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /adestroy [vehicle ID] or \"all\" or \"visible\" or \"current\"");
 		SendClientMessage(playerid, COLOUR_HELP, "Destroys vehicles created with acreate");
 		return 1;
 	}
-
-	new string[512];
+	
+	new string[MAX_STRING * 2];
 	if(isnull(params)) {
 		if(Bit_GetStringFromArray(gCreatedVehicles, string)) {
 			strins(string, "Vehicle IDs: ", 0);
@@ -4489,12 +4495,13 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 			#if VEHICLE_TAGS_TIME > 0 && VEHICLE_TAGS_NUMBER > 0
 				ShowVehicleTags(playerid);
 			#endif
-		} else {
+		}
+		else {
 			SendClientMessage(playerid, COLOUR_ADMIN, "There are no admin created vehicles");
 		}
 		return 1;
 	}
-
+	
 	new vid;
 	if(strcmp("all", params, true) == 0) {
 		new num;
@@ -4507,15 +4514,16 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 			return 1;
 		}
 		Bit_SetAll(gCreatedVehicles, false, sizeof(gCreatedVehicles));
-
+		
 		format(string, sizeof(string), "You have destroyed all %i created vehicles", num);
 		SendClientMessage(playerid, COLOUR_ADMIN, string);
-
+		
 		format(string, sizeof(string), "%s has destroyed all %i created vehicles", ReturnPlayerName(playerid), num);
 		LogAction(string);
 		AddLogString(string);
 		return 1;
-	} else if(strcmp("current", params, true) == 0) {
+	}
+	else if(strcmp("current", params, true) == 0) {
 		if(!IsPlayerInAnyVehicle(playerid)) {
 			SendClientMessage(playerid, COLOUR_WARNING, "You are not in a vehicle");
 			return 1;
@@ -4525,8 +4533,8 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 			SendClientMessage(playerid, COLOUR_WARNING, "You are not in an admin created vehicle");
 			return 1;
 		}
-
-	} else if(strcmp("visible", params, true) == 0) {
+	}
+	else if(strcmp("visible", params, true) == 0) {
 		new num,
 			BitArray:destroyed<MAX_VEHICLES>;
 		foreach(new i : Bits(gCreatedVehicles)) {
@@ -4539,7 +4547,8 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 		if(num == 0) {
 			SendClientMessage(playerid, COLOUR_WARNING, "There are no visible admin vehicles");
 			return 1;
-		} else if(num > 0) {
+		}
+		else if(num > 0) {
 			foreach(new i : Bits(destroyed)) {
 				DestroyVehicle(i);
 				Bit_Vet(gCreatedVehicles, i);
@@ -4553,7 +4562,8 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 			AddLogString(string);
 			return 1;
 		}
-	} else {
+	}
+	else {
 		if(!isNumeric(params)) {
 			new num,
 				BitArray:destroyed<MAX_VEHICLES>;
@@ -4561,7 +4571,8 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 				foreach(new i : Bits(destroyed)) {
 					if(!Bit_Get(gCreatedVehicles, i)) {
 						Bit_Vet(destroyed, i);
-					} else {
+					}
+					else {
 						num++;
 						vid = i;
 					}
@@ -4569,7 +4580,8 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 				if(num == 0) {
 					SendClientMessage(playerid, COLOUR_WARNING, "There are no admin vehicles in the list");
 					return 1;
-				} else if(num > 1) {
+				}
+				else if(num > 1) {
 					foreach(new i : Bits(destroyed)) {
 						DestroyVehicle(i);
 						Bit_Vet(gCreatedVehicles, i);
@@ -4583,7 +4595,8 @@ acmd:adestroy(const playerid, const params[], const bool:help)
 					AddLogString(string);
 					return 1;
 				}
-			} else {
+			}
+			else {
 
 				SendClientMessage(playerid, COLOUR_HELP, "USAGE: /adestroy [vehicle IDs] or \"all\" or \"visible\" or \"current\"");
 				return 1;
@@ -11722,13 +11735,13 @@ stock ShowVehicleTags(playerid)
 		KillTimer(gPlayerData[playerid][E_TIMER_VEHICLETAGS]);
 		gPlayerData[playerid][E_TIMER_VEHICLETAGS] = 0;
 	}
-	for(new i; i < sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS]); i++) {
-		if(gPlayerData[playerid][E_VEHICLETAGS][i] != INVALID_PLAYER3DTEXT_ID) {
-			DeletePlayer3DTextLabel(playerid, gPlayerData[playerid][E_VEHICLETAGS][i]);
-			gPlayerData[playerid][E_VEHICLETAGS][i] = INVALID_PLAYER3DTEXT_ID;
+	for(new i, j = sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS]); i < j; i++) {
+		if(gPlayerData[playerid][E_VEHICLETAGS][i] != INVALID_3DTEXT_ID) {
+			DestroyDynamic3DTextLabel(gPlayerData[playerid][E_VEHICLETAGS][i]);
+			gPlayerData[playerid][E_VEHICLETAGS][i] = INVALID_3DTEXT_ID;
 		}
 	}
-
+	
 	new Float:px, Float:py, Float:pz,
 		Float:vx, Float:vy, Float:vz,
 		Float:dist,
@@ -11737,22 +11750,26 @@ stock ShowVehicleTags(playerid)
 
 	if(IsPlayerInAnyVehicle(playerid)) {
 		GetVehiclePos(GetPlayerVehicleID(playerid), px, py, pz);
-	} else if(gPlayerData[playerid][E_SPECTATING]) {
+	}
+	else if(gPlayerData[playerid][E_SPECTATING]) {
 		if(gPlayerData[playerid][E_SPECID] == INVALID_PLAYER_ID) {
 			px = gPlayerData[playerid][E_CAM_POS_X];
 			py = gPlayerData[playerid][E_CAM_POS_Y];
 			pz = gPlayerData[playerid][E_CAM_POS_Z];
-		} else {
+		}
+		else {
 			if(IsPlayerInAnyVehicle(gPlayerData[playerid][E_SPECID])) {
 				GetVehiclePos(GetPlayerVehicleID(gPlayerData[playerid][E_SPECID]), px, py, pz);
-			} else {
+			}
+			else {
 				GetPlayerPos(gPlayerData[playerid][E_SPECID], px, py, pz);
 			}
 		}
-	} else {
+	}
+	else {
 		GetPlayerPos(playerid, px, py, pz);
 	}
-
+	
 	// Find the X few vehicles
 	new vid, idx;
 	for(; vid < MAX_VEHICLES && idx < sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS]); vid++) {
@@ -11763,7 +11780,7 @@ stock ShowVehicleTags(playerid)
 			idx++;
 		}
 	}
-
+	
 	if(idx) {
 		// Find the closest vehicles
 		for(; vid < MAX_VEHICLES; vid++) {
@@ -11779,14 +11796,15 @@ stock ShowVehicleTags(playerid)
 				}
 			}
 		}
-
+		
 		// Show the tags
 		new string[20];
 		for(new i; i < sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS]); i++) {
 			if(CloseVehicleID[i] == INVALID_VEHICLE_ID) break;
 			format(string, sizeof(string), "Vehicle ID: %i", CloseVehicleID[i]);
-			gPlayerData[playerid][E_VEHICLETAGS][i] = CreatePlayer3DTextLabel(playerid, string, COLOUR_VEHICLE, 0.0, 0.0, 0.4, VEHICLE_TAGS_DISTANCE, INVALID_PLAYER_ID, CloseVehicleID[i], 1);
+			gPlayerData[playerid][E_VEHICLETAGS][i] = CreateDynamic3DTextLabel(string, COLOUR_VEHICLE, 0.0, 0.0, 0.4, VEHICLE_TAGS_DISTANCE, INVALID_PLAYER_ID, CloseVehicleID[i], 1, -1, -1, playerid);
 		}
+		Streamer_Update(playerid, STREAMER_TYPE_3D_TEXT_LABEL);
 		gPlayerData[playerid][E_TIMER_VEHICLETAGS] = SetTimerEx("alar_hidevehicletags", (VEHICLE_TAGS_TIME) * 1000, 0, "i", playerid);
 	}
 }
@@ -11799,9 +11817,9 @@ stock ShowVehicleTags(playerid)
 			gPlayerData[playerid][E_TIMER_VEHICLETAGS] = 0;
 		}
 		for(new i; i < sizeof(SIZE_E_PLAYERDATA[E_VEHICLETAGS]); i++) {
-			if(gPlayerData[playerid][E_VEHICLETAGS][i] != INVALID_PLAYER3DTEXT_ID) {
-				DeletePlayer3DTextLabel(playerid, gPlayerData[playerid][E_VEHICLETAGS][i]);
-				gPlayerData[playerid][E_VEHICLETAGS][i] = INVALID_PLAYER3DTEXT_ID;
+			if(gPlayerData[playerid][E_VEHICLETAGS][i] != INVALID_3DTEXT_ID) {
+				DestroyDynamic3DTextLabel(gPlayerData[playerid][E_VEHICLETAGS][i]);
+				gPlayerData[playerid][E_VEHICLETAGS][i] = INVALID_3DTEXT_ID;
 			}
 		}
 	}
