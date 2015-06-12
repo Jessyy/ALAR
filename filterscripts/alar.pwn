@@ -13293,7 +13293,7 @@ stock AddJoinTextLine(colour, const string[])
 			TextDrawColor(gJoinMessage[i][E_TEXTBOX_TEXT], gJoinMessage[i][E_TEXTBOX_COLOUR]);
 			TextDrawBackgroundColor(gJoinMessage[i][E_TEXTBOX_TEXT], gJoinMessage[i][E_TEXTBOX_COLOUR] & 0x000000FF);
 			LoopPlayers(j) {
-				if(!IsPlayerNPC(i) && !gPlayerData[j][E_JOINTEXT]) {
+				if(!IsPlayerNPC(j) && !gPlayerData[j][E_JOINTEXT]) {
 					TextDrawShowForPlayer(j, gJoinMessage[i][E_TEXTBOX_TEXT]);
 				}
 			}
