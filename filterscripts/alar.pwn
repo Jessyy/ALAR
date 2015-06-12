@@ -4861,29 +4861,34 @@ acmd:admins(const playerid, const params[], const bool:help)
 		SendClientMessage(playerid, COLOUR_HELP, "USAGE: /admins");
 		if(gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0) {
 			SendWrappedMessageToPlayer(playerid, COLOUR_HELP, "Displays a list of online admins, ® appears for RCON admins, ° shows the admin is hidden from non-admins, and © appears for admins who are under logged in under a different name");
-		} else {
+		}
+		else {
 			SendClientMessage(playerid, COLOUR_HELP, "Displays a list of online admins, ® appears for RCON admins");
 		}
 		return 1;
 	}
-
-	new msg[512] = "Admins online:";
+	
+	new msg[MAX_STRING * 2] = "Admins online:";
 	LoopPlayers(i) {
 		if(gPlayerData[i][E_ADMINLEVEL] > 0) {
-			if(gPlayerData[playerid][E_ADMINLEVEL] > 0) {
+			if(playerid == INVALID_PLAYER_ID || gPlayerData[playerid][E_ADMINLEVEL] > 0) {
 				new pname[MAX_PLAYER_NAME];
 				GetPlayerName(i, pname, sizeof(pname));
 				format(msg, sizeof(msg), "%s %s%s%s%s(%i)", msg, pname, gPlayerData[i][E_STATE] & ADMIN_STATE_HIDDEN ? ("°") : (""), IsPlayerAdmin(i) ? ("®") : (""), strcmp(pname, gPlayerData[i][E_NAME], true) ? ("©") : (""), gPlayerData[i][E_ADMINLEVEL]);
-			} else if(~gPlayerData[i][E_STATE] & ADMIN_STATE_HIDDEN) {
+			}
+			else if(~gPlayerData[i][E_STATE] & ADMIN_STATE_HIDDEN) {
 				format(msg, sizeof(msg), "%s %s%s(%i)", msg, ReturnPlayerName(i), IsPlayerAdmin(i) ? ("®") : (""), gPlayerData[i][E_ADMINLEVEL]);
 			}
-		} else if(IsPlayerAdmin(i)) {
+		}
+		else if(IsPlayerAdmin(i)) {
 			format(msg, sizeof(msg), "%s %s®", msg, ReturnPlayerName(i));
 		}
 	}
+	
 	if(playerid == INVALID_PLAYER_ID) {
 		print(msg);
-	} else {
+	}
+	else {
 		SendWrappedMessageToPlayer(playerid, gPlayerData[playerid][E_ADMINLEVEL] > 0 || gPlayerData[playerid][E_RCONLEVEL] > 0 ? COLOUR_ADMIN : COLOUR_PLAYER, msg);
 	}
 	return 1;
