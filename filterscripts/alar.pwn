@@ -1767,6 +1767,13 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerDisconnect(playerid, reason)
 {
+	SetTimerEx("ALAR_OnPlayerDisconnect", 0, false, "ii", playerid, reason);
+	return 1;
+}
+
+forward ALAR_OnPlayerDisconnect(playerid, reason)
+public ALAR_OnPlayerDisconnect(playerid, reason)
+{
 	if(gPlayerData[playerid][E_KICK]) KillTimer(gPlayerData[playerid][E_KICK]);
 	if(gPlayerData[playerid][E_UNMUTE]) KillTimer(gPlayerData[playerid][E_UNMUTE]);
 	if(gPlayerData[playerid][E_UNJAIL]) KillTimer(gPlayerData[playerid][E_UNJAIL]);
