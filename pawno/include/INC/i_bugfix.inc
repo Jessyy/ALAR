@@ -13,8 +13,8 @@
 #include <a_samp>
 
 /**
-	native bf_db_close(&DB:handle);
 	native bf_fclose(&File:handle);
+	native bf_db_close(&DB:handle);
 	
 	native bf_strval(const string[]);
 	native Float:bf_floatstr(const string[]);
@@ -64,30 +64,12 @@ const PlayerText3D:@INVALID_PLAYER3DTEXT_ID = PlayerText3D:(0xFFFF);
 #define INVALID_PLAYER3DTEXT_ID		@INVALID_PLAYER3DTEXT_ID
 
 /**
- *  Close a SQLite database that was opened with db_open
- *  @param	DB:handle	The ID of the database you wish to close
- *  @return	1 on success, otherwise 0
- *
-stock bf_db_close(&DB:handle)
-{
-	new ret = db_close(handle);
-	handle = DB:0;
-	return ret;
-}
-#if defined _ALS_db_close
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
-#else
-	#define _ALS_db_close
-#endif
-#define db_close    bf_db_close
-*/
-/**
  *  Close a File that was opened with fopen
  *  @param	handle	The ID of the file you wish to close
  *  @return	1 on success, otherwise 0
  *  
  *  @fixes	Crashes on an invalid handle
- *
+ */
 stock bf_fclose(&File:handle)
 {
 	if(handle) {
@@ -98,12 +80,30 @@ stock bf_fclose(&File:handle)
 	return 0;
 }
 #if defined _ALS_fclose
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_fclose
 #endif
 #define fclose      bf_fclose
-*/
+
+/**
+ *  Close a SQLite database that was opened with db_open
+ *  @param	DB:handle	The ID of the database you wish to close
+ *  @return	1 on success, otherwise 0
+ */
+stock bf_db_close(&DB:handle)
+{
+	new ret = db_close(handle);
+	handle = DB:0;
+	return ret;
+}
+#if defined _ALS_db_close
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
+#else
+	#define _ALS_db_close
+#endif
+#define db_close    bf_db_close
+
 /**
  *  Can be used to convert a string to an integer
  *  @param	string[]	The string you want to convert to an integer
@@ -135,7 +135,7 @@ stock bf_strval(const string[])
 	return val * neg;
 }
 #if defined _ALS_strval
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_strval
 #endif
@@ -158,7 +158,7 @@ stock Float:bf_floatstr(const string[])
 	return floatstr(buf);
 }
 #if defined _ALS_floatstr
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_floatstr
 #endif
@@ -254,7 +254,7 @@ stock bf_strins(string[], const substr[], pos, maxlength = sizeof(string))
 	}
 }
 #if defined _ALS_strins
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_strins
 #endif
@@ -272,7 +272,7 @@ stock bf_Kick(playerid)
 	return Kick(playerid);
 }
 #if defined _ALS_Kick
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_Kick
 #endif
@@ -290,7 +290,7 @@ stock bf_Ban(playerid)
 	return Ban(playerid);
 }
 #if defined _ALS_Ban
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_Ban
 #endif
@@ -309,7 +309,7 @@ stock bf_BanEx(playerid, const reason[])
 	return BanEx(playerid, reason);
 }
 #if defined _ALS_BanEx
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_BanEx
 #endif
@@ -327,7 +327,7 @@ stock bf_GetPVarString(playerid, varname[], string_return[], len)
 	return ret;
 }
 #if defined _ALS_GetPVarString
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_GetPVarString
 #endif
@@ -344,7 +344,7 @@ stock bf_SetPVarString(playerid, varname[], string_value[])
 	return SetPVarString(playerid, varname, string_value);
 }
 #if defined _ALS_SetPVarString
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_SetPVarString
 #endif
@@ -362,7 +362,7 @@ stock bf_GetVehicleTrailer(vehicleid)
 	return GetVehicleTrailer(vehicleid);
 }
 #if defined _ALS_GetVehicleTrailer
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_GetVehicleTrailer
 #endif
@@ -385,7 +385,7 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 	#endif
 }
 #if defined _ALS_OnPlayerExitVehicle
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_OnPlayerExitVehicle
 #endif
@@ -406,7 +406,7 @@ stock static
 
 /**
  *  GetPlayerColor returns 0
- *
+ */
 public OnPlayerConnect(playerid)
 {
 	static const playerColors[] = {
@@ -432,7 +432,7 @@ public OnPlayerConnect(playerid)
 	#endif
 }
 #if defined _ALS_OnPlayerConnect
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_OnPlayerConnect
 #endif
@@ -441,10 +441,10 @@ public OnPlayerConnect(playerid)
 #if defined bf_OnPlayerConnect
 	forward bf_OnPlayerConnect(playerid);
 #endif
-*/
+
 /**
  *
- *
+ */
 public OnPlayerDisconnect(playerid, reason)
 {
 	sPlayerSpecMode[playerid] = SPECTATE_MODE_NORMAL;
@@ -458,7 +458,7 @@ public OnPlayerDisconnect(playerid, reason)
 	#endif
 }
 #if defined _ALS_OnPlayerDisconnect
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_OnPlayerDisconnect
 #endif
@@ -467,7 +467,7 @@ public OnPlayerDisconnect(playerid, reason)
 #if defined bf_OnPlayerDisconnect
 	forward bf_OnPlayerDisconnect(playerid, reason);
 #endif
-*/
+
 /**
  *
  */
@@ -484,7 +484,7 @@ public OnPlayerStreamIn(playerid, forplayerid)
 	#endif
 }
 #if defined _ALS_OnPlayerStreamIn
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_OnPlayerStreamIn
 #endif
@@ -510,7 +510,7 @@ public OnPlayerStreamOut(playerid, forplayerid)
 	#endif
 }
 #if defined _ALS_OnPlayerStreamOut
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_OnPlayerStreamOut
 #endif
@@ -536,7 +536,7 @@ public OnVehicleStreamIn(vehicleid, forplayerid)
 	#endif
 }
 #if defined _ALS_OnVehicleStreamIn
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_OnVehicleStreamIn
 #endif
@@ -562,7 +562,7 @@ public OnVehicleStreamOut(vehicleid, forplayerid)
 	#endif
 }
 #if defined _ALS_OnVehicleStreamOut
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_OnVehicleStreamOut
 #endif
@@ -613,7 +613,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	#endif
 }
 #if defined _ALS_OnPlayerStateChange
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_OnPlayerStateChange
 #endif
@@ -647,7 +647,7 @@ public OnPlayerRequestClass(playerid, classid)
 	#endif
 }
 #if defined _ALS_OnPlayerRequestClass
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_OnPlayerRequestClass
 #endif
@@ -668,7 +668,7 @@ stock bf_PlayerSpectatePlayer(playerid, targetplayerid, mode = SPECTATE_MODE_NOR
 	return PlayerSpectatePlayer(playerid, targetplayerid, mode);
 }
 #if defined _ALS_PlayerSpectatePlayer
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_PlayerSpectatePlayer
 #endif
@@ -685,7 +685,7 @@ stock bf_PlayerSpectateVehicle(playerid, targetvehicleid, mode = SPECTATE_MODE_N
 	return PlayerSpectateVehicle(playerid, targetvehicleid, mode);
 }
 #if defined _ALS_PlayerSpectateVehicle
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_PlayerSpectateVehicle
 #endif
@@ -702,7 +702,7 @@ stock bf_TogglePlayerSpectating(playerid, toggle)
 	return TogglePlayerSpectating(playerid, toggle);
 }
 #if defined _ALS_TogglePlayerSpectating
-	#error "Bugfix.inc must be included immediately after a_samp.inc"
+	#error "i_bugfix.inc must be included immediately after a_samp.inc"
 #else
 	#define _ALS_TogglePlayerSpectating
 #endif
