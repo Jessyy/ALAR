@@ -1771,7 +1771,7 @@ public OnPlayerDisconnect(playerid, reason)
 	return 1;
 }
 
-forward ALAR_OnPlayerDisconnect(playerid, reason)
+forward ALAR_OnPlayerDisconnect(playerid, reason);
 public ALAR_OnPlayerDisconnect(playerid, reason)
 {
 	if(gPlayerData[playerid][E_KICK]) KillTimer(gPlayerData[playerid][E_KICK]);
