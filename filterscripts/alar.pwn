@@ -778,6 +778,53 @@ forward alar_SuspendPlayer(playerid, Float:hours, const reason[], const adminnam
 forward alar_WarnPlayer(playerid, const reason[], const adminname[], const adminip[], bool:hidename);
 forward alar_Warn(const playername[], const reason[], const adminname[], const adminip[], bool:hidename);
 
+/**
+ *  Slowlee this will be the new structure of alar
+ */
+//#include	"alar\header\file_name"
+//#include	"alar\functions\file_name"
+
+//#include	"alar\commands\acmd_aalias"				// aalias, aalias2, aalias3
+//#include	"alar\commands\acmd_aheal"				// aheal, ahealall
+//#include	"alar\commands\acmd_aarmour"			// aarmour, armourall
+//#include	"alar\commands\acmd_alogin"				// aautologin, alogin, aloginas, alogout, achangepw
+//#include	"alar\commands\acmd_aban"				// abancheck, aban, abanip, abanname, aunban, aclearbans
+//#include	"alar\commands\acmd_acreate"			// acreate, adestroy
+//#include	"alar\commands\acmd_aeject"				// aeject, aejectall
+//#include	"alar\commands\acmd_afreeze"			// afrozen, afreeze, aunfreeze
+//#include	"alar\commands\acmd_agivecash"			// agivecash, agiveallcash
+//#include	"alar\commands\acmd_agiveweapon"		// agiveweapon, agiveallweapon
+//#include	"alar\commands\acmd_ahide"				// ahide, aunhide
+//#include	"alar\commands\acmd_ajail"				// ajailed, ajail, aunjail
+//#include	"alar\commands\acmd_amute"				// amuted, amute, aunmute
+//#include	"alar\commands\acmd_arape"				// arape, aunrape
+//#include	"alar\commands\acmd_asuspend"			// asuspend, asuspendip, asuspendname, aunsuspend
+//#include	"alar\commands\acmd_awarn"				// awarnings, awarn, aunwarn
+//#include	"alar\commands\acmd_awhitelist"			// awhitelist, aunwhitelist
+//#include	"alar\commands\acmd_acommands"			// acommands, ahelp
+
+//#include	"alar\callbacks\OnFilterScriptInit"
+//#include	"alar\callbacks\OnFilterScriptExit"
+//#include	"alar\callbacks\OnGameModeInit"
+//#include	"alar\callbacks\OnGameModeExit"
+//#include	"alar\callbacks\OnPlayerConnect"
+//#include	"alar\callbacks\OnPlayerDisconnect"
+//#include	"alar\callbacks\OnPlayerRequestClass"
+//#include	"alar\callbacks\OnPlayerSpawn"
+//#include	"alar\callbacks\OnPlayerDeath"
+//#include	"alar\callbacks\OnPlayerText"
+//#include	"alar\callbacks\OnPlayerCommandText"
+//#include	"alar\callbacks\OnVehicleMod"
+//#include	"alar\callbacks\OnVehiclePaintjob"
+//#include	"alar\callbacks\OnPlayerStateChange"
+//#include	"alar\callbacks\OnPlayerKeyStateChange"
+//#include	"alar\callbacks\OnPlayerInteriorChange"
+//#include	"alar\callbacks\OnPlayerUpdate"
+//#include	"alar\callbacks\OnPlayerClickPlayer"
+//#include	"alar\callbacks\OnRconCommand"
+//#include	"alar\callbacks\OnRconLoginAttempt"
+//#include	"alar\callbacks\OnVehicleSpawn"
+
 public OnFilterScriptInit()
 {
 	gAlarDB = db_open(ALAR_DATABASE);
