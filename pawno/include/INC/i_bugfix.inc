@@ -90,7 +90,7 @@ stock bf_fclose(&File:handle)
  *  Close a SQLite database that was opened with db_open
  *  @param	DB:handle	The ID of the database you wish to close
  *  @return	1 on success, otherwise 0
- */
+ *
 stock bf_db_close(&DB:handle)
 {
 	new ret = db_close(handle);
@@ -103,7 +103,7 @@ stock bf_db_close(&DB:handle)
 	#define _ALS_db_close
 #endif
 #define db_close    bf_db_close
-
+*/
 /**
  *  Can be used to convert a string to an integer
  *  @param	string[]	The string you want to convert to an integer

@@ -3,7 +3,7 @@ TITLE Yom's SA-MP auto compiler ...
 
 REM Then file name and path to be compiled
 SET FILENAME=alar
-SET FILEPATH=C:\Users\Cosmin\Documents\GitHub\ALAR
+SET FILEPATH=%~dp0
 
 REM -d<num>  Debugging level (default = -d1)
 REM     0    No symbolic information, no run-time checks
@@ -18,19 +18,22 @@ REM     1    JIT-compatible optimizations only
 REM     2    Full optimizations
 SET OLEVEL=-O1
 
-IF EXIST "%FILEPATH%\filterscripts\%FILENAME%.amx" (
-  ECHO The amx has been deleted from folder...
-  DEL "%FILEPATH%\filterscripts\%FILENAME%.amx"
+SET FAMX="%FILEPATH%\%FILENAME%.amx"
+IF EXIST %FAMX% (
+  ECHO Info: 'AMX' file has been deleted from folder
+  DEL %FAMX%
   TIMEOUT /T 2 > NUL
 )
 
-IF EXIST "%FILEPATH%\filterscripts\%FILENAME%.xml" (
-  ECHO The xml has been deleted from folder ...
-  DEL "%FILEPATH%\filterscripts\%FILENAME%.xml"
+SET FXML="%FILEPATH%\%FILENAME%.xml"
+IF EXIST %FXML% (
+  ECHO Info: 'XML' file has been deleted from folder
+  DEL %FXML%
   TIMEOUT /T 2 > NUL
 )
 
-%FILEPATH%/pawno/pawncc.exe "%FILENAME%.pwn" -i"./pawno/include" "-;" "-(" "%DLEVEL%" "%OLEVEL%"
+ECHO.
+"%FILEPATH%/../pawno/pawncc.exe" "%FILENAME%.pwn" -i"./pawno/include" "-;" "-(" "%DLEVEL%" "%OLEVEL%"
 
 :GPAUSE
   PAUSE
