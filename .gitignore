@@ -6,7 +6,6 @@ plugins/*
 scriptfiles/*
 samp-license.txt
 server-readme.txt
-server.cfg
 server_log.txt
 *.dll
 *.exe
