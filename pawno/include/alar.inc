@@ -393,7 +393,7 @@ stock static const scCountryCodes[][E_COUNTRYCODES] = {
 // Functions
 // --------------------------------------------------
 
-/**
+/*
  *  Send a custom join message just before kicking a player
  *  @param	playerid	The playerid of the player to be kicked
  *  @param	colour		The colour of the message
@@ -402,7 +402,7 @@ stock static const scCountryCodes[][E_COUNTRYCODES] = {
  */
 #define AddJoinLine(%1,%2,%3)		(CallRemoteFunction("alar_AddJoinLine", "iis", %1, %2, %3))
 
-/**
+/*
  *  Add a message to the admin log
  *  @param	colour		The colour of the message
  *  @param	string		The message
@@ -410,35 +410,35 @@ stock static const scCountryCodes[][E_COUNTRYCODES] = {
  */
 #define AddAdminLogLine(%1,%2)		(CallRemoteFunction("alar_AddAdminLogLine", "is", %1, %2))
 
-/**
+/*
  *  Get a player's admin level
  *  @param	playerid	The playerid of the player
  *  @return	The level of the player, or 0 if no player is found
  */
 #define GetAdminLevel(%1)			GetPVarInt(%1, "AlarLevel")
 
-/**
+/*
  *  Remove an admin from admin spec
  *  @param	playerid	The playerid of the admin
  *  @return	1 if the player was spawned, otherwise 0
  */
 #define DisableAdminSpectating(%1)	(CallRemoteFunction("alar_DisableAdminSpectating", "i", %1))
 
-/**
+/*
  *  Clear the spawn data of an admin is admin spec, forcing them to use the gamemode spawn info
  *  @param	playerid	The playerid of the admin
  *  @return	1 if the data was cleared, otherwise 0
  */
 #define ClearAdminSpawnData(%1)		(CallRemoteFunction("alar_ClearAdminSpawnData", "i", %1))
 
-/**
+/*
  *  Get the state of a player (muted/frozen etc)
  *  @param	playerid	The playerid of the player
  *  @return	A mask of the state bits (ADMIN_STATE_MUTED/ADMIN_STATE_FROZEN etc)
  */
 #define GetAdminState(%1)			GetPVarInt(%1, "AlarStatus")
 
-/**
+/*
  *  Clear the state of a player (ie unmute/unjail etc)
  *  @param	playerid	The playerid of the player
  *  @param	newstate	A mask of the states to clear
@@ -446,27 +446,27 @@ stock static const scCountryCodes[][E_COUNTRYCODES] = {
  */
 #define ClearAdminState(%1,%2)		(CallRemoteFunction("alar_ClearAdminState", "ii", %1, %2))
 
-/**
+/*
  *  Check if a player is either and RCON or alar admin
  *  @param	playerid	The playerid of the player
  *  @return	true if the player is an admin, otherwise false
  */
 #define IsPlayerScriptAdmin(%1)		(IsPlayerAdmin(%1) || GetPVarInt(%1, "AlarLevel") > 0)
 
-/**
+/*
  *  Check if a player is either and RCON or alar admin
  *  @return	1 if the history was cleared, otherwise 0
  */
 #define HistoryClear(%1)			(CallRemoteFunction("alar_ClearHistory", ""))
 
-/**
+/*
  *  Destroy an admin created vehicle
  *  @param	vehicleid	The vehicle to destroy, or INVALID_VEHICLE_ID to destroy all admin vehicles
  *  @return	The number of vehicles destroyed
  */
 #define DestroyAdminVehicle(%1)		(CallRemoteFunction("alar_DestroyVehicle", "%i", %1))
 
-/**
+/*
  *  Get the version number of alar
  *  @param	version		A string to store the version number in
  *  @param	maxlength	The size of the version string
@@ -485,7 +485,7 @@ stock bool:GetAlarVersion(version[]="", maxlength=sizeof(version))
 	return false;
 }
 
-/**
+/*
  *  Gets a country name from an ISO 3166-1 alpha-2 country code
  *  @param	code		The ISO 3166-1 alpha-2 country code
  *  @param	dest		The destination string
@@ -506,7 +506,7 @@ stock bool:GetCountryFromCode(const code[], dest[], maxlength=sizeof(dest))
 	return false;
 }
 
-/**
+/*
  *  Get an IP's ISO 3166-1 alpha-2 country code
  *  @param	IP			The IP
  *  @param	dest		The destination string
@@ -526,7 +526,7 @@ stock bool:GetIPCountryCode(const IP[], dest[], maxlength=sizeof(dest))
 	return false;
 }
 
-/**
+/*
  *  Get the player's ISO 3166-1 alpha-2 country code
  *  @param	playerid	The playerid of the player
  *  @param	dest		The destination string
@@ -542,7 +542,7 @@ stock bool:GetPlayerCountryCode(playerid, dest[], maxlength=sizeof(dest))
 	return false;
 }
 
-/**
+/*
  *  Get the player's country name
  *  @param	playerid	The playerid of the player
  *  @param	dest		The destination string
@@ -558,7 +558,7 @@ stock bool:GetPlayerCountryName(playerid, dest[], maxlength=sizeof(dest))
 	return false;
 }
 
-/**
+/*
  *  Get the playerid of the person an admin is spectating
  *  @param	playerid	The playerid of the admin
  *  @return	The playerid of the player being spectated, FREE_SPECTATE_ID if the admin is in free spec,
@@ -574,7 +574,7 @@ stock GetAdminSpectating(playerid)
 	return INVALID_PLAYER_ID;
 }
 
-/**
+/*
  *  Set an admin spectating another player
  *  @param	playerid	The playerid of the admin
  *  @param	targetid	The playerid of player to be spectated
@@ -586,7 +586,7 @@ stock SetAdminSpectating(playerid, targetid=INVALID_PLAYER_ID, bool:saveplayer=f
 	return CallRemoteFunction("alar_SetAdminSpectating", "iii", playerid, targetid, saveplayer);
 }
 
-/**
+/*
  *  Set which data should be saved when an admin goes into spectate mode, and how it should be restored
  *  @param	spawnytype	How the data should be restored (SPAWN_ALAR_SPAWN/SPAWN_ALAR_STATE etc)
  *  @param	spawnsaves	A mask of which data should be stored (INFOTYPE_POSITION/INFOTYPE_WORLD etc)
@@ -597,7 +597,7 @@ stock SetSpawnType(E_SPAWNTYPE:spawntype, E_INFOTYPE:spawnsaves=INFOTYPE_POSITIO
 	return CallRemoteFunction("alar_SetSpawnType", "ii", _:spawntype, _:spawnsaves);
 }
 
-/**
+/*
  *  Set which public function should be called to check if a player is logged in (for banning/suspending names)
  *  @param	func	The public function
  *  @return	1 if alar is loaded, otherwise 0
@@ -607,7 +607,7 @@ stock SetAlarLoginCheck(const func[]="\01")
 	return CallRemoteFunction("alar_LoginFunc", "s", func);
 }
 
-/**
+/*
  *  Set the state of a player (muted/jailed etc)
  *  @param	newstate	A mask of the states to be set (ADMIN_STATE_MUTED/ADMIN_STATE_JAILED etc)
  *  @param	seconds		The number of seconds to set the state for (0 or less for it to be permanent)
@@ -618,7 +618,7 @@ stock SetAdminState(playerid, newstate, seconds=0)
 	return CallRemoteFunction("alar_SetAdminState", "iii", playerid, newstate, seconds);
 }
 
-/**
+/*
  *  Ban a player
  *  @param	playername	The name to be banned
  *  @param	playerip	The IP to be banned
@@ -633,7 +633,7 @@ stock BanPlayer(const playername[]="\01", const playerip[]="\01", const reason[]
 	return CallRemoteFunction("alar_Ban", "sssssi", playername, playerip, reason, adminname, adminip, hidename);
 }
 
-/**
+/*
  *  Ban a player
  *  @param	playerid	The playerid of the player to be banned
  *  @param	reason		The reason for the ban
@@ -647,7 +647,7 @@ stock BanPlayerid(playerid, const reason[]="\01", const adminname[]="\01", const
 	return CallRemoteFunction("alar_BanPlayer", "isssi", playerid, reason, adminname, adminip, hidename);
 }
 
-/**
+/*
  *  Suspend a player
  *  @param	playername	The name to be suspended
  *  @param	playerip	The IP to be suspended
@@ -663,7 +663,7 @@ stock SuspendPlayer(const playername[]="\01", const playerip[]="\01", Float:hour
 	return CallRemoteFunction("alar_Suspend", "ssfsssi", playername, playerip, hours, reason, adminname, adminip, hidename);
 }
 
-/**
+/*
  *  Suspend a player
  *  @param	playerid	The playerid for the player to be suspended
  *  @param	hours		The number of hours to suspend for
@@ -678,7 +678,7 @@ stock SuspendPlayerid(playerid, Float:hours, const reason[]="\01", const adminna
 	return CallRemoteFunction("alar_SuspendPlayer", "ifsssi", playerid, hours, reason, adminname, adminip, hidename);
 }
 
-/**
+/*
  *  Warn a player
  *  @param	playername	The name to be warned
  *  @param	reason		The reason for the warning
@@ -692,7 +692,7 @@ stock WarnPlayer(const playername[], const reason[]="No reason", const adminname
 	return CallRemoteFunction("alar_Warn", "ssssi", playername, reason, adminname, adminip, hidename);
 }
 
-/**
+/*
  *  Warn a player
  *  @param	playerid	The playerid for the player to be warned
  *  @param	reason		The reason for the warning
@@ -706,7 +706,7 @@ stock WarnPlayerid(playerid, const reason[]="No reason", const adminname[]="\01"
 	return CallRemoteFunction("alar_WarnPlayer", "isssi", playerid, reason, adminname, adminip, hidename);
 }
 
-/**
+/*
  *  Add a message to the chat history
  *  @param	playername	The name of the player who sent the message
  *  @param	colour		The colour of the message
@@ -719,7 +719,7 @@ stock HistoryAddMessage(const playername[], colour, const message[], flags=0)
 	return CallRemoteFunction("alar_AddMessageToHistory", "sisi", playername, colour, message, flags);
 }
 
-/**
+/*
  *  Add a line to the chat history
  *  @param	colour		The colour of the line
  *  @param	message		The message

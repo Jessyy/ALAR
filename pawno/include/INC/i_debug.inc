@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_debug.inc
  *		Debug setup
  *	
@@ -15,7 +15,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native _@_y_funcinc_@_();
 	native Debug_Print_0(str[], {Float,_}:...);
 */
@@ -28,7 +28,7 @@
 	#define YSI_DEBUG	false
 #endif
 
-/**
+/*
  *  General debug levels:
  *  	0 - No debug information
  *  	1 - Callbacks and timers
@@ -41,7 +41,7 @@
  */
 #define C:%1(%2);	Debug_Code_%1(%2);
 
-/**
+/*
  *  Definitions:
  *  	P:<0-7> - Print a message
  *  	P:C - Run debug code
@@ -53,7 +53,7 @@
  */
 #define P:%1(%2);	Debug_Print_%1(%2);
 
-/**
+/*
  *  Code is not a variable, it's a code chunk and may be written as so. The 
  *  code must all be on one line to avoid errors. This isn't really a function
  *  as the first parameter is part of the name.
@@ -137,7 +137,7 @@
 	#define Debug_Print_Y(%1);
 #endif
 
-/**
+/*
  *  This function calls any functions used in assembly code in YSI to ensure
  *  that they are included in the native function table.
  */

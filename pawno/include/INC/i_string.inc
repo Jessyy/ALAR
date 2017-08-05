@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_string.inc
  *		String functions
  *	
@@ -15,7 +15,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native hexstr({Float,Unsigned,_}:number);
 	
 	native bool:isFloat(const string[]);
@@ -44,7 +44,7 @@
 
 #include "i_utils"
 
-/**
+/*
  *  Convert a number to a hexadecimal string
  *  @param	number	The number to convert
  *  @return	A string containing the hexadecimal value of the number, padded to 8 chars with a leading "0x"
@@ -63,7 +63,7 @@ stock hexstr(_:number)
 	return string;
 }
 
-/**
+/*
  *  Check if a string contains a floating point number
  *  @param	string	The string to check
  *  @return	true if the string contains a floating point number, otherwise false
@@ -122,7 +122,7 @@ stock bool:isFloat(const string[])
 	return true;
 }
 
-/**
+/*
  *  Check if a string contains an integer
  *  @param	string	The string to check
  *  @return	true if the string contains an integer, otherwise false
@@ -153,7 +153,7 @@ stock bool:isInteger(const string[])
 	return true;
 }
 
-/**
+/*
  *  Check if a string consists only of numeric characters
  *  @param	string	The string to check
  *  @return	true if the string consists only of numeric characters, otherwise false
@@ -185,7 +185,7 @@ stock bool:isNumeric(const string[])
 	return true;
 }
 
-/**
+/*
  *  Copy a string
  *  @param	dest		The destination string
  *  @param	source		The source string
@@ -230,7 +230,7 @@ stock strcpy(dest[], const source[], maxlength = sizeof(dest), end = cellmax, bo
 	}
 }
 
-/**
+/*
  *  Deletes a word from a string
  *  @param	string		The string to search
  *  @param	word		The word to search for
@@ -250,7 +250,7 @@ stock strdelword(string[], const word[], bool:ignorecase = false)
 	return count;
 }
 
-/**
+/*
  *  Finds a character in a string
  *  @param	string		The string to search
  *  @param	character	The character to search for
@@ -283,7 +283,7 @@ stock strfindchar(const string[], const character, bool:ignorecase = false, posi
 	return -1;
 }
 
-/**
+/*
  *  Finds a word in a string
  *  @param	string		The string to search
  *  @param	word		The word to search for
@@ -317,7 +317,7 @@ stock strfindword(const string[], const word[], bool:ignorecase = false, positio
 	return -1;
 }
 
-/**
+/*
  *  Removes words from the begining of a string
  *  @param	string		The string to be shortened
  *  @param	space		The number of characters needed
@@ -360,7 +360,7 @@ stock strmakeroom(string[], space, maxlength = sizeof(string))
 	}
 }
 
-/**
+/*
  *  Replace a character in a string
  *  @param	string		The source string
  *  @param	oldchar		The character to be replaced
@@ -412,7 +412,7 @@ stock strreplacechar(string[], const oldchar, const newchar)
 	return matches;
 }
 
-/**
+/*
  *  Replace a substring in a string
  *  @param	string		The source string
  *  @param	find		The substring to be replaced
@@ -442,7 +442,7 @@ stock strreplaceword(string[], const find[], const replace[], bool:ignorecase = 
 	return matches;
 }
 
-/**
+/*
  *  Scans a string and extracts data
  *  
  *  	A fail is either insufficient variables to store the data or insufficient
@@ -910,7 +910,7 @@ stock strscan(const string[], const format[], {Float,Unsigned,_}:...)
 	return 0;
 }
 
-/**
+/*
  *  Splits a string into a number of strings based on a delimiter
  *  @param	dest	The array of strings to store the results
  *  @param	string	The string to strip the newline from
@@ -1045,7 +1045,7 @@ stock bool:strsplit(dest[][], const string[], delim, height = sizeof(dest), widt
 	}
 }
 
-/**
+/*
  *  Strips Newline from the end of a string
  *  @param	string	The string to remove the newline from
  */
@@ -1079,7 +1079,7 @@ stock strstripnewline(string[])
 	}
 }
 
-/**
+/*
  *  Strips leading, trailing and unnecessary whitespace from a string
  *  @param	string	The string to remove whitespace from
  */
@@ -1130,7 +1130,7 @@ stock strstripwhitespace(string[])
 	}
 }
 
-/**
+/*
  *  Returns an element of a string splitted by ' ', default index is 0
  *  @param	string		The string to be split
  *  @param	index		The starting position
@@ -1199,7 +1199,7 @@ stock strtok(const string[], &index, seperator=' ', bool:pack=false)
 	}
 }
 
-/**
+/*
  *  Truncate a string and append an ellipsis
  *  @param	string		The string to truncate
  *  @param	length		The maximium length of the final string
@@ -1268,7 +1268,7 @@ stock strtruncate(dest[], const string[], length=sizeof(dest), const ellipsis[]=
 	}
 }
 
-/**
+/*
  *  Convert a number to a string with commas for easy readability
  *  @param	value	The number to convert to a string
  *  @return	A string containing a number formatted with commas
@@ -1289,7 +1289,7 @@ stock strcommaval(value)
 	return string;
 }
 
-/**
+/*
  *  Compare a string using wildcards [* - any number of characters] AND [? - any single character]
  *  @param	wild		The string containing wildcards
  *  @param	source		The string to compare
@@ -1431,7 +1431,7 @@ stock bool:strwild(const wild[], const string[], bool:ignorecase = false)
 	}
 }
 
-/**
+/*
  *  Adds words to a string if they are not already present
  *  @param	dest		The string to add words to
  *  @param	source		The string with space seperated words to add

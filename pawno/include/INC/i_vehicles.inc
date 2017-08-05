@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_vehicles.inc
  *		Vehicle functions
  *	
@@ -15,7 +15,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native ReturnVehicleName(modelid);
 	native ReturnPlayerVehicleName(playerid);
 	native ReturnVehicleModel(const vname[]);
@@ -39,7 +39,7 @@
 #include "i_foreach"
 #include "i_string"
 
-/**
+/*
  *  Keeping the number of vehicle models below 150 is a good idea
  */
 #define MAX_VEHICLE_MODELS		(150)
@@ -2460,7 +2460,7 @@ stock static const scValidMods[194][7] = {
 	}
 };
 
-/**
+/*
  *  Return the name of a vehicle's model
  *  @param	modelid	The model of the vehicle
  *  @return	A string containing the vehicle's model name
@@ -2475,7 +2475,7 @@ stock ReturnVehicleName(modelid)
 	return vname;
 }
 
-/**
+/*
  *  Return the name of a player's vehicle
  *  @param	playerid	The ID of the player
  *  @return	A string containing the vehicle's model name, or "Unknown" if the player is not in a vehicle
@@ -2491,7 +2491,7 @@ stock ReturnPlayerVehicleName(playerid)
 	return vname;
 }
 
-/**
+/*
  *  Return the model of a vehicle from it's name
  *  @param	vname	The full or partial name of the vehicle
  *  @return	The vehicle's modelid, or INVALID_MODEL_ID if no vehicle was found
@@ -2513,7 +2513,7 @@ stock ReturnVehicleModel(const vname[])
 	return modelid;
 }
 
-/**
+/*
  *  Get the number of vehicles and the number of types being used in the server
  *  @param	numvehicles	The number of vehicles
  *  @param	numtypes	The number of types
@@ -2537,7 +2537,7 @@ stock GetServerVehicleInfo(&numvehicles, &numtypes)
 	numtypes += (types[7]?1:0) + (types[30]?1:0) + (types[32]?1:0) + (types[47]?1:0) + (types[64]?1:0) + (types[76]?1:0) + (types[120]?1:0) + (types[144]?1:0) + (types[201]?1:0);
 }
 
-/**
+/*
  *  Check if NOS can be added to a vehicle
  *  @param	model	The model of the vehicle
  *  @return	true if NOS can be added, otherwise false
@@ -2555,7 +2555,7 @@ stock bool:IsVehicleNosValid(model)
 	return true;
 }
 
-/**
+/*
  *  Check if a component can be put on a vehicle via a mod shop
  *  @param	model		The model of the vehicle
  *  @param	componentid	The ID of the component
@@ -2570,7 +2570,7 @@ stock IsVehicleModValid(model, componentid)
 	return false;
 }
 
-/**
+/*
  *  Get the number of seats in a vehicle
  *  @param	model	The model of the vehicle
  *  @return	The number of seats in the vehicle
@@ -2583,7 +2583,7 @@ stock GetVehicleSeats(model)
 	return scVehicleSeats[model - 400];
 }
 
-/**
+/*
  *  Gets a mask of all the seats used in a vehicle
  *  @param	vehicleid	The vehicleid of the vehicle
  *  @return	The mask of the seats used
@@ -2605,7 +2605,7 @@ stock BitArray:GetVehicleUsedSeats(vehicleid)
 	return mask;
 }
 
-/**
+/*
  *  Checks if a seat is free in a vehicle
  *  @param	vehicleid	The vehicleid of the vehicle
  *  @param	seatid		The seatid in the vehicle
@@ -2624,7 +2624,7 @@ stock IsVehicleSeatFree(vehicleid, seatid)
 	return true;
 }
 
-/**
+/*
  *  Finds the first free seat in a vehicle
  *  @param	vehicleid		The vehicleid of the vehicle
  *  @param	includedriver	If the driver seat is allowed
@@ -2653,7 +2653,7 @@ stock GetVehicleFreeSeat(vehicleid, includedriver = true)
 	return INVALID_SEAT_ID;
 }
 
-/**
+/*
  *  Check if the server contains a vehicle model
  *  @param	model	The model of the vehicle
  *  @return	true if the server has a vehicle of that model, otherwise false
@@ -2669,7 +2669,7 @@ stock ExistsVehicleModel(model)
 	return false;
 }
 
-/**
+/*
  *  Get a car colour from a string
  *  @param	string	The string to get the colour from
  *  @return	The ID of the colour, or UNKNOWN_CAR_COLOUR if the colour is unknown
@@ -2715,7 +2715,7 @@ stock bool:IsVehicleDamaged(vehicleid)
 }
 
 #if defined _inc_formatex_included
-	/**
+	/*
 	 *  
 	 */
 	FormatSpecifier<'V'>(output[], modelid)

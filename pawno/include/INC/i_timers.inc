@@ -1,4 +1,4 @@
-/**
+/*
 					===================================
 					 y_timers - run timers efficiently 
 					===================================
@@ -56,12 +56,12 @@ Changelog: @released: 02/03/2013
 #include "i_malloc"
 #include "i_foreach"
 
-/**
+/*
  *  Used to get rid of the "string:" tag once it has been used.
  */
 #define string:
 
-/**
+/*
  *  J@ is a "nul" target - send things there if they need ignoring or if a
  *  parameter needs using.  I@ is too now.
  */
@@ -517,7 +517,7 @@ stock _Timer_H(slot)
 	#define timer YSI_timer
 #endif
 
-/**
+/*
 					===================================
 					    v2 - run timers efficiently    
 					===================================
@@ -583,7 +583,7 @@ Changelog: @released: 02/03/2013
 
 #define stop%0; {_Timer_F(_:%0);}
 
-/**
+/*
 					===================================
 					    v3 - run timers efficiently    
 					===================================

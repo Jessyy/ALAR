@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_weapons.inc
  *		Weapon functions
  *	
@@ -12,7 +12,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native ReturnWeaponName(weaponid);
 	native ReturnWeaponID(const wname[]);
 	native ReturnWeaponSlot(weaponid);
@@ -22,7 +22,7 @@
 
 #include "i_string"
 
-/**
+/*
  *
  */
 #define INVALID_WEAPON_ID		(-1)
@@ -90,7 +90,7 @@ static const scWeaponNames[55][] = {
 	{!"Collision"            }	// 54
 };
 
-/**
+/*
  *  Return a weapon's name
  *  @param	weaponid	The id of the weapon
  *  @return	A string containing the weapon's name
@@ -105,7 +105,7 @@ stock ReturnWeaponName(weaponid)
 	return wname;
 }
 
-/**
+/*
  *  Return a weapon's id
  *  @param	wname	The full or partial name of the weapon
  *  @return	The weapon's id, or INVALID_WEAPON_ID if no match was found
@@ -127,7 +127,7 @@ stock ReturnWeaponID(const wname[])
 	return weaponid;
 }
 
-/**
+/*
  *  Return a weapons's slot
  *  @param	weaponid	The id of the weapon
  *  @return	The slot of the weapon, INVALID_WEAPON_SLOT if the weaponid is invalid
@@ -166,7 +166,7 @@ stock ReturnWeaponSlot(weaponid)
 }
 
 #if defined _inc_formatex_included
-	/**
+	/*
 	 *  
 	 */
 	FormatSpecifier<'W'>(output[], weaponid)

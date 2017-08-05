@@ -1,4 +1,4 @@
-/**
+/*
 					===========================
 					Y Sever Includes - Bit Core
 					===========================
@@ -132,7 +132,7 @@ stock Cell_ReverseBits(GLOBAL_TAG_TYPES:data)
 	#endif
 #endif
 
-/**--------------------------------------------------------------------------**\
+/*
 <summary>Bit_Bits</summary>
 <param name="size">Number of bits required.</param>
 <returns>
@@ -141,12 +141,12 @@ stock Cell_ReverseBits(GLOBAL_TAG_TYPES:data)
 <remarks>
 	-
 </remarks>
-\**--------------------------------------------------------------------------**/
+*/
 
 // If this ever changes, update the size reference in y_users.
 #define Bit_Bits(%1) (((%1)+cellbits-1)/cellbits)
 
-/**--------------------------------------------------------------------------**\
+/*
 <summary>Bit_Slot</summary>
 <param name="value">Value to get the slot for.</param>
 <returns>
@@ -155,11 +155,11 @@ stock Cell_ReverseBits(GLOBAL_TAG_TYPES:data)
 <remarks>
 	-
 </remarks>
-\**--------------------------------------------------------------------------**/
+*/
 
 #define Bit_Slot(%1) ((_:%1)>>>CELLSHIFT)
 
-/**--------------------------------------------------------------------------**\
+/*
 <summary>Bit_Mask</summary>
 <param name="value">Value to get the mask for</param>
 <returns>
@@ -168,11 +168,11 @@ stock Cell_ReverseBits(GLOBAL_TAG_TYPES:data)
 <remarks>
 	-
 </remarks>
-\**--------------------------------------------------------------------------**/
+*/
 
 #define Bit_Mask(%1) (Bit:(1<<((_:%1)&cellbits-1)))
 
-/**--------------------------------------------------------------------------**\
+/*
 <summary>Bit_GetBit</summary>
 <param name="Bit:array[]">Array of bits.</param>
 <param name="slot">Bit slot.</param>
@@ -182,11 +182,11 @@ stock Cell_ReverseBits(GLOBAL_TAG_TYPES:data)
 <remarks>
 	Unsafe but faster for when you're sure you're within range.
 </remarks>
-\**--------------------------------------------------------------------------**/
+*/
 
 #define Bit_GetBit(%1,%2) (%1[(%2)>>>CELLSHIFT]&Bit:(1<<((%2)&cellbits-1)))
 
-/**--------------------------------------------------------------------------**\
+/*
 <summary>Bit_Get</summary>
 <param name="Bit:array[]">Array of bits.</param>
 <param name="slot">Bit slot.</param>
@@ -200,11 +200,11 @@ stock Cell_ReverseBits(GLOBAL_TAG_TYPES:data)
 native Bit_Get(BitArray:array<>, slot);
 
 </remarks>
-\**--------------------------------------------------------------------------**/
+*/
 
 #define Bit_Get(%1,%2) bool:Bit_GetBit(Bit:%1,_:%2)
 
-/**--------------------------------------------------------------------------**\
+/*
 <summary>Bit_Let</summary>
 <param name="Bit:array[]">Array of bits.</param>
 <param name="slot">Bit slot.</param>
@@ -214,11 +214,11 @@ native Bit_Get(BitArray:array<>, slot);
 <remarks>
 	Sets the slot to 1.
 </remarks>
-\**--------------------------------------------------------------------------**/
+*/
 
 #define Bit_Let(%1,%2) %1[(%2)>>>CELLSHIFT]|=Bit:(1<<((%2)&cellbits-1))
 
-/**--------------------------------------------------------------------------**\
+/*
 <summary>Bit_Vet</summary>
 <param name="Bit:array[]">Array of bits.</param>
 <param name="slot">Bit slot.</param>
@@ -228,11 +228,11 @@ native Bit_Get(BitArray:array<>, slot);
 <remarks>
 	Sets the slot to 0.
 </remarks>
-\**--------------------------------------------------------------------------**/
+*/
 
 #define Bit_Vet(%1,%2) %1[(%2)>>>CELLSHIFT]&=Bit:~(1<<((%2)&cellbits-1))
 
-/**--------------------------------------------------------------------------**\
+/*
 <summary>Bit_Set</summary>
 <param name="Bit:array[]">Array of bits.</param>
 <param name="slot">Bit slot.</param>
@@ -247,7 +247,7 @@ native Bit_Get(BitArray:array<>, slot);
 native Bit_Set(BitArray:array<>, slot, bool:set, size = sizeof (array));
 
 </remarks>
-\**--------------------------------------------------------------------------**/
+*/
 
 stock Bit_Set(BitArray:array<>, slot, bool:set)//, size = sizeof (array))
 {
@@ -258,7 +258,7 @@ stock Bit_Set(BitArray:array<>, slot, bool:set)//, size = sizeof (array))
 
 //#define Bit_Set(%0,%1,%2) ((%2)?Bit_Let(%0,(%1)):Bit_Vet(%0,(%1)))
 
-/**--------------------------------------------------------------------------**\
+/*
 <summary>Bit_SetAll</summary>
 <param name="Bit:array[]">Array to set all values of.</param>
 <param name="bool:set">Wether to set them all 0 or 1.</param>
@@ -272,7 +272,7 @@ stock Bit_Set(BitArray:array<>, slot, bool:set)//, size = sizeof (array))
 native Bit_SetAll(BitArray:array<>, bool:set, size = sizeof (array));
 
 </remarks>
-\**--------------------------------------------------------------------------**/
+*/
 
 stock Bit_SetAll(BitArray:array<>, bool:set, size = sizeof (array))
 {
@@ -281,7 +281,7 @@ stock Bit_SetAll(BitArray:array<>, bool:set, size = sizeof (array))
 	for (new i = 0; i != size; ++i) array[i] = val;
 }
 
-/**--------------------------------------------------------------------------**\
+/*
 <summary>Bit_GetCount</summary>
 <param name="Bit:array[]">Array to count.</param>
 <param name="size">Size of array.</param>
@@ -295,7 +295,7 @@ stock Bit_SetAll(BitArray:array<>, bool:set, size = sizeof (array))
 native Bit_Count(BitArray:array<>, size = sizeof (array));
 
 </remarks>
-\**--------------------------------------------------------------------------**/
+*/
 
 #define Bit_Count Bit_GetCount
 stock Bit_GetCount(BitArray:array<>, size = sizeof (array))
@@ -327,7 +327,7 @@ stock Bit_Display(BitArray:array<>, size = sizeof (array))
 	return ret;
 }
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_GetStringFromArray
 Params:
@@ -341,7 +341,7 @@ Return:
 	If the array had bits set.
 Notes:
 	-
--*----------------------------------------------------------------------------*/
+*/
 
 stock Bit_GetStringFromArray(const Bit:array[], string[], const seperator[]=",", const range[]="-", size=sizeof(array), maxlength=sizeof(string))
 {
@@ -411,7 +411,7 @@ stock Bit_GetStringFromArray(const Bit:array[], string[], const seperator[]=",",
 	return !empty;
 }
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_GetArrayFromString
 Params:
@@ -424,7 +424,7 @@ Return:
 	If the string was a valid list.
 Notes:
 	-
--*----------------------------------------------------------------------------*/
+*/
 
 stock Bit_GetArrayFromString(Bit:array[], const string[], const seperator[]=",", const range[]="-", size=sizeof(array))
 {

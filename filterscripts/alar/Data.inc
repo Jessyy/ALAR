@@ -110,7 +110,7 @@ enum E_SAVEDATA {
 	E_SAVE_FREEZETIME,
 }; stock SIZE_E_SAVEDATA[E_SAVEDATA];
 
-/**
+/*
  *  Initialise the admin table
  *	@param	db			The database
  */
@@ -121,7 +121,7 @@ stock Admin_Init(DB:db)
 	}
 }
 
-/**
+/*
  *  Find the highest admin level with the matching name or ip
  *  @param	db			The database
  *  @param	playername	The admin name ("" for any)
@@ -156,7 +156,7 @@ stock Admin_GetHighestLevel(DB:db, const playername[]="", const playerip[]="")
 	return 0;
 }
 
-/**
+/*
  *  Get the account info of an admin
  *  @param	db			The database
  *  @param	playername	The admin name
@@ -195,7 +195,7 @@ stock bool:Admin_GetData(DB:db, const playername[], LoginData[E_LOGINDATA])
 	return false;
 }
 
-/**
+/*
  *  Add or overwrite an admin account
  *  @param	db			The database
  *  @param	playername	The admin name
@@ -237,7 +237,7 @@ stock bool:Admin_SetAdmin(DB:db, const playername[], LoginData[E_LOGINDATA], boo
 	return false;
 }
 
-/**
+/*
  *  Remove an admin account
  *  @param	db			The database
  *  @param	playername	The admin name
@@ -253,7 +253,7 @@ stock bool:Admin_RemoveAdmin(DB:db, const playername[])
 	return false;
 }
 
-/**
+/*
  *  Set if an admin is hidden
  *  @param	db			The database
  *  @param	playername	The admin name
@@ -270,7 +270,7 @@ stock bool:Admin_Hidden(DB:db, const playername[], bool:hidden)
 	return false;
 }
 
-/**
+/*
  *  Toggles if an admin needs to login manually
  *  @param	db			The database
  *  @param	playername	The admin name
@@ -295,7 +295,7 @@ stock bool:Admin_Manuallogin(DB:db, const playername[])
 	return false;
 }
 
-/**
+/*
  *  Sets an admin's password
  *  @param	db			The database
  *  @param	playername	The admin name
@@ -312,7 +312,7 @@ stock bool:Admin_Password(DB:db, const playername[], const password[])
 	return false;
 }
 
-/**
+/*
  *  Updates an admin's settings
  *  @param	db			The database
  *  @param	playername	The admin name
@@ -340,7 +340,7 @@ stock bool:Admin_Update(DB:db, const playername[], const playerip[], bool:hidden
 	return false;
 }
 
-/**
+/*
  *  Initialise the alias table
  *	@param	db			The database
  */
@@ -351,7 +351,7 @@ stock Alias_Init(DB:db)
 	}
 }
 
-/**
+/*
  *  Add or update an alias
  *  @param	db			The database
  *  @param	playername	The player name
@@ -377,7 +377,7 @@ stock bool:Alias_Add(DB:db, const playername[], const playerip[])
 	return false;
 }
 
-/**
+/*
  *  Update an alias with the time online
  *  @param	db			The database
  *  @param	playername	The player name
@@ -395,7 +395,7 @@ stock bool:Alias_Update(DB:db, const playername[], const playerip[], seconds)
 	return false;
 }
 
-/**
+/*
  *  Get the last IP used by a name
  *  @param	db			The database
  *  @param	playername	The player name
@@ -416,7 +416,7 @@ stock Alias_GetLastIP(DB:db, const playername[])
 	return pIP;
 }
 
-/**
+/*
  *  Get a player's aliases from a name (find's the last IP used by the name)
  *  @param	db			The database
  *  @param	playername	The player name
@@ -448,7 +448,7 @@ stock Alias_GetAliasFromName(DB:db, const playername[], names[], maxlength=sizeo
 	return 0;
 }
 
-/**
+/*
  *  Get a player's aliases from an IP
  *  @param	db			The database
  *  @param	playerip	The player IP
@@ -480,7 +480,7 @@ stock Alias_GetAliasFromIP(DB:db, const playerip[], names[], maxlength=sizeof(na
 	return 0;
 }
 
-/**
+/*
  *  Get the aliases used by a player's subnet from their name (find's the last IP used by the name)
  *  @param	db			The database
  *  @param	playername	The player name
@@ -519,7 +519,7 @@ stock Alias_GetAlias2FromName(DB:db, const playername[], names[], maxlength=size
 	return 0;
 }
 
-/**
+/*
  *  Get the aliases used by a player's subnet
  *  @param	db			The database
  *  @param	playerip	The player IP
@@ -552,7 +552,7 @@ stock Alias_GetAlias2FromIP(DB:db, const playerip[], names[], maxlength=sizeof(n
 	return 0;
 }
 
-/**
+/*
  *  Get the aliases of a player's previous IPs
  *  @param	db			The database
  *  @param	playername	The player name
@@ -584,7 +584,7 @@ stock Alias_GetAlias3FromName(DB:db, const playername[], names[], maxlength=size
 	return 0;
 }
 
-/**
+/*
  *  Get a player's previous IPs
  *  @param	db			The database
  *  @param	playername	The player name
@@ -616,7 +616,7 @@ stock Alias_GetIPsFromName(DB:db, const playername[], IPs[], maxlength=sizeof(IP
 	return 0;
 }
 
-/**
+/*
  *  Initialise the gamemodes table
  *  @param	db			The database
  */
@@ -626,7 +626,7 @@ stock Gamemodes_Init(DB:db)
 		db_free_result(db_query(db, "CREATE TABLE IF NOT EXISTS `Gamemodes` ( `name` TEXT NOT NULL PRIMARY KEY )"));	}
 }
 
-/**
+/*
  *  Find a gamemode
  *  @param	db			The database
  *  @param	search		The string to search for
@@ -660,7 +660,7 @@ stock bool:Gamemodes_Exists(DB:db, const search[], name[], maxlength=sizeof(name
 	return false;
 }
 
-/**
+/*
  *  List all gamemodes
  *  @param	db			The database
  *  @param	string		The array to store the gamemode name
@@ -689,7 +689,7 @@ stock Gamemodes_List(DB:db, string[], const seperator[]="  ", maxlength=sizeof(s
 	return 0;
 }
 
-/**
+/*
  *  Initialise the player and status tables
  *  @param	db			The database
  */
@@ -702,7 +702,7 @@ stock Player_Init(DB:db)
 	}
 }
 
-/**
+/*
  *  Get a player's settings and status
  *  @param	db			The database
  *  @param	playername	The player name
@@ -785,7 +785,7 @@ stock bool:Player_GetData(DB:db, const playername[], const playerip[], SaveData[
 	return false;
 }
 
-/**
+/*
  *  Get whether a player is immune from the ping kicker
  *  @param	db			The database
  *  @param	playername	The player name
@@ -808,7 +808,7 @@ stock bool:Player_GetImmune(DB:db, const playername[])
 	return false;
 }
 
-/**
+/*
  *  Set whether a player is immune from the ping kicker
  *  @param	db			The database
  *  @param	playername	The player name
@@ -833,7 +833,7 @@ stock bool:Player_SetImmune(DB:db, const playername[], bool:immune)
 	return false;
 }
 
-/**
+/*
  *  Set whether joins are shown in textdraws for a player
  *  @param	db			The database
  *  @param	playername	The player name
@@ -858,7 +858,7 @@ stock bool:Player_SetJointext(DB:db, const playername[], bool:jointext)
 	return false;
 }
 
-/**
+/*
  *  Set a players's status
  *  @param	db			The database
  *  @param	playerip	The player IP
@@ -997,7 +997,7 @@ stock bool:Player_SetStatus(DB:db, const playerip[], status, time=0)
 	return false;
 }
 
-/**
+/*
  *  Clear a players's status
  *  @param	db			The database
  *  @param	playerip	The player IP
@@ -1043,7 +1043,7 @@ stock bool:Player_ClearStatus(DB:db, const playerip[], status)
 	return false;
 }
 
-/**
+/*
  *  Set the status of all players
  *  @param	db			The database
  */
@@ -1054,7 +1054,7 @@ stock bool:Player_ClearAllStatus(DB:db)
 	}
 }
 
-/**
+/*
  *  Initialise the setting table
  *  @param	db			The database
  */
@@ -1065,7 +1065,7 @@ stock Setting_Init(DB:db)
 	}
 }
 
-/**
+/*
  *  Get a string setting, initialising it if it's not set
  *  @param	db			The database to get the setting from
  *  @param	setting		The setting name
@@ -1095,7 +1095,7 @@ stock bool:Setting_LoadString(DB:db, const setting[], const value[], dest[], max
 	return false;
 }
 
-/**
+/*
  *  Get a boolean setting, initialising it if it's not set
  *  @param	db			The database to get the setting from
  *  @param	setting		The setting name
@@ -1114,7 +1114,7 @@ stock bool:Setting_LoadBool(DB:db, const setting[], bool:value, &bool:dest)
 	return false;
 }
 
-/**
+/*
  *  Get an integer setting, initialising it if it's not set
  *  @param	db			The database to get the setting from
  *  @param	setting		The setting name
@@ -1133,7 +1133,7 @@ stock bool:Setting_LoadInt(DB:db, const setting[], value, &dest)
 	dest = value;
 	return false;
 }
-/**
+/*
  *  Get a string setting
  *  @param	db			The database to get the setting from
  *  @param	setting		The setting name
@@ -1157,7 +1157,7 @@ stock bool:Setting_GetString(DB:db, const setting[], dest[], maxlength=sizeof(de
 	return false;
 }
 
-/**
+/*
  *  Get a boolean setting
  *  @param	db			The database to get the setting from
  *  @param	setting		The setting name
@@ -1174,7 +1174,7 @@ stock bool:Setting_GetBool(DB:db, const setting[], &bool:dest)
 	return false;
 }
 
-/**
+/*
  *  Get an integer setting
  *  @param	db			The database to get the setting from
  *  @param	setting		The setting name
@@ -1191,7 +1191,7 @@ stock bool:Setting_GetInt(DB:db, const setting[], &dest)
 	return false;
 }
 
-/**
+/*
  *  Set a string setting
  *  @param	db			The database to set it in
  *  @param	setting		The setting name
@@ -1216,7 +1216,7 @@ stock bool:Setting_SetString(DB:db, const setting[], const value[])
 }
 
 
-/**
+/*
  *  Set a boolean setting
  *  @param	db			The database to set it in
  *  @param	setting		The setting name
@@ -1227,7 +1227,7 @@ stock bool:Setting_SetBool(DB:db, const setting[], bool:value)
 	return Setting_SetString(db, setting, value ? ("true") : ("false"));
 }
 
-/**
+/*
  *  Set a integer setting
  *  @param	db			The database to set it in
  *  @param	setting		The setting name

@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_zones.inc
  *		Zones functions
  *	
@@ -15,7 +15,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native ReturnZoneName(zoneid);
 	native ReturnPlayerZoneName(playerid);
 	native ReturnPlayerZoneID(playerid);
@@ -26,14 +26,14 @@
 
 #include "i_string"
 
-/**
+/*
  *  Definitions
  */
 #define INVALID_ZONE_ID				(-1)
 #define MAX_ZONE_NAME				(32)
 #define ZONE_BETWEEN<%0>(%1,%2)		(scZones[%1][E_ZONE_MIN%0] <= %2 <= scZones[%1][E_ZONE_MAX%0])
 
-/**
+/*
  *  Basic zone info
  */
 enum E_ZONEINFO {
@@ -46,7 +46,7 @@ enum E_ZONEINFO {
 	Float:E_ZONE_MAXZ
 }
 
-/**
+/*
  *  Data for all the zones
  */
 stock static const scZones[][E_ZONEINFO] = {
@@ -417,7 +417,7 @@ stock static const scZones[][E_ZONEINFO] = {
 	{!"Whetstone",                   -2997.40, -2892.90,  -242.90, -1213.90, -1115.50,   900.00}
 };
 
-/**
+/*
  *  Gets the name of a zone
  *  @param	zoneid	The id of the zone
  *  @return	A string containing the name of the zone
@@ -432,7 +432,7 @@ stock ReturnZoneName(zoneid)
 	return string;
 }
 
-/**
+/*
  *  Returns the name of the zone a player is in
  *  @param	playerid	The player to check
  *  @return	A string containing the zone name, or "Unknown" if the player is not in a zone
@@ -451,7 +451,7 @@ stock ReturnPlayerZoneName(playerid)
 	return playerzone;
 }
 
-/**
+/*
  *  Gets the zoneid of a player
  *  @param	playerid	The player to check
  *  @return	The zoneid of the player, or INVALID_ZONE_ID if they are not in a zone
@@ -468,7 +468,7 @@ stock ReturnPlayerZoneID(playerid)
 	return INVALID_ZONE_ID;
 }
 
-/**
+/*
  *  Checks if a player is in a zone
  *  @param	playerid	The player to check
  *  @param	zoneid		The zone to check
@@ -488,7 +488,7 @@ stock IsPlayerInZone(playerid, zoneid)
 }
 
 #if defined _inc_formatex_included
-	/**
+	/*
 	 *  
 	 */
 	FormatSpecifier<'Z'>(output[], zoneid)

@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_functions.inc
  *		Assorted functions
  *	
@@ -14,7 +14,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native ReturnServerVar(const string[]);
 	
 	native bool:IsSpawned(playerid);
@@ -35,7 +35,7 @@
 #include "i_foreach"
 #include "i_string"
 
-/**
+/*
  *  Return a server variable
  *  @param	string	The name of the server variable to retrive
  *  @return	A string containing the server variable
@@ -47,7 +47,7 @@ stock ReturnServerVar(const string[])
 	return buffer;
 }
 
-/**
+/*
  *  Checks if a player is spawned
  *  @param	playerid	The playerid of the player
  *  @return	true if the player is spawned, false otherwise
@@ -61,7 +61,7 @@ stock bool:IsSpawned(playerid)
 	return false;
 }
 
-/**
+/*
  *  Checks if a player name is valid
  *  @param	string		The string to check
  *  @param	wildcards	If wildcards (* and ?) are allowed
@@ -95,7 +95,7 @@ stock bool:IsValidName(const string[], bool:wildcards = false)
 	return (wildfound || chars >= 3) && (chars <= 20);
 }
 
-/**
+/*
  *  Sends a wrapped message to all players with indentation
  *  @param	colour		The colour of the message
  *  @param	msg			The message to send
@@ -141,7 +141,7 @@ stock SendWrappedMessageToAll(colour, const msg[], maxlength = 85, const prefix[
 	return;
 }
 
-/**
+/*
  *  Sends a wrapped message to player with indentation
  *  @param	playerid	The playerid to send the message to
  *  @param	colour		The colour of the message
@@ -188,7 +188,7 @@ stock SendWrappedMessageToPlayer(playerid, colour, const msg[], maxlength = 85, 
 	return;
 }
 
-/**
+/*
  *  Sends a wrapped message to players with indentation
  *  @param	players		A bit array of the players to send the message to
  *  @param	colour		The colour of the message
@@ -241,7 +241,7 @@ stock SendWrappedMessageToClients(BitArray:players<MAX_PLAYERS>, colour, const m
 	return;
 }
 
-/**
+/*
  *  Returns a copy of the text which will display some common charachters in gta properly
  *  @param	text	The text to copy
  *  @return	The modified gametext
@@ -268,7 +268,7 @@ stock ReturnGameText(const text[])
 	return string;
 }
 
-/**
+/*
  *  Checks if a string is valid gametext (won't crash the server)
  *  @param	string	The string to check
  *  @return	true if the string is valid gametext, false otherwise
@@ -297,7 +297,7 @@ stock bool:IsValidGameText(const string[])
 	return true;
 }
 
-/**
+/*
  *  Get a timestamp for the current server time
  *  @return	A string containing the timestamp formatted as 'YYYY-MM-DD HH:MM:SS'
  */
@@ -313,7 +313,7 @@ stock ReturnTimeStamp()
 	return datetime;
 }
 
-/**
+/*
  *  Check if a timestamp is valid (quick and ugly)
  *  @return	true if the string is in the form 'YYYY-MM-DD HH:MM:SS'
  */
@@ -325,7 +325,7 @@ stock bool:IsValidTimeStamp(const string[])
 	return 1970 <= year <= 2038 && 1 <= month <= 12 && 00 <= day <= 31 && 00 <= hour <= 23 && 00 <= minute <= 59 && 00 <= second <= 59;
 }
 
-/**
+/*
  *  Return a floating point random number
  *
 stock Float:frandom(Float:max, Float:min = 0.0, dp = 4)

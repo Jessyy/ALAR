@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_amx.inc
  *		Access amx data
  *	

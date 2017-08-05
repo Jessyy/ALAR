@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_hash.inc
  *		Password hashing
  *	
@@ -12,19 +12,19 @@
 
 #include <a_samp>
 
-/**
+/*
 	native ReturnHashString(const string[]);
 	native Hash_Compare(const string[], const hash[]);
 */
 
-/**
+/*
  *
  */
 #define MAX_HASH_LENGTH		(145)
 
 native WP_Hash(buffer[], len, const str[]);
 
-/**
+/*
  *  Hash a string
  *  @param	string	The string to hash
  *  @return	The hash of the string
@@ -36,7 +36,7 @@ stock ReturnHashString(const string[])
 	return hash;
 }
 
-/**
+/*
  *  Check if a string has a specified hash
  *  @param	string	The string
  *  @param	hash	The hash

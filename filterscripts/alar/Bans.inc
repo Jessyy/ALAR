@@ -107,7 +107,7 @@ enum E_ALAR_WARNING {
 }; stock SIZE_E_ALAR_WARNING[E_ALAR_WARNING];
 
 
-/**
+/*
  *  Initialise the whitelist table
  *	@param	db			The database
  */
@@ -118,7 +118,7 @@ stock Whitelist_Init(DB:db)
 	}
 }
 
-/**
+/*
  *  Check if a name is whitelisted
  *	@param	db			The database
  *  @param	playername	The name to check
@@ -145,7 +145,7 @@ stock bool:Whitelist_IsNameWhitelisted(DB:db, const playername[], bool:update=fa
 	return false;
 }
 
-/**
+/*
  *  Whitelist a name
  *	@param	db			The database
  *  @param	playername	The name to whitelist
@@ -163,7 +163,7 @@ stock bool:Whitelist_WhitelistName(DB:db, const playername[])
 	return false;
 }
 
-/**
+/*
  *  Remove a name from the whitelist
  *	@param	db			The database
  *  @param	playername	The name to remove from the whitelist
@@ -187,7 +187,7 @@ stock bool:Whitelist_UnwhitelistName(DB:db, const playername[])
 	return false;
 }
 
-/**
+/*
  *  Clears all whitelisted names
  *	@param	db			The database
  */
@@ -199,7 +199,7 @@ stock Whitelist_Clear(DB:db)
 }
 
 
-/**
+/*
  *  Initialise the bans table
  *	@param	db			The database
  */
@@ -210,7 +210,7 @@ stock Bans_Init(DB:db)
 	}
 }
 
-/**
+/*
  *  Check if a name is not currently banned
  *	@param	db			The database
  *  @param	playername	The name to check
@@ -232,7 +232,7 @@ stock bool:Bans_IsNameNotBanned(DB:db, const playername[])
 	return true;
 }
 
-/**
+/*
  *  Check if an IP is not currently banned
  *	@param	db			The database
  *  @param	playerip	The IP to check
@@ -254,7 +254,7 @@ stock bool:Bans_IsIPNotBanned(DB:db, const playerip[])
 	return true;
 }
 
-/**
+/*
  *  Get the details of a ban from the first matching name or IP
  *	@param	db			The database
  *  @param	playername	The name to check
@@ -316,7 +316,7 @@ stock bool:Bans_GetBanInfo(DB:db, const playername[], const playerip[], BanData[
 	return false;
 }
 
-/**
+/*
  *  Ban a player by name and IP
  *	@param	db			The database
  *  @param	playername	The name to ban
@@ -532,7 +532,7 @@ stock bool:Bans_BanPlayer(DB:db, const playername[], const playerip[], const rea
 	return false;
 }
 
-/**
+/*
  *  Ban a player by name
  *	@param	db			The database
  *  @param	playername	The name to ban
@@ -546,7 +546,7 @@ stock bool:Bans_BanName(DB:db, const playername[], const reason[], const adminna
 	return Bans_BanPlayer(db, playername, "", reason, adminname, adminip, hits);
 }
 
-/**
+/*
  *  Ban a player by IP
  *	@param	db			The database
  *  @param	playerip	The IP to ban
@@ -560,7 +560,7 @@ stock bool:Bans_BanIP(DB:db, const playerip[], const reason[], const adminname[]
 	return Bans_BanPlayer(db, "", playerip, reason, adminname, adminip, hits);
 }
 
-/**
+/*
  *  Unban a player by name or IP
  *	@param	db			The database
  *  @param	playername	The name to unban
@@ -609,7 +609,7 @@ stock bool:Bans_UnbanPlayer(DB:db, const playername[], const playerip[], BanData
 #define Bans_UnbanName(%1,%2,%3)			Bans_UnbanPlayer(%1,%2,"",%3)
 #define Bans_UnbanIP(%1,%2,%3)				Bans_UnbanPlayer(%1,"",%2,%3)
 
-/**
+/*
  *  Clears all bans
  *	@param	db			The database
  */
@@ -621,7 +621,7 @@ stock Bans_Clear(DB:db)
 }
 
 
-/**
+/*
  *  Initialise the suspensions table
  *	@param	db			The database
  */
@@ -632,7 +632,7 @@ stock Suspensions_Init(DB:db)
 	}
 }
 
-/**
+/*
  *  Check if a name is not currently suspended
  *	@param	db			The database
  *  @param	playername	The name to check
@@ -654,7 +654,7 @@ stock bool:Suspensions_IsNameNotSuspended(DB:db, const playername[])
 	return true;
 }
 
-/**
+/*
  *  Check if an IP is not currently suspended
  *	@param	db			The database
  *  @param	playerip	The IP to check
@@ -676,7 +676,7 @@ stock bool:Suspensions_IsIPNotSuspended(DB:db, const playerip[])
 	return true;
 }
 
-/**
+/*
  *  Get the details of a suspension from the first matching name or IP
  *	@param	db			The database
  *  @param	playername	The name to check
@@ -741,7 +741,7 @@ stock bool:Suspensions_GetSuspendInfo(DB:db, const playername[], const playerip[
 	return false;
 }
 
-/**
+/*
  *  Suspend a player by name and IP
  *	@param	db			The database
  *  @param	playername	The name to suspend
@@ -957,7 +957,7 @@ stock bool:Suspensions_SuspendPlayer(DB:db, const playername[], const playerip[]
 	return false;
 }
 
-/**
+/*
  *  Suspend a player by name
  *	@param	db			The database
  *  @param	playername	The name to suspend
@@ -972,7 +972,7 @@ stock bool:Suspensions_SuspendName(DB:db, const playername[], Float:hours, const
 	return Suspensions_SuspendPlayer(db, playername, "", hours, reason, adminname, adminip, hits);
 }
 
-/**
+/*
  *  Suspend a player by IP
  *	@param	db			The database
  *  @param	playerip	The IP to suspend
@@ -987,7 +987,7 @@ stock bool:Suspensions_SuspendIP(DB:db, const playerip[], Float:hours, const rea
 	return Suspensions_SuspendPlayer(db, "", playerip, hours, reason, adminname, adminip, hits);
 }
 
-/**
+/*
  *  Unsuspend a player by name or IP
  *	@param	db			The database
  *  @param	playername	The name to unsuspend
@@ -1040,7 +1040,7 @@ stock bool:Suspensions_UnsuspendPlayer(DB:db, const playername[], const playerip
 #define Suspensions_UnsuspendName(%1,%2,%3)			Suspensions_UnsuspendPlayer(%1,%2,"",%3)
 #define Suspensions_UnsuspendIP(%1,%2,%3)			Suspensions_UnsuspendPlayer(%1,"",%2,%3)
 
-/**
+/*
  *  Clears all suspensions
  *	@param	db			The database
  */
@@ -1052,7 +1052,7 @@ stock Suspensions_Clear(DB:db)
 }
 
 
-/**
+/*
  *  Store a temporarily RCON banned IP
  *	@param	db			The database
  *  @param	playerip	The banned IP
@@ -1074,7 +1074,7 @@ stock TempBan_Add(DB:db, const playerip[], const reason[])
 	return false;
 }
 
-/**
+/*
  *  Remove a temporarily RCON banned IP
  *	@param	db			The database
  *  @param	playerip	The banned IP
@@ -1097,7 +1097,7 @@ stock TempBan_Remove(DB:db, const playerip[])
 	return false;
 }
 
-/**
+/*
  *  Unban all temporarily RCON banned IPs
  *	@param	db			The database
  *	@return The number of IPs unbanned
@@ -1122,7 +1122,7 @@ stock TempBan_UnbanAll(DB:db)
 }
 
 
-/**
+/*
  *  Initialise the warnings table
  *	@param	db			The database
  */
@@ -1134,7 +1134,7 @@ stock Warnings_Init(DB:db)
 	}
 }
 
-/**
+/*
  *  Warn a player
  *	@param	db			The database
  *	@param	playername	The name of the player
@@ -1166,7 +1166,7 @@ stock Warnings_WarnPlayer(DB:db, const playername[], const reason[], const admin
 	return false;
 }
 
-/**
+/*
  *  Get the number of warnings a player has
  *	@param	db			The database
  *	@param	playername	The name of the player
@@ -1189,7 +1189,7 @@ stock Warnings_GetWarningCount(DB:db, const playername[], hours=0)
 	return 0;
 }
 
-/**
+/*
  *  Get the info for a player's warning
  *	@param	db			The database
  *	@param	playername	The name of the player
@@ -1218,7 +1218,7 @@ stock Warnings_GetWarningInfo(DB:db, const playername[], number, WarnInfo[E_ALAR
 	return false;
 }
 
-/**
+/*
  *  Set a player's warnings as inactive
  *	@param	db			The database
  *	@param	playername	The name of the player
@@ -1240,7 +1240,7 @@ stock Warnings_SetInactive(DB:db, const playername[], hours=0)
 }
 
 
-/**
+/*
  *  Clears all warnings
  *	@param	db			The database
  */

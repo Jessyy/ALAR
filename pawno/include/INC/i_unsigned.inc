@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_unsigned.inc
  *		Unsigned integer datatype
  *	
@@ -19,7 +19,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native ucmp(Unsigned:oper1, Unsigned:oper2);
 	native Unsigned:umul(Unsigned:oper1, Unsigned:oper2);
 	native Unsigned:udiv(Unsigned:dividend, Unsigned:divisor);
@@ -234,7 +234,7 @@ stock Unsigned:operator%(oper1, Unsigned:oper2)
 }
 */
 
-/**
+/*
  *  Compare two unsigned integers
  *  @param	oper1	The first unsigned integer
  *  @param	oper2	The second unsigned integer
@@ -259,7 +259,7 @@ stock ucmp(Unsigned:oper1, Unsigned:oper2)
 	return (_:oper1 > _:oper2) ? (1) : (-1);
 }
 
-/**
+/*
  *  Multiply two unsigned integers
  *  @param	oper1	The first unsigned integer
  *  @param	oper2	The second unsigned integer
@@ -283,7 +283,7 @@ stock Unsigned:umul(Unsigned:oper1, Unsigned:oper2)
 	return value;
 }
 
-/**
+/*
  *  Divide two unsigned integers
  *  @param	dividend	The unsigned integer to be divided
  *  @param	divisor		The unsigned integer to divide by
@@ -336,7 +336,7 @@ stock Unsigned:udiv(Unsigned:dividend, Unsigned:divisor)
 	return quotient;
 }
 
-/**
+/*
  *  Find the remainder of the division of two unsigned integers
  *  @param	oper1	The unsigned integer to be divided
  *  @param	oper2	The unsigned integer to divide by
@@ -387,7 +387,7 @@ stock Unsigned:umod(Unsigned:oper1, Unsigned:oper2)
 	return remainder;
 }
 
-/**
+/*
  *  Get the result and remainder of the division of two unsigned integers
  *  @param	dividend	The unsigned integer to be divided
  *  @param	divisor		The unsigned integer to divide by
@@ -452,7 +452,7 @@ stock umoddiv(Unsigned:dividend, Unsigned:divisor, &Unsigned:quotient, &Unsigned
 	return;
 }
 
-/**
+/*
  *  Add two unsigned integers
  *  @param	oper1	The first unsigned integer
  *  @param	oper2	The second unsigned integer
@@ -471,7 +471,7 @@ stock Unsigned:uadd(Unsigned:oper1, Unsigned:oper2)
 	return Unsigned:value;
 }
 
-/**
+/*
  *  Perform subtraction on an unsigned integer
  *  @param	oper1	The unsigned integer to be subtracted from
  *  @param	oper2	The unsigned integer to subtract by
@@ -490,7 +490,7 @@ stock Unsigned:usub(Unsigned:oper1, Unsigned:oper2)
 	return Unsigned:value;
 }
 
-/**
+/*
  *  Convert an unsigned integer into a floating point value
  *  @param	number	The unsigned integer
  *  @return	The integer as a floating point number
@@ -506,7 +506,7 @@ stock Float:ufloat(Unsigned:number)
 	return float(_:number);
 }
 
-/**
+/*
  *  Convert an unsigned integer into a string
  *  @param	number	The unsigned integer
  *  @return	The integer as a string
@@ -534,7 +534,7 @@ stock ustr(Unsigned:number)
 	return string;
 }
 
-/**
+/*
  *  Convert a string into an unsigned integer
  *  @param	string	The string to get the unsigned integer from
  *  @return	The unsigned integer

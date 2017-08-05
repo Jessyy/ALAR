@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_bugfix.inc
  *		Fixes for sa-mp bugs
  *	
@@ -12,7 +12,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native bf_fclose(&File:handle);
 	native bf_db_close(&DB:handle);
 	
@@ -31,7 +31,7 @@
 	
 */
 
-/**
+/*
  *  Add tags to the constants below, without changing their values
  *  Store the values in symbolic constants and add tags
  */
@@ -40,7 +40,7 @@ const Text:@INVALID_TEXT_DRAW = Text:INVALID_TEXT_DRAW;
 const Text3D:@INVALID_3DTEXT_ID = Text3D:INVALID_3DTEXT_ID;
 const PlayerText3D:@INVALID_PLAYER3DTEXT_ID = PlayerText3D:(0xFFFF);
 
-/**
+/*
  *  Undefine the macros then make them refer to the symbolic constants above
  */
 #if defined INVALID_MENU
@@ -63,7 +63,7 @@ const PlayerText3D:@INVALID_PLAYER3DTEXT_ID = PlayerText3D:(0xFFFF);
 #endif
 #define INVALID_PLAYER3DTEXT_ID		@INVALID_PLAYER3DTEXT_ID
 
-/**
+/*
  *  Close a File that was opened with fopen
  *  @param	handle	The ID of the file you wish to close
  *  @return	1 on success, otherwise 0
@@ -86,7 +86,7 @@ stock bf_fclose(&File:handle)
 #endif
 #define fclose      bf_fclose
 
-/**
+/*
  *  Close a SQLite database that was opened with db_open
  *  @param	DB:handle	The ID of the database you wish to close
  *  @return	1 on success, otherwise 0
@@ -104,7 +104,7 @@ stock bf_db_close(&DB:handle)
 #endif
 #define db_close    bf_db_close
 */
-/**
+/*
  *  Can be used to convert a string to an integer
  *  @param	string[]	The string you want to convert to an integer
  *  @return	The integer value of the string
@@ -141,7 +141,7 @@ stock bf_strval(const string[])
 #endif
 #define strval      bf_strval
 
-/**
+/*
  *  Can be used to convert a string to an float
  *  @param	string[]	The string you want to convert to an float
  *  @return	The float value of the string
@@ -164,7 +164,7 @@ stock Float:bf_floatstr(const string[])
 #endif
 #define floatstr    bf_floatstr
 
-/**
+/*
  *  Strins has buffer overflows
  */
 
@@ -176,7 +176,7 @@ stock Float:bf_floatstr(const string[])
 	#define cellchars	(cellbits/charbits)
 #endif
 
-/**
+/*
  *  Inserts a string into another string, defined by substr and string
  *  @param	string[]	The string you want to insert substr in
  *  @param	substr[]	The string you want to insert into string
@@ -260,7 +260,7 @@ stock bf_strins(string[], const substr[], pos, maxlength = sizeof(string))
 #endif
 #define strins      bf_strins
 
-/**
+/*
  *  Can be used to kick a player who currently is in your server
  *  @param	playerid	The playerid of the player
  *  
@@ -278,7 +278,7 @@ stock bf_Kick(playerid)
 #endif
 #define Kick        bf_Kick
 
-/**
+/*
  *  Can be used to ban a player who currently is in your server
  *  @param	playerid	The playerid of the player
  *  
@@ -296,7 +296,7 @@ stock bf_Ban(playerid)
 #endif
 #define Ban         bf_Ban
 
-/**
+/*
  *  Can be used to ban a player with a reason who currently is in your server
  *  @param	playerid	The playerid of the player
  *  @param	reason[]	The reason for the ban
@@ -315,7 +315,7 @@ stock bf_BanEx(playerid, const reason[])
 #endif
 #define BanEx       bf_BanEx
 
-/**
+/*
  *  PVars crashing when setting to empty strings
  */
 stock bf_GetPVarString(playerid, varname[], string_return[], len)
@@ -333,7 +333,7 @@ stock bf_GetPVarString(playerid, varname[], string_return[], len)
 #endif
 #define GetPVarString   bf_GetPVarString
 
-/**
+/*
  *  PVars crashing when setting to empty strings
  */
 stock bf_SetPVarString(playerid, varname[], string_value[])
@@ -350,7 +350,7 @@ stock bf_SetPVarString(playerid, varname[], string_value[])
 #endif
 #define SetPVarString   bf_SetPVarString
 
-/**
+/*
  *  GetVehicleTrailer doesn't work for trains
  */
 stock bf_GetVehicleTrailer(vehicleid)
@@ -368,7 +368,7 @@ stock bf_GetVehicleTrailer(vehicleid)
 #endif
 #define GetVehicleTrailer   bf_GetVehicleTrailer
 
-/**
+/*
  *  Camera gets stuck on trains
  */
 public OnPlayerExitVehicle(playerid, vehicleid)
@@ -395,7 +395,7 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 	forward bf_OnPlayerExitVehicle(playerid, vehicleid);
 #endif
 
-/**
+/*
  *  Spectate is FUCKED
  */
 stock static
@@ -404,7 +404,7 @@ stock static
 	sPlayerSpectating[MAX_PLAYERS] = {INVALID_PLAYER_ID, ...},
 	sVehicleSpectating[MAX_PLAYERS] = {INVALID_VEHICLE_ID, ...};
 
-/**
+/*
  *  GetPlayerColor returns 0
  */
 public OnPlayerConnect(playerid)
@@ -442,7 +442,7 @@ public OnPlayerConnect(playerid)
 	forward bf_OnPlayerConnect(playerid);
 #endif
 
-/**
+/*
  *
  */
 public OnPlayerDisconnect(playerid, reason)
@@ -468,7 +468,7 @@ public OnPlayerDisconnect(playerid, reason)
 	forward bf_OnPlayerDisconnect(playerid, reason);
 #endif
 
-/**
+/*
  *
  */
 public OnPlayerStreamIn(playerid, forplayerid)
@@ -494,7 +494,7 @@ public OnPlayerStreamIn(playerid, forplayerid)
 	forward bf_OnPlayerStreamIn(playerid, forplayerid);
 #endif
 
-/**
+/*
  *
  */
 public OnPlayerStreamOut(playerid, forplayerid)
@@ -520,7 +520,7 @@ public OnPlayerStreamOut(playerid, forplayerid)
 	forward bf_OnPlayerStreamOut(playerid, forplayerid);
 #endif
 
-/**
+/*
  *
  */
 public OnVehicleStreamIn(vehicleid, forplayerid)
@@ -546,7 +546,7 @@ public OnVehicleStreamIn(vehicleid, forplayerid)
 	forward bf_OnVehicleStreamIn(vehicleid, forplayerid);
 #endif
 
-/**
+/*
  *
  */
 public OnVehicleStreamOut(vehicleid, forplayerid)
@@ -572,7 +572,7 @@ public OnVehicleStreamOut(vehicleid, forplayerid)
 	forward bf_OnVehicleStreamOut(vehicleid, forplayerid);
 #endif
 
-/**
+/*
  *
  */
 public OnPlayerStateChange(playerid, newstate, oldstate)
@@ -623,7 +623,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	forward bf_OnPlayerStateChange(playerid, newstate, oldstate);
 #endif
 
-/**
+/*
  *
  */
 public OnPlayerRequestClass(playerid, classid)
@@ -657,7 +657,7 @@ public OnPlayerRequestClass(playerid, classid)
 	forward bf_OnPlayerRequestClass(playerid, classid);
 #endif
 
-/**
+/*
  *
  */
 stock bf_PlayerSpectatePlayer(playerid, targetplayerid, mode = SPECTATE_MODE_NORMAL)
@@ -674,7 +674,7 @@ stock bf_PlayerSpectatePlayer(playerid, targetplayerid, mode = SPECTATE_MODE_NOR
 #endif
 #define PlayerSpectatePlayer    bf_PlayerSpectatePlayer
 
-/**
+/*
  *
  */
 stock bf_PlayerSpectateVehicle(playerid, targetvehicleid, mode = SPECTATE_MODE_NORMAL)
@@ -691,7 +691,7 @@ stock bf_PlayerSpectateVehicle(playerid, targetvehicleid, mode = SPECTATE_MODE_N
 #endif
 #define PlayerSpectateVehicle   bf_PlayerSpectateVehicle
 
-/**
+/*
  *
  */
 stock bf_TogglePlayerSpectating(playerid, toggle)

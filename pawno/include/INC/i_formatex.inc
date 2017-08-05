@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_formatex.inc
  *		Formatex handling
  *	
@@ -20,7 +20,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native _@_i_formatex_inc@_();
 	native InitializeFormatSpecifiers();
 	
@@ -28,14 +28,14 @@
 	native printfex(const szFormatString[], {FORMAT_TAGS}:...);
 */
 
-/**
+/*
  *  
  */
 #define FORMAT_BUFFER_SIZE					(2048)
 #define FORMAT_PRINT_BUFFER_SIZE			(512)
 #define FORMAT_CUSTOM_SPEC_BUFFER_SIZE		(512)
 
-/**
+/*
  *  
  */
 #if defined FORMAT_EXTRA_TAGS
@@ -44,7 +44,7 @@
 	#define FORMAT_TAGS  _, PlayerText3D, Text, Text3D, Menu, DB, DBResult, File, Float
 #endif
 
-/**
+/*
  *  FormatSpecifier<'C'>(output[], color)			i_formatex.inc
  *  FormatSpecifier<'P'>(output[], playerid)		i_players.inc
  *  FormatSpecifier<'W'>(output[], weaponid)		i_weapons.inc
@@ -55,13 +55,13 @@
 #define FMAT@2:___unused,%1[              %1[
 #define FMAT@1:%1(%2)                     forward %1(%2); public %1(%2)
 
-/**
+/*
  *  
  */
 static stock gs_CustomFormatFunctions[127] = {-1, ...},
 	bool:gs_bIsInitialized = false;
 
-/**
+/*
  *  
  */
 forward _@_i_formatex_inc@_();
@@ -71,7 +71,7 @@ public _@_i_formatex_inc@_()
 	format(szOutput, 0, "");
 }
 
-/**
+/*
  *  
  */
 static stock InitializeFormatSpecifiers()
@@ -113,7 +113,7 @@ static stock InitializeFormatSpecifiers()
 	}
 }
 
-/**
+/*
  *  formatex(buffer, sizeof(buffer), "You were given a %W by %P", weaponid, playerid);
  */
 stock formatex(szOutput[], iLength = sizeof(szOutput), const szFormatString[], {FORMAT_TAGS}:...)
@@ -342,7 +342,7 @@ stock formatex(szOutput[], iLength = sizeof(szOutput), const szFormatString[], {
 	return 1;
 }
 
-/**
+/*
  *  printfex("You were given a %W by %P", weaponid, playerid);
  */
 stock printfex(const szFormatString[], {FORMAT_TAGS}:...)
@@ -380,7 +380,7 @@ stock printfex(const szFormatString[], {FORMAT_TAGS}:...)
 	print(s_szBuffer);
 }
 
-/**
+/*
  *  Inline colour
  */
 FormatSpecifier<'C'>(output[], color)

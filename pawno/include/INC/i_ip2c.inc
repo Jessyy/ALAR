@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_ip2c.inc
  *		IP functions
  *	
@@ -12,7 +12,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native bool:IPisvalid(const string[], bool:allowranges=true);
 	native IPcompare(const ip1[], const ip2[]);
 	native Unsigned:IP2Code(const IP[]);
@@ -27,7 +27,7 @@
 #include "i_functions"
 #include "i_unsigned"
 
-/**
+/*
  *
  */
 #define MAX_IP				(16)
@@ -301,7 +301,7 @@ stock static const scCuntCodes[][E_CUNTCODE] = {
 	{!"ZW", !"Zimbabwe"}
  };
 
-/**
+/*
  *  Checks if a string contains a valid IPv4 IP address, buffering 0s not accepted
  *  @param	string		The string to check
  *  @param	allowranges	Whether IP ranges are allowed (eg 192.168.*.*)
@@ -362,7 +362,7 @@ stock bool:IPisvalid(const string[], bool:allowranges=true)
 	return true;
 }
 
-/**
+/*
  *  Compares two IPv4 addresses to find a match
  *  @param	ip1	The first IP
  *  @param	ip2	The second IP
@@ -457,7 +457,7 @@ stock IPcompare(const ip1[], const ip2[])
 	return 0;
 }
 
-/**
+/*
  *  Return an IPv4 address code from an IPv4 address string
  *  @param	IP	The IPv4 address string
  *  @return	An IPv4 address code for the IPv4 address string
@@ -505,7 +505,7 @@ stock Unsigned:IP2Code(const IP[])
 	return Unsigned:IPCode;
 }
 
-/**
+/*
  *  Return an IPv4 address string from an IPv4 address code
  *  @param	IP	The IPv4 address code
  *  @return	An IPv4 address string for the IPv4 address code
@@ -517,7 +517,7 @@ stock Code2IP(Unsigned:IPCode)
 	return IP;
 }
 
-/**
+/*
  *  Returns the subnet of an IPv4 address
  *  @param	IP	The IPv4 address string
  *  @return	An IPv4 address code for the IPv4 address string
@@ -532,7 +532,7 @@ stock IPsubnet(const IP[])
 	return IPSubnet;
 }
 
-/**
+/*
  *  Return an ISO 3166-1 alpha-2 country code from an IPv4 address string
  *  @param	db	The database where the definitions are stored
  *  @param	IP	The IPv4 address string
@@ -572,7 +572,7 @@ stock ReturnCuntCode(DB:db, const IP[])
 	return cuntcode;
 }
 
-/**
+/*
  *  Return a country name from an ISO 3166-1 alpha-2 country code
  *  @param	cuntcode	The ISO 3166-1 alpha-2 country code
  *  @return	A string containing the country name or "Unknown" if the name could not be found
@@ -591,7 +591,7 @@ stock ReturnCuntName(const cuntcode[])
 	return cuntname;
 }
 
-/**
+/*
  *  Get a country name from an ISO 3166-1 alpha-2 country code
  *  @param	cuntcode	The ISO 3166-1 alpha-2 country code
  *  @param	dest		The destination string
@@ -611,7 +611,7 @@ stock GetCuntName(const cuntcode[], dest[], maxlength=sizeof(dest))
 	return false;
 }
 
-/**
+/*
  *  Create the IP definition files from a comma seperated cvs file
  *  Supports cvs files from the following sources:
  *  	http://www.maxmind.com/app/geoip_country (recommended)

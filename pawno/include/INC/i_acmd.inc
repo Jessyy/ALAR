@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_acmd.inc
  *		Command handling
  *	
@@ -15,21 +15,21 @@
 
 #include <a_samp>
 
-/**
+/*
 	native ACMD_CommandProcess(playerid, const cmdtext[], bool:help = false)
 	native ACMD_CommandHelp(const playerid, const command[]);
 */
 
 #include "i_utils"
 
-/**
+/*
  *  Definitions
  */
 #define MAX_COMMAND_LENGTH		(32)	// The maximum length of a command string
 #define hcmd:%1->%2;			acmd:%2(const playerid, const params[], const bool:help) { return acmd_%1(playerid, params, help); }
 #define acmd:%1(%2)				forward acmd_%1(%2); public acmd_%1(%2)
 
-/**
+/*
  *  Basic command flags
  */
 enum E_COMMFLAG (<<=1) {
@@ -37,7 +37,7 @@ enum E_COMMFLAG (<<=1) {
 	E_COMMFLAG_OPCP,		// On player command performed
 };
 
-/**
+/*
  *  Variables
  */
 static stock E_COMMFLAG:gCommandFlags = E_COMMFLAG:0;
@@ -135,13 +135,13 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	forward ACMD_OnPlayerCommandText(playerid, cmdtext[]);
 #endif
 
-/**
+/*
  *  Forwards for initial command callbacks
  */
 forward OnPlayerCommandReceived(playerid, cmdtext[]);
 forward OnPlayerCommandPerformed(playerid, cmdtext[], success);
 
-/**
+/*
  *  Called from OnPlayerCommandText to process entered commands
  *  @param	playerid	-
  *  @param	command		-
@@ -168,7 +168,7 @@ stock ACMD_CommandProcess(playerid, const cmdtext[], bool:help = false)
 	}
 }
 
-/**
+/*
  *  Call a function to have it show it's usage
  *  @param	playerid	The playerid to send the info to
  *  @param	command		The command name

@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_utils.inc
  *		Util Functions
  *	
@@ -14,7 +14,7 @@
 
 #include <a_samp>
 
-/**
+/*
  *  
  */
 #define MAX_INPUT		(128)
@@ -23,24 +23,24 @@
 #define MAX_IP			(16)
 #define MAX_TIMESTAMP	(30)
 
-/**
+/*
  *  Define many tag types for function calls
  */
 #if !defined GLOBAL_TAG_TYPES
 	#define GLOBAL_TAG_TYPES	{_,Bit,File,Float,Menu,PlayerText,Text,Text3D}
 #endif
 
-/**
+/*
  *  
  */
 #define cellchars	(cellbits/charbits)
 
-/**
+/*
  *  Checks if a string is null
  */
 #define isnull(%1)	((!(%1[0])) || (((%1[0]) == '\1') && (!(%1[1]))))
 
-/**
+/*
  *  Convert RGB color code to HEX (Hexadecimal)
  *  
  *  MK_RGB(255, 238, 187)			// output: "0xFFEEBBAA"
@@ -49,7 +49,7 @@
 #define MK_RGB(%0,%1,%2)		((%0)<<24|(%1)<<16|(%2)<<8|0xAA)
 #define MK_RGBA(%0,%1,%2,%3)	((%0)<<24|(%1)<<16|(%2)<<8|(%3))
 
-/**
+/*
  *  Detecting holding / pressing / releasing a key
  *  
  *  HOLDING(KEY_FIRE)				// Holding one key
@@ -59,35 +59,35 @@
 #define PRESSED(%0)		(((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
 #define RELEASED(%0)	(((newkeys & (%0)) != (%0)) && ((oldkeys & (%0)) == (%0)))
 
-/**
+/*
  *
  */
 #if !defined TRUE
 new stock bool:TRUE = true;
 #endif
 
-/**
+/*
  *
  */
 #if !defined FALSE
 new stock bool:FALSE = false;
 #endif
 
-/**
+/*
  *
  */
 #if !defined NULL
 new stock NULL[2] = {1, 0};
 #endif
 
-/**
+/*
  *
  */
 #define FLOAT_POS_INFINITY		(Float:0x7F800000)
 #define FLOAT_NAN				(Float:0x7FFFFFFF)
 #define FLOAT_NEG_INFINITY		(Float:0xFF800000)
 
-/**
+/*
  *  String to unpack. Mainly used for debugging
  */
 stock unpack(const str[])
@@ -99,7 +99,7 @@ stock unpack(const str[])
 	return ret;
 }
 
-/**
+/*
  *  Improved version of CallLocalFunction. Supports strings and arrays better.
  *  Variables can be passed by reference (format specifier "v").
  *  

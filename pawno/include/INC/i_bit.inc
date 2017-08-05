@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------*-
+/*
 					===========================
 					Y Sever Includes - Bit Core
 					===========================
@@ -74,7 +74,7 @@ Commands:
 	-
 Compile options:
 	-
--*----------------------------------------------------------------------------*/
+*/
 
 #if defined _YSI_bit_included
   #endinput
@@ -84,7 +84,7 @@ Compile options:
 
 #include <a_samp>
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	ceildiv
 Params:
@@ -94,12 +94,12 @@ Return:
 	num / div rounded up.
 Notes:
 	-
--*----------------------------------------------------------------------------*/
+*/
 
 #define ceildiv(%1,%2) \
 	(((%1) + (%2) - 1) / (%2))
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_Bits
 Params:
@@ -108,12 +108,12 @@ Return:
 	Number of cells required for the bit array.
 Notes:
 	-
--*----------------------------------------------------------------------------*/
+*/
 
 #define Bit_Bits(%1) \
 	ceildiv((%1), cellbits)
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_GetBit
 Params:
@@ -123,12 +123,12 @@ Return:
 	State of the provided slot, 0 on fail.
 Notes:
 	Unsafe but faster for when you're sure you're within range.
--*----------------------------------------------------------------------------*/
+*/
 
 #define Bit_GetBit(%1,%2) \
 	((%1[(%2) / cellbits]) & Bit:(1 << ((%2) % cellbits)))
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_Get
 Params:
@@ -139,7 +139,7 @@ Return:
 	State of the provided slot, 0 on fail.
 Notes:
 	-
--*----------------------------------------------------------------------------*/
+*/
 
 #define Bit_Get(%1,%2) _:Bit_GetBit(Bit:%1, _:%2)
 /*stock Bit_Get(Bit:array[], slot, size = sizeof (array))
@@ -148,7 +148,7 @@ Notes:
 	return (Bit_GetBit(array, slot) ? (1) : (0));
 }*/
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_Let
 Params:
@@ -158,12 +158,12 @@ Return:
 	-
 Notes:
 	Sets the slot to 1.
--*----------------------------------------------------------------------------*/
+*/
 
 #define Bit_Let(%1,%2) \
 	%1[(%2) / cellbits] |= Bit:(1 << ((%2) % cellbits))
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_Vet
 Params:
@@ -173,12 +173,12 @@ Return:
 	-
 Notes:
 	Sets the slot to 0.
--*----------------------------------------------------------------------------*/
+*/
 
 #define Bit_Vet(%1,%2) \
 	%1[(%2) / cellbits] &= Bit:~(1 << ((%2) % cellbits))
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_Loop
 Params:
@@ -188,12 +188,12 @@ Return:
 	-
 Notes:
 	Loops through the positive values of an array of bits.
--*----------------------------------------------------------------------------*/
+*/
 
 #define Bit_Loop(%1,%2) \
 	for(new %2, %1i; %1i < sizeof(%1); %1i++) for(new %1j = 1; %1j; %1j <<= 1, (%2)++) if(%1[%1i] & Bit:%1j)
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_Set
 Params:
@@ -205,7 +205,7 @@ Return:
 	-
 Notes:
 	-
--*----------------------------------------------------------------------------*/
+*/
 
 stock Bit_Set(Bit:array[], slot, set, size = sizeof (array))
 {
@@ -214,7 +214,7 @@ stock Bit_Set(Bit:array[], slot, set, size = sizeof (array))
 	else Bit_Vet(array, slot);
 }
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_SetAll
 Params:
@@ -225,7 +225,7 @@ Return:
 	-
 Notes:
 	-
--*----------------------------------------------------------------------------*/
+*/
 
 stock Bit_SetAll(Bit:array[], set, size)
 {
@@ -234,7 +234,7 @@ stock Bit_SetAll(Bit:array[], set, size)
 	for (new i = 0; i < size; i++) array[i] = val;
 }
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_GetCount
 Params:
@@ -244,7 +244,7 @@ Return:
 	Number of 1s in the array.
 Notes:
 	-
--*----------------------------------------------------------------------------*/
+*/
 
 stock Bit_GetCount(const Bit:array[], size = sizeof (array))
 {
@@ -254,7 +254,7 @@ stock Bit_GetCount(const Bit:array[], size = sizeof (array))
 	return count;
 }
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_GetStringFromArray
 Params:
@@ -268,7 +268,7 @@ Return:
 	If the array had bits set.
 Notes:
 	-
--*----------------------------------------------------------------------------*/
+*/
 
 stock Bit_GetStringFromArray(const Bit:array[], string[], const seperator[]=",", const range[]="-", size=sizeof(array), maxlength=sizeof(string))
 {
@@ -338,7 +338,7 @@ stock Bit_GetStringFromArray(const Bit:array[], string[], const seperator[]=",",
 	return !empty;
 }
 
-/*----------------------------------------------------------------------------*-
+/*
 Function:
 	Bit_GetArrayFromString
 Params:
@@ -351,7 +351,7 @@ Return:
 	If the string was a valid list.
 Notes:
 	-
--*----------------------------------------------------------------------------*/
+*/
 
 stock Bit_GetArrayFromString(Bit:array[], const string[], const seperator[]=",", const range[]="-", size=sizeof(array))
 {

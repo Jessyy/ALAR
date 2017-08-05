@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_players.inc
  *		Player functions
  *	
@@ -12,7 +12,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native ReturnPlayerName(playerid);
 	native ReturnPlayerID(const playername[]);
 	
@@ -27,7 +27,7 @@
 #include "i_foreach"
 #include "i_string"
 
-/**
+/*
  *  Return a player's name
  *  @param	playerid	The playerid of the player
  *  @return	A string containing the player's name
@@ -39,7 +39,7 @@ stock ReturnPlayerName(playerid)
 	return pname;
 }
 
-/**
+/*
  *  Finds a playerid from a player's name, or part of a player's name
  *  @param	playername	The full or partial name of a player
  *  @return	The playerid of the player, or INVALID_PLAYER_ID if there were no matches
@@ -74,7 +74,7 @@ stock ReturnPlayerID(const playername[])
 	return pid;
 }
 
-/**
+/*
  *  Return a player's IP
  *  @param	playerid	The playerid of the player
  *  @return	A string containing the player's IP
@@ -86,7 +86,7 @@ stock ReturnPlayerIP(playerid)
 	return pIP;
 }
 
-/**
+/*
  *  Finds a playerid from a player's name, part of a player's name, or a playerid
  *  @param	string	The full or partial name of a player, or a playerid
  *  @return	The playerid of the player, or INVALID_PLAYER_ID if there were no matches
@@ -100,7 +100,7 @@ stock FindPlayer(const string[])
 	return ReturnPlayerID(string);
 }
 
-/**
+/*
  *  Finds the closest player to a player, looking first for players in the same virtual world
  *  @param	playerid	The playerid of the player to search around
  *  @return	The playerid of the closest player, or INVALID_PLAYER_ID if noone was found
@@ -140,7 +140,7 @@ stock FindClosestPlayer(playerid)
 }
 
 #if defined _inc_formatex_included
-	/**
+	/*
 	 *  
 	 */
 	FormatSpecifier<'P'>(output[], playerid)

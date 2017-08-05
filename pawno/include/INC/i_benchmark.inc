@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_benchmark.inc
  *		Benchmark setup
  *	
@@ -23,12 +23,12 @@
 
 #include <a_samp>
 
-/**
+/*
  *  To avoid loose indentation warnings on compile
  */
 #pragma tabsize		0
 
-/**
+/*
  *  Mainly to make sure your code doesn't cause any performance issues for the server
  *  
  *  START_BENCH(1000);

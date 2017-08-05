@@ -355,13 +355,13 @@ enum E_SPAWNTYPE {
 
 //-------------------------------------------------------------------------------------------------------------------
 
-/**
+/*
  *  Libraries and respective links to their release pages
  */
 #include	<a_samp>				// By SA-MP team:   http://www.sa-mp.com/download.php
 #include	<streamer>				// By Incognito:    http://forum.sa-mp.com/showthread.php?t=102865
 
-/**
+/*
  *  INC Library ...
  */
 //#include	"INC\i_benchmark"		// Loading "Benchmark setup"
@@ -778,7 +778,7 @@ forward alar_SuspendPlayer(playerid, Float:hours, const reason[], const adminnam
 forward alar_WarnPlayer(playerid, const reason[], const adminname[], const adminip[], bool:hidename);
 forward alar_Warn(const playername[], const reason[], const adminname[], const adminip[], bool:hidename);
 
-/**
+/*
  *  Slowlee this will be the new structure of alar
  */
 //#include	"alar\header\file_name"

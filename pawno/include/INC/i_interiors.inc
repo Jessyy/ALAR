@@ -1,4 +1,4 @@
-/**
+/*
  *	Any Last Administrative Requests - i_interiors.inc
  *		Interiors functions
  *	
@@ -15,7 +15,7 @@
 
 #include <a_samp>
 
-/**
+/*
 	native ReturnInteriorName(interiorid);
 	native ReturnPlayerInteriorName(playerid);
 	native ReturnPlayerInteriorID(playerid);
@@ -26,14 +26,14 @@
 
 #include "i_string"
 
-/**
+/*
  *  Definitions
  */
 #define INVALID_INTERIOR_ID				(-1)
 #define MAX_INTERIOR_NAME				(32)
 #define INTERIOR_BETWEEN<%0>(%1,%2)		(scInteriors[%1][E_INTERIOR_MIN%0] <= %2 <= scInteriors[%1][E_INTERIOR_MAX%0])
 
-/**
+/*
  *  Basic interior info
  */
 enum E_INTERIORINFO {
@@ -47,7 +47,7 @@ enum E_INTERIORINFO {
 	Float:E_INTERIOR_MAXZ
 }
 
-/**
+/*
  *  Data for all the interiors
  */
 stock static const scInteriors[][E_INTERIORINFO] = {
@@ -167,7 +167,7 @@ stock static const scInteriors[][E_INTERIORINFO] = {
 	{!"Plane School",                             10,     400.91,    2533.28,       9.00,     460.91,    2547.96,      14.90}
 };
 
-/**
+/*
  *  Gets the name of a interior
  *  @param	interiorid	The id of the interior
  *  @return	A string containing the name of the interior
@@ -182,7 +182,7 @@ stock ReturnInteriorName(interiorid)
 	return string;
 }
 
-/**
+/*
  *  Returns the name of the interior a player is in
  *  @param	playerid	The player to check
  *  @return	A string containing the interior name, or "Unknown" if the player is not in a interior
@@ -201,7 +201,7 @@ stock ReturnPlayerInteriorName(playerid)
 	return playerinterior;
 }
 
-/**
+/*
  *  Gets the interiorid of a player
  *  @param	playerid	The player to check
  *  @return	The interiorid of the player, or INVALID_INTERIOR_ID if they are not in a interior
@@ -218,7 +218,7 @@ stock ReturnPlayerInteriorID(playerid)
 	return INVALID_INTERIOR_ID;
 }
 
-/**
+/*
  *  Checks if a player is in a interior
  *  @param	playerid		The player to check
  *  @param	interiorid		The interior to check
@@ -238,7 +238,7 @@ stock IsPlayerInInterior(playerid, interiorid)
 }
 
 #if defined _inc_formatex_included
-	/**
+	/*
 	 *  
 	 */
 	FormatSpecifier<'Z'>(output[], interiorid)
