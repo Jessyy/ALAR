@@ -1,5 +1,5 @@
 @ECHO OFF
-TITLE Yom's SA-MP auto compiler ...
+TITLE Samp project compiler...
 
 REM Then file name and path to be compiled
 SET FILENAME=alar
@@ -33,7 +33,7 @@ IF EXIST %FXML% (
 )
 
 ECHO.
-"%FILEPATH%/../pawno/pawncc.exe" "%FILENAME%.pwn" -i"./pawno/include" "-;" "-(" "%DLEVEL%" "%OLEVEL%"
+"%FILEPATH%/../pawno/pawncc.exe" "-r" "%FILENAME%.pwn" -i"./pawno/include" "-;" "-(" "%DLEVEL%" "%OLEVEL%"
 
 :GPAUSE
   PAUSE
