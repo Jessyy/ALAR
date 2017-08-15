@@ -1,10 +1,10 @@
 /*
  *	Any Last Administrative Requests - i_string.inc
  *		String functions
- *	
+ *
  *	strscan based off sscanf by Y_Less
  *	strstripnewline originally by Y_Less and DracoBlue
- *	
+ *
  *	Copyright (c) 2009 [DRuG]Dabombber
  */
 
@@ -17,11 +17,11 @@
 
 /*
 	native hexstr({Float,Unsigned,_}:number);
-	
+
 	native bool:isFloat(const string[]);
 	native bool:isInteger(const string[]);
 	native bool:isNumeric(const string[]);
-	
+
 	native strcpy(dest[], const source[], maxlength = sizeof(dest), end = cellmax, bool:pack = false);
 	native strdelword(string[], const word[], bool:ignorecase = false);
 	native strfindchar(const string[], const character, bool:ignorecase = false, position = 0);
@@ -37,7 +37,7 @@
 	native strtruncate(dest[], const string[], length = sizeof(dest), const ellipsis[] = "...", wordlength = 15, bool:pack = false, maxlength = sizeof(dest));
 	native strcommaval(value);
 	native bool:strwild(const wild[], const string[], bool:ignorecase = false);
-	
+
 	native straddword(dest[], const source[], maxlength = sizeof(dest));
 +	native strtruncate(string[], length, const ellipsis[] = "...", wordlength = 15, maxlength = sizeof(string));
 */
@@ -48,7 +48,7 @@
  *  Convert a number to a hexadecimal string
  *  @param	number	The number to convert
  *  @return	A string containing the hexadecimal value of the number, padded to 8 chars with a leading "0x"
- *  
+ *
  *  hexstr(-3243050);	// output: "0xFFCE83D6"
  */
 stock hexstr(_:number)
@@ -67,7 +67,7 @@ stock hexstr(_:number)
  *  Check if a string contains a floating point number
  *  @param	string	The string to check
  *  @return	true if the string contains a floating point number, otherwise false
- *  
+ *
  *  isFloat("01.25");	// output: "true"
  *  isFloat("+1.25");	// output: "true"
  *  isFloat("-1.25");	// output: "true"
@@ -126,7 +126,7 @@ stock bool:isFloat(const string[])
  *  Check if a string contains an integer
  *  @param	string	The string to check
  *  @return	true if the string contains an integer, otherwise false
- *  
+ *
  *  isInteger("0125");	// output: "true"
  *  isInteger("+125");	// output: "true"
  *  isInteger("-125");	// output: "true"
@@ -157,7 +157,7 @@ stock bool:isInteger(const string[])
  *  Check if a string consists only of numeric characters
  *  @param	string	The string to check
  *  @return	true if the string consists only of numeric characters, otherwise false
- *  
+ *
  *  isNumeric("0125");	// output: "true"
  *  isNumeric("+125");	// output: "false"
  *  isNumeric("-125");	// output: "false"
@@ -236,7 +236,7 @@ stock strcpy(dest[], const source[], maxlength = sizeof(dest), end = cellmax, bo
  *  @param	word		The word to search for
  *  @param	ignorecase	If the search is case insensitive
  *  @return	The number of words deleted
- *  
+ *
  *  new string[64] = "We will delete everything apart from this.";
  *  strdelword(string, "everything");	// output: "We will delete apart from this."
  */
@@ -257,7 +257,7 @@ stock strdelword(string[], const word[], bool:ignorecase = false)
  *  @param	ignorecase	If the search is case insensitive
  *  @param	position	The starting position for the search
  *  @return	The position in the string of the character, or -1 if not found
- *  
+ *
  *  new string[64] = "We will find everything apart from this.";
  *  strfindchar(string, 'f');	// output: "8"
  */
@@ -290,7 +290,7 @@ stock strfindchar(const string[], const character, bool:ignorecase = false, posi
  *  @param	ignorecase	If the search is case insensitive
  *  @param	position			The starting position for the search
  *  @return	The position in the string of the begining of the word, or -1 if not found
- *  
+ *
  *  new string[64] = "We will find everything apart from this.";
  *  strfindword(string, "everything");	// output: "13"
  */
@@ -322,7 +322,7 @@ stock strfindword(const string[], const word[], bool:ignorecase = false, positio
  *  @param	string		The string to be shortened
  *  @param	space		The number of characters needed
  *  @param	maxlength	The maxlength of the string
- *  
+ *
  *  new string[64] = "We will remove everything apart from this.";
  *  strmakeroom(string, 8);	// output: "remove everything apart from this."
  */
@@ -366,7 +366,7 @@ stock strmakeroom(string[], space, maxlength = sizeof(string))
  *  @param	oldchar		The character to be replaced
  *  @param	newchar		The character to replace with
  *  @return	The number of characters replaced
- *  
+ *
  *  new string[64] = "We will replace everything apart from this.";
  *  strreplacechar(string, 'l', 'H');	// output: "We wiHH repHace everything apart from this."
  */
@@ -421,7 +421,7 @@ stock strreplacechar(string[], const oldchar, const newchar)
  *  @param	maxlength	The length of the source string
  *  @param	count		The number of substrings to be replaced
  *  @return	The number of substrings replaced
- *  
+ *
  *  new string[64] = "We will replace everything apart from this.";
  *  strreplaceword(string, "everything", "ALL");	// output: "We will replace ALL apart from this."
  */
@@ -444,16 +444,16 @@ stock strreplaceword(string[], const find[], const replace[], bool:ignorecase = 
 
 /*
  *  Scans a string and extracts data
- *  
+ *
  *  	A fail is either insufficient variables to store the data or insufficient
  *  	data for the format string - excess data is disgarded
- *  
+ *
  *  	A string in the middle of the input data is extracted as a single word, a
  *  	string at the end of the data collects all remaining text. The length of
  *  	a string must be passed after the string
- *  
+ *
  *  The format codes are:
- *  
+ *
  *  	c - A character
  *  	d, i - An integer
  *  	f - A float
@@ -466,7 +466,7 @@ stock strreplaceword(string[], const find[], const replace[], bool:ignorecase = 
  *  	z - An optional string
  *  	_ - Skip a parameter
  *  	-X - An additional delimiter where X is another character
- *  
+ *
  *  @param	string					String to extract parameters from
  *  @param	format					Parameter types to get
  *  @param	{Float,Unsigned,_}:...	Data return variables
@@ -1140,7 +1140,7 @@ stock strstripwhitespace(string[])
  */
 stock strtok(const string[], &index, seperator=' ', bool:pack=false)
 {
-	new result[MAX_STRING], offset = index;
+	new result[MAX_STRING_LENGTH], offset = index;
 	if(ispacked(string)) {
 		if(pack) {
 			while(string{index} != '\0' && string{index} <= ' ') {
@@ -1295,7 +1295,7 @@ stock strcommaval(value)
  *  @param	source		The string to compare
  *  @param	ignorecase	If the search is case insensitive
  *  @return	true if it matches, otherwise false
- *  
+ *
  *  if(strwild("bl?h.*", "blah.jpg")) {
  *  	// we have a match
  *  } else {
@@ -1439,7 +1439,7 @@ stock bool:strwild(const wild[], const string[], bool:ignorecase = false)
  */
 stock straddword(dest[], const source[], maxlength = sizeof(dest))
 {
-	new idx, tmp[MAX_STRING];
+	new idx, tmp[MAX_STRING_LENGTH];
 	for(tmp = strtok(source, idx); tmp[0] != '\0'; tmp = strtok(source, idx)) {
 		if(strfindword(dest, tmp) == -1) {
 			strcat(dest, " ", maxlength);

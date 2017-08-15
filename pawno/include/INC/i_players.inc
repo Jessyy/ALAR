@@ -1,7 +1,7 @@
 /*
  *	Any Last Administrative Requests - i_players.inc
  *		Player functions
- *	
+ *
  *	Copyright (c) 2009 [DRuG]Dabombber
  */
 
@@ -15,12 +15,12 @@
 /*
 	native ReturnPlayerName(playerid);
 	native ReturnPlayerID(const playername[]);
-	
+
 	native ReturnPlayerIP(playerid);
-	
+
 	native FindPlayer(const string[]);
 	native FindClosestPlayer(playerid);
-	
+
 	FormatSpecifier<'P'>(output[], playerid);
 */
 
@@ -49,12 +49,12 @@ stock ReturnPlayerID(const playername[])
 	if(playername[0] == 0) {
 		return INVALID_PLAYER_ID;
 	}
-	
+
 	new pid = INVALID_PLAYER_ID,
 		bool:found,
 		pname[MAX_PLAYER_NAME],
 		length = strlen(playername);
-	
+
 	foreach(new i : Player) {
 		GetPlayerName(i, pname, sizeof(pname));
 		new j = strfind(pname, playername, true);
@@ -81,7 +81,7 @@ stock ReturnPlayerID(const playername[])
  */
 stock ReturnPlayerIP(playerid)
 {
-	new pIP[MAX_IP];
+	new pIP[MAX_IP_LENGTH];
 	GetPlayerIp(playerid, pIP, sizeof(pIP));
 	return pIP;
 }
@@ -116,10 +116,10 @@ stock FindClosestPlayer(playerid)
 		world,
 		sameid = INVALID_PLAYER_ID, Float:samedist = FLOAT_POS_INFINITY,
 		id = INVALID_PLAYER_ID, Float:dist = FLOAT_POS_INFINITY;
-	
+
 	GetPlayerPos(playerid, px, py, pz);
 	world = GetPlayerVirtualWorld(playerid);
-	
+
 	foreach(new i : Player) {
 		if(i != playerid && IsSpawned(i)) {
 			GetPlayerPos(i, tmpx, tmpy, tmpz);
@@ -141,7 +141,7 @@ stock FindClosestPlayer(playerid)
 
 #if defined _inc_formatex_included
 	/*
-	 *  
+	 *
 	 */
 	FormatSpecifier<'P'>(output[], playerid)
 	{

@@ -1,9 +1,9 @@
 /*
  *	Any Last Administrative Requests - i_functions.inc
  *		Assorted functions
- *	
+ *
  *	Shamelessly borrowed from their respective authors
- *	
+ *
  *	Copyright (c) 2009 [DRuG]Dabombber
  */
 
@@ -16,17 +16,17 @@
 
 /*
 	native ReturnServerVar(const string[]);
-	
+
 	native bool:IsSpawned(playerid);
 	native bool:IsValidName(const string[], bool:wildcards = false);
-	
+
 	native SendWrappedMessageToAll(colour, const msg[], maxlength = 85, const prefix[] = "    ");
 	native SendWrappedMessageToPlayer(playerid, colour, const msg[], maxlength = 85, const prefix[] = "    ");
 	native SendWrappedMessageToClients(BitArray:players<MAX_PLAYERS>, colour, const msg[], maxlength = 85, const prefix[] = "    ");
-	
+
 	native ReturnGameText(const text[]);
 	native bool:IsValidGameText(const string[]);
-	
+
 	native ReturnTimeStamp();
 	native bool:IsValidTimeStamp(const string[]);
 */
@@ -42,7 +42,7 @@
  */
 stock ReturnServerVar(const string[])
 {
-	new buffer[MAX_INPUT];
+	new buffer[MAX_INPUT_LENGTH];
 	GetServerVarAsString(string, buffer, sizeof(buffer));
 	return buffer;
 }
@@ -109,7 +109,7 @@ stock SendWrappedMessageToAll(colour, const msg[], maxlength = 85, const prefix[
 		SendClientMessageToAll(colour, msg);
 		return;
 	}
-	new string[MAX_INPUT], idx;
+	new string[MAX_INPUT_LENGTH], idx;
 	for(new i, space, plen, bool:useprefix; i < length; i++) {
 		if(i - idx + plen >= maxlength) {
 			if(idx == space || i - space >= 25) {
@@ -156,7 +156,7 @@ stock SendWrappedMessageToPlayer(playerid, colour, const msg[], maxlength = 85, 
 		SendClientMessage(playerid, colour, msg);
 		return;
 	}
-	new string[MAX_INPUT], idx;
+	new string[MAX_INPUT_LENGTH], idx;
 	for(new i, space, plen, bool:useprefix; i < length; i++) {
 		if(i - idx + plen >= maxlength) {
 			if(idx == space || i - space >= 25) {
@@ -205,7 +205,7 @@ stock SendWrappedMessageToClients(BitArray:players<MAX_PLAYERS>, colour, const m
 		}
 		return;
 	}
-	new string[MAX_INPUT], idx;
+	new string[MAX_INPUT_LENGTH], idx;
 	for(new i, space, plen, bool:useprefix; i < length; i++) {
 		if(i - idx + plen >= maxlength) {
 			if(idx == space || i - space >= 25) {
@@ -248,7 +248,7 @@ stock SendWrappedMessageToClients(BitArray:players<MAX_PLAYERS>, colour, const m
  */
 stock ReturnGameText(const text[])
 {
-	new string[MAX_STRING];
+	new string[MAX_STRING_LENGTH];
 	for(new i; text[i] != '\0' && i < sizeof(string) - 1; i++) {
 		switch(text[i]) {
 			case '[': {
@@ -303,12 +303,12 @@ stock bool:IsValidGameText(const string[])
  */
 stock ReturnTimeStamp()
 {
-	new datetime[MAX_TIMESTAMP],
+	new datetime[MAX_TIMESTAMP_LENGTH],
 		year, month, day, hour, minute, second;
-	
+
 	getdate(year, month, day);
 	gettime(hour, minute, second);
-	
+
 	format(datetime, sizeof(datetime), "%04i-%02i-%02i %02i:%02i:%02i", year, month, day, hour, minute, second);
 	return datetime;
 }
@@ -320,7 +320,7 @@ stock ReturnTimeStamp()
 stock bool:IsValidTimeStamp(const string[])
 {
 	new year, month, day, hour, minute, second;
-	
+
 	if(!strwild("????-??-?? ??:??:??", string) || strscan(string, "-- iii -: iii", year, month, day, hour, minute, second)) return false;
 	return 1970 <= year <= 2038 && 1 <= month <= 12 && 00 <= day <= 31 && 00 <= hour <= 23 && 00 <= minute <= 59 && 00 <= second <= 59;
 }

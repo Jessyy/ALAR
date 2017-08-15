@@ -1,7 +1,7 @@
 /*
  *	Any Last Administrative Requests - i_ip2c.inc
  *		IP functions
- *	
+ *
  *	Copyright (c) 2009 [DRuG]Dabombber
  */
 
@@ -30,7 +30,7 @@
 /*
  *
  */
-#define MAX_IP				(16)
+#define MAX_IP_LENGTH				(16)
 #define MAX_COUNTRY_NAME	(64)
 
 enum E_CUNTCODE {
@@ -512,7 +512,7 @@ stock Unsigned:IP2Code(const IP[])
  */
 stock Code2IP(Unsigned:IPCode)
 {
-	new IP[MAX_IP];
+	new IP[MAX_IP_LENGTH];
 	format(IP, sizeof(IP), "%i.%i.%i.%i", (_:IPCode & 0xFF000000) >>> 24, (_:IPCode & 0x00FF0000) >> 16, (_:IPCode & 0x0000FF00) >> 8, (_:IPCode & 0x000000FF) >> 0);
 	return IP;
 }
@@ -525,7 +525,7 @@ stock Code2IP(Unsigned:IPCode)
 stock IPsubnet(const IP[])
 {
 	new Unsigned:IPCode = IP2Code(IP),
-		IPSubnet[MAX_IP];
+		IPSubnet[MAX_IP_LENGTH];
 	if(IPCode) {
 		format(IPSubnet, sizeof(IPSubnet), "%i.%i.*.*", (_:IPCode & 0xFF000000) >>> 24, (_:IPCode & 0x00FF0000) >> 16);
 	}
@@ -542,13 +542,13 @@ stock ReturnCuntCode(DB:db, const IP[])
 {
 	new Unsigned:IPcode = IP2Code(IP),
 		cuntcode[3];
-	
+
 	// LOCALHOST
 	if(IPcode == Unsigned:0x7F000001) {	// 127.0.0.1
 		cuntcode = "XL";
 		return cuntcode;
 	}
-	
+
 	// LAN
 	if( Unsigned:0x0A000000 <= IPcode <= Unsigned:0x0AFFFFFF ||	// 10.0.0.0    - 10.255.255.255
 		Unsigned:0xAC100000 <= IPcode <= Unsigned:0xAC1FFFFF ||	// 172.16.0.0  - 172.31.255.255
@@ -557,7 +557,7 @@ stock ReturnCuntCode(DB:db, const IP[])
 		cuntcode = "XN";
 		return cuntcode;
 	}
-	
+
 	if(db) {
 		new string[110];
 		format(string, sizeof(string), "SELECT * FROM `Countries` WHERE ( %s BETWEEN `start` AND `end` ) LIMIT 1", ustr(IPcode));
@@ -623,50 +623,50 @@ stock GetCuntName(const cuntcode[], dest[], maxlength=sizeof(dest))
 stock CreateCuntDefinitions(DB:db)
 {
 	if(!db) return 0;
-	
+
 	static const inputfiles[][][] = {
 		{"GeoIPCountryWhois.csv", "-, _ _ s s s "},
 		{"IpToCountry.csv", "-, s s _ _ s "},
 		{"ip-to-country.csv", "-, s s s "}
 	};
-	
+
 	// I don't think this does anything since the sqlite version samp uses is over 2 and a half years old...
 	db_free_result(db_query(db, "SAVEPOINT CreateCuntDefinitions"));
-	
+
 	db_free_result(db_query(db, "CREATE TABLE IF NOT EXISTS `Countries` ( `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `code` TEXT NOT NULL , PRIMARY KEY ( `start` , `end` ) ); DELETE FROM `Countries`"));
-	
+
 	new counter;
-	for(new inputidx, length, File:rhandle, string[MAX_STRING]; inputidx < sizeof(inputfiles); inputidx++) {
+	for(new inputidx, length, File:rhandle, string[MAX_STRING_LENGTH]; inputidx < sizeof(inputfiles); inputidx++) {
 		if((rhandle = fopen(inputfiles[inputidx][0], io_read))) {
 			while(fread(rhandle, string)) {
 				if(string[0] == '#') continue;
-				
+
 				new quotedstart[13], quotedend[13], quotedcode[5];
 				strscan(string, inputfiles[inputidx][1], quotedstart, sizeof(quotedstart), quotedend, sizeof(quotedend), quotedcode, sizeof(quotedcode));
-				
+
 				length = strlen(quotedstart);
 				if(length < 2 || quotedstart[length-1] != '"') continue;	// " stupid notepad++ function list
 				quotedstart[length-1] = '\0';
-				
+
 				length = strlen(quotedend);
 				if(length < 2 || quotedend[length-1] != '"') continue;		// " stupid notepad++ function list
 				quotedend[length-1] = '\0';
-				
+
 				length = strlen(quotedcode);
 				if(length < 2 || quotedcode[length-1] != '"') continue;		// " stupid notepad++ function list
 				quotedcode[length-1] = '\0';
-				
+
 				format(string, sizeof(string), "INSERT INTO `Countries` ( `start` , `end` , `code` ) VALUES ( %s , %s , upper( '%s' ) )", quotedstart[1], quotedend[1], quotedcode[1]);
 				db_free_result(db_query(db, string));
-				
+
 				counter++;
 			}
 			fclose(rhandle);
 			break;
 		}
 	}
-	
+
 	db_free_result(db_query(db, "RELEASE SAVEPOINT CreateCuntDefinitions"));
-	
+
 	return counter;
 }

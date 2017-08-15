@@ -79,31 +79,31 @@
 
 enum E_ALAR_BAN {
 	E_BAN_NAME[MAX_PLAYER_NAME],
-	E_BAN_IP[MAX_IP],
-	E_BAN_DATETIME[MAX_TIMESTAMP],
+	E_BAN_IP[MAX_IP_LENGTH],
+	E_BAN_DATETIME[MAX_TIMESTAMP_LENGTH],
 	E_BAN_ADMIN[MAX_PLAYER_NAME],
-	E_BAN_REASON[MAX_INPUT],
+	E_BAN_REASON[MAX_INPUT_LENGTH],
 	E_BAN_HITS,
-	E_BAN_LASTHIT[MAX_TIMESTAMP]
+	E_BAN_LASTHIT[MAX_TIMESTAMP_LENGTH]
 }; stock SIZE_E_ALAR_BAN[E_ALAR_BAN];
 
 enum E_ALAR_SUSPENSION {
 	E_SUSPEND_NAME[MAX_PLAYER_NAME],
-	E_SUSPEND_IP[MAX_IP],
-	E_SUSPEND_DATETIME[MAX_TIMESTAMP],
+	E_SUSPEND_IP[MAX_IP_LENGTH],
+	E_SUSPEND_DATETIME[MAX_TIMESTAMP_LENGTH],
 	E_SUSPEND_ADMIN[MAX_PLAYER_NAME],
-	E_SUSPEND_REASON[MAX_INPUT],
-	E_SUSPEND_EXPIRES[MAX_TIMESTAMP],
+	E_SUSPEND_REASON[MAX_INPUT_LENGTH],
+	E_SUSPEND_EXPIRES[MAX_TIMESTAMP_LENGTH],
 	bool:E_SUSPEND_EXPIRED,
 	E_SUSPEND_HITS,
-	E_SUSPEND_LASTHIT[MAX_TIMESTAMP]
+	E_SUSPEND_LASTHIT[MAX_TIMESTAMP_LENGTH]
 }; stock SIZE_E_ALAR_SUSPENSION[E_ALAR_SUSPENSION];
 
 enum E_ALAR_WARNING {
 	E_WARN_NAME[MAX_PLAYER_NAME],
-	E_WARN_DATETIME[MAX_TIMESTAMP],
+	E_WARN_DATETIME[MAX_TIMESTAMP_LENGTH],
 	E_WARN_ADMIN[MAX_PLAYER_NAME],
-	E_WARN_REASON[MAX_INPUT]
+	E_WARN_REASON[MAX_INPUT_LENGTH]
 }; stock SIZE_E_ALAR_WARNING[E_ALAR_WARNING];
 
 
@@ -242,7 +242,7 @@ stock bool:Bans_IsIPNotBanned(DB:db, const playerip[])
 {
 	if(playerip[0] == '\0') return false;
 	if(db) {
-		new string[60 + MAX_IP];
+		new string[60 + MAX_IP_LENGTH];
 		format(string, sizeof(string), "SELECT ROWID FROM `Bans` WHERE ( `ip` = '%s' ) LIMIT 1", playerip);
 		new DBResult:result = db_query(db, string);
 		if(db_num_rows(result)) {
@@ -269,7 +269,7 @@ stock bool:Bans_GetBanInfo(DB:db, const playername[], const playerip[], BanData[
 {
 	if(isnull(playername) && isnull(playerip)) return false;
 	if(db) {
-		new string[400 + MAX_IP + MAX_PLAYER_NAME];
+		new string[400 + MAX_IP_LENGTH + MAX_PLAYER_NAME];
 
 		if(update) {
 			string = "SELECT ROWID AS `rowid` , ifnull(`name`,'') AS `name` , ifnull(`ip`,'') AS `ip` , ifnull(datetime(`datetime`,'localtime'),'') AS `datetime` , ifnull(`adminname`,'') AS `adminname` , ifnull(`reason`,'') AS `reason` , `hits` + 1 AS `hits` , datetime('now','localtime') AS `lasthit` FROM `Bans` WHERE (";
@@ -330,7 +330,7 @@ stock bool:Bans_BanPlayer(DB:db, const playername[], const playerip[], const rea
 {
 	if(isnull(playername) && isnull(playerip)) return false;
 	if(db) {
-		new string[190 + (MAX_PLAYER_NAME * 2) + (MAX_IP * 2) + (MAX_INPUT * 2)];
+		new string[190 + (MAX_PLAYER_NAME * 2) + (MAX_IP_LENGTH * 2) + (MAX_INPUT_LENGTH * 2)];
 		if(!isnull(reason)) {
 			strcat(string, reason);
 			strreplaceword(string, "'", "''");
@@ -572,7 +572,7 @@ stock bool:Bans_UnbanPlayer(DB:db, const playername[], const playerip[], BanData
 {
 	if(isnull(playername) && isnull(playerip)) return false;
 	if(db) {
-		new string[340 + MAX_PLAYER_NAME + MAX_IP] = "SELECT ROWID AS `rowid` , ifnull(`name`,'') AS `name` , ifnull(`ip`,'') AS `ip` , ifnull(datetime(`datetime`,'localtime'),'') AS `datetime` , ifnull(`adminname`,'') AS `adminname` , ifnull(`reason`,'') AS `reason` FROM `Bans` WHERE (";
+		new string[340 + MAX_PLAYER_NAME + MAX_IP_LENGTH] = "SELECT ROWID AS `rowid` , ifnull(`name`,'') AS `name` , ifnull(`ip`,'') AS `ip` , ifnull(datetime(`datetime`,'localtime'),'') AS `datetime` , ifnull(`adminname`,'') AS `adminname` , ifnull(`reason`,'') AS `reason` FROM `Bans` WHERE (";
 		if(!isnull(playerip)) {
 			format(string, sizeof(string), "%s '%s' GLOB `ip`", string, playerip);
 			if(!isnull(playername)) {
@@ -664,7 +664,7 @@ stock bool:Suspensions_IsIPNotSuspended(DB:db, const playerip[])
 {
 	if(playerip[0] == '\0') return false;
 	if(db) {
-		new string[70 + MAX_IP];
+		new string[70 + MAX_IP_LENGTH];
 		format(string, sizeof(string), "SELECT ROWID FROM `Suspensions` WHERE ( `ip` = '%s' ) LIMIT 1", playerip);
 		new DBResult:result = db_query(db, string);
 		if(db_num_rows(result)) {
@@ -691,7 +691,7 @@ stock bool:Suspensions_GetSuspendInfo(DB:db, const playername[], const playerip[
 {
 	if(isnull(playername) && isnull(playerip)) return false;
 	if(db) {
-		new string[540 + MAX_PLAYER_NAME + MAX_IP];
+		new string[540 + MAX_PLAYER_NAME + MAX_IP_LENGTH];
 
 		if(update) {
 			string = "SELECT ROWID AS `rowid` , ifnull(`name`,'') AS `name` , ifnull(`ip`,'') AS `ip` , ifnull(datetime(`datetime`,'localtime'),'') AS `datetime` , ifnull(datetime(`expires`,'localtime'),'') AS `expires` , ifnull(`adminname`,'') AS `adminname` , ifnull(`reason`,'') AS `reason` , ifnull(julianday('now') > julianday(`expires`),1) AS `expired` , `hits` + 1 AS `hits` , datetime('now','localtime') AS `lasthit` FROM `Suspensions` WHERE (";
@@ -756,7 +756,7 @@ stock bool:Suspensions_SuspendPlayer(DB:db, const playername[], const playerip[]
 {
 	if(isnull(playername) && isnull(playerip)) return false;
 	if(db) {
-		new string[270 + (MAX_PLAYER_NAME * 2) + (MAX_IP * 2) + (MAX_INPUT * 2)];
+		new string[270 + (MAX_PLAYER_NAME * 2) + (MAX_IP_LENGTH * 2) + (MAX_INPUT_LENGTH * 2)];
 		if(!isnull(reason)) {
 			strcat(string, reason);
 			strreplaceword(string, "'", "''");
@@ -999,7 +999,7 @@ stock bool:Suspensions_UnsuspendPlayer(DB:db, const playername[], const playerip
 {
 	if(isnull(playername) && isnull(playerip)) return false;
 	if(db) {
-		new string[540 + MAX_PLAYER_NAME + MAX_IP] = "SELECT ROWID AS `rowid` , ifnull(`name`,'') AS `name` , ifnull(`ip`,'') AS `ip` , ifnull(datetime(`datetime`,'localtime'),'') AS `datetime` , ifnull(datetime(`expires`,'localtime'),'') AS `expires` , ifnull(`adminname`,'') AS `adminname` , ifnull(`reason`,'') AS `reason` , ifnull(julianday('now') > julianday(`expires`),1) AS `expired` , `hits` , ifnull(datetime(`lasthit`,'localtime'),'') AS `lasthit` FROM `Suspensions` WHERE (";
+		new string[540 + MAX_PLAYER_NAME + MAX_IP_LENGTH] = "SELECT ROWID AS `rowid` , ifnull(`name`,'') AS `name` , ifnull(`ip`,'') AS `ip` , ifnull(datetime(`datetime`,'localtime'),'') AS `datetime` , ifnull(datetime(`expires`,'localtime'),'') AS `expires` , ifnull(`adminname`,'') AS `adminname` , ifnull(`reason`,'') AS `reason` , ifnull(julianday('now') > julianday(`expires`),1) AS `expired` , `hits` , ifnull(datetime(`lasthit`,'localtime'),'') AS `lasthit` FROM `Suspensions` WHERE (";
 		if(!isnull(playerip)) {
 			format(string, sizeof(string), "%s '%s' GLOB `ip`", string, playerip);
 			if(!isnull(playername)) {
@@ -1107,7 +1107,7 @@ stock TempBan_UnbanAll(DB:db)
 	if(db) {
 		new DBResult:result = db_query(db, "SELECT * FROM `TempBans`"),
 			num = db_num_rows(result),
-			string[10 + MAX_IP];
+			string[10 + MAX_IP_LENGTH];
 		for(new i; i < num; i++) {
 			db_get_field_assoc(result, "ip", string, sizeof(string));
 			format(string, sizeof(string), "unbanip %s", string);
@@ -1144,7 +1144,7 @@ stock Warnings_Init(DB:db)
 stock Warnings_WarnPlayer(DB:db, const playername[], const reason[], const adminname[], const adminip[])
 {
 	if(db) {
-		new string[90 + (MAX_PLAYER_NAME * 2) + MAX_IP + (MAX_INPUT * 2)];
+		new string[90 + (MAX_PLAYER_NAME * 2) + MAX_IP_LENGTH + (MAX_INPUT_LENGTH * 2)];
 		strcat(string, reason);
 		strreplaceword(string, "'", "''");
 		if(isnull(adminname)) {

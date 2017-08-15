@@ -7,28 +7,28 @@ Description:
 	The arrays are usually bigger than required due to cell boundaries but this
 	shouldn't cause a major problem (bit tests on the 101st bit of a 100 bit
 	array won't return 0 for out of bounds, but the 129th will).
-	
+
 	Note that y_commands has a few optimisations which bypass the code in here
 	so any modifications to bit array layouts will need to be reflected there.
 Legal:
 	Version: MPL 1.1
-	
-	The contents of this file are subject to the Mozilla Public License Version 
-	1.1 (the "License"); you may not use this file except in compliance with 
-	the License. You may obtain a copy of the License at 
+
+	The contents of this file are subject to the Mozilla Public License Version
+	1.1 (the "License"); you may not use this file except in compliance with
+	the License. You may obtain a copy of the License at
 	http://www.mozilla.org/MPL/
-	
+
 	Software distributed under the License is distributed on an "AS IS" basis,
 	WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
 	for the specific language governing rights and limitations under the
 	License.
-	
+
 	The Original Code is the YSI bit include.
-	
+
 	The Initial Developer of the Original Code is Alex "Y_Less" Cole.
 	Portions created by the Initial Developer are Copyright (C) 2011
 	the Initial Developer. All Rights Reserved.
-	
+
 Version:
 	0.2
 Changelog: @released: 02/03/2013
@@ -94,8 +94,8 @@ Compile options:
 
 #include "i_debug"
 
-#if !defined YSI_MAX_STRING
-	#define YSI_MAX_STRING		(130)
+#if !defined YSI_MAX_STRING_LENGTH
+	#define YSI_MAX_STRING_LENGTH		(130)
 #endif
 
 #if !defined GLOBAL_TAG_TYPES
@@ -316,7 +316,7 @@ stock Bit_GetCount(BitArray:array<>, size = sizeof (array))
 stock Bit_Display(BitArray:array<>, size = sizeof (array))
 {
 	new
-		ret[YSI_MAX_STRING],
+		ret[YSI_MAX_STRING_LENGTH],
 		val;
 	while (size--)
 	{
@@ -558,7 +558,7 @@ stock Blanks@YSII_Ag(BitArray:data<>, start, size = sizeof (data))
 	return -1;
 }
 
-#define bits<%1> Bit_Bits(%1) 
+#define bits<%1> Bit_Bits(%1)
 
 #undef BitArray
 #define BitArray:%1<%2> Bit:%1[bits<%2>]

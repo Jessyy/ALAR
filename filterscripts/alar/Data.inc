@@ -91,7 +91,7 @@
 */
 enum E_LOGINDATA {
 	E_LOGIN_LEVEL,
-	E_LOGIN_IP[MAX_IP],
+	E_LOGIN_IP[MAX_IP_LENGTH],
 	E_LOGIN_HASH[MAX_HASH_LENGTH],
 	bool:E_LOGIN_HIDDEN,
 	E_LOGIN_PAGE,
@@ -131,7 +131,7 @@ stock Admin_Init(DB:db)
 stock Admin_GetHighestLevel(DB:db, const playername[]="", const playerip[]="")
 {
 	if(db) {
-		new string[170 + MAX_PLAYER_NAME + MAX_IP];
+		new string[170 + MAX_PLAYER_NAME + MAX_IP_LENGTH];
 		if(isnull(playername)) {
 			if(isnull(playerip)) {
 				string = "SELECT `level` FROM `Admins` ORDER BY `level` DESC LIMIT 1";
@@ -205,7 +205,7 @@ stock bool:Admin_GetData(DB:db, const playername[], LoginData[E_LOGINDATA])
 stock bool:Admin_SetAdmin(DB:db, const playername[], LoginData[E_LOGINDATA], bool:online=true)
 {
 	if(db) {
-		new string[280 + MAX_PLAYER_NAME + MAX_HASH_LENGTH + MAX_IP];
+		new string[280 + MAX_PLAYER_NAME + MAX_HASH_LENGTH + MAX_IP_LENGTH];
 		format(string, sizeof(string), "SELECT ROWID FROM `Admins` WHERE ( `name` = '%s' )", playername);
 		new DBResult:result = db_query(db, string);
 		if(db_num_rows(result)) {
@@ -324,7 +324,7 @@ stock bool:Admin_Password(DB:db, const playername[], const password[])
 stock bool:Admin_Update(DB:db, const playername[], const playerip[], bool:hidden, logpage, bool:spechud)
 {
 	if(db) {
-		new string[180 + MAX_PLAYER_NAME + MAX_IP];
+		new string[180 + MAX_PLAYER_NAME + MAX_IP_LENGTH];
 		if(!isnull(playerip)) {
 			if(strcmp(playerip, "NULL") == 0) {
 				format(string, sizeof(string), "UPDATE `Admins` SET `ip` = NULL , `hidden` = '%s', `logpage` = %i , `spechud` = '%s' , `lastonline` = CURRENT_TIMESTAMP WHERE ( `name` = '%s' )", hidden ? ("true") : ("false"), logpage, spechud ? ("true") : ("false"), playername);
@@ -360,7 +360,7 @@ stock Alias_Init(DB:db)
 stock bool:Alias_Add(DB:db, const playername[], const playerip[])
 {
 	if(db && !isnull(playername) && !isnull(playerip)) {
-		new string[100 + MAX_PLAYER_NAME + MAX_IP];
+		new string[100 + MAX_PLAYER_NAME + MAX_IP_LENGTH];
 		format(string, sizeof(string), "SELECT ROWID FROM `Aliases`  WHERE ( `name` = '%s' AND `ip` = '%s' )", playername, playerip);
 		new DBResult:result = db_query(db, string);
 		if(db_num_rows(result)) {
@@ -387,7 +387,7 @@ stock bool:Alias_Add(DB:db, const playername[], const playerip[])
 stock bool:Alias_Update(DB:db, const playername[], const playerip[], seconds)
 {
 	if(db && !isnull(playername) && !isnull(playerip) && seconds > 0) {
-		new string[160 + MAX_PLAYER_NAME + MAX_IP];
+		new string[160 + MAX_PLAYER_NAME + MAX_IP_LENGTH];
 		format(string, sizeof(string), "UPDATE `Aliases` SET `datetime` = CURRENT_TIMESTAMP , `onlinetime` = `onlinetime` + %i WHERE ( `name` = '%s' AND `ip` = '%s' )", seconds, playername, playerip);
 		db_free_result(db_query(db, string));
 		return true;
@@ -403,7 +403,7 @@ stock bool:Alias_Update(DB:db, const playername[], const playerip[], seconds)
  */
 stock Alias_GetLastIP(DB:db, const playername[])
 {
-	new pIP[MAX_IP];
+	new pIP[MAX_IP_LENGTH];
 	if(db && !isnull(playername)) {
 		new string[90 + MAX_PLAYER_NAME];
 		format(string, sizeof(string), "SELECT `ip` FROM `Aliases` WHERE ( `name` = '%s' ) ORDER BY `datetime` DESC LIMIT 1", playername);
@@ -459,7 +459,7 @@ stock Alias_GetAliasFromName(DB:db, const playername[], names[], maxlength=sizeo
 stock Alias_GetAliasFromIP(DB:db, const playerip[], names[], maxlength=sizeof(names))
 {
 	if(db && !isnull(playerip)) {
-		new string[110 + MAX_IP];
+		new string[110 + MAX_IP_LENGTH];
 		format(string, sizeof(string), "SELECT DISTINCT `name` FROM ( SELECT `name` FROM `Aliases` WHERE ( `ip` GLOB '%s' ) ORDER BY `datetime` DESC )", playerip);
 		new DBResult:result = db_query(db, string),
 			num_rows = db_num_rows(result);
@@ -491,7 +491,7 @@ stock Alias_GetAliasFromIP(DB:db, const playerip[], names[], maxlength=sizeof(na
 stock Alias_GetAlias2FromName(DB:db, const playername[], names[], maxlength=sizeof(names))
 {
 	if(db && !isnull(playername)) {
-		new string[90 + MAX_IP + MAX_PLAYER_NAME];
+		new string[90 + MAX_IP_LENGTH + MAX_PLAYER_NAME];
 		format(string, sizeof(string), "SELECT `ip` FROM `Aliases` WHERE ( `name` = '%s' ) ORDER BY `datetime` DESC LIMIT 1", playername);
 		new DBResult:result = db_query(db, string);
 		if(db_num_rows(result)) {
@@ -530,7 +530,7 @@ stock Alias_GetAlias2FromName(DB:db, const playername[], names[], maxlength=size
 stock Alias_GetAlias2FromIP(DB:db, const playerip[], names[], maxlength=sizeof(names))
 {
 	if(db && !isnull(playerip)) {
-		new string[90 + MAX_IP];
+		new string[90 + MAX_IP_LENGTH];
 		format(string, sizeof(string), "SELECT DISTINCT `name` FROM `Aliases` WHERE ( `ip` GLOB '%s' ) ORDER BY `datetime` DESC", IPsubnet(playerip));
 		new DBResult:result = db_query(db, string),
 			num_rows = db_num_rows(result);
@@ -713,7 +713,7 @@ stock bool:Player_GetData(DB:db, const playername[], const playerip[], SaveData[
 {
 	if(isnull(playername) || isnull(playerip)) return false;
 	if(db) {
-		new string[360 + MAX_IP];
+		new string[360 + MAX_IP_LENGTH];
 		format(string, sizeof(string), "SELECT ifnull(`immune`,'false') AS `immune` , ifnull(`jointext`,'unset') AS `jointext` FROM `Players` WHERE ( `name` = '%s' ) LIMIT 1", playername, playerip);
 		new DBResult:result = db_query(db, string);
 		if(db_num_rows(result)) {
@@ -869,7 +869,7 @@ stock bool:Player_SetStatus(DB:db, const playerip[], status, time=0)
 {
 	if(isnull(playerip) || !(status & (ADMIN_STATE_MUTED | ADMIN_STATE_JAILED | ADMIN_STATE_FROZEN))) return false;
 	if(db) {
-		new string[180 + MAX_IP];
+		new string[180 + MAX_IP_LENGTH];
 		format(string, sizeof(string), "SELECT ROWID FROM `Status` WHERE ( `ip` = '%s' ) LIMIT 1", playerip);
 		new DBResult:result = db_query(db, string);
 		if(db_num_rows(result)) {
@@ -1007,7 +1007,7 @@ stock bool:Player_ClearStatus(DB:db, const playerip[], status)
 {
 	if(isnull(playerip) || !(status & (ADMIN_STATE_MUTED | ADMIN_STATE_JAILED | ADMIN_STATE_FROZEN))) return false;
 	if(db) {
-		new string[110 + MAX_IP];
+		new string[110 + MAX_IP_LENGTH];
 		if(status & ADMIN_STATE_FROZEN) {
 			if(status & ADMIN_STATE_JAILED) {
 				if(status & ADMIN_STATE_MUTED) {
@@ -1077,7 +1077,7 @@ stock Setting_Init(DB:db)
 stock bool:Setting_LoadString(DB:db, const setting[], const value[], dest[], maxlength=sizeof(dest))
 {
 	if(db && setting[0]) {
-		new string[MAX_STRING];
+		new string[MAX_STRING_LENGTH];
 		format(string, sizeof(string), "SELECT ifnull(`value`,'') AS `value` FROM `Settings` WHERE ( `setting` = '%s' ) LIMIT 1", setting);
 		new DBResult:result = db_query(db, string);
 		if(db_num_rows(result)) {
@@ -1144,7 +1144,7 @@ stock bool:Setting_LoadInt(DB:db, const setting[], value, &dest)
 stock bool:Setting_GetString(DB:db, const setting[], dest[], maxlength=sizeof(dest))
 {
 	if(db && setting[0]) {
-		new string[MAX_STRING];
+		new string[MAX_STRING_LENGTH];
 		format(string, sizeof(string), "SELECT ifnull(`value`,'') AS `value` FROM `Settings` WHERE ( `setting` = '%s' ) LIMIT 1", setting);
 		new DBResult:result = db_query(db, string);
 		if(db_num_rows(result)) {
@@ -1200,7 +1200,7 @@ stock bool:Setting_GetInt(DB:db, const setting[], &dest)
 stock bool:Setting_SetString(DB:db, const setting[], const value[])
 {
 	if(db && setting[0]) {
-		new string[MAX_STRING];
+		new string[MAX_STRING_LENGTH];
 		format(string, sizeof(string), "SELECT ROWID FROM `Settings` WHERE ( `setting` = '%s' ) LIMIT 1", setting);
 		new DBResult:result = db_query(db, string);
 		if(db_num_rows(result)) {
