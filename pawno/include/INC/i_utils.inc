@@ -22,6 +22,7 @@
 
 #define MAX_IP_LENGTH			(16)
 #define MAX_TIMESTAMP_LENGTH	(30)
+#define MAX_EMAIL_LENGTH		(254)
 
 /*
  *  Define many tag types for function calls

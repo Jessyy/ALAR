@@ -19,6 +19,7 @@
 
 	native bool:IsSpawned(playerid);
 	native bool:IsValidName(const string[], bool:wildcards = false);
+	native bool:IsValidEmail(const szString[])
 
 	native SendWrappedMessageToAll(colour, const msg[], maxlength = 85, const prefix[] = "    ");
 	native SendWrappedMessageToPlayer(playerid, colour, const msg[], maxlength = 85, const prefix[] = "    ");
@@ -93,6 +94,85 @@ stock bool:IsValidName(const string[], bool:wildcards = false)
 		}
 	}
 	return (wildfound || chars >= 3) && (chars <= 20);
+}
+
+/*
+ *  Checks if a string is syntactically valid
+ *  @param	string	The string to check
+ *  @return	true if the string is valid email, false otherwise
+ */
+stock bool:IsValidEmail(const szString[])
+{
+	if(isnull(szString)) {
+		return false;
+	}
+
+	new iLength = strlen(szString);
+	if(iLength < 5 || strfindchar(szString, '@') == -1 || strfindchar(szString, ' ') != -1) {
+		return false;
+	}
+
+	new szLocal[MAX_EMAIL_LENGTH], szDomain[MAX_EMAIL_LENGTH];
+	strscan(szString, "-@ ss", szLocal, sizeof(szLocal), szDomain, sizeof(szDomain));
+
+	if(isnull(szLocal) || isnull(szDomain)) {
+		return false;
+	}
+
+	new iCharacters, iNumbers, iSymbols, iDots;
+	for(new i, j=strlen(szLocal); i < j; i++) {
+		if('a' <= tolower(szLocal[i]) <= 'z') {
+			iCharacters++;
+			continue;
+		}
+		if('0' <= szLocal[i] <= '9') {
+			iNumbers++;
+			continue;
+		}
+		if(szLocal[i] == '_' || szLocal[i] == '.' || szLocal[i] == '-') {
+			iSymbols++;
+			continue;
+		}
+		return false;
+	}
+	if(iCharacters == 0 && iNumbers == 0) {
+		return false;
+	}
+
+	iCharacters = 0;
+	iNumbers = 0;
+	iSymbols = 0;
+	iDots = 0;
+	for(new i, j=strlen(szDomain); i < j; i++) {
+		if('a' <= tolower(szDomain[i]) <= 'z') {
+			iCharacters++;
+			continue;
+		}
+		if('0' <= szDomain[i] <= '9') {
+			iNumbers++;
+			continue;
+		}
+		if(szDomain[i] == '-') {
+			iSymbols++;
+			continue;
+		}
+		if(szDomain[i] == '.') {
+			if(i == j - 1 || (iCharacters == 0 && iNumbers == 0)) {
+				return false;
+			}
+			iCharacters = 0;
+			iNumbers = 0;
+			iSymbols = 0;
+			iDots++;
+			continue;
+		}
+		return false;
+	}
+	if(iCharacters == 0 || iNumbers != 0 || iSymbols != 0 || iDots == 0) {
+		return false;
+	}
+
+	return true;
 }
 
 /*
